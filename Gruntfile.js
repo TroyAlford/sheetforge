@@ -47,18 +47,11 @@ module.exports = function(grunt) {
             }
         },
         less: {
-            development: {
-                options: {
-                    compress: true,
-                    paths: 'css/'
-                },
-                files: {
-                    'bin/css/app.min.css': [
-                        'src/css/**/*.{css,css}',
-                        '!**/functions.less', // Exclude Functions
-                        '!**/vendor/*'        // Exclude Vendor CSS
-                    ]
-                }
+            options: {
+                //plugins : [ new (require('less-plugin-autoprefix'))({browsers : [ "last 2 versions" ]}) ]
+            },
+            systems: {
+                files: [{ expand: true, cwd: 'src/less', src: ['sys.*.less'], dest: 'bin/css/', extDot: 'last', ext: '.css'}]
             }
         },
         copy: {
@@ -86,8 +79,8 @@ module.exports = function(grunt) {
                 tasks: ['jshint', 'uglify:app']
             },
             less: {
-                files: ['src/css/**/*.less', '!**/vendor/*'],
-                tasks: ['less:development']
+                files: ['src/less/**/*.less', '!**/vendor/*'],
+                tasks: ['less:systems']
             },
             html: {
                 files: ['src/**/*.{html,gif,jpg,png,ico,woff2}'],
@@ -96,8 +89,7 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('build', ['concat', 'uglify', 'less', 'copy']);
-    grunt.registerTask('default', ['build']);
+    grunt.registerTask('default', ['concat', 'uglify', 'less', 'copy']);
 
     return grunt;
 };
