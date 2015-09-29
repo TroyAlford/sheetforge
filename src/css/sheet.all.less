@@ -1,0 +1,37 @@
+/* Generic Sheet Rules */
+.cs.sheet, .cs.sheet * {
+  box-sizing: border-box;
+}
+.cs.sheet {
+  align-content: flex-start;
+  border: 0;
+  box-shadow: 1px 1px 15px #eee,
+    -1px -1px 15px #eee;
+  display: flex;
+  flex-flow: row wrap;
+  height: 11in; width: 8.5in;
+  padding: .25in;
+  margin: .5in auto;
+
+  > .row > * { margin: 5px; }
+
+  .row, .col {
+    display: flex;
+  }
+
+  .row {
+    align-items: flex-start;
+    align-content: flex-start;
+    flex: 1 1 calc(100% - 10px);
+    flex-flow: row wrap;
+  }
+
+  .col {
+    flex: 1 1 calc(30% - 10px);
+    flex-flow: column wrap;
+
+    &.c-2 { flex: 1 1 calc(60% - 10px); }
+    &.c-3 { flex: 1 1 auto; }
+  }
+}
+@import 'sheet.cosmos.less';

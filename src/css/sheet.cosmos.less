@@ -1,0 +1,97 @@
+@import 'functions.less';
+
+/* Cosmos-RPG Specific Rules */
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);
+
+@highlight-color: #f0f9f9;
+@gradient: linear-gradient(left,#036,#2eccfa 40%,#fff) 100% 1;
+
+.cs.cosmos {
+  .row {
+    .header {
+      border-width: 0 0 1px 0;
+      .vendor(border-image, @gradient);
+
+      color: #333;
+      flex: 1 1 100%;
+      font-family: Ubuntu;
+      font-size: 0.8rem;
+      font-weight: bold;
+      height: 30px; min-height: 30px; max-height: 30px;
+      padding: 8px 0 8px 0;
+      text-align: left;
+      text-shadow: 2px 1px #ddd;
+
+      &.row {
+        border-width: 0 0 3px 0;
+        font-size: 1.1rem;
+        margin: 0 0 8px 0;
+      }
+    }
+    &:not(.two-up) > .entry:not(.header):nth-child(even) { background-color: @highlight-color; }
+
+    &.title {
+      border-bottom: 1px solid;
+      font-size: 1.5rem;
+      font-weight: bold;
+      justify-content: flex-end;
+      padding: 8px;
+    }
+  }
+
+  .picture {
+    border: 20px solid #eee;
+    box-shadow: -1px -1px 0 0 rgba(0,0,0,.7),
+                 1px 1px 0 0 rgba(0,0,0,.7),
+                 1px -1px 0 0 rgba(0,0,0,.7),
+                -1px 1px 0 0 rgba(0,0,0,.7),
+                 inset 2px 2px 8px 0 rgba(0,0,0,.7),
+                 inset -2px -2px 8px 0 rgba(0,0,0,.3);
+    display: flex;
+    background-size: cover;
+    background-position: center center;
+    padding-bottom: 100%;
+  }
+
+  .entry {
+    align-items: center;
+    display: flex;
+    flex: 0 0 calc(50% - 4px);
+    font-size: .80rem;
+    margin: 0 2px;
+    padding: 5px;
+
+    > * {
+      flex: 1 1;
+      text-align: center;
+    }
+    > .name {
+      color: #036;
+      font-family: Ubuntu;
+      font-weight: bold;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .traits .entry .name { min-width: 65%; }
+  .skills .entry .name { min-width: 60%; }
+  .equipment .entry {
+    flex: 1 1 100%;
+    .name { min-width: 40%; }
+  }
+
+  .two-up {
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-flow: row wrap;
+
+    > * { flex: 1 1 calc(50% - 10px); }
+    &.row .header { flex: 1 1 calc(40%); }
+
+    > .entry:not(.header):nth-child(4n+3), > .entry:not(.header):nth-child(4n+4) {
+      background-color: @highlight-color;
+    }
+  }
+}
