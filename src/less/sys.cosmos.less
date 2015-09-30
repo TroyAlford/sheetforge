@@ -3,11 +3,18 @@
 /* Cosmos-RPG Specific Rules */
 @import url(https://fonts.googleapis.com/css?family=Ubuntu);
 
+@bg-color: #fff;
+@fg-color: #036;
 @highlight-color: #f0f9f9;
-@gradient: linear-gradient(left,#036,#2eccfa 40%,#fff) 100% 1;
-@header-font: Ubuntu;
+@gradient: linear-gradient(left,@fg-color,#2eccfa 40%,@bg-color) 100% 1;
+@header-font: Ubuntu, Calibri, Sans Serif;
 
 .cs.cosmos {
+  .invert, .entry.invert > .name {
+    background-color: #E2FBFB;
+    color: @fg-color;
+  }
+
   .row {
     .header {
       border: none;
@@ -25,17 +32,21 @@
 
       &.row {
         font-size: 1.1rem;
-        margin: 0 0 8px 0;
+        margin: 0 0 5px 0;
       }
     }
-    &:not(.two-up) > .entry:not(.header):nth-child(even) { background-color: @highlight-color; }
 
     &.title {
       border-bottom: 1px solid;
       font-size: 1.5rem;
       font-weight: bold;
+      height: 45px;
       justify-content: flex-end;
       padding: 8px;
+    }
+
+    .entry:not(.header):not(.invert):nth-child(even) {
+      background-color: @highlight-color;
     }
   }
 
@@ -50,6 +61,7 @@
     display: flex;
     background-size: cover;
     background-position: center center;
+    margin: 5px;
     padding-bottom: 100%;
   }
 
@@ -57,28 +69,36 @@
     align-items: center;
     display: flex;
     flex: 0 0 calc(50% - 4px);
-    font-size: .80rem;
+    font-size: .75rem;
     height: 25px;
     line-height: 25px;
     margin: 0 2px;
     padding: 5px;
+
+    &:not(.header) { border-radius: 5px; }
 
     > * {
       flex: 1 1;
       text-align: center;
     }
     > .name {
-      color: #036;
-      font-family: @header-font;
+      color: @fg-color;
       font-weight: bold;
       overflow: hidden;
       text-align: left;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    > * { font-family: @header-font; }
   }
   .traits .entry .name { min-width: 65%; }
   .skills .entry .name { min-width: 60%; }
+  .attributes .entry {
+    margin: 2px;
+    .name { min-width: 60%; }
+    .box { margin: 0; }
+    &.derived .name { min-width: 80%; }
+  }
   .equipment .entry {
     flex: 1 1 100%;
     .name { min-width: 40%; }

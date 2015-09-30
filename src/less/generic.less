@@ -1,4 +1,8 @@
 /* Generic Sheet Rules */
+
+@bg-color: #fff;
+@fg-color: #036;
+
 .cs.sheet, .cs.sheet * {
   box-sizing: border-box;
 }
@@ -13,7 +17,7 @@
   padding: .25in;
   margin: .5in auto;
 
-  > .row > * { margin: 5px; }
+  > .row > * { margin: 0 5px; }
 
   .row, .col {
     display: flex;
@@ -32,7 +36,36 @@
 
     &.c-2 { flex: 1 1 calc(60% - 10px); }
     &.c-3 { flex: 1 1 auto; }
+    &.no-margin { margin: 0; }
   }
 }
 
+.border { border: 1px solid #000; }
+.box {
+  border-left: 1px dotted @fg-color;
+  height: 15px;
+  margin: 0 -7px 0 5px;
+  position: relative;
+  top: 1px;
+
+  &:after {
+    border: 1px solid @fg-color;
+    .rounded;
+    display: inline-block;
+    position: absolute;
+    left: 0px;
+    top: 2px;
+    right: 6px;
+    bottom: 2px;
+  }
+}
+.center { text-align: center!important; }
+.invert { color: @bg-color; background-color: @fg-color; }
+.rounded { border-radius: 5px; }
+
 @import 'functions.less';
+
+@media print {
+  .cs.sheet { box-shadow: none; margin: 0; }
+  .fade-on-print, .entry > *:not(.name) { color: #ddd; }
+}
