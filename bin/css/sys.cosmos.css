@@ -5,17 +5,12 @@
   box-sizing: border-box;
 }
 .cs.sheet {
-  -webkit-align-content: flex-start;
-      -ms-flex-line-pack: start;
-          align-content: flex-start;
+  align-content: flex-start;
+  background: #fff;
   border: 0;
   box-shadow: 1px 1px 15px #eeeeee, -1px -1px 15px #eeeeee;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: row wrap;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
+  flex-flow: row wrap;
   height: 11in;
   width: 8.5in;
   padding: .25in;
@@ -26,41 +21,23 @@
 }
 .cs.sheet .row,
 .cs.sheet .col {
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
 }
 .cs.sheet .row {
-  -webkit-align-items: flex-start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  -webkit-align-content: flex-start;
-      -ms-flex-line-pack: start;
-          align-content: flex-start;
-  -webkit-flex: 1 1 calc(90%);
-      -ms-flex: 1 1 calc(90%);
-          flex: 1 1 calc(90%);
-  -webkit-flex-flow: row wrap;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex: 1 1 calc(90%);
+  flex-flow: row wrap;
 }
 .cs.sheet .col {
-  -webkit-flex: 1 1 calc(20%);
-      -ms-flex: 1 1 calc(20%);
-          flex: 1 1 calc(20%);
-  -webkit-flex-flow: column wrap;
-      -ms-flex-flow: column wrap;
-          flex-flow: column wrap;
+  flex: 1 1 calc(20%);
+  flex-flow: column wrap;
 }
 .cs.sheet .col.c-2 {
-  -webkit-flex: 1 1 calc(50%);
-      -ms-flex: 1 1 calc(50%);
-          flex: 1 1 calc(50%);
+  flex: 1 1 calc(50%);
 }
 .cs.sheet .col.c-3 {
-  -webkit-flex: 1 1 auto;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 .cs.sheet .col.no-margin {
   margin: 0;
@@ -115,9 +92,7 @@
   border: none;
   border-bottom: 1px solid #2eccfa;
   color: #333;
-  -webkit-flex: 1 1 100%;
-      -ms-flex: 1 1 100%;
-          flex: 1 1 100%;
+  flex: 1 1 100%;
   font-family: Ubuntu, Calibri, Sans Serif;
   font-size: 0.8rem;
   font-weight: bold;
@@ -137,9 +112,7 @@
   font-size: 1.5rem;
   font-weight: bold;
   height: 45px;
-  -webkit-justify-content: flex-end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  justify-content: flex-end;
   padding: 8px;
 }
 .cs.cosmos .row .entry:not(.header):not(.invert):nth-child(even) {
@@ -148,8 +121,6 @@
 .cs.cosmos .picture {
   border: 20px solid #eee;
   box-shadow: -1px -1px 0 0 rgba(0, 0, 0, 0.7), 1px 1px 0 0 rgba(0, 0, 0, 0.7), 1px -1px 0 0 rgba(0, 0, 0, 0.7), -1px 1px 0 0 rgba(0, 0, 0, 0.7), inset 2px 2px 8px 0 rgba(0, 0, 0, 0.7), inset -2px -2px 8px 0 rgba(0, 0, 0, 0.3);
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   background-size: cover;
   background-position: center center;
@@ -157,15 +128,9 @@
   padding-bottom: 100%;
 }
 .cs.cosmos .entry {
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  display: -webkit-flex;
-  display: -ms-flexbox;
+  align-items: center;
   display: flex;
-  -webkit-flex: 0 0 calc(46%);
-      -ms-flex: 0 0 calc(46%);
-          flex: 0 0 calc(46%);
+  flex: 0 0 calc(46%);
   font-size: .75rem;
   height: 25px;
   line-height: 25px;
@@ -176,9 +141,7 @@
   border-radius: 5px;
 }
 .cs.cosmos .entry > * {
-  -webkit-flex: 1 1;
-      -ms-flex: 1 1;
-          flex: 1 1;
+  flex: 1 1;
   text-align: center;
 }
 .cs.cosmos .entry > .name {
@@ -211,33 +174,28 @@
   min-width: 80%;
 }
 .cs.cosmos .equipment .entry {
-  -webkit-flex: 1 1 100%;
-      -ms-flex: 1 1 100%;
-          flex: 1 1 100%;
+  flex: 1 1 100%;
 }
 .cs.cosmos .equipment .entry .name {
   min-width: 40%;
 }
+.cs.cosmos .gear .entry > * {
+  text-align: left;
+}
+.cs.cosmos .gear .entry > *.name {
+  min-width: 20%;
+  max-width: 20%;
+}
 .cs.cosmos .two-up {
-  -webkit-align-items: flex-start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  -webkit-align-content: flex-start;
-      -ms-flex-line-pack: start;
-          align-content: flex-start;
-  -webkit-flex-flow: row wrap;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-flow: row wrap;
 }
 .cs.cosmos .two-up > * {
-  -webkit-flex: 1 1 calc(40%);
-      -ms-flex: 1 1 calc(40%);
-          flex: 1 1 calc(40%);
+  flex: 1 1 calc(40%);
 }
 .cs.cosmos .two-up.row .header {
-  -webkit-flex: 1 1 calc(40%);
-      -ms-flex: 1 1 calc(40%);
-          flex: 1 1 calc(40%);
+  flex: 1 1 calc(40%);
 }
 .cs.cosmos .two-up > .entry:not(.header):nth-child(4n+3),
 .cs.cosmos .two-up > .entry:not(.header):nth-child(4n+4) {
