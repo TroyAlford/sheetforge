@@ -33,6 +33,7 @@
       &.row {
         font-size: 1.1rem;
         margin: 0 0 5px 0;
+        line-height: normal;
       }
     }
 
@@ -50,19 +51,20 @@
     }
   }
 
+  @shadow-color: rgba(226,251,251,.5);
   .picture {
     border: 20px solid #eee;
-    box-shadow: -1px -1px 0 0 rgba(0,0,0,.7),
-                 1px 1px 0 0 rgba(0,0,0,.7),
-                 1px -1px 0 0 rgba(0,0,0,.7),
-                -1px 1px 0 0 rgba(0,0,0,.7),
-                 inset 2px 2px 8px 0 rgba(0,0,0,.7),
-                 inset -2px -2px 8px 0 rgba(0,0,0,.3);
+    .rounded;
     display: flex;
-    background-size: cover;
-    background-position: center center;
     margin: 5px;
-    padding-bottom: 100%;
+
+    img {
+      border: 1px solid #2eccfa;
+      .rounded;
+      margin: -10px;
+      height: 280px;
+      width: 230px;
+    }
   }
 
   .entry {
@@ -91,8 +93,8 @@
     }
     > * { font-family: @header-font; }
   }
-  .traits .entry .name { min-width: 65%; }
   .skills .entry .name { min-width: 60%; }
+  .traits .entry .name { min-width: 80%; }
   .attributes .entry {
     margin: 2px;
     .name { min-width: 60%; }

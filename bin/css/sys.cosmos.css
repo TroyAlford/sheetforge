@@ -106,6 +106,7 @@
 .cs.cosmos .row .header.row {
   font-size: 1.1rem;
   margin: 0 0 5px 0;
+  line-height: normal;
 }
 .cs.cosmos .row.title {
   border-bottom: 1px solid;
@@ -120,12 +121,16 @@
 }
 .cs.cosmos .picture {
   border: 20px solid #eee;
-  box-shadow: -1px -1px 0 0 rgba(0, 0, 0, 0.7), 1px 1px 0 0 rgba(0, 0, 0, 0.7), 1px -1px 0 0 rgba(0, 0, 0, 0.7), -1px 1px 0 0 rgba(0, 0, 0, 0.7), inset 2px 2px 8px 0 rgba(0, 0, 0, 0.7), inset -2px -2px 8px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
   display: flex;
-  background-size: cover;
-  background-position: center center;
   margin: 5px;
-  padding-bottom: 100%;
+}
+.cs.cosmos .picture img {
+  border: 1px solid #2eccfa;
+  border-radius: 5px;
+  margin: -10px;
+  height: 280px;
+  width: 230px;
 }
 .cs.cosmos .entry {
   align-items: center;
@@ -155,11 +160,11 @@
 .cs.cosmos .entry > * {
   font-family: Ubuntu, Calibri, Sans Serif;
 }
-.cs.cosmos .traits .entry .name {
-  min-width: 65%;
-}
 .cs.cosmos .skills .entry .name {
   min-width: 60%;
+}
+.cs.cosmos .traits .entry .name {
+  min-width: 80%;
 }
 .cs.cosmos .attributes .entry {
   margin: 2px;
