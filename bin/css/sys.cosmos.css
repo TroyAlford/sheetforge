@@ -46,21 +46,16 @@
   border: 1px solid #000;
 }
 .box {
-  border-left: 1px dotted #003366;
-  height: 15px;
-  margin: 0 -7px 0 5px;
   position: relative;
-  top: 1px;
+  height: 25px;
 }
-.box:after {
-  border: 1px solid #003366;
-  border-radius: 5px;
-  display: inline-block;
+.box:before {
+  border-left: 1px dotted #003366;
   position: absolute;
-  left: 0px;
+  left: 1px;
   top: 2px;
-  right: 6px;
   bottom: 2px;
+  content: '';
 }
 .center {
   text-align: center!important;
@@ -77,8 +72,15 @@
     box-shadow: none;
     margin: 0;
   }
-  .fade-on-print,
-  .entry > *:not(.name) {
+  .fade-on-print {
+    color: #ddd;
+  }
+  .name,
+  .name > a {
+    color: #003366;
+  }
+  .xp .entry > *:not(.name),
+  .rp .entry > *:not(.name) {
     color: #ddd;
   }
 }
@@ -94,12 +96,12 @@
   color: #333;
   flex: 1 1 100%;
   font-family: Ubuntu, Calibri, Sans Serif;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: bold;
   height: 30px;
   min-height: 30px;
   max-height: 30px;
-  padding: 8px 0 8px 0;
+  padding: 8px 5px;
   text-align: left;
   text-shadow: 2px 1px #ddd;
 }
@@ -178,18 +180,45 @@
 .cs.cosmos .attributes .entry.derived .name {
   min-width: 80%;
 }
+.cs.cosmos .health {
+  text-align: center;
+  align-content: space-around;
+  align-items: center;
+}
+.cs.cosmos .health .col {
+  border-radius: 5px;
+  flex: 1 1 1%;
+  float: left;
+  color: #ccc;
+  height: 20px;
+  margin: 0 2px;
+  width: 20px;
+}
+.cs.cosmos .health .col.header {
+  border-bottom: none;
+  color: #003366;
+  min-width: 50px;
+}
+.cs.cosmos .health .col:not(.header) {
+  font-size: .7rem;
+  padding: 3px;
+}
 .cs.cosmos .equipment .entry {
   flex: 1 1 100%;
 }
-.cs.cosmos .equipment .entry .name {
-  min-width: 40%;
+.cs.cosmos .equipment .entry.armor > .name {
+  min-width: 35%;
+  max-width: 35%;
+}
+.cs.cosmos .equipment .entry.weapon > .name {
+  min-width: 60%;
+  max-width: 60%;
+}
+.cs.cosmos .gear .entry .name {
+  max-width: 150px;
 }
 .cs.cosmos .gear .entry > * {
   text-align: left;
-}
-.cs.cosmos .gear .entry > *.name {
-  min-width: 20%;
-  max-width: 20%;
 }
 .cs.cosmos .two-up {
   align-items: flex-start;

@@ -23,10 +23,10 @@
       color: #333;
       flex: 1 1 100%;
       font-family: @header-font;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: bold;
       height: 30px; min-height: 30px; max-height: 30px;
-      padding: 8px 0 8px 0;
+      padding: 8px 5px;
       text-align: left;
       text-shadow: 2px 1px #ddd;
 
@@ -101,13 +101,40 @@
     .box { margin: 0; }
     &.derived .name { min-width: 80%; }
   }
+  .health {
+    text-align: center;
+    align-content: space-around;
+    align-items: center;
+    .col {
+      .rounded;
+      flex: 1 1 1%;
+      float: left;
+      color: #ccc;
+      height: 20px;
+      margin: 0 2px;
+      width: 20px;
+      &.header {
+        border-bottom: none;
+        color: @fg-color;
+        min-width: 50px;
+      }
+      &:not(.header) { font-size: .7rem; padding: 3px; }
+    }
+  }
   .equipment .entry {
     flex: 1 1 100%;
-    .name { min-width: 40%; }
+    &.armor > .name {
+      min-width: 35%;
+      max-width: 35%;
+    }
+    &.weapon > .name {
+      min-width: 60%;
+      max-width: 60%;
+    }
   }
-  .gear .entry > * {
-    text-align: left;
-    &.name { min-width: 20%; max-width: 20%; }
+  .gear .entry {
+    .name { max-width: 150px; }
+    > * { text-align: left;}
   }
 
   .two-up {

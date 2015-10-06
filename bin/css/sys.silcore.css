@@ -46,21 +46,16 @@
   border: 1px solid #000;
 }
 .box {
-  border-left: 1px dotted #003366;
-  height: 15px;
-  margin: 0 -7px 0 5px;
   position: relative;
-  top: 1px;
+  height: 25px;
 }
-.box:after {
-  border: 1px solid #003366;
-  border-radius: 5px;
-  display: inline-block;
+.box:before {
+  border-left: 1px dotted #003366;
   position: absolute;
-  left: 0px;
+  left: 1px;
   top: 2px;
-  right: 6px;
   bottom: 2px;
+  content: '';
 }
 .center {
   text-align: center!important;
@@ -77,8 +72,15 @@
     box-shadow: none;
     margin: 0;
   }
-  .fade-on-print,
-  .entry > *:not(.name) {
+  .fade-on-print {
+    color: #ddd;
+  }
+  .name,
+  .name > a {
+    color: #003366;
+  }
+  .xp .entry > *:not(.name),
+  .rp .entry > *:not(.name) {
     color: #ddd;
   }
 }
