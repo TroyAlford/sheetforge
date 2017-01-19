@@ -1,21 +1,23 @@
-@import 'generic.less';
+@import './base';
+@import './variables';
+@import './fn/gradients';
 
 /* SilCore Specific Rules */
 @import url(https://fonts.googleapis.com/css?family=Ubuntu);
 
-@highlight-color: #f0f9f9;
-@gradient: linear-gradient(left,#036,#2eccfa 40%,#fff) 100% 1;
-@header-font: Ubuntu;
+$highlight-color: #f0f9f9;
+$gradient: linear-gradient(left,#036,#2eccfa 40%,#fff) 100% 1;
+$header-font: Ubuntu;
 
 .cs.silcore {
   .row {
     .header {
       border-width: 0 0 1px 0;
-      .vendor(border-image, @gradient);
+      border-image: $gradient;
 
       color: #333;
       flex: 1 1 100%;
-      font-family: @header-font;
+      font-family: $header-font;
       font-size: 0.8rem;
       font-weight: bold;
       height: 30px; min-height: 30px; max-height: 30px;
@@ -29,7 +31,9 @@
         margin: 0 0 8px 0;
       }
     }
-    &:not(.two-up) > .entry:not(.header):nth-child(even) { background-color: @highlight-color; }
+    &:not(.two-up) > .entry:not(.header):nth-child(even) {
+      background-color: $highlight-color;
+    }
 
     &.title {
       border-bottom: 1px solid;
@@ -68,7 +72,7 @@
     }
     > .name {
       color: #036;
-      font-family: @header-font;
+      font-family: $header-font;
       font-weight: bold;
       overflow: hidden;
       text-align: left;
@@ -92,7 +96,7 @@
     &.row .header { flex: 1 1 calc(40%); }
 
     > .entry:not(.header):nth-child(4n+3), > .entry:not(.header):nth-child(4n+4) {
-      background-color: @highlight-color;
+      background-color: $highlight-color;
     }
   }
 }
