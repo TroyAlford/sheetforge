@@ -12,17 +12,20 @@ export default class Base extends React.Component {
     return this.classes.join(' ')
   }
   get classes() {
+    const fromState = this.state && Array.isArray(this.state.classes) && this.state.classes || []
+
     return uniq([
       'sheetforge',
       this.constructor.name.toLowerCase(),
-      this.props.className,
-      ...this.props.classes,
+      this.props.className || '',
+      ...this.props.classes || [],
+      ...fromState.filter(c => typeof c === 'string'),
     ]).filter(c => !!c)
   }
 
   render() {
     return (
-      <div className={this.classes.join(' ')}>
+      <div className={this.classString}>
         {this.props.children}
       </div>
     )

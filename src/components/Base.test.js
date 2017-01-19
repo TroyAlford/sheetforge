@@ -18,12 +18,17 @@ describe('Base', () => {
 
   it('renders classes properly', () => {
     render(<Base className="test" classes={['foo', 'bar', '']} />)
+
     expect(rendered().classList).toContain('base')
     expect(rendered().classList).toContain('test')
     expect(rendered().classList).toContain('foo')
     expect(rendered().classList).toContain('bar')
-    expect(rendered().className).not.toMatch(/  /)
+    expect(rendered().className).not.toMatch(/  /) // Empty strings are removed
 
     expect(component.classString).toEqual('sheetforge base test foo bar')
+
+    component.setState({ classes: ['state'] })
+    expect(rendered().classList).toContain('state')
+    expect(component.classString).toEqual('sheetforge base test foo bar state')
   })
 })

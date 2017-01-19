@@ -1,20 +1,17 @@
 import React from 'react'
+import Base from './Base'
 
-export default class Page extends React.Component {
+export default class Page extends Base {
   render() {
-    const classes = ['sheetforge', 'page', this.props.className, ...this.props.classes]
     return (
-      <div className={classes.join(' ')}>
+      <div className={this.classes.join(' ')}>
         {this.props.children}
       </div>
     )
   }
 }
 
-Page.propTypes = {
-
-}
 Page.defaultProps = {
-  classes: [],
-  className: '',
+}
+Page.propTypes = {
 }

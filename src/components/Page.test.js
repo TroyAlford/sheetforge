@@ -17,13 +17,8 @@ describe('Page', () => {
   })
 
   it('renders classes properly', () => {
-    render(<Page className="test" />)
-    expect(rendered().classList.contains('page')).toEqual(true)
-    expect(rendered().classList.contains('test')).toEqual(true)
+    render(<Page />)
 
-    render(<Page classes={['foo', 'bar']} />)
     expect(rendered().classList.contains('page')).toEqual(true)
-    expect(rendered().classList.contains('foo')).toEqual(true)
-    expect(rendered().classList.contains('bar')).toEqual(true)
   })
 })
