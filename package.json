@@ -20,14 +20,24 @@
     "node-sass": "^4.3.0",
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
+    "react-autobind": "^1.0.6",
     "react-dom": "^15.4.2"
   },
   "scripts": {
     "test": "./node_modules/jest-cli/bin/jest.js"
   },
   "babel": {
+    "presets": [
+      "react",
+      "es2015"
+    ]
+  },
+  "jest": {
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.js", "!**/node_modules/**"],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!**/node_modules/**"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 50,
@@ -36,12 +46,6 @@
         "statements": 50
       }
     },
-    "presets": [
-      "react",
-      "es2015"
-    ]
-  },
-  "jest": {
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react/",
       "<rootDir>/node_modules/react-dom/",
