@@ -27,15 +27,6 @@ describe('Character', () => {
     expect(attrs.C).toEqual(4)
   })
 
-  // it('', () => {
-  //   const character = new Character({ layers: [{ attributes: { A: 'C + B', B: 'C ^ 2', C: 4 } }] })
-  //   const attrs = character.Attributes
-
-  //   expect(attrs.A).toEqual(0)
-  //   expect(attrs.B).toEqual(16)
-  //   expect(attrs.C).toEqual(4)
-  // })
-
   it('handles circular reference equations without a base layer set to defaults', () => {
     const character = new Character({ layers: [{ attributes: { A: 'B', B: 'C', C: 'A' } }] })
     const attrs = character.Attributes
