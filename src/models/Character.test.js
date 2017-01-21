@@ -50,17 +50,26 @@ describe('Character', () => {
     expect(attrs.C).toEqual(1)
     expect(attrs.D).toEqual(6)
   })
-})
 
-it('aggregates effects appropriately', () => {
-  const character = new Character({
-    layers: [
-      { effects: { 'vs Undead': { str: 1 } } },
-      { effects: { 'vs Undead': { str: 1 } } },
-    ]
+  it('aggregates effects appropriately', () => {
+    const character = new Character({
+      effects: {
+        'vs Evil': { str: 3, dmg: 1 }, // Third, str = 6 + 3 = 9
+        'vs Undead': { str: 1 },
+      },
+      equipment: [
+        { effects: { 'vs Evil': { str: 'str * 3', dmg: 1 } } }, // Second, str = 2 * 3 = 6
+        { effects: { 'vs Undead': { str: 1 } } },
+      ],
+      layers: [
+        { effects: { 'vs Evil': { str: 2, dmg: 1 } } }, // First, str = 2
+        { effects: { 'vs Undead': { str: 1 } } },
+      ]
+    })
+    const effects = character.Effects
+
+    expect(Object.keys(effects)).toHaveLength(2)
+    expect(effects['vs Evil']).toEqual({ str: 9, dmg: 3 })
+    expect(effects['vs Undead']).toEqual({ str: 3 })
   })
-  const effects = character.Effects
-
-  expect(Object.keys(effects)).toHaveLength(1)
-  expect(effects['vs Undead']).toEqual({ str: 2 })
 })

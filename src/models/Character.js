@@ -53,29 +53,37 @@ export default class Character {
   }
 
   get Effects() {
-    const all = this.layers.map(layer => layer.effects || {})
-    // [{ 'vs Undead': { str: 1 } }, { 'vs Undead': { str: 1 } }]
+    const all = [
+      ...this.layers.map(layer => layer.effects || {}),
+      ...this.equipment.map(item => item.effects || {}),
+      this.effects,
+    ]
+    // [{ 'key': { val: 1 } }, { 'key': { val: 1 } }]
 
     const layers = {}
     all.forEach(layer => Object.keys(layer).map(key => {
       if (!layers[key]) layers[key] = []
       layers[key].push(layer[key])
     }))
-    // { 'vs Undead': [{ str: 1 }, { str: 1 }] }
+    // { 'key': [{ val: 1 }, { val: 1 }] }
 
     Object.keys(layers).forEach(key => {
       layers[key] = layers[key].reduce(this.layerReducer, {})
     })
-    // [{ 'vs Undead': { str: 2 } }]
+    // [{ 'key': { val: 2 } }]
 
     return layers
   }
 
-  // applyEffects(effects = [], current = {}) {
-  //   effects.forEach(effect => {
-
-  //   })
-  // }
+  get Naked() {
+    return this.ActiveLayers.reduce(this.layerReducer, {})
+  }
+  get Equipped() {
+    return [this.Naked, ...this.ActiveEquipment].reduce(this.layerReducer, {})
+  }
+  get Buffed() {
+    return [this.Equipped, ...this.ActiveEffects].reduce(this.layerReducer, {})
+  }
 
   calculate(formula, values, options) {
     const parser = math.parser()
