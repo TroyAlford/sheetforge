@@ -51,3 +51,16 @@ describe('Character', () => {
     expect(attrs.D).toEqual(6)
   })
 })
+
+it('aggregates effects appropriately', () => {
+  const character = new Character({
+    layers: [
+      { effects: { 'vs Undead': { str: 1 } } },
+      { effects: { 'vs Undead': { str: 1 } } },
+    ]
+  })
+  const effects = character.Effects
+
+  expect(Object.keys(effects)).toHaveLength(1)
+  expect(effects['vs Undead']).toEqual({ str: 2 })
+})
