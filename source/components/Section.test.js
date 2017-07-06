@@ -1,23 +1,26 @@
-jest.unmock('./Section')
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import TestUtils from 'react-addons-test-utils'
 import Section from './Section'
 
+jest.unmock('./Section')
+
 describe('Section', () => {
-  let parent = null, component = null, rendered = null
+  /* eslint-disable no-console */
+  let parent = null
+  let component = null
+  let rendered = null
 
   function render(element) { ReactDOM.render(element, parent) }
 
   const consoleError = console.error
-  beforeAll(() => {
-    console.error = jest.fn()
-  })
+  beforeAll(() => { console.error = jest.fn() })
   beforeEach(() => {
     console.error.mockClear()
     parent = document.createElement('div')
     component = ReactDOM.render(<Section />, parent)
+
+    // eslint-disable-next-line react/no-find-dom-node
     rendered = () => ReactDOM.findDOMNode(component)
   })
   afterAll(() => {

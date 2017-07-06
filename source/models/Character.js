@@ -1,4 +1,4 @@
-import { defaultsDeep, flow, forOwn, pickBy } from 'lodash'
+import { defaultsDeep, forOwn, pickBy } from 'lodash'
 import bindMethods from '../utility/bindMethods'
 import math from '../vendor/mathjs'
 
@@ -14,6 +14,28 @@ const DEFAULT = {
     min: undefined,
     value: 0,
   },
+}
+
+function calculate(formula, values, options) {
+  const parser = math.parser()
+  const parsed = math.parse(formula)
+  parsed.traverse((node) => {
+    if (node.type === 'SymbolNode') {
+      parser.set(node.name,
+        values[node.name] !== undefined ? values[node.name] : options.value
+      )
+    }
+  })
+  let result = parser.eval(formula)
+
+  if (typeof options.min === 'number' && result < options.min) {
+    result = options.min
+  }
+  if (typeof options.max === 'number' && result > options.max) {
+    result = options.max
+  }
+
+  return result
 }
 
 export default class Character {
@@ -41,7 +63,6 @@ export default class Character {
   }
 
   get Attributes() {
-    const attributeDefaults = this.defaults.attribute
     return this.ActiveLayers
                .map(layer => layer.attributes)
                .reduce(this.layerReducer, {})
@@ -56,13 +77,13 @@ export default class Character {
     // [{ 'key': { val: 1 } }, { 'key': { val: 1 } }]
 
     const layers = {}
-    all.forEach(layer => Object.keys(layer).map(key => {
+    all.forEach(layer => Object.keys(layer).forEach((key) => {
       if (!layers[key]) layers[key] = []
       layers[key].push(layer[key])
     }))
     // { 'key': [{ val: 1 }, { val: 1 }] }
 
-    Object.keys(layers).forEach(key => {
+    Object.keys(layers).forEach((key) => {
       layers[key] = layers[key].reduce(this.layerReducer, {})
     })
     // [{ 'key': { val: 2 } }]
@@ -80,42 +101,23 @@ export default class Character {
     return [this.Equipped, ...this.ActiveEffects].reduce(this.layerReducer, {})
   }
 
-  calculate(formula, values, options) {
-    const parser = math.parser()
-    const parsed = math.parse(formula)
-    parsed.traverse(node => {
-      if (node.type === 'SymbolNode') {
-        parser.set(node.name,
-          values[node.name] !== undefined ? values[node.name] : options.value
-        )
-      }
-    })
-    let result = parser.eval(formula)
-
-    if (typeof(options.min) === 'number' && result < options.min)
-      result = options.min
-    if (typeof(options.max) === 'number' && result > options.max)
-      result = options.max
-
-    return result
-  }
   layerReducer(attrs, layer) {
     const defaults = this.defaults.attribute
-    const numericals = pickBy(layer, value => typeof(value) === 'number')
-    const calculated = pickBy(layer, value => typeof(value) === 'string')
+    const numericals = pickBy(layer, value => typeof value === 'number')
+    const calculated = pickBy(layer, value => typeof value === 'string')
 
     const changes = {}
 
     forOwn(numericals, (value, key) => {
       const current = [attrs[key], defaults.value, 0]
-                      .filter(v => typeof(v) === 'number')[0]
-      attrs[key] = value + current
+                      .filter(v => typeof v === 'number')[0]
+      attrs[key] = value + current // eslint-disable-line no-param-reassign
     })
 
     Object.keys(calculated)
     .map(key => ({ key, calc: calculated[key] }))
     .forEach(({ key, calc }) => {
-      changes[key] = this.calculate(calc, attrs, defaults)
+      changes[key] = calculate(calc, attrs, defaults)
     })
 
     return { ...attrs, ...changes }

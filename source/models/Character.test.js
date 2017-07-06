@@ -1,6 +1,6 @@
-jest.unmock('./Character')
-
 import Character from './Character'
+
+jest.unmock('./Character')
 
 describe('Character', () => {
   it('adds simple numeric attributes from active layers', () => {
@@ -8,8 +8,8 @@ describe('Character', () => {
       layers: [
         { attributes: { str: 1, dex: 1, con: 1 } },
         { attributes: { str: 2, dex: 3, con: -2 } },
-        { active: false, attributes: { str: 1, dex: -4, con: 1 } }
-      ]
+        { active: false, attributes: { str: 1, dex: -4, con: 1 } },
+      ],
     })
 
     const attrs = character.Attributes
@@ -39,9 +39,10 @@ describe('Character', () => {
   it('handles circular reference equations across layers sequentially', () => {
     const character = new Character({
       layers: [
-        { attributes: { A:  1 , B:  2 , C:  3  } },
+        // eslint-disable-next-line key-spacing,comma-spacing
+        { attributes: { A:  1 , B:  2 , C:  3 } },
         { attributes: { C: 'A', A: 'B', B: 'C', D: 'A + B + C' } },
-      ]
+      ],
     })
     const attrs = character.Attributes
 
@@ -64,7 +65,7 @@ describe('Character', () => {
       layers: [
         { effects: { 'vs Evil': { str: 2, dmg: 1 } } }, // First, str = 2
         { effects: { 'vs Undead': { str: 1 } } },
-      ]
+      ],
     })
     const effects = character.Effects
 

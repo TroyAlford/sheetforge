@@ -1,4 +1,4 @@
-import Character from '../../models/Character'
+import Character from '../../source/models/Character'
 
 const DEFAULT = {
   layer: {
@@ -32,7 +32,7 @@ const DEFAULT = {
     max: 10,
     min: -10,
     value: -1,
-  }
+  },
 }
 
 export default class Mortal extends Character {

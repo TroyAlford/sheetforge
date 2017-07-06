@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 
 export default class Section extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      classes: [typeof props.title === 'string' && props.title || '']
+      classes: [(typeof props.title === 'string' && props.title) || ''],
     }
   }
   componentWillReceiveProps(props) {
     this.setState({
-      classes: [typeof props.title === 'string' && props.title || '']
+      classes: [(typeof props.title === 'string' && props.title) || ''],
     })
   }
 
@@ -40,18 +39,23 @@ export default class Section extends Component {
 
 Section.defaultProps = {
   className: 'section',
+  children: undefined,
   headers: [],
   title: '',
 }
 
-Section.propTypes = {
-  className: PropTypes.string,
-  headers: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ])).isRequired,
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ]),
+if (process.NODE_ENV !== 'production') {
+  const PropTypes = require('prop-types') // eslint-disable-line global-require
+  Section.propTypes = {
+    className: PropTypes.string,
+    children: PropTypes.arrayOf(PropTypes.element),
+    headers: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ])).isRequired,
+    title: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
+    ]),
+  }
 }
