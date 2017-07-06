@@ -1,7 +1,7 @@
-import React from 'react'
-import Base from './Base'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-export default class Section extends Base {
+export default class Section extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -26,8 +26,10 @@ export default class Section extends Base {
       )
     })
 
+    const className = ['sf', this.props.className].filter(Boolean).join(' ')
+
     return (
-      <div className={this.classString}>
+      <div className={className}>
         {this.props.title && <div className="title">{this.props.title}</div>}
         {headers.length !== 0 && <div className="header">{headers}</div>}
         {this.props.children}
@@ -36,21 +38,20 @@ export default class Section extends Base {
   }
 }
 
-Section.propTypes = {
-  className: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.arrayOf(React.PropTypes.string),
-  ]),
-  headers: React.PropTypes.arrayOf(React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element,
-  ])).isRequired,
-  title: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.array,
-  ]),
-}
 Section.defaultProps = {
+  className: 'section',
   headers: [],
   title: '',
+}
+
+Section.propTypes = {
+  className: PropTypes.string,
+  headers: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ])).isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
 }

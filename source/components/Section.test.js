@@ -25,14 +25,8 @@ describe('Section', () => {
   })
 
   it('renders classes properly', () => {
-    render(<Section title="title" />)
-
+    render(<Section />)
     expect(rendered().classList).toContain('section')
-    expect(rendered().classList).toContain('title')
-
-    render(<Section title={['first', 'second']} />)
-    expect(rendered().classList).not.toContain('first')
-    expect(rendered().classList).not.toContain('second')
   })
 
   it('handles non-string titles gracefully', () => {
