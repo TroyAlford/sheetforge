@@ -1,5 +1,5 @@
 import { defaultsDeep, flow, forOwn, pickBy } from 'lodash'
-import autoBind from 'react-autobind'
+import bindMethods from '../utility/bindMethods'
 import math from '../vendor/mathjs'
 
 const DEFAULT = {
@@ -17,17 +17,12 @@ const DEFAULT = {
 }
 
 export default class Character {
-  constructor(
-    /* Character Info */
-    { effects = DEFAULT.effects, equipment = DEFAULT.equipment, layers = DEFAULT.layers } = {},
-    /* Options */
-    { attribute } = {}
-  ) {
-    autoBind(this)
-
+  constructor({ effects, equipment, layers } = {}, { attribute } = {}) {
     this.effects = effects || DEFAULT.effects
     this.equipment = equipment || DEFAULT.equipment
     this.layers = layers || DEFAULT.layers
+
+    bindMethods(this, ['calculate', 'layerReducer'])
 
     this.defaults = {
       attribute: defaultsDeep(attribute, DEFAULT.attribute),
