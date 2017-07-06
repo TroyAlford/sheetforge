@@ -1,5 +1,5 @@
-import { defaultsDeep, forOwn, pickBy } from 'lodash'
 import bindMethods from '../utility/bindMethods'
+import pickBy from '../utility/pickBy'
 import math from '../vendor/mathjs'
 
 const DEFAULT = {
@@ -47,7 +47,7 @@ export default class Character {
     bindMethods(this, ['calculate', 'layerReducer'])
 
     this.defaults = {
-      attribute: defaultsDeep(attribute, DEFAULT.attribute),
+      attribute: { ...DEFAULT.attribute, ...(attribute || {}) },
     }
   }
 
@@ -108,10 +108,11 @@ export default class Character {
 
     const changes = {}
 
-    forOwn(numericals, (value, key) => {
+    Object.keys(numericals)
+    .forEach((key) => {
       const current = [attrs[key], defaults.value, 0]
                       .filter(v => typeof v === 'number')[0]
-      attrs[key] = value + current // eslint-disable-line no-param-reassign
+      attrs[key] = current + numericals[key] // eslint-disable-line no-param-reassign
     })
 
     Object.keys(calculated)
