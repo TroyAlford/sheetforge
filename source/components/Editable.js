@@ -16,7 +16,7 @@ export default class Editable extends React.Component {
 
   state = {
     editing: false,
-    editorValue: this.props.value,
+    resetValue: this.props.value,
   }
 
   getEditorType = () => {
@@ -37,15 +37,8 @@ export default class Editable extends React.Component {
 
     return 'text'
   }
-  commitChanges = () => {
-    this.props.onChange(this.state.editorValue, this.props.value)
-    this.setState({ editing: false })
-  }
   resetChanges = () => {
-    this.setState({
-      editing: false,
-      editorValue: this.props.value,
-    })
+    this.props.onChange(this.state.resetValue, this.props.value)
   }
 
   createRefWithAutoFocus = (editor) => {
@@ -62,10 +55,10 @@ export default class Editable extends React.Component {
       case 'slider':
       case 'number':
         value = parseInt(value || 0, 10)
-        if (Number.isNaN(value)) value = this.state.editorValue
+        if (Number.isNaN(value)) value = this.props.value
         value = bound(value, { min, max })
     }
-    this.setState({ editorValue: value })
+    this.props.onChange(value, this.state.originalValue)
   }
   handleKeys = (event) => {
     const { target, key, ctrlKey, metaKey } = event
@@ -73,7 +66,7 @@ export default class Editable extends React.Component {
     if (key === 'Escape') this.resetChanges()
     if (key === 'Enter') {
       if (target.nodeName !== 'TEXTAREA' || ctrlKey || metaKey) {
-        this.commitChanges(event)
+        this.handleToggleEditing()
       }
     }
   }
@@ -85,7 +78,7 @@ export default class Editable extends React.Component {
     if (this.props.readonly) return
     this.setState({
       editing: !this.state.editing,
-      editorValue: this.props.value,
+      resetValue: this.props.value,
     })
   }
 
@@ -113,13 +106,13 @@ export default class Editable extends React.Component {
 
     return (
       <textarea
-        onBlur={this.commitChanges}
+        onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
         onKeyDown={this.handleKeys}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
-        rows={this.state.editorValue.split('\n').length}
-      >{this.state.editorValue}</textarea> // eslint-disable-line
+        rows={this.props.value.split('\n').length}
+      >{this.props.value}</textarea> // eslint-disable-line
     )
   }
   renderNumber = () => {
@@ -130,14 +123,14 @@ export default class Editable extends React.Component {
         type="number"
         max={this.props.max}
         min={this.props.min}
-        onBlur={this.commitChanges}
+        onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
-        onFocus={event => event.target.select()}
+        onFocus={this.handleReceivingFocus}
         onKeyDown={this.handleKeys}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
         step={this.props.step || 1}
-        value={this.state.editorValue}
+        value={this.props.value}
       />
     )
   }
@@ -150,11 +143,11 @@ export default class Editable extends React.Component {
         disabled={this.props.readonly}
         max={this.props.max || 100}
         min={this.props.min || 0}
-        onBlur={this.commitChanges}
+        onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
         ref={this.createRefWithAutoFocus}
         step={this.props.step || 1}
-        value={this.state.editorValue}
+        value={this.props.value}
       />
     )
   }
@@ -164,13 +157,13 @@ export default class Editable extends React.Component {
     return (
       <input
         type="text"
-        onBlur={this.commitChanges}
+        onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
         onFocus={this.selectOnFocus}
         onKeyDown={this.handleKeys}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
-        value={this.state.editorValue}
+        value={this.props.value}
       />
     )
   }
