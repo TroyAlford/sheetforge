@@ -1,5 +1,6 @@
 import React from 'react'
 import bound from '../utilities/bound'
+import './Editable.scss'
 
 export default class Editable extends React.Component {
   static defaultProps = {
