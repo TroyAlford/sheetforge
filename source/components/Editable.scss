@@ -14,18 +14,16 @@ div.editable {
   }
 
   span, input, textarea {
+    align-items: center;
     border: none;
-    display: block;
+    display: inline-flex;
     font-family: inherit;
     font-size: inherit;
     height: 100%;
     line-height: inherit;
     padding: 0;
+    justify-content: inherit;
     text-align: inherit;
     width: 100%;
-  }
-
-  span {
-    padding-top: 2px;
   }
 }

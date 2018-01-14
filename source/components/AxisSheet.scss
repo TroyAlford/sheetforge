@@ -1,3 +1,42 @@
-.sheet {
-  background-color: blue;
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);
+
+.sheetforge.sheet {
+  font-family: Ubuntu;
+  font-size: 12px;
+
+  display: grid;
+  grid-gap: 10px;
+  position: relative;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px;
+  }
+
+  div.descriptors {
+    display: grid;
+    padding: 5px;
+    grid-gap: 5px;
+  }
+}
+
+.sheetforge.sheet {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(40px, auto);
+
+  header {
+    grid-area: 1 / 1 / 1 / 4;
+  }
+
+  img.portrait {
+    grid-area: 2 / 1 / 4 / 2;
+    align-self: stretch;
+  }
+
+  div.descriptors {
+    grid-area: 2 / 2 / 3 / 4;
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
