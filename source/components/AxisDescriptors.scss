@@ -1,0 +1,52 @@
+@import '../variables';
+
+.sheetforge.sheet .descriptors {
+  display: grid;
+  grid-area: descriptors;
+  grid-auto-flow: column;
+  grid-gap: 5px;
+  grid-template-areas:
+    "header header header"
+    "homeland height eyes"
+    "race weight hair"
+    "concept gender age";
+  grid-template-rows: repeat(4, 40px);
+  height: auto;
+
+  header {
+    border-bottom: 1px solid $color-divider;
+    font-size: 1.5em;
+    font-weight: bold;
+    grid-area: header;
+    height: 1.5em;
+  }
+}
+
+.sheetforge.sheet .descriptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2em;
+  margin: .5em 0;
+  width: 100%;
+
+  strong, .editable {
+    align-items: center;
+    border: 1px solid transparent;
+    display: inline-flex;
+    height: 100%;
+  }
+  strong {
+    margin-right: 5px;
+    text-align: left;
+    text-transform: capitalize;
+  }
+  .editable {
+    justify-content: flex-end;
+    text-align: right;
+
+    &.editing {
+      border-color: #eee;
+    }
+  }
+}

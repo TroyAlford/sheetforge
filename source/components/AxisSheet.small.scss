@@ -1,0 +1,45 @@
+.sheetforge.sheet.axis.small {
+  grid-template-areas:
+    "header"
+    "attributes"
+    "descriptors"
+  ;
+
+  img.portrait { display: none; }
+
+  .descriptors {
+    grid-template-areas:
+      "height weight"
+      "gender age"
+      "eyes hair"
+      "homeland race"
+      "concept concept"
+    ;
+  }
+  .attributes {
+    grid-template-areas: 
+      "header header header"
+      "body mind spirit"
+      "strength intellect confidence"
+      "agility acuity intuition"
+      "fitness focus devotion"
+      "potency resilience reflex"
+      "divider-1 divider-1 divider-1"
+      "racial racial racial"
+      "size speed naturalArmor"
+      "combat combat combat"
+      "accuracy might toughness"
+      "divider-2 divider-2 divider-2"
+      "thresholds thresholds thresholds"
+      "light deep death"
+    ;
+    padding: 0;
+  }
+
+  .attribute, .descriptor {
+    &:not(.computed) {
+      background-color: #fafafa;
+      border: 1px solid #efefef;
+    }
+  }
+}

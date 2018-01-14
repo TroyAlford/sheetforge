@@ -1,0 +1,73 @@
+@import '../variables';
+
+.sheetforge.sheet .attributes {
+  display: grid;
+  grid-area: attributes;
+  grid-gap: 5px;
+  grid-template-areas:
+    "header header header header"
+    "none body mind spirit"
+    "potency strength intellect confidence"
+    "reflex agility acuity intuition"
+    "resilience fitness focus devotion"
+    "divider-1 divider-1 divider-1 divider-1"
+    "racial size speed naturalArmor"
+    "combat accuracy might toughness"
+    "divider-2 divider-2 divider-2 divider-2"
+    "thresholds light deep death"
+  ;
+  height: auto;
+  white-space: nowrap;
+
+  header {
+    border-bottom: 1px solid $color-divider;
+    font-size: 1.5em;
+    font-weight: bold;
+    grid-area: header;
+  }
+  hr {
+    border: 0;
+    border-bottom: 1px solid $color-divider;
+    margin: 0;
+    width: 100%;
+
+    &.divider-1 { margin-top: 5px; grid-area: divider-1; }
+    &.divider-2 { grid-area: divider-2; }
+  }
+}
+
+.sheetforge.sheet .attribute {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  box-sizing: border-box;
+  justify-content: space-between;
+  height: 2.5em;
+  padding: 5px;
+  width: 100%;
+
+  &.computed {
+    background-color: $color-highlight-bg;
+    border: 1px solid $color-highlight-border;
+  }
+
+  strong, .editable {
+    align-items: center;
+    border: 1px solid transparent;
+    display: inline-flex;
+    height: 100%;
+  }
+  strong, span {
+    margin-right: 5px;
+    text-align: left;
+    text-transform: capitalize;
+  }
+  .editable {
+    justify-content: flex-end;
+    text-align: right;
+
+    &.editing {
+      border-color: #eee;
+    }
+  }
+}
