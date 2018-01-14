@@ -1,0 +1,12 @@
+.sheetforge.sheet.large {
+  grid-template-areas:
+    "header header header"
+    "left descriptors descriptors"
+    "left attributes attributes"
+    "left attributes attributes"
+  ;
+
+  img.portrait {
+    grid-area: left;
+  }
+}

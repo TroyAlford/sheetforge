@@ -3,74 +3,72 @@ import Character from './Character'
 jest.unmock('./Character')
 
 describe('Character', () => {
-  it('adds simple numeric attributes from active layers', () => {
+  it('calculates active layers', () => {
+    const character = new Character()
+
+    expect(character.layers).toHaveLength(0)
+    expect(character.modifiers).toHaveLength(0)
+
+    character.layers.push({ inactive: true })
+    expect(character.layers).toHaveLength(1)
+    expect(character.modifiers).toHaveLength(0)
+
+    character.layers[0].inactive = false
+    expect(character.layers).toHaveLength(1)
+    expect(character.modifiers).toHaveLength(1)
+  })
+
+  it('applies layers via constructor', () => {
+    const character = new Character({
+      layers: [{ inactive: true }, {}]
+    })
+
+    expect(character.layers).toHaveLength(2)
+    expect(character.modifiers).toHaveLength(1)
+  })
+
+  it('calculates attributes from active layers', () => {
     const character = new Character({
       layers: [
-        { attributes: { str: 1, dex: 1, con: 1 } },
-        { attributes: { str: 2, dex: 3, con: -2 } },
-        { active: false, attributes: { str: 1, dex: -4, con: 1 } },
+        { strength: 1, fitness: 2, agility: 3 },
+        { strength: 3, fitness: 2, agility: 1 },
       ],
     })
 
-    const attrs = character.Attributes
-    expect(attrs.str).toEqual(3)  // Active: 1 +  2 = 3
-    expect(attrs.dex).toEqual(4)  // Active: 1 +  3 = 4
-    expect(attrs.con).toEqual(-1) // Active: 1 + -2 = -1
+    expect(character.modifierFor('strength')).toBe(4)
+    expect(character.modifierFor('fitness')).toBe(4)
+    expect(character.modifierFor('agility')).toBe(4)
+    expect(character.sumOf('strength', 'fitness', 'agility')).toBe(12)
+    expect(character.averageOf('strength', 'fitness', 'agility')).toBe(4)
+
+    character.layers[1].inactive = true
+    expect(character.modifierFor('strength')).toBe(1)
+    expect(character.modifierFor('fitness')).toBe(2)
+    expect(character.modifierFor('agility')).toBe(3)
+    expect(character.averageOf('strength', 'fitness', 'agility')).toBe(2)
   })
 
-  it('calculates attribute equations', () => {
-    const character = new Character({ layers: [{ attributes: { A: 'B * C', B: 2, C: 4 } }] })
-    const attrs = character.Attributes
-
-    expect(attrs.A).toEqual(8)
-    expect(attrs.B).toEqual(2)
-    expect(attrs.C).toEqual(4)
-  })
-
-  it('handles circular reference equations without a base layer set to defaults', () => {
-    const character = new Character({ layers: [{ attributes: { A: 'B', B: 'C', C: 'A' } }] })
-    const attrs = character.Attributes
-
-    expect(attrs.A).toEqual(0)
-    expect(attrs.B).toEqual(0)
-    expect(attrs.C).toEqual(0)
-  })
-
-  it('handles circular reference equations across layers sequentially', () => {
+  it('calculates active effect modifiers', () => {
     const character = new Character({
-      layers: [
-        // eslint-disable-next-line key-spacing,comma-spacing
-        { attributes: { A:  1 , B:  2 , C:  3 } },
-        { attributes: { C: 'A', A: 'B', B: 'C', D: 'A + B + C' } },
-      ],
+      layers: [{ STR: 1, CON: 1, DEX: 1 }],
+      effects: [{ name: 'Cat\'s Grace', active: true, modifiers: { DEX: 2 } }],
+      equipment: [{ name: 'Bracers of Strength', equipped: true, modifiers: { STR: 2 } }],
     })
-    const attrs = character.Attributes
 
-    expect(attrs.A).toEqual(2)
-    expect(attrs.B).toEqual(3)
-    expect(attrs.C).toEqual(1)
-    expect(attrs.D).toEqual(6)
-  })
+    expect(character.modifierFor('STR')).toBe(3)
+    expect(character.modifierFor('DEX')).toBe(3)
+    expect(character.modifierFor('CON')).toBe(1)
 
-  it('aggregates effects appropriately', () => {
-    const character = new Character({
-      effects: {
-        'vs Evil': { str: 3, dmg: 1 }, // Third, str = 6 + 3 = 9
-        'vs Undead': { str: 1 },
-      },
-      equipment: [
-        { effects: { 'vs Evil': { str: 'str * 3', dmg: 1 } } }, // Second, str = 2 * 3 = 6
-        { effects: { 'vs Undead': { str: 1 } } },
-      ],
-      layers: [
-        { effects: { 'vs Evil': { str: 2, dmg: 1 } } }, // First, str = 2
-        { effects: { 'vs Undead': { str: 1 } } },
-      ],
-    })
-    const effects = character.Effects
+    character.equipment.push({ name: 'Belt of Constitution', equipped: true, modifiers: { CON: 2 } })
+    expect(character.modifierFor('CON')).toBe(3)
 
-    expect(Object.keys(effects)).toHaveLength(2)
-    expect(effects['vs Evil']).toEqual({ str: 9, dmg: 3 })
-    expect(effects['vs Undead']).toEqual({ str: 3 })
+    character.equipment[0].equipped = false
+    expect(character.modifierFor('STR')).toBe(1)
+
+    character.effects[0].active = false
+    expect(character.modifierFor('DEX')).toBe(1)
+
+    character.equipment[1].modifiers.CON = 4
+    expect(character.modifierFor('CON')).toBe(5)
   })
 })

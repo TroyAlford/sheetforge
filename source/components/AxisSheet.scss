@@ -1,0 +1,26 @@
+@import '../variables';
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);
+
+.sheetforge.sheet.axis {
+  font-family: Ubuntu;
+  font-size: 12px;
+
+  display: grid;
+  grid-auto-rows: minmax(40px, auto);
+  grid-gap: 10px;
+  position: relative;
+  max-height: 11.5in;
+  max-width: 8.5in;
+
+  header {
+    align-items: center;
+    display: flex;
+    grid-area: "header";
+    justify-content: flex-start;
+    padding: 5px;
+  }
+}
+
+@import './AxisSheet.small';
+@import './AxisSheet.medium';
+@import './AxisSheet.large';
