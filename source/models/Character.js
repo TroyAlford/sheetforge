@@ -6,6 +6,7 @@ export default class Character {
   layers = observable([]);
   effects = observable([]);
   equipment = observable([]);
+  descriptors = observable.map({});
 
   constructor({ layers, effects, equipment } = {}) {
     this.layers.replace(layers || [])
