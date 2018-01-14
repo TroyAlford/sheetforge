@@ -10,7 +10,7 @@ export default class Editable extends React.Component {
     placeholder: '',
     readonly: false,
     step: 1,
-    value: null,
+    value: '',
   }
 
   state = {
@@ -76,7 +76,7 @@ export default class Editable extends React.Component {
       }
     }
   }
-  handleReceivingFocus() {
+  handleReceivingFocus = () => {
     if (this.props.readonly) return
     if (!this.state.editing) this.handleToggleEditing()
   }
@@ -103,7 +103,7 @@ export default class Editable extends React.Component {
   )
   renderMultiline = () => {
     if (!this.state.editing) {
-      const lines = this.state.editorValue.split('\n')
+      const lines = this.props.value.split('\n')
       const paragraphs = lines.map((line, index) =>
         <p key={index}>{line}</p>
       )
@@ -174,7 +174,7 @@ export default class Editable extends React.Component {
     )
   }
   renderStatic = () => (
-    <span onClick={this.handleToggleEditing}>{this.state.editorValue}</span>
+    <span onClick={this.handleToggleEditing}>{this.props.value}</span>
   )
 
   renderEditor = () => {
