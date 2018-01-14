@@ -1,17 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react'
+import { observer } from 'mobx-react'
 import Editable from './Editable'
-import './Descriptor.scss'
 
-export default class Descriptor extends Component {
+@observer export default class Descriptor extends Component {
   handleChange = (value) => {
-    this.props.onChange(this.props.name, value)
+    const { character, name } = this.props
+    character.descriptors.set(name, value)
   }
 
   render = () => {
-    const { name, value } = this.props
+    const { character, name } = this.props
+    const value = character.descriptors.get(name)
+    const style = { gridArea: name }
+
     return (
-      <div className="descriptor">
+      <div className={`descriptor ${name}`} style={style}>
         <strong>{name}</strong>
         <Editable value={value} onChange={this.handleChange} />
       </div>
