@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import Editable from './Editable'
 
@@ -10,19 +10,36 @@ import Editable from './Editable'
   }
 
   render = () => {
-    const { caption, character, computed, name } = this.props
-    const current = character.modifierFor(name)
-    const value = computed ? current : character.layers[0][name]
-    const valueDisplay = computed
-      ? <span>{value}</span>
-      : <Editable value={value} onChange={this.handleChange} min={-10} max={10} />
-    const classes = ['attribute', name, (computed && 'computed') || ''].filter(Boolean)
-    const style = { gridArea: name }
-    const HeaderTag = computed ? 'strong' : 'span'
+    const { caption, character, className, computed, name } = this.props
+    let modified = false
+    let valueDisplay
+
+    if (character) {
+      const modifiedValue = character.modifierFor(name)
+      const unmodifiedValue = character.layers[0][name]
+      modified = !computed && modifiedValue !== unmodifiedValue
+      valueDisplay = (
+        <Fragment>
+          <Editable
+            max={10}
+            min={-10}
+            onChange={this.handleChange}
+            readonly={Boolean(computed)}
+            value={computed ? modifiedValue : unmodifiedValue}
+          />
+          {modified && <span className="temporary">{modifiedValue}</span>}
+        </Fragment>
+      )
+    }
+
+    const classes = [
+      'attribute', className, name,
+      modified ? 'modified' : '',
+    ].filter(Boolean)
 
     return (
-      <div className={classes.join(' ')} style={style}>
-        <HeaderTag>{caption || name}</HeaderTag>
+      <div className={classes.join(' ')}>
+        <span className="caption">{caption || name}</span>
         {valueDisplay}
       </div>
     )
