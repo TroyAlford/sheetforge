@@ -84,13 +84,13 @@ $attributes:
     border: 1px solid $color-highlight-border;
   }
 
-  strong, .editable {
+  .caption, .editable, .temporary {
     align-items: center;
     border: 1px solid transparent;
     display: inline-flex;
     height: 100%;
   }
-  strong, span {
+  .caption {
     margin-right: 5px;
     text-align: left;
     text-transform: capitalize;
@@ -102,5 +102,13 @@ $attributes:
     &.editing {
       border-color: #eee;
     }
+  }
+  &.modified .editable span {
+    color: #bbb;
+    text-decoration: line-through;
+  }
+  .temporary {
+    color: green;
+    font-weight: bold;
   }
 }
