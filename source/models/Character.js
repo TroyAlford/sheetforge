@@ -3,15 +3,17 @@ import { computed, observable } from 'mobx'
 function sum(a, b) { return a + b }
 
 export default class Character {
+  @observable name = 'Unnamed Character';
   layers = observable([]);
   effects = observable([]);
   equipment = observable([]);
   descriptors = observable.map({});
 
-  constructor({ layers, effects, equipment } = {}) {
-    this.layers.replace(layers || [])
+  constructor({ effects, equipment, layers, name } = {}) {
     this.effects.replace(effects || [])
     this.equipment.replace(equipment || [])
+    this.layers.replace(layers || [])
+    if (typeof name === 'string') this.name = name
   }
 
   @computed get modifiers() {

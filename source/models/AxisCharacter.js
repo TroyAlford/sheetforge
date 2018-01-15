@@ -35,11 +35,12 @@ const baseAttributes = {
 }
 
 export default class AxisCharacter extends Character {
-  constructor({ effects, equipment } = {}) {
+  constructor({ effects, equipment, name } = {}) {
     super({
       layers: [baseAttributes],
       effects,
       equipment,
+      name,
     })
   }
 
