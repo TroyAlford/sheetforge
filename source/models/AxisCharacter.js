@@ -14,17 +14,21 @@ const baseAttributes = {
   strength: -1,
 
   size: 0,
+  naturalArmor: 0,
 
   accuracy() { return this.averageOf('acuity', 'focus', 'intuition') },
   body() { return this.averageOf('strength', 'agility', 'fitness') },
-  damageThreshold() {
+  damageThresholdLight() {
     return bound(this.sumOf('size', 'strength', 'fitness', 'armor', 'naturalArmor'), { min: 1 })
   },
+  damageThresholdDeep() { return this.modifierFor('damageThresholdLight') * 2 },
+  damageThresholdDeath() { return this.modifierFor('damageThresholdDeep') * 2 },
   might() { return this.modifierFor('size') + this.averageOf('strength', 'fitness') },
   mind() { return this.averageOf('intellect', 'acuity', 'focus') },
   potency() { return this.averageOf('strength', 'intellect', 'confidence') },
   reflex() { return this.averageOf('agility', 'acuity', 'intuition') },
   resilience() { return this.averageOf('fitness', 'focus', 'devotion') },
+  speed() { return 6 + this.modifierFor('size') + Math.round(this.modifierFor('fitness') / 2) },
   spirit() { return this.averageOf('confidence', 'intuition', 'devotion') },
   toughness() {
     return (
