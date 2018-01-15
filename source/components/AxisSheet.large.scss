@@ -1,10 +1,13 @@
 .sheetforge.sheet.large {
+  border: 1px solid #eee;
   grid-template-areas:
     "header header header"
     "left descriptors descriptors"
     "left attributes attributes"
     "left attributes attributes"
   ;
+  margin: 0 auto;
+  padding: .25in;
 
   img.portrait {
     grid-area: left;
