@@ -21,7 +21,6 @@ $descriptors:
     "homeland height eyes"
     "race weight hair"
     "concept gender age";
-  grid-template-rows: repeat(4, 40px);
   height: auto;
 
   header {
@@ -34,11 +33,14 @@ $descriptors:
 }
 
 .sheetforge.sheet .descriptor {
-  display: flex;
   align-items: center;
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  height: 2.5em;
   justify-content: space-between;
-  height: 2em;
-  margin: .5em 0;
+  margin: 0;
+  padding: 5px;
   width: 100%;
 
   @each $descriptor in $descriptors {
