@@ -16,7 +16,7 @@ import Editable from './Editable'
 
     if (character) {
       const modifiedValue = character.modifierFor(name)
-      const unmodifiedValue = character.layers[0][name]
+      const unmodifiedValue = character.layers[0].get(name)
       modified = !computed && modifiedValue !== unmodifiedValue
       valueDisplay = (
         <Fragment>
