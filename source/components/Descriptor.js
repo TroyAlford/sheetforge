@@ -12,10 +12,9 @@ import Editable from './Editable'
   render = () => {
     const { character, name } = this.props
     const value = character.descriptors.get(name)
-    const style = { gridArea: name }
 
     return (
-      <div className={`descriptor ${name}`} style={style}>
+      <div className={`descriptor ${name}`}>
         <strong>{name}</strong>
         <Editable value={value} onChange={this.handleChange} />
       </div>
