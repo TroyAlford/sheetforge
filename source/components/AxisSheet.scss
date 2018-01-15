@@ -12,11 +12,13 @@
   max-height: 11.5in;
   max-width: 8.5in;
 
-  header {
+  .character-name {
     align-items: center;
     display: flex;
-    grid-area: "header";
+    font-size: 1.5em;
+    grid-area: header;
     justify-content: flex-start;
+  }
 
   header {
     border-bottom: 1px solid $color-divider;

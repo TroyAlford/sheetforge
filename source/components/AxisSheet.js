@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import AxisCharacter from '../models/AxisCharacter'
 import AxisAttributes from './AxisAttributes'
 import AxisDescriptors from './AxisDescriptors'
+import Editable from './Editable'
 import bound from '../utilities/bound'
 
 import './AxisSheet.scss'
@@ -41,6 +42,9 @@ import './AxisSheet.scss'
   handleDescriptorChange = (descriptor, value) => {
     this.character.descriptors.set(descriptor.toLowerCase(), value)
   }
+  handleNameChange = (value) => {
+    this.character.name = value
+  }
 
   render = () => {
     const { portraitHeight, sizeClass = 'large' } = this.state
@@ -48,7 +52,11 @@ import './AxisSheet.scss'
 
     return (
       <div className={`sheetforge sheet axis ${sizeClass}`} ref={(self) => { this.container = self }}>
-        <header>{character.name || 'Unnamed Character'}</header>
+        <Editable
+          className="character-name"
+          value={character.name}
+          onChange={this.handleNameChange}
+        />
         <img
           className="portrait"
           alt="Character Portrait"
