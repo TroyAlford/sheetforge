@@ -55,6 +55,7 @@ export default class Editable extends React.Component {
       case 'slider':
       case 'number':
         value = parseInt(value || 0, 10)
+        // eslint-disable-next-line prefer-destructuring
         if (Number.isNaN(value)) value = this.props.value
         value = bound(value, { min, max })
     }
