@@ -17,7 +17,20 @@
     display: flex;
     grid-area: "header";
     justify-content: flex-start;
-    padding: 5px;
+
+  header {
+    border-bottom: 1px solid $color-divider;
+    font-size: 1.5em;
+    font-weight: bold;
+    grid-area: header;
+    height: 1.5em;
+  }
+
+  hr {
+    border: 0;
+    border-bottom: 1px solid $color-divider;
+    margin: 0;
+    width: 100%;
   }
 }
 

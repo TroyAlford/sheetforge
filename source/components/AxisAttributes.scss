@@ -48,21 +48,8 @@ $attributes:
   height: auto;
   white-space: nowrap;
 
-  header {
-    border-bottom: 1px solid $color-divider;
-    font-size: 1.5em;
-    font-weight: bold;
-    grid-area: header;
-  }
-  hr {
-    border: 0;
-    border-bottom: 1px solid $color-divider;
-    margin: 0;
-    width: 100%;
-
-    &.divider-1 { margin-top: 5px; grid-area: divider-1; }
-    &.divider-2 { grid-area: divider-2; }
-  }
+  hr.divider-1 { margin-top: 5px; grid-area: divider-1; }
+  hr.divider-2 { grid-area: divider-2; }
 }
 
 .sheetforge.sheet .attribute {
