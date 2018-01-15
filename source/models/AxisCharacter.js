@@ -16,6 +16,9 @@ const baseAttributes = {
   size: 0,
   naturalArmor: 0,
 
+  xp: 0,
+  rp: 0,
+
   accuracy() { return this.averageOf('acuity', 'focus', 'intuition') },
   body() { return this.averageOf('strength', 'agility', 'fitness') },
   damageThresholdLight() {
@@ -36,6 +39,8 @@ const baseAttributes = {
       this.averageOf('strength', 'fitness', 'size')
     )
   },
+
+  power() { return 0 },
 }
 
 export default class AxisCharacter extends Character {
@@ -47,6 +52,4 @@ export default class AxisCharacter extends Character {
       name,
     })
   }
-
-  wounds = observable(0)
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import AxisCharacter from '../models/AxisCharacter'
+import Attribute from './Attribute'
 import AxisAttributes from './AxisAttributes'
+import AxisCharacter from '../models/AxisCharacter'
 import AxisDescriptors from './AxisDescriptors'
 import Editable from './Editable'
 import bound from '../utilities/bound'
@@ -52,11 +53,12 @@ import './AxisSheet.scss'
 
     return (
       <div className={`sheetforge sheet axis ${sizeClass}`} ref={(self) => { this.container = self }}>
-        <Editable
-          className="character-name"
-          value={character.name}
-          onChange={this.handleNameChange}
-        />
+        <header>
+          <Editable className="character-name" value={character.name} onChange={this.handleNameChange} />
+          <Attribute caption="XP" character={character} name="xp" min={0} max={Infinity} />
+          <Attribute caption="RP" character={character} name="rp" min={0} max={Infinity} />
+          <Attribute caption="CP" character={character} name="power" computed />
+        </header>
         <img
           className="portrait"
           alt="Character Portrait"

@@ -10,7 +10,7 @@ import Editable from './Editable'
   }
 
   render = () => {
-    const { caption, character, className, computed, name } = this.props
+    const { caption, character, className, computed, min = -10, max = 10, name } = this.props
     let modified = false
     let valueDisplay
 
@@ -21,8 +21,8 @@ import Editable from './Editable'
       valueDisplay = (
         <Fragment>
           <Editable
-            max={10}
-            min={-10}
+            max={max}
+            min={min}
             onChange={this.handleChange}
             readonly={Boolean(computed)}
             value={computed ? modifiedValue : unmodifiedValue}

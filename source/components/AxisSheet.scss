@@ -12,20 +12,28 @@
   max-height: 11.5in;
   max-width: 8.5in;
 
-  .character-name {
-    align-items: center;
-    display: flex;
-    font-size: 1.5em;
-    grid-area: header;
-    justify-content: flex-start;
-  }
-
   header {
     border-bottom: 1px solid $color-divider;
     font-size: 1.5em;
     font-weight: bold;
     grid-area: header;
     height: 1.5em;
+  }
+
+  > header {
+    align-items: center;
+    border-bottom: none;
+    display: grid;
+    grid-area: header;
+    grid-gap: 3px;
+    grid-template-columns: 4fr 40px 40px 1fr;
+
+    .xp, .rp, .power {
+      font-size: 10px;
+      padding: 2px;
+      .caption { margin-right: 0; }
+      .editable { font-weight: normal; }
+    }
   }
 
   hr {
