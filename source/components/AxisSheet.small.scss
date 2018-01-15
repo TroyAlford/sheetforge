@@ -1,20 +1,14 @@
 .sheetforge.sheet.axis.small {
   grid-template-areas:
     "header"
-    "attributes"
     "descriptors"
+    "attributes"
   ;
 
   img.portrait { display: none; }
 
-  .descriptors {
-    grid-template-areas:
-      "height weight"
-      "gender age"
-      "eyes hair"
-      "homeland race"
-      "concept concept"
-    ;
+  .attributes, .descriptors {
+    font-size: .7rem;
   }
   .attributes {
     grid-template-areas: 
@@ -34,12 +28,5 @@
       "light deep death"
     ;
     padding: 0;
-  }
-
-  .attribute, .descriptor {
-    &:not(.computed) {
-      background-color: #fafafa;
-      border: 1px solid #efefef;
-    }
   }
 }
