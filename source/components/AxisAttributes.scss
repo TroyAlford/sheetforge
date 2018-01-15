@@ -1,4 +1,33 @@
 @import '../variables';
+$attributes:
+  "accuracy",
+  "acuity",
+  "agility",
+  "body",
+  "combat",
+  "confidence",
+  "death",
+  "deep",
+  "devotion",
+  "fitness",
+  "focus",
+  "intellect",
+  "intuition",
+  "light",
+  "might",
+  "mind",
+  "naturalArmor",
+  "potency",
+  "racial",
+  "reflex",
+  "resilience",
+  "size",
+  "speed",
+  "spirit",
+  "strength",
+  "thresholds",
+  "toughness"
+;
 
 .sheetforge.sheet .attributes {
   display: grid;
@@ -46,7 +75,11 @@
   padding: 5px;
   width: 100%;
 
-  &.computed {
+  @each $attribute in $attributes {
+  &.#{unquote($attribute)} { grid-area: unquote($attribute); }
+  }
+
+  &.highlight {
     background-color: $color-highlight-bg;
     border: 1px solid $color-highlight-border;
   }

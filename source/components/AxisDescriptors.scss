@@ -1,4 +1,15 @@
 @import '../variables';
+$descriptors: 
+  "age",
+  "concept",
+  "eyes",
+  "gender",
+  "hair",
+  "height",
+  "homeland",
+  "race",
+  "weight"
+;
 
 .sheetforge.sheet .descriptors {
   display: grid;
@@ -29,6 +40,10 @@
   height: 2em;
   margin: .5em 0;
   width: 100%;
+
+  @each $descriptor in $descriptors {
+  &.#{unquote($descriptor)} { grid-area: unquote($descriptor); }
+  }
 
   strong, .editable {
     align-items: center;
