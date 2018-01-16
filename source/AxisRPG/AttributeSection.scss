@@ -59,7 +59,7 @@ $attributes:
   box-sizing: border-box;
   justify-content: space-between;
   height: 2.5em;
-  padding: 5px;
+  padding: 0 5px;
   width: 100%;
 
   @each $attribute in $attributes {

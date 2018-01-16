@@ -12,23 +12,21 @@
 }
 
 .sheetforge.sheet .skill {
-  display: flex;
   align-items: center;
   border-radius: 5px;
   box-sizing: border-box;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 30px 30px;
   height: 2.5em;
-  padding: 5px;
+  padding: 0 5px;
   width: 100%;
 
   .name, .theory, .mastery {
     align-items: center;
   }
-  .name {
-    justify-content: flex-start;
-  }
   .theory, .mastery {
     justify-content: flex-end;
-    width: 40px;
+
+    input { text-align: right; }
   }
 }
