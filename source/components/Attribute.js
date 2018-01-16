@@ -6,7 +6,7 @@ import Editable from './Editable'
 @observer export default class Attribute extends Component {
   handleChange = (value) => {
     const { character, name } = this.props
-    character.layers[0][name] = value
+    character.layers[0].set(name, value)
   }
 
   render = () => {
