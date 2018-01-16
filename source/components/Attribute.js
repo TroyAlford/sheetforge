@@ -4,9 +4,24 @@ import { observer } from 'mobx-react'
 import Editable from './Editable'
 
 @observer export default class Attribute extends Component {
-  handleChange = (value) => {
+  handleChange = (newValue) => {
     const { character, name } = this.props
-    character.layers[0].set(name, value)
+    const attributes = character.layers[0]
+
+    const oldValue = attributes.get(name)
+    const powerBefore = attributes.get('power').apply(character)
+
+    attributes.set(name, newValue)
+
+    const xp = attributes.get('xp')
+    const powerAfter = attributes.get('power').apply(character)
+    const xpCost = powerAfter - powerBefore
+
+    if (xpCost > xp) {
+      attributes.set(name, oldValue)
+    } else {
+      attributes.set('xp', xp - xpCost)
+    }
   }
 
   render = () => {
