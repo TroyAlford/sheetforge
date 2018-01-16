@@ -1,15 +1,6 @@
 .sheetforge.sheet.axis.small {
-  grid-template-areas:
-    "header"
-    "descriptors"
-    "attributes"
-  ;
+  font-size: .7rem;
 
-  img.portrait { display: none; }
-
-  .attributes, .descriptors {
-    font-size: .7rem;
-  }
   .attributes {
     grid-template-areas: 
       "header header header"
@@ -26,7 +17,17 @@
       "thresholds thresholds thresholds"
       "light deep death"
     ;
+    grid-template-columns: 1fr 1fr 1fr;
     padding: 0;
+
+    .divider-1, .divider-2 { display: none; }
   }
-  .divider-2 { display: none; }
+  .skills {
+    grid-template-areas:
+      "header"
+      "subheader"
+      "skills"
+    ;
+    grid-template-columns: 1fr;
+  }
 }

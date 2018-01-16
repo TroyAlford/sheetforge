@@ -4,11 +4,14 @@
     "header header header"
     "left descriptors descriptors"
     "left attributes attributes"
+    "left skills skills"
   ;
+  grid-template-columns: 2fr 3fr 3fr;
   margin: 0 auto;
   padding: .25in;
 
   img.portrait {
+    display: block;
     grid-area: left;
   }
 }
