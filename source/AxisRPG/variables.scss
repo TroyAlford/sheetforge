@@ -1,3 +1,11 @@
 $color-highlight-bg: #ccf8f8;
 $color-highlight-border: #b5f5f5;
 $color-divider: #42afe3;
+
+@mixin gridCell {
+  align-items: center;
+  border-radius: 5px;
+  display: grid;
+  height: 2.5em;
+  padding: 0 5px;
+}

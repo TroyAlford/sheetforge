@@ -41,8 +41,8 @@ export default ({ character }) => (
     <hr className="divider-2" />
 
     <Attribute caption="Damage" className="thresholds header highlight" />
-    <Attribute caption="Light Wound" className="light" name="damageThresholdLight" character={character} computed />
-    <Attribute caption="Deep Wound" className="deep" name="damageThresholdDeep" character={character} computed />
-    <Attribute caption="Death Blow" className="death" name="damageThresholdDeath" character={character} computed />
+    <Attribute caption="Light" className="light" name="damageThresholdLight" character={character} computed />
+    <Attribute caption="Deep" className="deep" name="damageThresholdDeep" character={character} computed />
+    <Attribute caption="Deadly" className="death" name="damageThresholdDeath" character={character} computed />
   </div>
 )

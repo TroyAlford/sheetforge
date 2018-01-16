@@ -1,6 +1,17 @@
 .sheetforge.sheet.axis.small {
   font-size: .7rem;
 
+  .descriptors {
+    grid-template-areas:
+      "header header header header header header"
+      "homeland homeland homeland race race race"
+      "height height weight weight gender gender"
+      "eyes eyes hair hair age age"
+      "concept concept concept concept concept concept"
+    ;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
   .attributes {
     grid-template-areas: 
       "header header header"
