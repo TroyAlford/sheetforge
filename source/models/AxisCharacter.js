@@ -1,18 +1,16 @@
-import { observable } from 'mobx'
 import bound from '../utilities/bound'
+import flow from '../utilities/flow'
+import range from '../utilities/range'
+import sum from '../utilities/sum'
 import Character from './Character'
 
-const baseAttributes = {
-  acuity: -1,
-  agility: -1,
-  confidence: -1,
-  devotion: -1,
-  fitness: -1,
-  focus: -1,
-  intellect: -1,
-  intuition: -1,
-  strength: -1,
+const ATTRIBUTES = [
+  'acuity', 'agility', 'confidence',
+  'devotion', 'fitness', 'focus',
+  'intellect', 'intuition', 'strength',
+]
 
+const BASE_LAYER = {
   size: 0,
   naturalArmor: 0,
 
@@ -40,13 +38,22 @@ const baseAttributes = {
     )
   },
 
-  power() { return 0 },
+  power() {
+    return flow([
+      array => array.map(attr => range(-1, this.layers[0].get(attr))),
+      array => array.reduce((set, values) => [...set, ...values], []),
+      array => array.map(value => (Math.abs(value + 1) ** 2) * (value >= 0 ? 1 : -1)),
+      array => array.reduce(sum, 0),
+    ], ATTRIBUTES)
+  },
 }
+
+ATTRIBUTES.forEach((attr) => { BASE_LAYER[attr] = -1 })
 
 export default class AxisCharacter extends Character {
   constructor({ effects, equipment, name } = {}) {
     super({
-      layers: [baseAttributes],
+      layers: [BASE_LAYER],
       effects,
       equipment,
       name,
