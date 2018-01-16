@@ -11,9 +11,10 @@ export default class Character {
   @observable effects = observable.array([]);
   @observable equipment = observable.array([]);
   @observable descriptors = observable.map({});
+  @observable skills = observable.array([])
 
-  constructor({ effects, equipment, layers, name } = {}) {
-    ['effects', 'equipment', 'layers'].forEach((set) => {
+  constructor({ effects, equipment, layers, name, skills } = {}) {
+    ['effects', 'equipment', 'layers', 'skills'].forEach((set) => {
       intercept(this[set], (change) => {
         const { added = [] } = change
         if (added.length) {
@@ -24,12 +25,14 @@ export default class Character {
       })
     })
 
-    this.effects.replace(effects || [])
-    this.equipment.replace(equipment || [])
-    this.layers.replace(layers || [])
     if (typeof name === 'string') {
       this.name = name
     }
+
+    this.effects.replace(effects || [])
+    this.equipment.replace(equipment || [])
+    this.layers.replace(layers || [])
+    this.skills.replace(skills || [])
   }
 
   @computed get modifiers() {
