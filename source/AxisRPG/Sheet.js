@@ -6,8 +6,9 @@ import AttributeSection from './AttributeSection'
 import AxisCharacter from '../models/AxisCharacter'
 import DescriptorSection from './DescriptorSection'
 import Editable from '../components/Editable'
+import SkillSection from './SkillSection'
 
-import './AxisSheet.scss'
+import './Sheet.scss'
 
 @observer export default class Sheet extends Component {
   constructor(props) {
@@ -70,6 +71,7 @@ import './AxisSheet.scss'
         />
         <DescriptorSection character={character} />
         <AttributeSection character={character} />
+        <SkillSection character={character} />
       </div>
     )
   }
