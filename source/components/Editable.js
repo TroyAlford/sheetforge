@@ -109,6 +109,7 @@ export default class Editable extends React.Component {
       <textarea
         onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
+        onFocus={this.selectOnFocus}
         onKeyDown={this.handleKeys}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
@@ -126,7 +127,7 @@ export default class Editable extends React.Component {
         min={this.props.min}
         onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
-        onFocus={this.handleReceivingFocus}
+        onFocus={this.selectOnFocus}
         onKeyDown={this.handleKeys}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
