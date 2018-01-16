@@ -1,6 +1,6 @@
 import { computed, intercept, isObservableMap, observable } from 'mobx'
+import sum from '../utilities/sum'
 
-const sum = (a, b) => a + b
 const toObservableMap = o => (
   isObservableMap(o) ? o : observable.map(Object.entries(o))
 )
