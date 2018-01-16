@@ -65,7 +65,7 @@ $attributes:
     border: 1px solid $color-highlight-border;
   }
 
-  .caption, .editable, .temporary {
+  .caption, .value, .editable, .temporary {
     align-items: center;
     border: 1px solid transparent;
     display: inline-flex;
@@ -84,11 +84,22 @@ $attributes:
       border-color: #eee;
     }
   }
-  &.modified .editable span {
-    color: #bbb;
-  }
-  .temporary {
-    color: green;
-    font-weight: bold;
+  &.modified {
+    grid-template-columns: auto 60px;
+
+    .value {
+      color: #bbb;
+    }
+
+    .editable span {
+      color: #bbb;
+      padding-right: 5px;
+    }
+
+    .temporary {
+      color: green;
+      font-weight: bold;
+      padding-left: 5px;
+    }
   }
 }

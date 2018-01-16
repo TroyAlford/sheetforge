@@ -34,7 +34,7 @@ import Editable from '../components/Editable'
       const unmodifiedValue = character.layers[0].get(name)
       modified = !computed && modifiedValue !== unmodifiedValue
       valueDisplay = (
-        <Fragment>
+        <div className="value">
           <Editable
             max={max}
             min={min}
@@ -42,8 +42,8 @@ import Editable from '../components/Editable'
             readonly={Boolean(computed)}
             value={computed ? modifiedValue : unmodifiedValue}
           />
-          {modified && <span className="temporary">{modifiedValue}</span>}
-        </Fragment>
+          {modified && <Fragment>↣<span className="temporary">{modifiedValue}</span></Fragment>}
+        </div>
       )
     }
 
