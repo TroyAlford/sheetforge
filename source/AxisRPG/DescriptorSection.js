@@ -1,7 +1,7 @@
 import React from 'react'
-import Descriptor from './Descriptor'
+import Descriptor from '../components/Descriptor'
 
-import './AxisDescriptors.scss'
+import './DescriptorSection.scss'
 
 export default ({ character }) => (
   <div className="descriptors">

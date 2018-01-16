@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import AxisSheet from '../source/components/AxisSheet'
+import Sheet from '../source/AxisRPG/Sheet'
 
 storiesOf('AxisSheet', module)
   .add('basic', () => (
-    <AxisSheet />
+    <Sheet />
   ))

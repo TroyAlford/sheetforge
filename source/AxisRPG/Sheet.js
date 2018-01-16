@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import Attribute from './Attribute'
-import AxisAttributes from './AxisAttributes'
-import AxisCharacter from '../models/AxisCharacter'
-import AxisDescriptors from './AxisDescriptors'
-import Editable from './Editable'
 import bound from '../utilities/bound'
+import Attribute from './Attribute'
+import AttributeSection from './AttributeSection'
+import AxisCharacter from '../models/AxisCharacter'
+import DescriptorSection from './DescriptorSection'
+import Editable from '../components/Editable'
 
 import './AxisSheet.scss'
 
-@observer export default class AxisSheet extends Component {
+@observer export default class Sheet extends Component {
   constructor(props) {
     super(props)
     this.character = new AxisCharacter()
@@ -68,8 +68,8 @@ import './AxisSheet.scss'
             width: '100%',
           }}
         />
-        <AxisDescriptors character={character} />
-        <AxisAttributes character={character} />
+        <DescriptorSection character={character} />
+        <AttributeSection character={character} />
       </div>
     )
   }

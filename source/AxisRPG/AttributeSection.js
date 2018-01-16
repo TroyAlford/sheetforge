@@ -1,7 +1,7 @@
 import React from 'react'
 import Attribute from './Attribute'
 
-import './AxisAttributes.scss'
+import './AttributeSection.scss'
 
 export default ({ character }) => (
   <div className="attributes">

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
-import Editable from './Editable'
+import Editable from '../components/Editable'
 
 @observer export default class Attribute extends Component {
   handleChange = (newValue) => {
