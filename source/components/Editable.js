@@ -2,6 +2,16 @@ import React from 'react'
 import bound from '../utilities/bound'
 import './Editable.scss'
 
+const TYPES = [
+  // Strings
+  'text', 'multiline',
+  // Checkboxes
+  'boolean',
+  // Numbers
+  'number', 'slider',
+]
+
+
 export default class Editable extends React.Component {
   static defaultProps = {
     className: '',
@@ -11,6 +21,7 @@ export default class Editable extends React.Component {
     placeholder: '',
     readonly: false,
     step: 1,
+    type: undefined,
     value: '',
   }
 
@@ -20,16 +31,10 @@ export default class Editable extends React.Component {
   }
 
   getEditorType = () => {
-    let { type, value } = this.props // eslint-disable-line
-    const types = [
-      // Strings
-      'text', 'multiline',
-      // Checkboxes
-      'boolean',
-      // Numbers
-      'number', 'slider',
-    ]
-    if (type !== undefined && types.includes(type)) return type
+    const { value } = this.props
+    let { type } = this.props
+
+    if (type !== undefined && TYPES.includes(type)) return type
 
     type = typeof value
     if (type === 'string') return value.includes('\n') ? 'multiline' : 'text'
@@ -225,6 +230,7 @@ if (process.env.NODE_ENV !== 'production') {
     placeholder: PropTypes.string,
     readonly: PropTypes.bool,
     step: PropTypes.number,
+    type: PropTypes.oneOf(TYPES),
     value: PropTypes.any,
   }
 }
