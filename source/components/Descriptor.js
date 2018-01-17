@@ -5,19 +5,16 @@ import Editable from './Editable'
 
 @observer export default class Descriptor extends Component {
   handleChange = (value) => {
-    const { character, name } = this.props
-    character.descriptors.set(name, value)
+    this.props.onChange(this.props.name, value)
   }
 
-  render = () => {
-    const { character, name } = this.props
-    const value = character.descriptors.get(name)
-
-    return (
-      <div className={`descriptor ${name}`}>
-        <strong>{name}</strong>
-        <Editable value={value} onChange={this.handleChange} />
-      </div>
-    )
-  }
+  render = () => (
+    <div className={`descriptor ${this.props.name}`}>
+      <strong>{this.props.name}</strong>
+      <Editable
+        onChange={this.handleChange}
+        value={this.props.value}
+      />
+    </div>
+  )
 }

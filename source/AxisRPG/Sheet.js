@@ -38,12 +38,6 @@ import './Sheet.scss'
     this.setState({ portraitHeight, sizeClass })
   }
 
-  handleAttributeChange = (attribute, value) => {
-    this.character[attribute] = value
-  }
-  handleDescriptorChange = (descriptor, value) => {
-    this.character.descriptors.set(descriptor.toLowerCase(), value)
-  }
   handleNameChange = (value) => {
     this.character.name = value
   }
@@ -69,7 +63,7 @@ import './Sheet.scss'
             width: '100%',
           }}
         />
-        <DescriptorSection character={character} />
+        <DescriptorSection descriptors={character.descriptors} />
         <AttributeSection character={character} />
         <SkillSection character={character} />
       </div>
