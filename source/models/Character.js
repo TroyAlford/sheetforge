@@ -1,9 +1,11 @@
-import { computed, intercept, isObservableMap, observable } from 'mobx'
+import { autorun, computed, intercept, isObservableMap, observable } from 'mobx'
+import compareBy from '../utilities/compareBy'
 import sum from '../utilities/sum'
 
 const toObservableMap = o => (
   isObservableMap(o) ? o : observable.map(Object.entries(o))
 )
+const skillSorter = compareBy('name')
 
 export default class Character {
   @observable name = 'Unnamed Character';
@@ -18,11 +20,19 @@ export default class Character {
       intercept(this[set], (change) => {
         const { added = [] } = change
         if (added.length) {
-          change.added = added.map(toObservableMap) // eslint-disable-line no-param-reassign
+          // eslint-disable-next-line no-param-reassign
+          change.added = added.map(toObservableMap)
         }
 
         return change
       })
+    })
+
+    autorun(() => {
+      const sortedSkills = this.skills.sort(skillSorter)
+      if (JSON.stringify(this.skills) !== JSON.stringify(sortedSkills)) {
+        this.skills.replace(sortedSkills)
+      }
     })
 
     if (typeof name === 'string') {
