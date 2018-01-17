@@ -9,6 +9,7 @@
     "left right"
   ;
   grid-template-columns: 1fr 1fr;
+  grid-auto-flow: column;
 }
 
 .sheetforge.sheet .skill {
