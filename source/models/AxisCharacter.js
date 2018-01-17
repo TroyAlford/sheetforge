@@ -10,6 +10,13 @@ const ATTRIBUTES = [
   'intellect', 'intuition', 'strength',
 ]
 
+const SKILLS = [
+  { name: 'Magic: Arcane', value: [1, 3] },
+  { name: 'Combat: Swordfighting', value: [4, 4] },
+  { name: 'Magic: Spiriturgy', value: [3, 5] },
+  { name: 'Horseback Riding', value: [0, 3] },
+]
+
 const BASE_LAYER = {
   size: 0,
   naturalArmor: 0,
@@ -51,12 +58,13 @@ const BASE_LAYER = {
 ATTRIBUTES.forEach((attr) => { BASE_LAYER[attr] = -1 })
 
 export default class AxisCharacter extends Character {
-  constructor({ effects, equipment, name } = {}) {
+  constructor({ effects, equipment, name, skills } = {}) {
     super({
       layers: [BASE_LAYER],
       effects,
       equipment,
       name,
+      skills: skills || SKILLS,
     })
   }
 }
