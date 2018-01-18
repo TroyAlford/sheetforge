@@ -1,48 +1,69 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Attribute from './Attribute'
 
 import './AttributeSection.scss'
 
-export default ({ character }) => (
-  <div className="attributes">
-    <header>Attributes</header>
+export default class AttributeSection extends Component {
+  renderAttribute = name => (
+    <Attribute
+      attributes={this.props.attributes}
+      className={name}
+      modifier={this.props.modifiers.get(name)}
+      name={name}
+    />
+  )
+  renderComputed = (name, { caption, className = '' } = {}) => (
+    <Attribute
+      attributes={this.props.attributes}
+      caption={caption}
+      className={`${name} ${className}`.replace(/ {2}/g, '')}
+      computed
+      modifier={this.props.modifiers.get(name)}
+      name={name}
+    />
+  )
 
-    <Attribute name="potency" character={character} className="header highlight" computed />
-    <Attribute name="reflex" character={character} className="header highlight" computed />
-    <Attribute name="resilience" character={character} className="header highlight" computed />
+  render = () => (
+    <div className="attributes">
+      <header>Attributes</header>
 
-    <Attribute name="body" character={character} className="header highlight" computed />
-    <Attribute name="strength" character={character} />
-    <Attribute name="agility" character={character} />
-    <Attribute name="fitness" character={character} />
+      {this.renderComputed('potency', { className: 'header highlight' })}
+      {this.renderComputed('reflex', { className: 'header highlight' })}
+      {this.renderComputed('resilience', { className: 'header highlight' })}
 
-    <Attribute name="mind" character={character} className="header highlight" computed />
-    <Attribute name="intellect" character={character} />
-    <Attribute name="acuity" character={character} />
-    <Attribute name="focus" character={character} />
+      {this.renderComputed('body', { className: 'header highlight' })}
+      {this.renderAttribute('strength')}
+      {this.renderAttribute('agility')}
+      {this.renderAttribute('fitness')}
 
-    <Attribute name="spirit" character={character} className="header highlight" computed />
-    <Attribute name="confidence" character={character} />
-    <Attribute name="intuition" character={character} />
-    <Attribute name="devotion" character={character} />
+      {this.renderComputed('mind', { className: 'header highlight' })}
+      {this.renderAttribute('intellect')}
+      {this.renderAttribute('acuity')}
+      {this.renderAttribute('focus')}
 
-    <hr className="divider-1" />
+      {this.renderComputed('spirit', { className: 'header highlight' })}
+      {this.renderAttribute('confidence')}
+      {this.renderAttribute('intuition')}
+      {this.renderAttribute('devotion')}
 
-    <Attribute caption="Racial" className="racial header highlight" />
-    <Attribute name="size" character={character} />
-    <Attribute name="speed" character={character} computed />
-    <Attribute name="naturalArmor" character={character} />
+      <hr className="divider-1" />
 
-    <Attribute caption="Combat" className="combat header highlight" />
-    <Attribute name="accuracy" character={character} computed />
-    <Attribute name="might" character={character} computed />
-    <Attribute name="toughness" character={character} computed />
+      <Attribute caption="Racial" className="racial header highlight" />
+      {this.renderAttribute('size')}
+      {this.renderComputed('speed')}
+      {this.renderAttribute('naturalArmor')}
 
-    <hr className="divider-2" />
+      <Attribute caption="Combat" className="combat header highlight" />
+      {this.renderComputed('accuracy')}
+      {this.renderComputed('might')}
+      {this.renderComputed('toughness')}
 
-    <Attribute caption="Damage" className="thresholds header highlight" />
-    <Attribute caption="Light" className="light" name="damageThresholdLight" character={character} computed />
-    <Attribute caption="Deep" className="deep" name="damageThresholdDeep" character={character} computed />
-    <Attribute caption="Deadly" className="death" name="damageThresholdDeath" character={character} computed />
-  </div>
-)
+      <hr className="divider-2" />
+
+      <Attribute caption="Damage" className="thresholds header highlight" />
+      {this.renderComputed('damageThresholdLight', { caption: 'Light', className: 'light' })}
+      {this.renderComputed('damageThresholdDeep', { caption: 'Deep', className: 'deep' })}
+      {this.renderComputed('damageThresholdDeath', { caption: 'Death', className: 'death' })}
+    </div>
+  )
+}
