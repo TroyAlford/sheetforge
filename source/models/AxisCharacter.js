@@ -67,4 +67,6 @@ export default class AxisCharacter extends Character {
       skills: skills || SKILLS,
     })
   }
+
+  get attributes() { return this.layers[0] }
 }
