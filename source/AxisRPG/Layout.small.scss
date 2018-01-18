@@ -34,6 +34,7 @@
     .divider-1, .divider-2 { display: none; }
   }
   .skills {
+    grid-auto-flow: row;
     grid-template-areas:
       "header"
       "subheader"
