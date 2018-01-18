@@ -29,18 +29,18 @@ const BASE_LAYER = {
   damageThresholdLight() {
     return bound(this.sumOf('size', 'strength', 'fitness', 'armor', 'naturalArmor'), { min: 1 })
   },
-  damageThresholdDeep() { return this.modifierFor('damageThresholdLight') * 2 },
-  damageThresholdDeath() { return this.modifierFor('damageThresholdDeep') * 2 },
-  might() { return this.modifierFor('size') + this.averageOf('strength', 'fitness') },
+  damageThresholdDeep() { return 2 * this.attributes.get('damageThresholdLight')() },
+  damageThresholdDeath() { return 2 * this.attributes.get('damageThresholdDeep')() },
+  might() { return this.valueOf('size') + this.averageOf('strength', 'fitness') },
   mind() { return this.averageOf('intellect', 'acuity', 'focus') },
   potency() { return this.averageOf('strength', 'intellect', 'confidence') },
   reflex() { return this.averageOf('agility', 'acuity', 'intuition') },
   resilience() { return this.averageOf('fitness', 'focus', 'devotion') },
-  speed() { return 6 + this.modifierFor('size') + Math.round(this.modifierFor('fitness') / 2) },
+  speed() { return 6 + this.valueOf('size') + Math.round(this.valueOf('fitness') / 2) },
   spirit() { return this.averageOf('confidence', 'intuition', 'devotion') },
   toughness() {
     return (
-      this.modifierFor('naturalArmor') + this.modifierFor('armor') +
+      this.valueOf('naturalArmor') + this.valueOf('armor') +
       this.averageOf('strength', 'fitness', 'size')
     )
   },
