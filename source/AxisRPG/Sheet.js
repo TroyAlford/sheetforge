@@ -43,29 +43,28 @@ import './Sheet.scss'
   }
 
   render = () => {
-    const { character } = this
-    const { descriptors, name, skills } = this.character
+    const { attributes, descriptors, imageUrl, modifiers, name, skills } = this.character
     const { portraitHeight, sizeClass = 'large' } = this.state
 
     return (
       <div className={`sheetforge sheet axis ${sizeClass}`} ref={(self) => { this.container = self }}>
         <header>
           <Editable className="character-name" value={name} onChange={this.handleNameChange} />
-          <Attribute caption="XP" character={character} name="xp" min={0} max={Infinity} />
-          <Attribute caption="RP" character={character} name="rp" min={0} max={Infinity} />
-          <Attribute caption="CP" character={character} name="power" computed />
+          <Attribute caption="XP" name="xp" attributes={attributes} min={0} max={Infinity} />
+          <Attribute caption="RP" name="rp" attributes={attributes} min={0} max={Infinity} />
+          <Attribute caption="CP" name="power" attributes={attributes} computed />
         </header>
         <img
           className="portrait"
           alt="Character Portrait"
-          src={character.imageUrl || '//via.placeholder.com/3x4/eeeeee?text=%20'}
+          src={imageUrl || '//via.placeholder.com/3x4/eeeeee?text=%20'}
           style={{
             height: portraitHeight,
             width: '100%',
           }}
         />
         <DescriptorSection descriptors={descriptors} />
-        <AttributeSection character={character} />
+        <AttributeSection attributes={attributes} modifiers={modifiers} />
         <SkillSection skills={skills} />
       </div>
     )
