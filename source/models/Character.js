@@ -1,5 +1,6 @@
 import { autorun, computed, intercept, isObservableMap, observable } from 'mobx'
 import compareBy from '../utilities/compareBy'
+import hash from '../utilities/hash'
 import sum from '../utilities/sum'
 
 const toObservableMap = o => (
@@ -20,8 +21,17 @@ export default class Character {
       intercept(this[set], (change) => {
         const { added = [] } = change
         if (added.length) {
-          // eslint-disable-next-line no-param-reassign
+          /* eslint-disable no-param-reassign */
           change.added = added.map(toObservableMap)
+          change.added.forEach((o) => {
+            o.set('id', hash(Math.random().toString()))
+            o.entries().forEach(([key, value]) => {
+              if (typeof value === 'function') {
+                o.set(key, value.bind(this))
+              }
+            })
+          })
+          /* eslint-enable no-param-reassign */
         }
 
         return change
