@@ -3,6 +3,16 @@ import compareBy from '../utilities/compareBy'
 import hash from '../utilities/hash'
 import sum from '../utilities/sum'
 
+const mapReducer = (all, next) => (
+  next.entries().forEach(([key, value]) => {
+    const current = all.get(key) || 0
+
+    if (typeof value === 'number') all.set(key, current + value)
+    if (typeof value === 'function') all.set(key, current + value())
+
+    return all
+  })
+)
 const toObservableMap = o => (
   isObservableMap(o) ? o : observable.map(Object.entries(o))
 )
@@ -55,25 +65,18 @@ export default class Character {
     this.skills.replace(skills || [])
   }
 
+  @computed get attributes() {
+    return this.layers.filter(o => !o.get('inactive')).reduce(mapReducer, new Map())
+  }
+
   @computed get modifiers() {
     return [
-      ...this.layers.filter(o => !o.get('inactive')),
       ...this.effects.filter(o => o.get('active')).map(o => o.get('modifiers')),
       ...this.equipment.filter(o => o.get('equipped')).map(o => o.get('modifiers')),
-    ]
+    ].reduce(mapReducer, new Map())
   }
 
   averageOf = (...names) => Math.round(this.sumOf(...names) / names.length)
-  sumOf = (...names) => names.map(n => this.modifierFor(n)).reduce(sum, 0)
-
-  modifierFor = name => (
-    this.modifiers
-      .map((m) => {
-        if (typeof m.get(name) === 'number') return m.get(name)
-        if (typeof m.get(name) === 'function') return m.get(name).apply(this)
-        return undefined
-      })
-      .filter(value => value !== undefined)
-      .reduce(sum, 0)
-  )
+  sumOf = (...names) => names.map(n => this.valueOf(n)).reduce(sum, 0)
+  valueOf = name => (this.attributes.get(name) || 0) + (this.modifiers.get(name) || 0)
 }
