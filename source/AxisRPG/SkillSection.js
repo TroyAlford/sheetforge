@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import hash from '../utilities/hash'
 import Skill from './Skill'
 
 import './SkillSection.scss'
@@ -14,12 +13,7 @@ import './SkillSection.scss'
       return (
         <div className="skills" style={style}>
           <header>Skills</header>
-          {skills.map(skill => (
-            <Skill
-              key={hash(skill.get('name'))}
-              skill={skill}
-            />
-        ))}
+          {skills.map(skill => <Skill key={skill.get('id')} skill={skill} />)}
         </div>
       )
     }
