@@ -1,5 +1,6 @@
 import React from 'react'
 import bound from '../utilities/bound'
+import noop from '../utilities/noop'
 import './Editable.scss'
 
 const TYPES = [
@@ -15,9 +16,12 @@ const TYPES = [
 export default class Editable extends React.Component {
   static defaultProps = {
     className: '',
+    forceEditMode: false,
     max: 0,
     min: 100,
-    onChange: () => true,
+    onChange: noop,
+    onEditStart: noop,
+    onEditEnd: noop,
     placeholder: '',
     readonly: false,
     step: 1,
@@ -28,6 +32,10 @@ export default class Editable extends React.Component {
   state = {
     editing: false,
     resetValue: this.props.value,
+  }
+
+  get editing() {
+    return this.props.forceEditMode || this.state.editing
   }
 
   getEditorType = () => {
@@ -44,11 +52,17 @@ export default class Editable extends React.Component {
   }
   resetChanges = () => {
     this.props.onChange(this.state.resetValue, this.props.value)
+    this.handleToggleEditing()
   }
 
   createRefWithAutoFocus = (editor) => {
-    if (editor && typeof editor.focus === 'function') editor.focus()
     this.editor = editor
+    if (!editor) return
+
+    if (typeof editor.focus === 'function') editor.focus()
+    if (this.props.forceEditMode && typeof editor.setSelectionRange === 'function') {
+      editor.setSelectionRange(editor.value.length, editor.value.length)
+    }
   }
 
   handleChange = ({ target }) => {
@@ -82,15 +96,23 @@ export default class Editable extends React.Component {
   }
   handleToggleEditing = () => {
     if (this.props.readonly) return
-    this.setState({
-      editing: !this.state.editing,
-      resetValue: this.props.value,
+
+    const editing = !this.editing
+
+    this.setState({ editing, resetValue: this.props.value }, () => {
+      if (this.state.editing) {
+        this.props.onEditStart()
+      } else {
+        this.props.onEditEnd()
+      }
     })
   }
 
   selectOnFocus = event => event.target.select()
   toggleBoolean = () => {
+    this.props.onEditStart()
     this.props.onChange(!this.props.value, this.props.value)
+    this.props.onEditEnd()
   }
 
   renderBoolean = () => (
@@ -102,7 +124,7 @@ export default class Editable extends React.Component {
     />
   )
   renderMultiline = () => {
-    if (!this.state.editing) {
+    if (!this.editing) {
       const lines = this.props.value.split('\n')
       const paragraphs = lines.map((line, index) =>
         <p key={index}>{line}</p>
@@ -112,6 +134,7 @@ export default class Editable extends React.Component {
 
     return (
       <textarea
+        disabled={this.props.readonly}
         onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
         onFocus={this.selectOnFocus}
@@ -123,11 +146,12 @@ export default class Editable extends React.Component {
     )
   }
   renderNumber = () => {
-    if (!this.state.editing) return this.renderStatic()
+    if (!this.editing) return this.renderStatic()
 
     return (
       <input
         type="number"
+        disabled={this.props.readonly}
         max={this.props.max}
         min={this.props.min}
         onBlur={this.handleToggleEditing}
@@ -136,34 +160,31 @@ export default class Editable extends React.Component {
         onKeyDown={this.handleKeys}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
-        step={this.props.step || 1}
+        step={this.props.step}
         value={this.props.value}
       />
     )
   }
-  renderSlider = () => {
-    if (!this.state.editing) return this.renderStatic()
-
-    return (
-      <input
-        type="range"
-        disabled={this.props.readonly}
-        max={this.props.max || 100}
-        min={this.props.min || 0}
-        onBlur={this.handleToggleEditing}
-        onChange={this.handleChange}
-        ref={this.createRefWithAutoFocus}
-        step={this.props.step || 1}
-        value={this.props.value}
-      />
-    )
-  }
+  renderSlider = () => (
+    <input
+      type="range"
+      disabled={this.props.readonly}
+      max={this.props.max}
+      min={this.props.min}
+      onBlur={this.handleToggleEditing}
+      onChange={this.handleChange}
+      ref={this.createRefWithAutoFocus}
+      step={this.props.step}
+      value={this.props.value}
+    />
+  )
   renderText = () => {
-    if (!this.state.editing) return this.renderStatic()
+    if (!this.editing) return this.renderStatic()
 
     return (
       <input
         type="text"
+        disabled={this.props.readonly}
         onBlur={this.handleToggleEditing}
         onChange={this.handleChange}
         onFocus={this.selectOnFocus}
@@ -193,20 +214,17 @@ export default class Editable extends React.Component {
     }
   }
   render = () => {
-    this.editor = null
-
     const { className, readonly } = this.props
-    const { editing } = this.state
 
     const classes = [
       'editable',
-      editing ? 'editing' : '',
+      this.editing ? 'editing' : '',
       className || '',
       readonly ? 'readonly' : '',
     ].filter(Boolean)
 
     let props = {}
-    if (!readonly && !editing) {
+    if (!readonly && !this.editing) {
       props = { tabIndex: '0', onFocus: this.handleReceivingFocus }
     }
 
@@ -224,9 +242,12 @@ if (process.env.NODE_ENV !== 'production') {
 
   Editable.propTypes = {
     className: PropTypes.string,
+    forceEditMode: PropTypes.bool,
     max: PropTypes.number,
     min: PropTypes.number,
     onChange: PropTypes.func,
+    onEditStart: PropTypes.func,
+    onEditEnd: PropTypes.func,
     placeholder: PropTypes.string,
     readonly: PropTypes.bool,
     step: PropTypes.number,
