@@ -1,6 +1,6 @@
 import range from './range'
 
-jest.unmock('./createRange')
+jest.unmock('./range')
 
 describe('range()', () => {
   it('returns 1 value when low === high', () => {
