@@ -16,6 +16,12 @@ import Editable from '../components/Editable'
     const [theory] = skill.get('value').toJS()
     skill.set('value', [theory, mastery])
   }
+  handleNameEditStart = () => {
+    this.props.skill.set('editingName', true)
+  }
+  handleNameEditEnd = () => {
+    this.props.skill.delete('editingName')
+  }
 
   render() {
     const { skill } = this.props
@@ -26,7 +32,10 @@ import Editable from '../components/Editable'
       <div className="skill">
         <Editable
           className="name"
+          forceEditMode={skill.get('editingName')}
           onChange={this.handleNameChange}
+          onEditStart={this.handleNameEditStart}
+          onEditEnd={this.handleNameEditEnd}
           value={name}
         />
         <Editable
