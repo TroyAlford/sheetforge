@@ -78,7 +78,7 @@ export default class Editable extends React.Component {
         if (Number.isNaN(value)) value = this.props.value
         value = bound(value, { min, max })
     }
-    this.props.onChange(value, this.state.originalValue)
+    this.props.onChange(value, this.state.resetValue)
   }
   handleKeys = (event) => {
     const { target, key, ctrlKey, metaKey } = event
