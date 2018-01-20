@@ -1,8 +1,6 @@
-import { isObservableMap } from 'mobx'
-
 export default prop => (objectA, objectB) => {
-  const a = isObservableMap(objectA) ? objectA.get(prop) : objectA[prop]
-  const b = isObservableMap(objectB) ? objectB.get(prop) : objectB[prop]
+  const a = objectA instanceof Map ? objectA.get(prop) : objectA[prop]
+  const b = objectB instanceof Map ? objectB.get(prop) : objectB[prop]
 
   if (a < b) {
     return -1
