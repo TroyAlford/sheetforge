@@ -1,82 +1,98 @@
-import { autorun, computed, intercept, isObservableMap, observable } from 'mobx'
-import compareBy from '../utilities/compareBy'
-import hash from '../utilities/hash'
-import sum from '../utilities/sum'
+import { types } from 'mobx-state-tree'
+import { autoHash } from '../utilities/types'
+import bound from '../utilities/bound'
+import flow from '../utilities/flow'
+import range from '../utilities/range'
+import { averageOf, sum } from '../utilities/math'
+import Skill from './Skill'
 
-const mapReducer = (all, next) => (
-  next.entries().forEach(([key, value]) => {
-    const current = all.get(key) || 0
+export const PRIMARY_ATTRIBUTES = [
+  'acuity', 'agility', 'confidence',
+  'devotion', 'fitness', 'focus',
+  'intellect', 'intuition', 'strength',
+]
+export const SECONDARY_ATTRIBUTES = [
+  'size', 'naturalArmor',
+]
+export const DERIVED_ATTRIBUTES = [
+  'body', 'mind', 'spirit',
+  'potency', 'reflex', 'resilience',
+  'accuracy', 'might', 'toughness',
+  'speed',
 
-    if (typeof value === 'number') all.set(key, current + value)
-    if (typeof value === 'function') all.set(key, current + value())
+  'damageThresholdLight', 'damageThresholdDeep', 'damageThresholdDeath',
 
-    return all
-  })
-)
-const toObservableMap = o => (
-  isObservableMap(o) ? o : observable.map(Object.entries(o))
-)
-const skillSorter = compareBy('name')
+  'power',
+]
 
-export default class Character {
-  @observable name = 'Unnamed Character';
-  @observable layers = observable.array([]);
-  @observable effects = observable.array([]);
-  @observable equipment = observable.array([]);
-  @observable descriptors = observable.map({});
-  @observable skills = observable.array([])
+export const ATTRIBUTES = [
+  ...PRIMARY_ATTRIBUTES,
+  ...SECONDARY_ATTRIBUTES,
+  ...DERIVED_ATTRIBUTES,
+]
 
-  constructor({ effects, equipment, layers, name, skills } = {}) {
-    ['effects', 'equipment', 'layers', 'skills'].forEach((set) => {
-      intercept(this[set], (change) => {
-        const { added = [] } = change
-        if (added.length) {
-          /* eslint-disable no-param-reassign */
-          change.added = added.map(toObservableMap)
-          change.added.forEach((o) => {
-            o.set('id', hash(Math.random().toString()))
-            o.entries().forEach(([key, value]) => {
-              if (typeof value === 'function') {
-                o.set(key, value.bind(this))
-              }
-            })
-          })
-          /* eslint-enable no-param-reassign */
-        }
+const Character = types
+  .model('Character', {
+    id: autoHash,
+    name: 'Unnamed Character',
 
-        return change
-      })
-    })
+    xp: 0,
+    rp: 0,
 
-    autorun(() => {
-      const sortedSkills = this.skills.sort(skillSorter)
-      if (JSON.stringify(this.skills) !== JSON.stringify(sortedSkills)) {
-        this.skills.replace(sortedSkills)
-      }
-    })
+    acuity: -1,
+    agility: -1,
+    confidence: -1,
+    devotion: -1,
+    fitness: -1,
+    focus: -1,
+    intellect: -1,
+    intuition: -1,
+    strength: -1,
 
-    if (typeof name === 'string') {
-      this.name = name
-    }
+    size: 0,
+    naturalArmor: 0,
 
-    this.effects.replace(effects || [])
-    this.equipment.replace(equipment || [])
-    this.layers.replace(layers || [])
-    this.skills.replace(skills || [])
-  }
+    // effects: types.array(Effect, []),
+    // equipment: types.array(types.union(Armor, Equipment, Weapon), []),
+    skills: types.optional(types.array(Skill), []),
+  }).views(self => ({
+    get accuracy() { return averageOf(self.acuity, self.focus, self.intuition) },
+    get body() { return averageOf(self.strength, self.agility, self.fitness) },
+    get might() { return self.size + averageOf(self.strength, self.fitness) },
+    get mind() { return averageOf(self.intellect, self.acuity, self.focus) },
+    get potency() { return averageOf(self.strength, self.intellect, self.confidence) },
+    get reflex() { return averageOf(self.agility, self.acuity, self.intuition) },
+    get resilience() { return averageOf(self.fitness, self.focus, self.devotion) },
+    get speed() { return 6 + self.size + Math.round(self.fitness / 2) },
+    get spirit() { return averageOf(self.confidence, self.intuition, self.devotion) },
+    get toughness() { return averageOf(self.strength, self.fitness, self.size) + self.naturalArmor + self.armor },
 
-  @computed get attributes() {
-    return this.layers.filter(o => !o.get('inactive')).reduce(mapReducer, new Map())
-  }
+    get armor() { return 0 },
 
-  @computed get modifiers() {
-    return [
-      ...this.effects.filter(o => o.get('active')).map(o => o.get('modifiers')),
-      ...this.equipment.filter(o => o.get('equipped')).map(o => o.get('modifiers')),
-    ].reduce(mapReducer, new Map())
-  }
+    get power() {
+      return flow([
+        array => array.map(attr => range(-1, self[attr])),
+        array => array.reduce((set, values) => [...set, ...values], []),
+        array => array.map(value => (Math.abs(value + 1) ** 2) * (value >= 0 ? 1 : -1)),
+        array => array.reduce(sum, 0),
+      ], PRIMARY_ATTRIBUTES)
+    },
 
-  averageOf = (...names) => Math.round(this.sumOf(...names) / names.length)
-  sumOf = (...names) => names.map(n => this.valueOf(n)).reduce(sum, 0)
-  valueOf = name => (this.attributes.get(name) || 0) + (this.modifiers.get(name) || 0)
-}
+    get damageThresholdLight() {
+      return bound(
+        self.size + self.strength + self.fitness + self.armor + self.naturalArmor,
+        { min: 1 }
+      )
+    },
+    get damageThresholdDeep() { return self.lightWoundThreshold * 2 },
+    get damageThresholdDeath() { return self.lightWoundThreshold * 4 },
+    // get equipped() {
+    //   return self.equipment.map(e => e.equipped === true)
+    // }
+  })).actions(self => ({
+    /* eslint-disable no-param-reassign */
+    setAttribute(name, value) { self[name] = value },
+    /* eslint-enable no-param-reassign */
+  }))
+
+export default Character

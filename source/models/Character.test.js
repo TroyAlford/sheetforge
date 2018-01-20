@@ -1,74 +1,53 @@
-import Character from './Character'
+import Character, { PRIMARY_ATTRIBUTES, SECONDARY_ATTRIBUTES } from './Character'
 
 jest.unmock('./Character')
 
-describe('Character', () => {
-  it('calculates active layers', () => {
-    const character = new Character()
+it('defaults main attributes correctly', () => {
+  const c = Character.create()
+  PRIMARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(-1) })
+  SECONDARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(0) })
+})
 
-    expect(character.layers).toHaveLength(0)
-    expect(character.modifiers).toHaveLength(0)
-
-    character.layers.push({ inactive: true })
-    expect(character.layers).toHaveLength(1)
-    expect(character.modifiers).toHaveLength(0)
-
-    character.layers[0].inactive = false
-    expect(character.layers).toHaveLength(1)
-    expect(character.modifiers).toHaveLength(1)
+it('assigns main attributes correctly', () => {
+  const c = Character.create({
+    strength: 1,
+    intellect: 1,
+    confidence: 1,
+    agility: 1,
+    acuity: 1,
+    intuition: 1,
+    fitness: 1,
+    focus: 1,
+    devotion: 1,
+    size: 1,
+    naturalArmor: 1,
   })
 
-  it('applies layers via constructor', () => {
-    const character = new Character({
-      layers: [{ inactive: true }, {}]
-    })
+  PRIMARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(1) })
+  SECONDARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(1) })
+})
 
-    expect(character.layers).toHaveLength(2)
-    expect(character.modifiers).toHaveLength(1)
+it('calculates derived attributes correctly', () => {
+  const c = Character.create({
+    strength: 1,
+    intellect: 0,
+    confidence: 2,
+    agility: 0,
+    acuity: 0,
+    intuition: 1,
+    fitness: 2,
+    focus: 0,
+    devotion: 2,
   })
 
-  it('calculates attributes from active layers', () => {
-    const character = new Character({
-      layers: [
-        { strength: 1, fitness: 2, agility: 3 },
-        { strength: 3, fitness: 2, agility: 1 },
-      ],
-    })
-
-    expect(character.modifierFor('strength')).toBe(4)
-    expect(character.modifierFor('fitness')).toBe(4)
-    expect(character.modifierFor('agility')).toBe(4)
-    expect(character.sumOf('strength', 'fitness', 'agility')).toBe(12)
-    expect(character.averageOf('strength', 'fitness', 'agility')).toBe(4)
-
-    character.layers[1].inactive = true
-    expect(character.modifierFor('strength')).toBe(1)
-    expect(character.modifierFor('fitness')).toBe(2)
-    expect(character.modifierFor('agility')).toBe(3)
-    expect(character.averageOf('strength', 'fitness', 'agility')).toBe(2)
-  })
-
-  it('calculates active effect modifiers', () => {
-    const character = new Character({
-      layers: [{ STR: 1, CON: 1, DEX: 1 }],
-      effects: [{ name: 'Cat\'s Grace', active: true, modifiers: { DEX: 2 } }],
-      equipment: [{ name: 'Bracers of Strength', equipped: true, modifiers: { STR: 2 } }],
-    })
-
-    expect(character.modifierFor('STR')).toBe(3)
-    expect(character.modifierFor('DEX')).toBe(3)
-    expect(character.modifierFor('CON')).toBe(1)
-
-    character.equipment.push({ name: 'Belt of Constitution', equipped: true, modifiers: { CON: 2 } })
-    expect(character.modifierFor('CON')).toBe(3)
-
-    character.equipment[0].equipped = false
-    expect(character.modifierFor('STR')).toBe(1)
-
-    character.effects[0].active = false
-    expect(character.modifierFor('DEX')).toBe(1)
-
-    character.equipment[1].modifiers.CON = 4
-    expect(character.modifierFor('CON')).toBe(5)
-  })
+  expect(c.body).toBe(1)
+  expect(c.mind).toBe(0)
+  expect(c.spirit).toBe(2)
+  expect(c.potency).toBe(1)
+  expect(c.reflex).toBe(0)
+  expect(c.resilience).toBe(1)
+  expect(c.speed).toBe(7)
+  expect(c.accuracy).toBe(0)
+  expect(c.might).toBe(2)
+  expect(c.toughness).toBe(1)
 })
