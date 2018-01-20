@@ -1,4 +1,4 @@
-export default (string = '', radix = 16) => {
+export default function hash(string = '', radix = 16) {
   let h = 0
   string.split('').forEach((char) => {
     /* eslint-disable no-bitwise */
@@ -8,3 +8,5 @@ export default (string = '', radix = 16) => {
   })
   return Math.abs(h).toString(radix)
 }
+
+export const randomHash = () => hash(Math.random().toString())
