@@ -3,7 +3,6 @@ import Armor, { REGION } from './Armor'
 it('defaults to 0 for all values', () => {
   const a = Armor.create()
 
-  expect(a.id).toHaveLength(8)
   expect(a.name).toBe('Unnamed Armor')
   expect(a.values.toJS()).toEqual([0, 0, 0, 0, 0, 0])
   expect(a.average).toBe(0)
