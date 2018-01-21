@@ -57,7 +57,6 @@ describe('Primary', () => {
       .toThrowError(/computed.*is not a literal false/)
   })
 
-
   it('defaults and sets value', () => {
     const a = Primary.create(attributes)
     expect(a.value).toBe(-1)
@@ -79,6 +78,23 @@ describe('Primary', () => {
 
     a.setValue(2)
     expect(a.xpCost).toBe(14)
+  })
+
+  it('honors min/max values', () => {
+    const oldConsoleWarn = console.warn
+    console.warn = () => { }
+
+    const a = Primary.create(attributes)
+    expect(a.min).toBe(-10)
+    expect(a.max).toBe(10)
+
+    a.setValue(a.max + 1)
+    expect(a.value).toBe(a.max)
+
+    a.setValue(a.min - 1)
+    expect(a.value).toBe(a.min)
+
+    console.warn = oldConsoleWarn
   })
 })
 

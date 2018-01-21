@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import bound from '../utilities/bound'
 import range from '../utilities/range'
 import ExperienceCost from './ExperienceCost'
 
@@ -6,12 +7,18 @@ const Primary = types.compose(
   types.model('Attribute', {
     id: types.identifier(types.string),
     computed: types.literal(false),
-    name: types.string,
     initialValue: -1,
+    max: 10,
+    min: -10,
+    name: types.string,
     value: -1,
   }).actions(self => ({
     /* eslint-disable no-param-reassign */
-    setValue(value) { self.value = value },
+    setValue(value) {
+      const bounded = bound(value, { min: self.min, max: self.max })
+      if (bounded === self.value) return
+      self.value = bounded
+    },
     /* eslint-enable no-param-reassign */
   })),
   ExperienceCost((self) => {
@@ -19,7 +26,7 @@ const Primary = types.compose(
     return values.reduce((total, value) => (
       total + ((Math.abs(value + 1) ** 2) * (value < 0 ? -1 : 1))
     ), 0)
-  })
+  }, ['setValue'])
 )
 
 const Computed = types.model('Attribute', {
