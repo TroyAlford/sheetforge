@@ -51,7 +51,7 @@ it('computes secondary values correctly', () => {
 })
 
 it('allows assigning primary attribute values', () => {
-  const c = Character.create()
+  const c = Character.create({ xp: 1000 })
   expect(c.attribute('strength').value).toBe(-1)
 
   c.attribute('strength').setValue(3)
