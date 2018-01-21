@@ -1,19 +1,18 @@
 import Armor, { REGION } from './Armor'
 
+it('correctly defaults & sets name', () => {
+  const a = Armor.create()
+
+  expect(a.name).toBe('New Armor')
+  a.setName('Foo!')
+  expect(a.name).toBe('Foo!')
+})
+
 it('defaults to 0 for all values', () => {
   const a = Armor.create()
 
-  expect(a.name).toBe('Unnamed Armor')
   expect(a.values.toJS()).toEqual([0, 0, 0, 0, 0, 0])
   expect(a.average).toBe(0)
-})
-
-it('allows setting name', () => {
-  const a = Armor.create()
-
-  expect(a.name).toBe('Unnamed Armor')
-  a.setName('Foo!')
-  expect(a.name).toBe('Foo!')
 })
 
 it('allows setting values', () => {

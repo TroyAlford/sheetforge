@@ -1,23 +1,22 @@
 import { types } from 'mobx-state-tree'
-import { autoHash } from '../utilities/types'
 import { average } from '../utilities/math'
+import Equippable from './Equippable'
+import Item from './Item'
 
 const armorValue = types.refinement(types.number, n => n >= 0)
 const armorArray = types.refinement(types.array(armorValue), a => a.length === 6)
 
 export const REGION = {
-  head: 0,
   arms: 1,
-  torso: 2,
-  hands: 3,
-  legs: 4,
   feet: 5,
+  hands: 3,
+  head: 0,
+  legs: 4,
+  torso: 2,
 }
 
-const Armor = types.model('Armor', {
-  id: autoHash,
-  equipped: false,
-  name: 'Unnamed Armor',
+const Armor = types.compose(Equippable, Item, types.model('Armor', {
+  name: 'New Armor',
   values: types.optional(armorArray, [0, 0, 0, 0, 0, 0]),
 }).views(self => ({
   get arms() { return self.values[REGION.arms] },
@@ -30,16 +29,15 @@ const Armor = types.model('Armor', {
   get average() { return average(...self.values) },
 })).actions(self => ({
   /* eslint-disable no-param-reassign */
-  setName(value) { self.name = value },
-  setArms(value) { self.values[REGION.arms] = value },
-  setFeet(value) { self.values[REGION.feet] = value },
-  setHands(value) { self.values[REGION.hands] = value },
-  setHead(value) { self.values[REGION.head] = value },
-  setLegs(value) { self.values[REGION.legs] = value },
-  setTorso(value) { self.values[REGION.torso] = value },
+  setArms(value) { self.setValue(REGION.arms, value) },
+  setFeet(value) { self.setValue(REGION.feet, value) },
+  setHands(value) { self.setValue(REGION.hands, value) },
+  setHead(value) { self.setValue(REGION.head, value) },
+  setLegs(value) { self.setValue(REGION.legs, value) },
+  setTorso(value) { self.setValue(REGION.torso, value) },
   setValue(index, value) { self.values[index] = value },
   setValues(values) { self.values = values },
   /* eslint-enable no-param-reassign */
-}))
+})))
 
 export default Armor
