@@ -10,37 +10,17 @@ import Editable from '../components/Editable'
     modifier: 0,
   }
 
-  handleChange = (newValue) => {
-    const { attributes, name } = this.props
-
-    const oldValue = attributes.get(name)
-    const powerBefore = attributes.get('power')()
-
-    attributes.set(name, newValue)
-
-    const xp = attributes.get('xp')
-    const powerAfter = attributes.get('power')()
-    const xpCost = powerAfter - powerBefore
-
-    if (xpCost > xp) {
-      attributes.set(name, oldValue)
-    } else {
-      attributes.set('xp', xp - xpCost)
-    }
-  }
-
   renderValue = () => {
-    const { attributes, computed, modifier = 0, max, min, name } = this.props
+    const { model } = this.props
+    const { computed, min, max, value } = model
+    const modifier = 0
 
-    if (!attributes) return undefined
-
-    const value = attributes.get(name)
     const current = typeof value !== 'function' ? value : value()
     const isModified = Boolean(!computed && modifier)
     const displayValue = computed ? (current + modifier) : current
     const display = computed
       ? <Editable max={max} min={min} readonly value={displayValue} />
-      : <Editable max={max} min={min} onChange={this.handleChange} value={current} />
+      : <Editable max={max} min={min} onChange={model.setValue} value={current} />
 
     const classes = [
       'value',
@@ -56,11 +36,11 @@ import Editable from '../components/Editable'
   }
 
   render = () => {
-    const { caption, className, name } = this.props
+    const { className = '', model } = this.props
 
     return (
-      <div className={`attribute ${className} ${name}`}>
-        <span className="caption">{caption || name}</span>
+      <div className={`attribute ${className} ${model.name}`}>
+        <span className="caption">{model.name}</span>
         {this.renderValue()}
       </div>
     )

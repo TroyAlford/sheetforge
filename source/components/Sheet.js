@@ -38,21 +38,24 @@ import './Sheet.scss'
     this.setState({ portraitHeight, sizeClass })
   }
 
-  handleNameChange = (value) => {
-    this.character.name = value
-  }
-
   render = () => {
+    const c = this.character
     const { attributes, descriptors, imageUrl, modifiers, name, skills } = this.character
     const { portraitHeight, sizeClass = 'large' } = this.state
 
     return (
       <div className={`sheetforge sheet axis ${sizeClass}`} ref={(self) => { this.container = self }}>
         <header>
-          <Editable className="character-name" value={name} onChange={this.handleNameChange} />
-          <Attribute caption="XP" name="xp" attributes={attributes} min={0} max={Infinity} />
-          <Attribute caption="RP" name="rp" attributes={attributes} min={0} max={Infinity} />
-          <Attribute caption="CP" name="power" attributes={attributes} computed />
+          <Editable className="character-name" value={c.name} onChange={c.setName} />
+          <div className="xp attribute">
+            <span className="caption">XP</span>
+            <Editable value={c.xp} onChange={c.setXP} />
+          </div>
+          <div className="rp attribute">
+            <span className="caption">RP</span>
+            <Editable value={c.rp} onChange={c.setRP} />
+          </div>
+          <Attribute model={c.attribute('power')} />
         </header>
         <img
           className="portrait"
