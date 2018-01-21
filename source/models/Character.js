@@ -39,9 +39,8 @@ const Character = types
   .model('Character', {
     id: autoHash,
     name: 'Unnamed Character',
-
-    xp: 0,
     rp: 0,
+    xp: 0,
 
     primaryAttributes: types.optional(types.array(Attribute), primaries),
 
@@ -93,6 +92,8 @@ const Character = types
     /* eslint-disable no-param-reassign */
     attribute(id) { return my.attributes.find(a => a.id === id) },
     setAttribute(id, value) { my.attribute(id).setValue(value) },
+    setXP(xp) { my.xp = xp },
+    setRP(rp) { my.rp = rp },
     /* eslint-enable no-param-reassign */
   }))
 
