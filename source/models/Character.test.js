@@ -2,52 +2,67 @@ import Character, { PRIMARY_ATTRIBUTES, SECONDARY_ATTRIBUTES } from './Character
 
 jest.unmock('./Character')
 
-it('defaults main attributes correctly', () => {
+const attr = (id, value) => ({ id, computed: false, name: '', value })
+
+it('defaults primary attributes correctly', () => {
   const c = Character.create()
-  PRIMARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(-1) })
-  SECONDARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(0) })
+
+  PRIMARY_ATTRIBUTES.forEach((id) => { expect(c.attribute(id).value).toBe(-1) })
+  SECONDARY_ATTRIBUTES.forEach((id) => { expect(c.attribute(id).value).toBe(0) })
 })
 
 it('assigns main attributes correctly', () => {
   const c = Character.create({
-    strength: 1,
-    intellect: 1,
-    confidence: 1,
-    agility: 1,
-    acuity: 1,
-    intuition: 1,
-    fitness: 1,
-    focus: 1,
-    devotion: 1,
-    size: 1,
-    naturalArmor: 1,
+    primaryAttributes: [attr('agility', 5), attr('fitness', 5), attr('strength', 5)],
   })
 
-  PRIMARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(1) })
-  SECONDARY_ATTRIBUTES.forEach((attr) => { expect(c[attr]).toBe(1) })
+  expect(c.attribute('agility').value).toBe(5)
+  expect(c.attribute('fitness').value).toBe(5)
+  expect(c.attribute('strength').value).toBe(5)
 })
 
-it('calculates derived attributes correctly', () => {
+it('computes secondary values correctly', () => {
   const c = Character.create({
-    strength: 1,
-    intellect: 0,
-    confidence: 2,
-    agility: 0,
-    acuity: 0,
-    intuition: 1,
-    fitness: 2,
-    focus: 0,
-    devotion: 2,
+    primaryAttributes: [
+      attr('acuity', 1),
+      attr('agility', 2),
+      attr('confidence', 0),
+      attr('devotion', 0),
+      attr('fitness', 2),
+      attr('focus', 1),
+      attr('intellect', 1),
+      attr('intuition', 0),
+      attr('strength', 2),
+      attr('size', 1),
+      attr('naturalArmor', 1),
+    ],
   })
 
-  expect(c.body).toBe(1)
-  expect(c.mind).toBe(0)
-  expect(c.spirit).toBe(2)
-  expect(c.potency).toBe(1)
-  expect(c.reflex).toBe(0)
-  expect(c.resilience).toBe(1)
-  expect(c.speed).toBe(7)
-  expect(c.accuracy).toBe(0)
-  expect(c.might).toBe(2)
-  expect(c.toughness).toBe(1)
+  expect(c.attribute('accuracy').value).toBe(1)
+  expect(c.attribute('body').value).toBe(2)
+  expect(c.attribute('might').value).toBe(3)
+  expect(c.attribute('mind').value).toBe(1)
+  expect(c.attribute('potency').value).toBe(1)
+  expect(c.attribute('reflex').value).toBe(1)
+  expect(c.attribute('resilience').value).toBe(1)
+  expect(c.attribute('speed').value).toBe(8)
+  expect(c.attribute('spirit').value).toBe(0)
+  expect(c.attribute('toughness').value).toBe(3)
+})
+
+it('allows assigning primary attribute values', () => {
+  const c = Character.create()
+  expect(c.attribute('strength').value).toBe(-1)
+
+  c.attribute('strength').setValue(3)
+  expect(c.attribute('strength').value).toBe(3)
+
+  c.setAttribute('strength', 2)
+  expect(c.attribute('strength').value).toBe(2)
+})
+it('rejects assigning secondary attribute values', () => {
+  const c = Character.create()
+  expect(c.attribute('toughness').value).toBe(-1)
+
+  expect(() => c.setAttribute('toughness', 2)).toThrow(/is not a function/)
 })
