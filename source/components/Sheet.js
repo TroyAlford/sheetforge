@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import bound from '../utilities/bound'
 import Attribute from './Attribute'
 import AttributeSection from './AttributeSection'
-import AxisCharacter from '../models/AxisCharacter'
+import Character from '../models/Character'
 import DescriptorSection from './DescriptorSection'
 import Editable from '../components/Editable'
 import SkillSection from './SkillSection'
@@ -13,7 +13,7 @@ import './Sheet.scss'
 @observer export default class Sheet extends Component {
   constructor(props) {
     super(props)
-    this.character = new AxisCharacter()
+    this.character = Character.create()
 
     window.addEventListener('resize', this.handleWindowResize)
   }
@@ -63,9 +63,9 @@ import './Sheet.scss'
             width: '100%',
           }}
         />
-        <DescriptorSection descriptors={descriptors} />
-        <AttributeSection attributes={attributes} modifiers={modifiers} />
-        <SkillSection skills={skills} />
+        {/* <DescriptorSection descriptors={descriptors} /> */}
+        {/* <AttributeSection attributes={attributes} modifiers={modifiers} /> */}
+        {/* <SkillSection skills={skills} /> */}
       </div>
     )
   }
