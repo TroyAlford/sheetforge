@@ -9,11 +9,23 @@ export default function ExperienceCost(
   }).views(self => ({
     get xpCost() { return calcFn(self) },
   })).actions((self) => {
-    const getCharacter = () => (distanceToCharacter ? getParent(self, distanceToCharacter) : self)
+    const getCharacter = () => {
+      if (!distanceToCharacter) return self
+      try {
+        return getParent(self, distanceToCharacter)
+      } catch (e) {
+        console.warn(
+          `Failed to find character ${distanceToCharacter} parents up from ExperienceCost model.`
+        )
+        return self
+      }
+    }
     const getAvailableXP = () => getCharacter().xp
     const adjustXP = (amount) => {
       const character = getCharacter()
-      character.setXP(character.xp + amount)
+      if (character && typeof character.setXP === 'function') {
+        character.setXP(character.xp + amount)
+      }
     }
 
     const guardedActions = guardedActionNames.reduce((map, name) => ({
