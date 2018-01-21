@@ -1,5 +1,6 @@
 import { types } from 'mobx-state-tree'
 import { autoHash } from '../utilities/types'
+import { average, sum } from '../utilities/math'
 import bound from '../utilities/bound'
 import range from '../utilities/range'
 import sequence from '../utilities/sequence'
