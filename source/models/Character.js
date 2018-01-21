@@ -1,9 +1,8 @@
 import { types } from 'mobx-state-tree'
 import { autoHash } from '../utilities/types'
 import bound from '../utilities/bound'
-import flow from '../utilities/flow'
 import range from '../utilities/range'
-import { average, sum } from '../utilities/math'
+import sequence from '../utilities/sequence'
 import Skill from './Skill'
 
 export const PRIMARY_ATTRIBUTES = [
@@ -72,12 +71,12 @@ const Character = types
     get armor() { return 0 },
 
     get power() {
-      return flow([
+      return sequence(PRIMARY_ATTRIBUTES, [
         array => array.map(attr => range(-1, my[attr])),
         array => array.reduce((set, values) => [...set, ...values], []),
         array => array.map(value => (Math.abs(value + 1) ** 2) * (value >= 0 ? 1 : -1)),
         array => array.reduce(sum, 0),
-      ], PRIMARY_ATTRIBUTES)
+      ])
     },
 
     get damageThresholdLight() {
