@@ -1,5 +1,7 @@
 import { getParent, types } from 'mobx-state-tree'
 import { autoHash } from '../utilities/types'
+import range from '../utilities/range'
+import ExperienceCost from './ExperienceCost'
 
 const between = (min, max, defaultTo = min) => (
   types.refinement(
@@ -8,8 +10,8 @@ const between = (min, max, defaultTo = min) => (
   )
 )
 
-const Skill = types
-  .model('Skill', {
+const Skill = types.compose(
+  types.model('Skill', {
     id: autoHash,
     name: 'New Skill',
     theory: between(0, 10),
@@ -23,6 +25,11 @@ const Skill = types
     setTheory(value) { self.theory = value },
     setMastery(value) { self.mastery = value },
     /* eslint-enable no-param-reassign */
-  }))
+  })),
+  ExperienceCost((self) => {
+    const values = [...range(0, self.theory), ...range(1, self.mastery)]
+    return values.reduce((total, next) => total + (next ** 2), 1)
+  })
+)
 
 export default Skill

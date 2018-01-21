@@ -16,3 +16,19 @@ it('allows setting theory', () => {
   s.setTheory(2)
   expect(s.theory).toBe(2)
 })
+
+it('computes xp cost correctly', () => {
+  const s = Skill.create()
+  expect(s.theory).toBe(0)
+  expect(s.mastery).toBe(1)
+  expect(s.xpCost).toBe(2) // 1 + (0 ^ 2) + (1 ^ 2)
+
+  s.setTheory(1)
+  expect(s.xpCost).toBe(3) // 1 + (1 ^ 2) + (1 ^ 2)
+
+  s.setTheory(2)
+  expect(s.xpCost).toBe(7) // 1 + (2 ^ 2) + (1 ^ 2)
+
+  s.setMastery(2)
+  expect(s.xpCost).toBe(11) // 1 + (2 ^ 2) + (2 ^ 2)
+})
