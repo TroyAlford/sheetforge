@@ -12,10 +12,16 @@ export default class DiceRoller {
   rollDie = (sides = this.options.dieSides) => (
     1 + Math.floor(Math.random() * Math.floor(sides))
   )
+  rollMany = (howMany, sides = this.options.dieSides) => (
+    [...new Array(howMany)].map(() => this.rollDie(sides))
+  )
 
-  vsThreshold = (howMany, threshold) => {
+  rollSum = (howMany, sides = this.options.dieSides) => (
+    this.rollMany(howMany, sides).reduce((sum, roll) => sum + roll, 0)
+  )
+  rollVsThreshold = (howMany, threshold) => {
     const { explodeOn, multiExplode } = this.options
-    const rolls = [...new Array(howMany)].map(() => this.rollDie())
+    const rolls = this.rollMany(howMany)
     let explosionCount = rolls.filter(r => explodeOn.includes(r)).length
     while (explosionCount) {
       const roll = this.rollDie()

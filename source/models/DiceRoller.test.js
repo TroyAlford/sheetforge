@@ -10,7 +10,7 @@ function createMockDiceRoller(rolls = [], options = {}) {
   return roller
 }
 
-it('rolls dice successfully', () => {
+it('rolls dice within range', () => {
   const roller = new DiceRoller()
   expect(roller.options.dieSides).toBe(6)
 
@@ -22,14 +22,20 @@ it('rolls dice successfully', () => {
   })
 })
 
-describe('vsThreshold()', () => {
+describe('rollSum()', () => {
+  it('sums values', () => {
+    const roller = createMockDiceRoller([1, 2, 3, 4, 5, 6])
+    expect(roller.rollSum(6)).toBe(21)
+  })
+})
+describe('rollVsThreshold()', () => {
   it('calculates botch correctly', () => {
     const roller = createMockDiceRoller(
       [1, 2, 3, 4, 5, 6],
       { explodeOn: [], multiExplode: false }
     )
 
-    expect(roller.vsThreshold(4, 5)).toEqual({
+    expect(roller.rollVsThreshold(4, 5)).toEqual({
       rolls: [1, 2, 3, 4],
       successes: 0,
       failures: 1,
@@ -43,7 +49,7 @@ describe('vsThreshold()', () => {
       { explodeOn: [6], multiExplode: false }
     )
 
-    expect(roller.vsThreshold(1, 5)).toEqual({
+    expect(roller.rollVsThreshold(1, 5)).toEqual({
       rolls: [6, 6],
       successes: 2,
       failures: 0,
@@ -57,9 +63,23 @@ describe('vsThreshold()', () => {
       { explodeOn: [6], multiExplode: true }
     )
 
-    expect(roller.vsThreshold(1, 5)).toEqual({
+    expect(roller.rollVsThreshold(1, 5)).toEqual({
       rolls: [6, 6, 6, 6, 1],
       successes: 4,
+      failures: 1,
+      isBotch: false,
+    })
+  })
+
+  it('honors multiple explodeOn values', () => {
+    const roller = createMockDiceRoller(
+      [5, 6, 5, 1],
+      { explodeOn: [5, 6], multiExplode: true }
+    )
+
+    expect(roller.rollVsThreshold(1, 5)).toEqual({
+      rolls: [5, 6, 5, 1],
+      successes: 3,
       failures: 1,
       isBotch: false,
     })
