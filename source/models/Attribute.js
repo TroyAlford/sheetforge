@@ -7,7 +7,6 @@ const Primary = types.compose(
   types.model('Attribute', {
     id: types.identifier(types.string),
     computed: types.literal(false),
-    initialValue: -1,
     max: 10,
     min: -10,
     name: types.string,
@@ -22,7 +21,7 @@ const Primary = types.compose(
     /* eslint-enable no-param-reassign */
   })),
   ExperienceCost((self) => {
-    const values = range(self.initialValue, self.value)
+    const values = range(-1, self.value)
     return values.reduce((total, value) => (
       total + ((Math.abs(value + 1) ** 2) * (value < 0 ? -1 : 1))
     ), 0)
