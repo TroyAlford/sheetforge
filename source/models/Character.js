@@ -26,14 +26,10 @@ export const DERIVED_ATTRIBUTES = [
   'power',
 ]
 
-const primaries = [
-  ...PRIMARY_ATTRIBUTES.map((id) => {
-    const name = id.replace(/^./, id.charAt(0).toUpperCase())
-    return { id, computed: false, name, value: -1 }
-  }),
-  { id: 'size', computed: false, name: 'Size', value: 0, initialValue: 0 },
-  { id: 'naturalArmor', computed: false, name: 'Natural Armor', value: 0, initialValue: 0 },
-]
+const primaries = PRIMARY_ATTRIBUTES.map((id) => {
+  const name = id.replace(/^./, id.charAt(0).toUpperCase())
+  return { id, computed: false, name, value: -1 }
+})
 
 const Character = types
   .model('Character', {
@@ -67,6 +63,8 @@ const Character = types
       Attribute.create({ id: 'damageThresholdLight', value: () => bound(sum(attrs('size', 'strength', 'fitness', 'armor', 'naturalArmor')), { min: 1 }), name: 'Light' }),
       Attribute.create({ id: 'damageThresholdDeep', value: () => attr('light') * 2, name: 'Deep' }),
       Attribute.create({ id: 'damageThresholdDeath', value: () => attr('light') * 4, name: 'Death' }),
+      Attribute.create({ id: 'size', value: () => 0, name: 'Size' }),
+      Attribute.create({ id: 'naturalArmor', value: () => 0, name: 'Natural Armor' }),
     ]
     /* eslint-enable max-len, object-property-newline */
 
@@ -81,10 +79,10 @@ const Character = types
       get armor() { return 0 },
       get equipped() { return my.equipment.filter(e => e.equipped) },
       get power() {
-        return sum(...[
-          my.primaryAttributes.map(a => a.xpCost),
-          my.skills.map(s => s.xpCost),
-          my.traits.map(s => s.xpCost),
+        return sum([
+          ...my.primaryAttributes.map(a => a.xpCost),
+          ...my.skills.map(s => s.xpCost),
+          ...my.traits.map(s => s.xpCost),
         ])
       },
     }
