@@ -40,7 +40,7 @@ import './Sheet.scss'
 
   render = () => {
     const c = this.character
-    const { attributes, descriptors, imageUrl, modifiers, name, skills } = this.character
+    const { attributes, descriptors, imageUrl, modifiers, name, skills } = c
     const { portraitHeight, sizeClass = 'large' } = this.state
 
     return (
@@ -55,7 +55,10 @@ import './Sheet.scss'
             <span className="caption">RP</span>
             <Editable value={c.rp} onChange={c.setRP} />
           </div>
-          <Attribute model={c.attribute('power')} />
+          <div className="power attribute">
+            <div className="caption">CP</div>
+            <Editable value={c.power} readonly />
+          </div>
         </header>
         <img
           className="portrait"
@@ -66,7 +69,7 @@ import './Sheet.scss'
             width: '100%',
           }}
         />
-        {/* <DescriptorSection descriptors={descriptors} /> */}
+        <DescriptorSection descriptors={descriptors} />
         {/* <AttributeSection attributes={attributes} modifiers={modifiers} /> */}
         {/* <SkillSection skills={skills} /> */}
       </div>

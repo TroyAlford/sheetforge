@@ -4,6 +4,7 @@ import { average, sum } from '../utilities/math'
 import bound from '../utilities/bound'
 import Attribute from './Attribute'
 import Armor from './Armor'
+import Descriptor from './Descriptor'
 import Item from './Item'
 import Skill from './Skill'
 import Trait from './Trait'
@@ -26,10 +27,19 @@ export const DERIVED_ATTRIBUTES = [
   'power',
 ]
 
-const primaries = PRIMARY_ATTRIBUTES.map((id) => {
-  const name = id.replace(/^./, id.charAt(0).toUpperCase())
-  return { id, computed: false, name, value: -1 }
-})
+export const DEFAULT_DESCRIPTORS = [
+  'age', 'concept', 'eyes', 'gender', 'hair', 
+  'height', 'homeland', 'race', 'weight'
+]
+
+const capitalize = s => s.replace(/^./, s.charAt(0).toUpperCase())
+
+const primaries = PRIMARY_ATTRIBUTES.map(id => (
+  { id, computed: false, name: capitalize(id), value: -1 }
+))
+const descriptors = DEFAULT_DESCRIPTORS.map(id => (
+  { id, name: capitalize(id), value: '' }
+))
 
 const Character = types
   .model('Character', {
@@ -39,7 +49,7 @@ const Character = types
     xp: 0,
 
     primaryAttributes: types.optional(types.array(Attribute), primaries),
-
+    descriptors: types.optional(types.array(Descriptor), descriptors),
     // effects: types.array(Effect, []),
     equipment: types.optional(types.array(types.union(Armor, Item, Weapon)), []),
     skills: types.optional(types.array(Skill), []),
