@@ -40,7 +40,7 @@ import './Sheet.scss'
 
   render = () => {
     const c = this.character
-    const { attributes, descriptors, imageUrl, modifiers, name, skills } = c
+    const { imageUrl, modifiers, name, skills } = c
     const { portraitHeight, sizeClass = 'large' } = this.state
 
     return (
@@ -69,8 +69,8 @@ import './Sheet.scss'
             width: '100%',
           }}
         />
-        <DescriptorSection descriptors={descriptors} />
-        {/* <AttributeSection attributes={attributes} modifiers={modifiers} /> */}
+        <DescriptorSection descriptors={c.descriptors} />
+        <AttributeSection attributes={c.attributes} modifiers={modifiers} />
         {/* <SkillSection skills={skills} /> */}
       </div>
     )
