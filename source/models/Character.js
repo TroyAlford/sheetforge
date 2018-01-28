@@ -98,6 +98,7 @@ const Character = types
     }
   }).actions(my => ({
     /* eslint-disable no-param-reassign */
+    addSkill() { my.skills.push(Skill.create()) },
     attribute(id) { return my.attributes.find(a => a.id === id) },
     setAttribute(id, value) { my.attribute(id).setValue(value) },
     setName(name) { my.name = name },
