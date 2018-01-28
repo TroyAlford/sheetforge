@@ -20,10 +20,11 @@ const Skill = types.compose(
     get modifier() {
       return getParent(self, 2).modifierFor(self.name)
     },
-  })).actions(self => ({
+  })).actions(my => ({
     /* eslint-disable no-param-reassign */
-    setTheory(value) { self.theory = value },
-    setMastery(value) { self.mastery = value },
+    setName(name) { my.name = name },
+    setTheory(theory) { my.theory = theory },
+    setMastery(mastery) { my.mastery = mastery },
     /* eslint-enable no-param-reassign */
   })),
   ExperienceCost((self) => {
