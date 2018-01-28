@@ -10,6 +10,20 @@
   ;
   grid-template-columns: 1fr 1fr;
   grid-auto-flow: column;
+
+  header {
+    display: grid;
+    grid-template-columns: auto 36px;
+    grid-template-areas: "header buttons";
+
+    > button { 
+      grid-area: buttons;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      &:hover { background-color: $color-highlight-bg; }
+    }
+  }
 }
 
 .sheetforge.sheet .skill {
