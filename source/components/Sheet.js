@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import bound from '../utilities/bound'
-import Attribute from './Attribute'
 import AttributeSection from './AttributeSection'
 import Character from '../models/Character'
 import DescriptorSection from './DescriptorSection'
 import Editable from '../components/Editable'
 import SkillSection from './SkillSection'
 
+import '../../fontello/css/axis-sheet-embedded.css'
 import './Sheet.scss'
 
 @observer export default class Sheet extends Component {
@@ -40,7 +40,6 @@ import './Sheet.scss'
 
   render = () => {
     const c = this.character
-    const { imageUrl, modifiers, name, skills } = c
     const { portraitHeight, sizeClass = 'large' } = this.state
 
     return (
@@ -63,15 +62,15 @@ import './Sheet.scss'
         <img
           className="portrait"
           alt="Character Portrait"
-          src={imageUrl || '//via.placeholder.com/3x4/eeeeee?text=%20'}
+          src={c.imageUrl || '//via.placeholder.com/3x4/eeeeee?text=%20'}
           style={{
             height: portraitHeight,
             width: '100%',
           }}
         />
         <DescriptorSection descriptors={c.descriptors} />
-        <AttributeSection attributes={c.attributes} modifiers={modifiers} />
-        {/* <SkillSection skills={skills} /> */}
+        <AttributeSection attributes={c.attributes} modifiers={c.modifiers} />
+        <SkillSection skills={c.skills} modifiers={c.modifiers} addSkill={c.addSkill} />
       </div>
     )
   }
