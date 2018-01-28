@@ -49,11 +49,11 @@ import './Sheet.scss'
           <Editable className="character-name" value={c.name} onChange={c.setName} />
           <div className="xp attribute">
             <span className="caption">XP</span>
-            <Editable value={c.xp} onChange={c.setXP} />
+            <Editable min={0} max={Infinity} value={c.xp} onChange={c.setXP} />
           </div>
           <div className="rp attribute">
             <span className="caption">RP</span>
-            <Editable value={c.rp} onChange={c.setRP} />
+            <Editable min={0} max={5} value={c.rp} onChange={c.setRP} />
           </div>
           <div className="power attribute">
             <div className="caption">CP</div>
