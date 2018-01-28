@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
-import hash from '../utilities/hash'
 import Descriptor from '../components/Descriptor'
 
 import './DescriptorSection.scss'
@@ -11,22 +10,13 @@ const DISPLAY_ORDER = [
   'eyes', 'hair', 'age',
 ]
 
-@observer export default class DescriptorSection extends Component {
-  handleChange = (name, value) => {
-    this.props.descriptors.set(name, value)
-  }
+const DescriptorSection = ({ descriptors }) => (
+  <div className="descriptors section">
+    <header>Descriptors</header>
+    {DISPLAY_ORDER.map(id => (
+      <Descriptor key={id} model={descriptors.find(d => d.id === id)} />
+    ))}
+  </div>
+)
 
-  render = () => (
-    <div className="descriptors section">
-      <header>Descriptors</header>
-      {DISPLAY_ORDER.map(name => (
-        <Descriptor
-          key={hash(name)}
-          name={name}
-          value={this.props.descriptors.get(name)}
-          onChange={this.handleChange}
-        />
-      ))}
-    </div>
-  )
-}
+export default observer(DescriptorSection)
