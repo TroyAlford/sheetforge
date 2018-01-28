@@ -28,8 +28,8 @@ export const DERIVED_ATTRIBUTES = [
 ]
 
 export const DEFAULT_DESCRIPTORS = [
-  'age', 'concept', 'eyes', 'gender', 'hair', 
-  'height', 'homeland', 'race', 'weight'
+  'age', 'concept', 'eyes', 'gender', 'hair',
+  'height', 'homeland', 'race', 'weight',
 ]
 
 const capitalize = s => s.replace(/^./, s.charAt(0).toUpperCase())
@@ -71,8 +71,8 @@ const Character = types
       Attribute.create({ id: 'spirit', value: () => average(attrs('confidence', 'intuition', 'devotion')), name: 'Spirit' }),
       Attribute.create({ id: 'toughness', value: () => average(attrs('strength', 'fitness', 'size')) + sum(attrs('naturalArmor', 'armor')), name: 'Toughness' }),
       Attribute.create({ id: 'damageThresholdLight', value: () => bound(sum(attrs('size', 'strength', 'fitness', 'armor', 'naturalArmor')), { min: 1 }), name: 'Light' }),
-      Attribute.create({ id: 'damageThresholdDeep', value: () => attr('light') * 2, name: 'Deep' }),
-      Attribute.create({ id: 'damageThresholdDeath', value: () => attr('light') * 4, name: 'Death' }),
+      Attribute.create({ id: 'damageThresholdDeep', value: () => attr('damageThresholdLight') * 2, name: 'Deep' }),
+      Attribute.create({ id: 'damageThresholdDeath', value: () => attr('damageThresholdLight') * 4, name: 'Death' }),
       Attribute.create({ id: 'size', value: () => 0, name: 'Size' }),
       Attribute.create({ id: 'naturalArmor', value: () => 0, name: 'Natural Armor' }),
     ]
@@ -100,6 +100,7 @@ const Character = types
     /* eslint-disable no-param-reassign */
     attribute(id) { return my.attributes.find(a => a.id === id) },
     setAttribute(id, value) { my.attribute(id).setValue(value) },
+    setName(name) { my.name = name },
     setXP(xp) { my.xp = xp },
     setRP(rp) { my.rp = rp },
     /* eslint-enable no-param-reassign */
