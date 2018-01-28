@@ -7,7 +7,7 @@ const Descriptor = types
     value: '',
   }).actions(my => ({
     /* eslint-disable no-param-reassign */
-    setName(value) { my.name = value },
+    setName(name) { my.name = name },
     setValue(value) { my.value = value },
     /* eslint-enable no-param-reassign */
   }))
