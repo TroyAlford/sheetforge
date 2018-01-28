@@ -12,6 +12,11 @@ export default class AttributeSection extends Component {
     const attr = this.props.attributes.find(a => a.id === id)
     return <Attribute model={attr} className={`${id} ${className} computed`} computed />
   }
+  renderHeader = (id, name) => (
+    <div className={`attribute ${id} header highlight`}>
+      <span className="caption">{name}</span>
+    </div>
+  )
 
   render = () => (
     <div className="attributes">
@@ -38,19 +43,19 @@ export default class AttributeSection extends Component {
 
       <hr className="divider-1" />
 
-      <Attribute model={{ id: 'racial', name: 'Racial' }} className="header highlight" />
+      {this.renderHeader('racial', 'Racial')}
       {this.renderAttribute('size')}
       {this.renderComputed('speed')}
       {this.renderAttribute('naturalArmor')}
 
-      <Attribute model={{ id: 'combat', name: 'Combat' }} className="header highlight" />
+      {this.renderHeader('combat', 'Combat')}
       {this.renderComputed('accuracy')}
       {this.renderComputed('might')}
       {this.renderComputed('toughness')}
 
       <hr className="divider-2" />
 
-      <Attribute model={{ id: 'thresholds', name: 'Damage' }} className="header highlight" />
+      {this.renderHeader('thresholds', 'Damage')}
       {this.renderComputed('damageThresholdLight', 'light')}
       {this.renderComputed('damageThresholdDeep', 'deep')}
       {this.renderComputed('damageThresholdDeath', 'death')}
