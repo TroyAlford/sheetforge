@@ -5,8 +5,10 @@ import Editable from '../components/Editable'
 
 @observer export default class Attribute extends Component {
   static defaultProps = {
+    className: 'none',
     min: -10,
     max: 10,
+    model: { id: 'none', name: '' },
     modifier: 0,
   }
 
@@ -37,9 +39,10 @@ import Editable from '../components/Editable'
 
   render = () => {
     const { className = '', model } = this.props
+    if (!model) console.log(model)
 
     return (
-      <div className={`attribute ${className} ${model.name}`}>
+      <div className={`attribute ${className} ${model.id}`}>
         <span className="caption">{model.name}</span>
         {this.renderValue()}
       </div>
