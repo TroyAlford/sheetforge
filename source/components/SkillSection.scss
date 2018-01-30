@@ -28,6 +28,8 @@
   header.subheader {
     display: grid;
     grid-template-columns: 1fr 1fr;
+
+    .theory, .mastery { text-align: right; }
   }
 }
 

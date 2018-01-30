@@ -41,5 +41,13 @@
       "skills"
     ;
     grid-template-columns: 1fr;
+
+    header.subheader {
+      grid-template-columns: 1fr;
+
+      .skill:nth-child(2) {
+        display: none;
+      }
+    }
   }
 }
