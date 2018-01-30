@@ -1,12 +1,14 @@
 .sheetforge.sheet.large {
   border: 1px solid #eee;
   grid-template-areas:
-    "header header header"
-    "left descriptors descriptors"
-    "left attributes attributes"
-    "left skills skills"
+    "header header header header header header"
+    "left left descriptors descriptors descriptors descriptors"
+    "left left attributes attributes attributes attributes"
+    "traits traits skills skills skills skills"
+    "weapons weapons weapons armor armor armor"
+    "equipment equipment equipment equipment equipment equipment"
   ;
-  grid-template-columns: 2fr 3fr 3fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   margin: 0 auto;
   padding: .25in;
 
