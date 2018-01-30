@@ -23,3 +23,9 @@ it('sorts with case-insensitivity', () => {
   array.sort(compareBy('a'))
   expect(array.map(o => o.a)).toEqual(['a', 'B', 'c'])
 })
+
+it('reverses sorting if specified', () => {
+  const array = [{ a: 'c' }, { a: 'B' }, { a: 'a' }]
+  array.sort(compareBy('a', true))
+  expect(array.map(o => o.a)).toEqual(['c', 'B', 'a'])
+})
