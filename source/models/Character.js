@@ -70,7 +70,7 @@ const Character = types
       Attribute.create({ id: 'speed', value: () => sum(6, attr('size'), Math.round(attr('fitness') / 2)), name: 'Speed' }),
       Attribute.create({ id: 'spirit', value: () => average(attrs('confidence', 'intuition', 'devotion')), name: 'Spirit' }),
       Attribute.create({ id: 'toughness', value: () => average(attrs('strength', 'fitness', 'size')) + sum(attrs('naturalArmor', 'armor')), name: 'Toughness' }),
-      Attribute.create({ id: 'damageThresholdLight', value: () => bound(sum(attrs('size', 'strength', 'fitness', 'armor', 'naturalArmor')), { min: 1 }), name: 'Light' }),
+      Attribute.create({ id: 'damageThresholdLight', value: () => bound(sum(attrs('size', 'strength', 'fitness', 'naturalArmor')) + my.armorRating, { min: 1 }), name: 'Light' }),
       Attribute.create({ id: 'damageThresholdDeep', value: () => attr('damageThresholdLight') * 2, name: 'Deep' }),
       Attribute.create({ id: 'damageThresholdDeath', value: () => attr('damageThresholdLight') * 4, name: 'Death' }),
       Attribute.create({ id: 'size', value: () => 0, name: 'Size' }),
@@ -86,7 +86,10 @@ const Character = types
           ...computedAttributes.map(a => a.id),
         ]
       },
-      get armor() { return 0 },
+      get armor() { return my.equipment.filter(e => Armor.is(e)) },
+      get armorRating() {
+        return sum(my.armor.map(e => (e.equipped ? e.average : 0)))
+      },
       get equipped() { return my.equipment.filter(e => e.equipped) },
       get power() {
         return sum([
