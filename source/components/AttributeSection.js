@@ -14,7 +14,7 @@ export default class AttributeSection extends Component {
   }
   renderHeader = (id, name) => (
     <div className={`attribute ${id} header highlight`}>
-      <span className="caption">{name}</span>
+      <span className="name">{name}</span>
     </div>
   )
 

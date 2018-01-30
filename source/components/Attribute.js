@@ -43,7 +43,7 @@ import Editable from '../components/Editable'
 
     return (
       <div className={`attribute ${className} ${model.id}`}>
-        <span className="caption">{model.name}</span>
+        <span className="name">{model.name}</span>
         {this.renderValue()}
       </div>
     )
