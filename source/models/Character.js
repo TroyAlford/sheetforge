@@ -102,6 +102,7 @@ const Character = types
     }
   }).actions(my => ({
     /* eslint-disable no-param-reassign */
+    addArmor() { my.equipment.push(Armor.create()) },
     addSkill() { my.skills.push(Skill.create()) },
     addTrait() { my.traits.push(Trait.create()) },
     addWeapon() { my.equipment.push(Weapon.create()) },
