@@ -2,8 +2,7 @@ import { types } from 'mobx-state-tree'
 import Equippable from './Equippable'
 import Item from './Item'
 
-const weaponValue = types.refinement(types.number, n => n >= 0)
-const weaponArray = types.refinement(types.array(weaponValue), a => a.length === 3)
+const weaponArray = types.refinement(types.array(types.number), a => a.length === 3)
 
 const PROPS = {
   accuracy: 1,
