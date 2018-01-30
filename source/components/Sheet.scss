@@ -15,6 +15,8 @@
     "header"
     "descriptors"
     "attributes"
+    "wounds"
+    "traits"
     "skills"
   ;
   grid-gap: 10px;
@@ -27,15 +29,38 @@
   header {
     align-items: center;
     border-bottom: 1px solid $color-divider;
+    display: grid;
     font-size: 1.5em;
     font-weight: bold;
     grid-area: header;
+    grid-template-areas: "header buttons";
+    grid-template-columns: auto 36px;
+    min-height: 25px;
+
+    > button {
+      grid-area: buttons;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      &:hover { background-color: $color-highlight-bg; }
+    }
   }
-  header + header.subheader {
+  header.subheader {
+    display: grid;
     font-size: .8em;
     font-weight: bold;
     grid-area: subheader;
+    grid-template-columns: 1fr 1fr;
+
+    > * > * { 
+      align-items: center;
+      text-align: right;
+      justify-content: flex-end;
+      input { text-align: right; }
+    }
+    > * > :first-child { text-align: left; }
   }
+
 
   > header {
     align-items: center;

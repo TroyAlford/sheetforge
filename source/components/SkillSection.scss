@@ -4,33 +4,13 @@
   display: grid;
   grid-area: skills;
   grid-gap: 0px;
-  grid-template-areas:
+  grid-template:
     "header header"
     "subheader subheader"
-    "left right"
+    "left right" minmax(30px, 30px)
   ;
   grid-template-columns: 1fr 1fr;
   grid-auto-flow: column;
-
-  header {
-    display: grid;
-    grid-template-columns: auto 36px;
-    grid-template-areas: "header buttons";
-
-    > button {
-      grid-area: buttons;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      &:hover { background-color: $color-highlight-bg; }
-    }
-  }
-  header.subheader {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    .theory, .mastery { text-align: right; }
-  }
 }
 
 .sheetforge.sheet .skill {
@@ -42,7 +22,6 @@
   }
   .theory, .mastery {
     justify-content: flex-end;
-
     input { text-align: right; }
   }
 }

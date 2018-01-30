@@ -1,0 +1,44 @@
+@import './variables';
+
+.sheetforge.sheet.axis .traits {
+  display: grid;
+  grid-area: traits;
+  grid-template-areas:
+    "header"
+    "subheader"
+    "traits"
+  ;
+  grid-template-columns: 1fr;
+
+  header.subheader {
+    grid-template-columns: 1fr;
+    .trait:nth-child(2) { display: none; }
+  }
+}
+
+.sheetforge.sheet .trait {
+  @include gridCell;
+  grid-template-columns: auto 30px;
+
+  .name, .value {
+    align-items: center;
+  }
+  .value {
+    justify-content: flex-end;
+    input { text-align: right; }
+  }
+}
+
+.sheetforge.sheet.medium .traits {
+  grid-template-areas:
+    "header header"
+    "subheader subheader"
+    "left right"
+  ;
+  grid-template-columns: 1fr 1fr;
+
+  header.subheader {
+    grid-template-columns: 1fr 1fr;
+    .trait:nth-child(2) { display: inherit; }
+  }
+}
