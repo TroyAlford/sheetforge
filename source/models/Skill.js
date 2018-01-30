@@ -15,7 +15,7 @@ const Skill = types.compose(
     id: autoHash,
     name: 'New Skill',
     theory: between(0, 10),
-    mastery: between(1, 10),
+    mastery: between(0, 10),
   }).views(self => ({
     get modifier() {
       return getParent(self, 2).modifierFor(self.name)

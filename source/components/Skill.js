@@ -33,9 +33,10 @@ import noop from '../utilities/noop'
         <Editable
           className="mastery"
           max={10}
-          min={1}
+          min={0}
+          type="number"
           onChange={skill.setMastery}
-          value={skill.mastery}
+          value={skill.mastery || ''}
         />
       </div>
     )
