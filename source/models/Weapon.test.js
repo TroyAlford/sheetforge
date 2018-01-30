@@ -1,4 +1,4 @@
-import Weapon, { REGION } from './Weapon'
+import Weapon from './Weapon'
 
 it('correctly defaults & sets name', () => {
   const a = Weapon.create()
