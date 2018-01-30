@@ -95,11 +95,13 @@ const Character = types
           ...my.traits.map(s => s.xpCost),
         ])
       },
+      get weapons() { return my.equipment.filter(e => Weapon.is(e)) },
     }
   }).actions(my => ({
     /* eslint-disable no-param-reassign */
     addSkill() { my.skills.push(Skill.create()) },
     addTrait() { my.traits.push(Trait.create()) },
+    addWeapon() { my.equipment.push(Weapon.create()) },
     attribute(id) { return my.attributes.find(a => a.id === id) },
     setAttribute(id, value) { my.attribute(id).setValue(value) },
     setName(name) { my.name = name },
