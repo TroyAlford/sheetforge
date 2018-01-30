@@ -16,12 +16,4 @@
 .sheetforge.sheet .skill {
   @include gridCell;
   grid-template-columns: auto 30px 30px;
-
-  .name, .theory, .mastery {
-    align-items: center;
-  }
-  .theory, .mastery {
-    justify-content: flex-end;
-    input { text-align: right; }
-  }
 }

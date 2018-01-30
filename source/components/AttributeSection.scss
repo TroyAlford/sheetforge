@@ -67,16 +67,9 @@ $attributes:
     border: 1px solid $color-highlight-border;
   }
 
-  .caption, .value, .editable, .temporary {
-    align-items: center;
+  .name, .value, .editable, .temporary {
     border: 1px solid transparent;
     display: inline-flex;
-    height: 100%;
-  }
-  .caption {
-    margin-right: 5px;
-    text-align: left;
-    text-transform: capitalize;
   }
   .editable {
     justify-content: flex-end;

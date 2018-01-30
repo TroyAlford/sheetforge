@@ -54,13 +54,14 @@
 
     > * > * { 
       align-items: center;
-      text-align: right;
-      justify-content: flex-end;
-      input { text-align: right; }
+      justify-content: center;
+      text-align: center;
+
+      &.name { text-align: left; }
+      input { text-align: center; }
     }
     > * > :first-child { text-align: left; }
   }
-
 
   > header {
     align-items: center;

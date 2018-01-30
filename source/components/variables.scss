@@ -3,10 +3,32 @@ $color-highlight-border: #b5f5f5;
 $color-divider: #42afe3;
 
 @mixin gridCell {
+  align-content: center;
   align-items: center;
   border-radius: 5px;
   display: grid;
   height: 100%;
   padding: 0 5px;
   min-height: 2.5em;
+
+  > * {
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  > .name {
+    justify-content: left;
+    &.editable input { text-align: left; }
+  }
+
+  .editable {
+    height: 30px;
+
+    input { text-align: center; }
+    input[type="checkbox"] {
+      height: 15px;
+      margin: 7.5px;
+      width: 15px;
+    }
+  }
 }
