@@ -17,8 +17,8 @@ export default class Editable extends React.Component {
   static defaultProps = {
     className: '',
     forceEditMode: false,
-    max: 0,
-    min: 100,
+    max: undefined,
+    min: undefined,
     onChange: noop,
     onEditStart: noop,
     onEditEnd: noop,
