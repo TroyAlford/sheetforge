@@ -9,7 +9,7 @@ import './SkillSection.scss'
   render = () => {
     const { addSkill, skills = [] } = this.props
     const rows = Math.ceil(skills.length / 2)
-    const style = { gridTemplateRows: `auto auto repeat(${rows}, 1fr)` }
+    const style = { gridTemplateRows: `25px 25px repeat(${rows || 1}, 30px)` }
 
     return (
       <div className="skills" style={style}>
