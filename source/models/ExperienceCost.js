@@ -29,6 +29,7 @@ export default function ExperienceCost(
     }
 
     const guardedActions = guardedActionNames.reduce((map, name) => ({
+      ...map,
       [`${name}Unguarded`]: self[name],
       [name]: (...args) => {
         const availableXP = getAvailableXP()
