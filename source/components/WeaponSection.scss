@@ -1,0 +1,35 @@
+@import './variables';
+
+.sheetforge.sheet.axis .weapons {
+  display: grid;
+  grid-area: weapons;
+  grid-template-areas:
+    "header"
+    "subheader"
+    "weapons"
+  ;
+  grid-template-columns: 1fr;
+
+  header.subheader {
+    grid-template-columns: 1fr;
+
+    > * {
+      > .equipped {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.sheetforge.sheet .weapon {
+  @include gridCell;
+  grid-template-columns: 30px auto 30px 30px 30px;
+
+  .name, .value {
+    align-items: center;
+  }
+  .value {
+    justify-content: flex-end;
+    input { text-align: right; }
+  }
+}
