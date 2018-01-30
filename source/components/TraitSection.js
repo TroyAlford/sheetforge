@@ -32,4 +32,5 @@ const TraitSection = observer(({ addTrait = noop, layout = 'large', traits = [] 
   )
 })
 
+TraitSection.displayName = 'TraitSection'
 export default TraitSection

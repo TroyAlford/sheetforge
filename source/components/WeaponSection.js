@@ -29,4 +29,5 @@ const WeaponSection = observer(({ addWeapon = noop, weapons = [] }) => (
   </div>
 ))
 
+WeaponSection.displayName = 'WeaponSection'
 export default WeaponSection
