@@ -5,6 +5,7 @@ import AttributeSection from './AttributeSection'
 import Character from '../models/Character'
 import DescriptorSection from './DescriptorSection'
 import Editable from '../components/Editable'
+import ArmorSection from './ArmorSection'
 import SkillSection from './SkillSection'
 import TraitSection from './TraitSection'
 import WeaponSection from './WeaponSection'
@@ -75,6 +76,7 @@ import './Sheet.scss'
         <TraitSection traits={c.traits} modifiers={c.modifiers} addTrait={c.addTrait} layout={sizeClass} />
         <SkillSection skills={c.skills} modifiers={c.modifiers} addSkill={c.addSkill} />
         <WeaponSection weapons={c.weapons} addWeapon={c.addWeapon} />
+        <ArmorSection armor={c.armor} addArmor={c.addArmor} />
       </div>
     )
   }

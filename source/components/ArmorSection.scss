@@ -1,0 +1,22 @@
+@import './variables';
+
+.sheetforge.sheet.axis .armors {
+  display: grid;
+  grid-area: armor;
+  grid-auto-rows: 30px;
+  grid-template-areas:
+    "header"
+    "subheader"
+  ;
+  grid-template-columns: 1fr;
+  grid-template-rows: 25px 25px;
+
+  header.subheader {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sheetforge.sheet .armor {
+  @include gridCell;
+  grid-template-columns: 30px auto repeat(7, 25px);
+}
