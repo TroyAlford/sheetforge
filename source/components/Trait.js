@@ -24,8 +24,6 @@ import noop from '../utilities/noop'
         />
         <Editable
           className="value"
-          max={Infinity}
-          min={0}
           type="number"
           onChange={trait.setValue}
           value={trait.value || ''}
