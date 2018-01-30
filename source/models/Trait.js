@@ -9,11 +9,11 @@ const Trait = types.compose(
     value: 0,
   }).actions(self => ({
     /* eslint-disable no-param-reassign */
-    setName(value) { self.name = value },
+    setName(name) { self.name = name },
     setValue(value) { self.value = value },
     /* eslint-enable no-param-reassign */
   })),
-  ExperienceCost(self => self.value),
+  ExperienceCost(self => self.value, ['setValue']),
 )
 
 export default Trait
