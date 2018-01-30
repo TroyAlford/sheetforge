@@ -16,7 +16,6 @@ import noop from '../utilities/noop'
       <div className="weapon">
         <Editable
           className="equipped"
-          forceEditMode={editing}
           onChange={weapon.setEquipped}
           type="boolean"
           value={weapon.equipped}

@@ -3,10 +3,10 @@
 .sheetforge.sheet.axis .traits {
   display: grid;
   grid-area: traits;
+  grid-auto-rows: 30px;
   grid-template-areas:
     "header"
     "subheader"
-    "traits"
   ;
   grid-template-columns: 1fr;
 

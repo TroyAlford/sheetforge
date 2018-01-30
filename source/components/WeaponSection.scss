@@ -3,12 +3,13 @@
 .sheetforge.sheet.axis .weapons {
   display: grid;
   grid-area: weapons;
+  grid-auto-rows: 30px;
   grid-template-areas:
     "header"
     "subheader"
-    "weapons"
   ;
   grid-template-columns: 1fr;
+  grid-template-rows: 25px 25px;
 
   header.subheader {
     grid-template-columns: 1fr;

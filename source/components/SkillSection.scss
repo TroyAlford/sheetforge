@@ -3,11 +3,11 @@
 .sheetforge.sheet .skills {
   display: grid;
   grid-area: skills;
+  grid-auto-rows: 30px;
   grid-gap: 0px;
   grid-template:
     "header header"
     "subheader subheader"
-    "left right" minmax(30px, 30px)
   ;
   grid-template-columns: 1fr 1fr;
   grid-auto-flow: column;
