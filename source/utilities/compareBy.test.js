@@ -17,3 +17,9 @@ it('sorts arrays of mixed Object and Map', () => {
   array.sort(compareBy('a'))
   expect(array.map(o => (o.get ? o.get('a') : o.a))).toEqual([1, 2, 3])
 })
+
+it('sorts with case-insensitivity', () => {
+  const array = [{ a: 'c' }, { a: 'B' }, { a: 'a' }]
+  array.sort(compareBy('a'))
+  expect(array.map(o => o.a)).toEqual(['a', 'B', 'c'])
+})
