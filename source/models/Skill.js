@@ -30,7 +30,7 @@ const Skill = types.compose(
   ExperienceCost((self) => {
     const values = [...range(0, self.theory), ...range(1, self.mastery)]
     return values.reduce((total, next) => total + (next ** 2), 1)
-  })
+  }, ['setMastery', 'setTheory'])
 )
 
 export default Skill
