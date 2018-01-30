@@ -5,6 +5,8 @@ import Skill from './Skill'
 
 import './SkillSection.scss'
 
+const compareByName = compareBy('name')
+
 @observer export default class SkillSection extends Component {
   render = () => {
     const { addSkill, skills = [] } = this.props
@@ -29,9 +31,7 @@ import './SkillSection.scss'
             <abbr className="mastery" title="Mastery">Ms</abbr>
           </div>
         </header>
-        {skills.sort(compareBy('name')).map(skill =>
-          <Skill key={skill.id} skill={skill} />
-        )}
+        {skills.sort(compareByName).map(skill => <Skill key={skill.id} skill={skill} />)}
       </div>
     )
   }

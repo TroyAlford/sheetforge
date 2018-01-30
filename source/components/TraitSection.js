@@ -6,6 +6,8 @@ import Trait from './Trait'
 
 import './TraitSection.scss'
 
+const compareByName = compareBy('name')
+
 const TraitSection = observer(({ addTrait = noop, layout = 'large', traits = [] }) => {
   const rows = layout === 'medium' ? Math.ceil(traits.length / 2) : traits.length
   const style = { gridTemplateRows: `25px 25px repeat(${rows || 1}, 30px)` }
@@ -25,9 +27,7 @@ const TraitSection = observer(({ addTrait = noop, layout = 'large', traits = [] 
           <span className="value">Cost</span>
         </div>
       </header>
-      {traits.sort(compareBy('name')).map(trait =>
-        <Trait key={trait.id} trait={trait} />
-      )}
+      {traits.sort(compareByName).map(trait => <Trait key={trait.id} trait={trait} />)}
     </div>
   )
 })
