@@ -3,9 +3,10 @@
 .sheetforge.sheet .skills {
   display: grid;
   grid-area: skills;
-  grid-gap: 5px;
+  grid-gap: 0px;
   grid-template-areas:
     "header header"
+    "subheader subheader"
     "left right"
   ;
   grid-template-columns: 1fr 1fr;
@@ -16,13 +17,17 @@
     grid-template-columns: auto 36px;
     grid-template-areas: "header buttons";
 
-    > button { 
+    > button {
       grid-area: buttons;
       border: none;
       background: transparent;
       cursor: pointer;
       &:hover { background-color: $color-highlight-bg; }
     }
+  }
+  header.subheader {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 }
 

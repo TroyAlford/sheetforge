@@ -36,16 +36,16 @@ $attributes:
   grid-area: attributes;
   grid-gap: 5px;
   grid-template-areas:
-    "header header header header"
-    "none body mind spirit"
-    "potency strength intellect confidence"
-    "reflex agility acuity intuition"
-    "resilience fitness focus devotion"
-    "divider-1 divider-1 divider-1 divider-1"
-    "racial size speed naturalArmor"
-    "combat accuracy might toughness"
-    "divider-2 divider-2 divider-2 divider-2"
-    "thresholds light deep death"
+    "header     header    header    header"
+    ".          body      mind      spirit"
+    "potency    strength  intellect confidence"
+    "reflex     agility   acuity    intuition"
+    "resilience fitness   focus     devotion"
+    "divider-1  divider-1 divider-1 divider-1"
+    "racial     size      speed     naturalArmor"
+    "combat     accuracy  might     toughness"
+    "divider-2  divider-2 divider-2 divider-2"
+    "thresholds light     deep      death"
   ;
   height: auto;
   white-space: nowrap;
@@ -59,7 +59,7 @@ $attributes:
   grid-template-columns: auto 30px;
 
   @each $attribute in $attributes {
-  &.#{unquote($attribute)} { grid-area: unquote($attribute); }
+  &.#{$attribute} { grid-area: #{$attribute}; }
   }
 
   &.highlight {

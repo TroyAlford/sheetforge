@@ -6,6 +6,7 @@ $color-divider: #42afe3;
   align-items: center;
   border-radius: 5px;
   display: grid;
-  height: 2.5em;
+  height: 100%;
   padding: 0 5px;
+  min-height: 2.5em;
 }

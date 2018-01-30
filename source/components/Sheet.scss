@@ -25,11 +25,16 @@
   img.portrait { display: none; }
 
   header {
+    align-items: center;
     border-bottom: 1px solid $color-divider;
     font-size: 1.5em;
     font-weight: bold;
     grid-area: header;
-    height: 1.5em;
+  }
+  header + header.subheader {
+    font-size: .8em;
+    font-weight: bold;
+    grid-area: subheader;
   }
 
   > header {
