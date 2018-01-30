@@ -18,7 +18,7 @@ const WeaponSection = observer(({ addWeapon = noop, weapons = [] }) => (
     </header>
     <header className="subheader">
       <div className="weapon">
-        <abbr className="equipped" title="Equipped">Equip</abbr>
+        <abbr className="equipped" title="Equipped">Eq</abbr>
         <span className="name">Name</span>
         <span className="damage">Dmg</span>
         <abbr className="range" title="Range">Rng</abbr>

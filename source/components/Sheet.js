@@ -7,6 +7,7 @@ import DescriptorSection from './DescriptorSection'
 import Editable from '../components/Editable'
 import SkillSection from './SkillSection'
 import TraitSection from './TraitSection'
+import WeaponSection from './WeaponSection'
 
 import '../../fontello/css/axis-sheet-embedded.css'
 import './Sheet.scss'
@@ -49,7 +50,7 @@ import './Sheet.scss'
           <Editable className="character-name" value={c.name} onChange={c.setName} />
           <div className="xp attribute">
             <span className="caption">XP</span>
-            <Editable min={0} max={Infinity} value={c.xp} onChange={c.setXP} />
+            <Editable min={0} value={c.xp} onChange={c.setXP} />
           </div>
           <div className="rp attribute">
             <span className="caption">RP</span>
@@ -73,6 +74,7 @@ import './Sheet.scss'
         <AttributeSection attributes={c.attributes} modifiers={c.modifiers} />
         <TraitSection traits={c.traits} modifiers={c.modifiers} addTrait={c.addTrait} layout={sizeClass} />
         <SkillSection skills={c.skills} modifiers={c.modifiers} addSkill={c.addSkill} />
+        <WeaponSection weapons={c.weapons} addWeapon={c.addWeapon} />
       </div>
     )
   }
