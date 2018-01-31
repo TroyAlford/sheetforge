@@ -50,15 +50,15 @@ import './Sheet.scss'
         <header>
           <Editable className="character-name" value={c.name} onChange={c.setName} />
           <div className="xp attribute">
-            <span className="caption">XP</span>
+            <span className="name">XP</span>
             <Editable min={0} value={c.xp} onChange={c.setXP} />
           </div>
           <div className="rp attribute">
-            <span className="caption">RP</span>
+            <span className="name">RP</span>
             <Editable min={0} max={5} value={c.rp} onChange={c.setRP} />
           </div>
           <div className="power attribute">
-            <div className="caption">CP</div>
+            <div className="name">CP</div>
             <Editable value={c.power} readonly />
           </div>
         </header>
