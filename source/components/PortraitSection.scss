@@ -1,0 +1,17 @@
+.portrait.section {
+  display: none;
+
+  .image {
+    background-size: cover;
+    height: 300px;
+    margin: 15px auto;
+    width: 225px;
+  }
+}
+
+.sheetforge.sheet.large {
+  .portrait.section {
+    display: block;
+    grid-area: left;
+  }
+}
