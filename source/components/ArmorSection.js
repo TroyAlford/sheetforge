@@ -20,13 +20,13 @@ const ArmorSection = observer(({ addArmor = noop, armor = [] }) => (
       <div className="armor">
         <abbr className="equipped" title="Equipped">Eq</abbr>
         <span className="name">Name</span>
-        <span className="icon-head" />
-        <span className="icon-torso" />
-        <span className="icon-arm" />
-        <span className="icon-leg" />
-        <span className="icon-hand" />
-        <span className="icon-feet" />
-        <span className="average">Avg</span>
+        <abbr className="icon-head" title="Head" />
+        <abbr className="icon-torso" title="Torso" />
+        <abbr className="icon-arm" title="Arms" />
+        <abbr className="icon-leg" title="Legs" />
+        <abbr className="icon-hand" title="Hands" />
+        <abbr className="icon-feet" title="Feet" />
+        <abbr className="average" title="Average">Avg</abbr>
       </div>
     </header>
     {sortArmors(armor).map(a => <Armor key={a.id} armor={a} />)}
