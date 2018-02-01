@@ -22,41 +22,24 @@ $descriptors:
     "race weight hair"
     "concept gender age";
   height: auto;
-
-  header {
-    border-bottom: 1px solid $color-divider;
-    font-size: 1.5em;
-    font-weight: bold;
-    grid-area: header;
-    height: 1.5em;
-  }
 }
 
 .sheetforge.sheet .descriptor {
   @include gridCell;
-  grid-template-columns: 65px auto;
+  grid-template-columns: 60px auto;
 
   @each $descriptor in $descriptors {
   &.#{unquote($descriptor)} { grid-area: unquote($descriptor); }
   }
 
-  strong, .editable {
-    align-items: center;
-    border: 1px solid transparent;
+  .name, .value {
     display: inline-flex;
-    height: 100%;
   }
-  strong {
-    margin-right: 5px;
-    text-align: left;
-    text-transform: capitalize;
+  .name {
+    font-weight: bold;
   }
-  .editable {
-    justify-content: flex-end;
-    text-align: right;
-
-    &.editing {
-      border-color: #eee;
-    }
+  .editable.value {
+    span { justify-content: flex-end; }
+    input { text-align: right; }
   }
 }
