@@ -74,7 +74,7 @@ const Character = types
       Attribute.create({ id: 'damageThresholdDeep', value: () => attr('damageThresholdLight') * 2, name: 'Deep' }),
       Attribute.create({ id: 'damageThresholdDeath', value: () => attr('damageThresholdLight') * 4, name: 'Death' }),
       Attribute.create({ id: 'size', value: () => 0, name: 'Size' }),
-      Attribute.create({ id: 'naturalArmor', value: () => 0, name: 'Natural Armor' }),
+      Attribute.create({ id: 'naturalArmor', value: () => 0, name: 'N. Armor' }),
     ]
     /* eslint-enable max-len, object-property-newline */
 
