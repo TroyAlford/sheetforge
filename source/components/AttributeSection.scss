@@ -56,7 +56,7 @@ $attributes:
 
 .sheetforge.sheet .attribute {
   @include gridCell;
-  grid-template-columns: auto 30px;
+  grid-template-columns: auto 40px;
 
   @each $attribute in $attributes {
   &.#{$attribute} { grid-area: #{$attribute}; }
