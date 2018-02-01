@@ -80,6 +80,9 @@
     margin: 0;
     width: 100%;
   }
+  abbr {
+    text-decoration: none;
+  }
 
   .descriptors {
     grid-template-columns: 2fr 1fr 1fr;
