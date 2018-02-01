@@ -5,8 +5,8 @@ import Editable from './Editable'
 
 const Descriptor = ({ model }) => (
   <div className={`descriptor ${model.id}`}>
-    <strong>{model.name}</strong>
-    <Editable value={model.value} onChange={model.setValue} />
+    <div className="name">{model.name}</div>
+    <Editable className="value" value={model.value} onChange={model.setValue} />
   </div>
 )
 
