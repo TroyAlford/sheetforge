@@ -1,4 +1,6 @@
 
+.icon-collapsed:before { content: '\e804'; } /* '' */
+.icon-expanded:before { content: '\e805'; } /* '' */
 .icon-sheet:before { content: '\e808'; } /* '' */
 .icon-d10:before { content: '\e809'; } /* '' */
 .icon-add:before { content: '\e80f'; } /* '' */

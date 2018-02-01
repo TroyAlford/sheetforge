@@ -177,6 +177,18 @@
       "css": "add",
       "code": 59407,
       "src": "fontawesome"
+    },
+    {
+      "uid": "gypcofts1tkouwkxbv8d33eanqpreyy9",
+      "css": "collapsed",
+      "code": 59396,
+      "src": "modernpics"
+    },
+    {
+      "uid": "8ax1xqcbzz1hobyd4i7f0unwib1bztip",
+      "css": "expanded",
+      "code": 59397,
+      "src": "modernpics"
     }
   ]
 }
