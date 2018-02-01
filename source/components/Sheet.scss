@@ -68,9 +68,11 @@
 
     .xp, .rp, .power {
       font-size: 10px;
-      padding: 2px;
-      .caption { margin-right: 0; }
-      .editable { font-weight: normal; }
+      .editable { 
+        font-weight: normal;
+        span { justify-content: center; }
+        input { text-align: center; }
+      }
     }
   }
 
