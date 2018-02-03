@@ -1,14 +1,15 @@
+@import './variables.scss';
+
 .sheetforge.sheet.large {
   border: 1px solid #eee;
   grid-template-areas:
-    "header header header header header header"
-    "left left descriptors descriptors descriptors descriptors"
-    "left left attributes attributes attributes attributes"
-    "traits traits skills skills skills skills"
-    "equipment-section equipment-section equipment-section equipment-section equipment-section equipment-section"
-    "equipment equipment equipment equipment equipment equipment"
+    "#{duplicate(header, 2)}"
+    "left descriptors"
+    "left attributes"
+    "traits skills"
+    "#{duplicate(equipment-section, 2)}"
   ;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   margin: 0 auto;
   padding: .25in;
 }
