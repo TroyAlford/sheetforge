@@ -198,10 +198,11 @@ export default class Editable extends React.Component {
     )
   }
   renderStatic = () => {
-    const className = this.props.value ? '' : 'placeholder'
+    const showPlaceholder = this.props.placeholder && !this.props.value
+    const className = showPlaceholder ? 'placeholder' : ''
     return (
       <span className={className} onClick={this.handleToggleEditing}>
-        {this.props.value || this.props.placeholder}
+        {showPlaceholder ? this.props.placeholder : this.props.value}
       </span>
     )
   }
