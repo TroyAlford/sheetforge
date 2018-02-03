@@ -8,12 +8,14 @@ div.editable {
   position: relative;
   width: 100%;
 
-  &:not(.readonly) > span {
-    cursor: pointer;
-    &:hover { background-color: #eee; }
+  &:not(.readonly) {
+    > span, > p {
+      cursor: pointer;
+      &:hover { background-color: #eee; }
+    }
   }
 
-  span, input, textarea {
+  div, span, input, textarea {
     align-items: center;
     border: none;
     display: inline-flex;
@@ -27,5 +29,21 @@ div.editable {
     margin: 0;
     text-align: inherit;
     width: 100%;
+  }
+
+  div.multiline {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    > p {
+      margin: 0 0 .5rem 0;
+      padding: 0;
+    }
+  }
+
+  .placeholder, input::placeholder, textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
   }
 }
