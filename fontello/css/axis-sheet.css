@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'axis-sheet';
-  src: url('../font/axis-sheet.eot?18266030');
-  src: url('../font/axis-sheet.eot?18266030#iefix') format('embedded-opentype'),
-       url('../font/axis-sheet.woff2?18266030') format('woff2'),
-       url('../font/axis-sheet.woff?18266030') format('woff'),
-       url('../font/axis-sheet.ttf?18266030') format('truetype'),
-       url('../font/axis-sheet.svg?18266030#axis-sheet') format('svg');
+  src: url('../font/axis-sheet.eot?3145337');
+  src: url('../font/axis-sheet.eot?3145337#iefix') format('embedded-opentype'),
+       url('../font/axis-sheet.woff2?3145337') format('woff2'),
+       url('../font/axis-sheet.woff?3145337') format('woff'),
+       url('../font/axis-sheet.ttf?3145337') format('truetype'),
+       url('../font/axis-sheet.svg?3145337#axis-sheet') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'axis-sheet';
-    src: url('../font/axis-sheet.svg?18266030#axis-sheet') format('svg');
+    src: url('../font/axis-sheet.svg?3145337#axis-sheet') format('svg');
   }
 }
 */
@@ -64,10 +64,10 @@
 .icon-torso:before { content: '\e812'; } /* '' */
 .icon-backpack:before { content: '\e813'; } /* '' */
 .icon-currency:before { content: '\e814'; } /* '' */
-.icon-arm:before { content: '\e815'; } /* '' */
-.icon-leg:before { content: '\e816'; } /* '' */
+.icon-arms:before { content: '\e815'; } /* '' */
+.icon-legs:before { content: '\e816'; } /* '' */
 .icon-feet:before { content: '\e817'; } /* '' */
 .icon-head:before { content: '\e818'; } /* '' */
 .icon-weapon:before { content: '\e819'; } /* '' */
-.icon-hand:before { content: '\e81a'; } /* '' */
+.icon-hands:before { content: '\e81a'; } /* '' */
 .icon-axis:before { content: '\e81b'; } /* '' */

@@ -76,7 +76,7 @@
     },
     {
       "uid": "332028a044ca227df01a4c9750d3733c",
-      "css": "arm",
+      "css": "arms",
       "code": 59413,
       "src": "custom_icons",
       "selected": true,
@@ -90,7 +90,7 @@
     },
     {
       "uid": "baa95a14056f22893656df8464bfea9a",
-      "css": "leg",
+      "css": "legs",
       "code": 59414,
       "src": "custom_icons",
       "selected": true,
@@ -146,7 +146,7 @@
     },
     {
       "uid": "6d0ebb938173182b8a994c9e3e8b27a4",
-      "css": "hand",
+      "css": "hands",
       "code": 59418,
       "src": "custom_icons",
       "selected": true,
