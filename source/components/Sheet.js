@@ -17,7 +17,7 @@ import './Sheet.scss'
 @observer export default class Sheet extends Component {
   constructor(props) {
     super(props)
-    this.character = Character.create()
+    this.character = CharacterModel.create()
 
     window.addEventListener('resize', this.handleWindowResize)
   }
