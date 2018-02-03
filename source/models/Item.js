@@ -5,10 +5,7 @@ const Item = types.model('Item', {
   id: autoHash,
   description: '',
   name: 'New Item',
-  quantity: types.refinement(
-    types.optional(types.number, 1),
-    n => n >= 0
-  ),
+  quantity: types.optional(types.refinement(types.number, n => n >= 0), 1),
   worth: types.optional(types.refinement(types.number, n => n >= 0), 0),
 }).actions(my => ({
   /* eslint-disable no-param-reassign */
