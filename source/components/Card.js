@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { observer } from 'mobx-react'
 
 import './Card.scss'
 
 const renderEmpty = () => { }
 
-export default class Card extends Component {
+@observer export default class Card extends Component {
   static defaultProps = {
     renderCollapsed: renderEmpty,
     renderExpanded: renderEmpty,
@@ -14,12 +15,13 @@ export default class Card extends Component {
   toggleExpanded = () => { this.setState({ expanded: !this.state.expanded }) }
 
   render = () => {
+    const { className, contentsClassName } = this.props
     const expandedClassName = this.state.expanded ? 'expanded' : 'collapsed'
 
     return (
-      <div className={`card ${expandedClassName}`}>
+      <div className={`card ${expandedClassName} ${className || ''}`.trim()}>
         <div className={`expander icon-${expandedClassName}`} onClick={this.toggleExpanded} />
-        <div className="card-contents">
+        <div className={`card-contents ${contentsClassName || ''}`.trim()}>
           {this.props.children}
           {this.state.expanded || this.props.renderCollapsed()}
           {this.state.expanded && this.props.renderExpanded()}
