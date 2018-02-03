@@ -33,3 +33,16 @@ $color-divider: #42afe3;
     }
   }
 }
+
+@mixin alignEditable($textAlign) {
+  .editable {
+    @if $textAlign == left {
+      span { justify-content: flex-start; }
+    } @else if $textAlign == center {
+      span { justify-content: center; }
+    } @else if $textAlign == right {
+      span { justify-content: flex-end; }
+    }
+    input { text-align: $textAlign; }
+  }
+}
