@@ -18,5 +18,6 @@
 
 .sheetforge.sheet .armor {
   @include gridCell;
+
   grid-template-columns: 30px auto repeat(7, 25px);
 }
