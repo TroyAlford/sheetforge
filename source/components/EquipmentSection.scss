@@ -1,0 +1,17 @@
+@import './variables';
+
+.sheetforge.sheet.axis .equipment.section {
+  display: grid;
+  grid-area: equipment-section;
+  grid-template-areas:
+    "header"
+  ;
+  grid-template-columns: 1fr;
+  grid-template-rows: 25px;
+
+  @import './Headers.scss';
+
+  header {
+    grid-template-columns: 25px auto 125px;
+  }
+}
