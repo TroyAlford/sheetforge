@@ -1,5 +1,5 @@
 @import './variables';
-$descriptors: 
+$descriptors:
   "age",
   "concept",
   "eyes",
@@ -11,7 +11,7 @@ $descriptors:
   "weight"
 ;
 
-.sheetforge.sheet .descriptors {
+.descriptors.section {
   display: grid;
   grid-area: descriptors;
   grid-auto-flow: column;
@@ -22,24 +22,9 @@ $descriptors:
     "race weight hair"
     "concept gender age";
   height: auto;
-}
-
-.sheetforge.sheet .descriptor {
-  @include gridCell;
-  grid-template-columns: 60px auto;
 
   @each $descriptor in $descriptors {
-  &.#{unquote($descriptor)} { grid-area: unquote($descriptor); }
-  }
-
-  .name, .value {
-    display: inline-flex;
-  }
-  .name {
-    font-weight: bold;
-  }
-  .editable.value {
-    span { justify-content: flex-end; }
-    input { text-align: right; }
+  .#{unquote($descriptor)} { grid-area: unquote($descriptor); }
   }
 }
+

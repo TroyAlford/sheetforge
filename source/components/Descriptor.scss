@@ -1,0 +1,17 @@
+@import './variables.scss';
+
+.descriptor {
+  @include gridCell;
+  grid-template-columns: 60px auto;
+
+  .name, .value {
+    display: inline-flex;
+  }
+  .name {
+    font-weight: bold;
+  }
+  .editable.value {
+    span { justify-content: flex-end; }
+    input { text-align: right; }
+  }
+}

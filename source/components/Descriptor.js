@@ -3,6 +3,8 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Editable from '@/components/Editable'
 
+import './Descriptor.scss'
+
 const Descriptor = ({ model }) => (
   <div className={`descriptor ${model.id}`}>
     <div className="name">{model.name}</div>
