@@ -26,41 +26,10 @@
   max-height: 11.5in;
   max-width: 8.5in;
 
-  header {
-    align-items: center;
-    border-bottom: 1px solid $color-divider;
-    display: grid;
-    font-size: 1.5em;
-    font-weight: bold;
-    grid-area: header;
-    grid-template-areas: "header buttons";
-    grid-template-columns: auto 36px;
-    min-height: 25px;
-
-    > button {
-      grid-area: buttons;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      &:hover { background-color: $color-highlight-bg; }
-    }
-  }
-  header.subheader {
-    display: grid;
-    font-size: .8em;
-    font-weight: bold;
-    grid-area: subheader;
-    grid-template-columns: 1fr 1fr;
-    text-align: center;
-
-    .name { text-align: left; }
-  }
+  @import './Headers.scss';
 
   > header {
-    align-items: center;
     border-bottom: none;
-    display: grid;
-    grid-area: header;
     grid-gap: 3px;
     grid-template-columns: auto 50px 50px 50px;
 
