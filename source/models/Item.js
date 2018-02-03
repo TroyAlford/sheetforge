@@ -12,9 +12,10 @@ const Item = types.model('Item', {
   worth: types.optional(types.refinement(types.number, n => n >= 0), 0),
 }).actions(my => ({
   /* eslint-disable no-param-reassign */
-  setDescription(value) { my.description = value },
-  setName(value) { my.name = value },
-  setWorth(value) { my.worth = value },
+  setDescription(description) { my.description = description },
+  setName(name) { my.name = name },
+  setQuantity(quantity) { my.quantity = quantity },
+  setWorth(worth) { my.worth = worth },
   /* eslint-enable no-param-reassign */
 }))
 
