@@ -18,8 +18,7 @@
     "wounds"
     "traits"
     "skills"
-    "weapons"
-    "armor"
+    "equipment-section"
   ;
   grid-gap: 10px;
   position: relative;
@@ -35,7 +34,7 @@
 
     .xp, .rp, .power {
       font-size: 10px;
-      .editable { 
+      .editable {
         font-weight: normal;
         span { justify-content: center; }
         input { text-align: center; }

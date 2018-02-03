@@ -5,11 +5,10 @@ import CharacterModel from '@/models/Character'
 import AttributeSection from '@/components/AttributeSection'
 import DescriptorSection from '@/components/DescriptorSection'
 import Editable from '@/components/Editable'
-import ArmorSection from '@/components/ArmorSection'
+import EquipmentSection from '@/components/EquipmentSection'
 import PortraitSection from '@/components/PortraitSection'
 import SkillSection from '@/components/SkillSection'
 import TraitSection from '@/components/TraitSection'
-import WeaponSection from '@/components/WeaponSection'
 
 import '../../fontello/css/axis-sheet-embedded.css'
 import './Sheet.scss'
@@ -60,8 +59,17 @@ import './Sheet.scss'
         <AttributeSection attributes={c.attributes} modifiers={c.modifiers} />
         <TraitSection traits={c.traits} modifiers={c.modifiers} addTrait={c.addTrait} layout={sizeClass} />
         <SkillSection skills={c.skills} modifiers={c.modifiers} addSkill={c.addSkill} />
-        <WeaponSection weapons={c.weapons} addWeapon={c.addWeapon} />
-        <ArmorSection armor={c.armor} addArmor={c.addArmor} />
+        <EquipmentSection
+          equipment={c.equipment}
+          buttons={
+            <div className="buttons">
+              Add:
+              <button className="icon-weapon" onClick={c.addWeapon} />
+              <button className="icon-torso" onClick={c.addArmor} />
+              <button className="icon-add" onClick={c.addItem} />
+            </div>
+          }
+        />
       </div>
     )
   }
