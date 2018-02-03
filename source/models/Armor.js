@@ -30,6 +30,7 @@ const Armor = types.compose(Equippable, Item, types.model('Armor', {
   get average() { return average(...self.values) },
 })).actions(self => ({
   /* eslint-disable no-param-reassign */
+  setAll(value) { self.setValues([value, value, value, value, value, value]) },
   setArms(value) { self.setValue(REGION.arms, value) },
   setFeet(value) { self.setValue(REGION.feet, value) },
   setHands(value) { self.setValue(REGION.hands, value) },
