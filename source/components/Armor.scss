@@ -1,0 +1,54 @@
+@import './variables';
+$properties:
+  "arms",
+  "average",
+  "description",
+  "equipped",
+  "feet",
+  "hands",
+  "head",
+  "legs",
+  "name",
+  "quantity",
+  "torso",
+  "worth"
+;
+
+.armor-card {
+  .expander {
+    margin-top: -10px;
+    top: 15px;
+  }
+}
+.armor {
+  @include gridCell;
+  @each $property in $properties {
+  .#{$property} { grid-area: #{$property}; }
+  }
+
+  grid-template-areas:
+    "equipped name average"
+    "#{duplicate(description, 2)} #{duplicate(worth, 1)}"
+    "#{duplicate(armor-values, 3)}"
+  ;
+  grid-template-columns: 30px auto 80px;
+  min-height: 30px;
+  padding: 0;
+
+  .armor-values {
+    border: 1px solid $color-highlight-bg;
+    border-width: 1px 0 0 1px;
+    border-radius: 5px 0 0 0;
+    display: grid;
+    grid-area: armor-values;
+    grid-template-areas: "head arms torso hands legs feet";
+    grid-template-columns: repeat(6, 50px);
+
+    .labeled-editable:nth-child(odd) {
+      background-color: lighten($color-highlight-bg, 5%);
+    }
+  }
+
+  .name, .description { @include alignEditable(left); }
+  .head, .arms, .torso, .hands, .legs, .feet, .worth, .average { @include alignEditable(center); }
+}

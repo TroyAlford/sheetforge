@@ -1,7 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
-import Editable from '@/components/Editable'
+import Card from '@/components/Card'
+import LabeledEditable from '@/components/LabeledEditable'
 import noop from '@/utilities/noop'
+
+import './Armor.scss'
 
 @observer export default class Armor extends Component {
   static defaultProps = {
@@ -9,74 +12,51 @@ import noop from '@/utilities/noop'
     onEditEnd: noop,
   }
 
-  render() {
-    const { editing, onEditStart, onEditEnd, armor } = this.props
-
+  renderEditable = (propName, props) => {
+    const loweredPropName = propName.toLowerCase()
     return (
-      <div className="armor">
-        <Editable
-          className="equipped"
-          onChange={armor.setEquipped}
-          type="boolean"
-          value={armor.equipped}
-        />
-        <Editable
-          className="name"
-          forceEditMode={editing}
-          onChange={armor.setName}
-          onEditStart={onEditStart}
-          onEditEnd={onEditEnd}
-          value={armor.name}
-        />
-        <Editable
-          className="head"
-          type="number"
-          min={0}
-          onChange={armor.setHead}
-          value={armor.head}
-        />
-        <Editable
-          className="arms"
-          type="number"
-          min={0}
-          onChange={armor.setArms}
-          value={armor.arms}
-        />
-        <Editable
-          className="torso"
-          type="number"
-          min={0}
-          onChange={armor.setTorso}
-          value={armor.torso}
-        />
-        <Editable
-          className="hands"
-          type="number"
-          min={0}
-          onChange={armor.setHands}
-          value={armor.hands}
-        />
-        <Editable
-          className="legs"
-          type="number"
-          min={0}
-          onChange={armor.setLegs}
-          value={armor.legs}
-        />
-        <Editable
-          className="feet"
-          type="number"
-          min={0}
-          onChange={armor.setFeet}
-          value={armor.feet}
-        />
-        <Editable
-          className="average"
-          type="number"
-          readonly
-          value={armor.average}
-        />
+      <LabeledEditable
+        caption={props.caption || <i className={`icon-${loweredPropName}`} />}
+        className={loweredPropName}
+        onChange={this.props.armor[`set${propName}`]}
+        value={this.props.armor[loweredPropName]}
+        {...props}
+      />
+    )
+  }
+
+  renderPropWithIcon = propName => this.renderEditable(propName, {
+    caption: <abbr className={`icon-${propName.toLowerCase()}`} title={propName} />,
+    min: 0,
+    type: 'number',
+  })
+  renderExpandedChildren = () => (
+    <Fragment>
+      {this.renderEditable('Description', { placeholder: 'Description' })}
+      {this.renderEditable('Worth', { caption: <abbr className="icon-currency" title="Value" /> })}
+      <div className="armor-values">
+        {this.renderPropWithIcon('Head')}
+        {this.renderPropWithIcon('Arms')}
+        {this.renderPropWithIcon('Torso')}
+        {this.renderPropWithIcon('Hands')}
+        {this.renderPropWithIcon('Legs')}
+        {this.renderPropWithIcon('Feet')}
       </div>
+    </Fragment>
+  )
+
+  render() {
+    const { editing, onEditStart, onEditEnd } = this.props
+    const cardProps = { className: 'armor-card', contentsClassName: 'item armor' }
+    return (
+      <Card {...cardProps} renderExpanded={this.renderExpandedChildren}>
+        {this.renderEditable('Equipped', { type: 'boolean' })}
+        {this.renderEditable('Name', { forceEditMode: editing, onEditEnd, onEditStart })}
+        {this.renderEditable('Average', {
+          caption: <abbr className="icon-torso" title="Average" />,
+          onChange: this.props.armor.setAll,
+        })}
+      </Card>
     )
   }
 }
