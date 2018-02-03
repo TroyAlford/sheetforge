@@ -1,4 +1,4 @@
-import range from './range'
+import range from '@/utilities/range'
 
 jest.unmock('./range')
 

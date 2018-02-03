@@ -1,5 +1,5 @@
-import Skill from './Skill'
-import { randomHash } from '../utilities/hash'
+import Skill from '@/models/Skill'
+import { randomHash } from '@/utilities/hash'
 
 it('defaults correctly', () => {
   const s = Skill.create({ id: randomHash() })

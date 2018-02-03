@@ -1,4 +1,4 @@
-import Character, { PRIMARY_ATTRIBUTES, SECONDARY_ATTRIBUTES } from './Character'
+import Character, { PRIMARY_ATTRIBUTES, SECONDARY_ATTRIBUTES } from '@/models/Character'
 
 jest.unmock('./Character')
 

@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
-import Equippable from './Equippable'
-import Item from './Item'
+import Equippable from '@/models/Equippable'
+import Item from '@/models/Item'
 
 const weaponArray = types.refinement(types.array(types.number), a => a.length === 3)
 

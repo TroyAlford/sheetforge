@@ -1,4 +1,4 @@
-import * as math from './math'
+import * as math from '@/utilities/math'
 
 describe('sum()', () => {
   it('adds numbers', () => {

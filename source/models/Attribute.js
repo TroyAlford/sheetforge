@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree'
-import bound from '../utilities/bound'
-import range from '../utilities/range'
-import ExperienceCost from './ExperienceCost'
+import bound from '@/utilities/bound'
+import range from '@/utilities/range'
+import ExperienceCost from '@/models/ExperienceCost'
 
 const Primary = types.compose(
   types.model('Attribute', {

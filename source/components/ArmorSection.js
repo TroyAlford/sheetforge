@@ -1,8 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import compareBy from '../utilities/compareBy'
-import noop from '../utilities/noop'
-import Armor from './Armor'
+import compareBy from '@/utilities/compareBy'
+import noop from '@/utilities/noop'
+import Armor from '@/components/Armor'
 
 import './ArmorSection.scss'
 

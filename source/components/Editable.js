@@ -1,6 +1,6 @@
 import React from 'react'
-import bound from '../utilities/bound'
-import noop from '../utilities/noop'
+import bound from '@/utilities/bound'
+import noop from '@/utilities/noop'
 import './Editable.scss'
 
 const TYPES = [
@@ -125,11 +125,12 @@ export default class Editable extends React.Component {
   )
   renderMultiline = () => {
     if (!this.editing) {
-      const lines = this.props.value.split('\n')
+      const lines = (this.props.value || this.props.placeholder).split('\n')
       const paragraphs = lines.map((line, index) =>
         <p key={index}>{line}</p>
       )
-      return <span onClick={this.handleToggleEditing}>{paragraphs}</span>
+      const className = ['multiline', this.props.value ? '' : 'placeholder'].join(' ').trim()
+      return <div className={className} onClick={this.handleToggleEditing}>{paragraphs}</div>
     }
 
     return (
@@ -142,7 +143,8 @@ export default class Editable extends React.Component {
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
         rows={this.props.value.split('\n').length}
-      >{this.props.value}</textarea> // eslint-disable-line
+        value={this.props.value}
+      />
     )
   }
   renderNumber = () => {
@@ -195,9 +197,14 @@ export default class Editable extends React.Component {
       />
     )
   }
-  renderStatic = () => (
-    <span onClick={this.handleToggleEditing}>{this.props.value}</span>
-  )
+  renderStatic = () => {
+    const className = this.props.value ? '' : 'placeholder'
+    return (
+      <span className={className} onClick={this.handleToggleEditing}>
+        {this.props.value || this.props.placeholder}
+      </span>
+    )
+  }
 
   renderEditor = () => {
     switch (this.getEditorType()) {
@@ -206,7 +213,7 @@ export default class Editable extends React.Component {
       case 'slider':
         return this.renderSlider()
       case 'multiline':
-        return this.renderMultilineEditor()
+        return this.renderMultiline()
       case 'number':
         return this.renderNumber()
       default:

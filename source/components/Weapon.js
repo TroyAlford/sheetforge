@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import Editable from '../components/Editable'
-import noop from '../utilities/noop'
+import Editable from '@/components/Editable'
+import noop from '@/utilities/noop'
 
 @observer export default class Weapon extends Component {
   static defaultProps = {

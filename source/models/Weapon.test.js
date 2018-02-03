@@ -1,4 +1,4 @@
-import Weapon from './Weapon'
+import Weapon from '@/models/Weapon'
 
 it('correctly defaults & sets name', () => {
   const a = Weapon.create()

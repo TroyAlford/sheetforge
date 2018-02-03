@@ -1,4 +1,4 @@
-import Armor, { REGION } from './Armor'
+import Armor, { REGION } from '@/models/Armor'
 
 it('correctly defaults & sets name', () => {
   const a = Armor.create()

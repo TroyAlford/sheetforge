@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree'
-import { average } from '../utilities/math'
-import Equippable from './Equippable'
-import Item from './Item'
+import { average } from '@/utilities/math'
+import Equippable from '@/models/Equippable'
+import Item from '@/models/Item'
 
 const armorValue = types.refinement(types.number, n => n >= 0)
 const armorArray = types.refinement(types.array(armorValue), a => a.length === 6)

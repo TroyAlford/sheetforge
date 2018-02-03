@@ -1,4 +1,4 @@
-import DiceRoller from './DiceRoller'
+import DiceRoller from '@/models/DiceRoller'
 
 function createMockDiceRoller(rolls = [], options = {}) {
   const roller = new DiceRoller(options)

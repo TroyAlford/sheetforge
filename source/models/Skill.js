@@ -1,7 +1,7 @@
 import { getParent, types } from 'mobx-state-tree'
-import { autoHash } from '../utilities/types'
-import range from '../utilities/range'
-import ExperienceCost from './ExperienceCost'
+import { autoHash } from '@/utilities/types'
+import range from '@/utilities/range'
+import ExperienceCost from '@/models/ExperienceCost'
 
 const between = (min, max, defaultTo = min) => (
   types.refinement(

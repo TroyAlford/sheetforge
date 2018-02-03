@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-import ExperienceCost from './ExperienceCost'
+import ExperienceCost from '@/models/ExperienceCost'
 
 const SimpleModel = types.model({
   xp: 0,

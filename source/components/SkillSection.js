@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import compareBy from '../utilities/compareBy'
-import Skill from './Skill'
+import compareBy from '@/utilities/compareBy'
+import Skill from '@/components/Skill'
 
 import './SkillSection.scss'
 

@@ -1,4 +1,4 @@
-import Trait from './Trait'
+import Trait from '@/models/Trait'
 
 it('defaults and sets name', () => {
   const a = Trait.create()

@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-import { autoHash } from './types'
+import { autoHash } from '@/utilities/types'
 
 it('automatically creates hash values', () => {
   const Model = types.model({ id: autoHash })

@@ -1,4 +1,4 @@
-import Item from './Item'
+import Item from '@/models/Item'
 
 it('auto-generates ids', () => {
   const a = Item.create()

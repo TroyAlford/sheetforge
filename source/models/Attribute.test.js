@@ -1,4 +1,4 @@
-import Attribute, { Primary, Computed, createComputed } from './Attribute'
+import Attribute, { Primary, Computed, createComputed } from '@/models/Attribute'
 
 describe('Attribute', () => {
   it('handles Attributes and Computeds', () => {

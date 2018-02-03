@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Attribute from './Attribute'
+import Attribute from '@/components/Attribute'
 
 import './AttributeSection.scss'
 

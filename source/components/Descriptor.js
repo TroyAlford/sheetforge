@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import { observer } from 'mobx-react'
-import Editable from './Editable'
+import Editable from '@/components/Editable'
 
 const Descriptor = ({ model }) => (
   <div className={`descriptor ${model.id}`}>
