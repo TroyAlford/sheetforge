@@ -46,3 +46,11 @@ $color-divider: #42afe3;
     input { text-align: $textAlign; }
   }
 }
+
+@function duplicate($value, $number) {
+  $output: ();
+  @for $i from 1 through $number {
+    $output: append($output, $value);
+  }
+  @return $output
+}
