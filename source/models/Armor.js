@@ -17,6 +17,7 @@ export const REGION = {
 
 const Armor = types.compose(Equippable, Item, types.model('Armor', {
   name: 'New Armor',
+  type: types.optional(types.literal('armor'), 'armor'),
   values: types.optional(armorArray, [0, 0, 0, 0, 0, 0]),
 }).views(self => ({
   get arms() { return self.values[REGION.arms] },

@@ -12,6 +12,7 @@ const PROPS = {
 
 const Weapon = types.compose(Equippable, Item, types.model('Weapon', {
   name: 'New Weapon',
+  type: types.optional(types.literal('weapon'), 'weapon'),
   values: types.optional(weaponArray, [0, 0, 0]),
 }).views(self => ({
   get accuracy() { return self.values[PROPS.accuracy] },
