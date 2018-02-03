@@ -1,0 +1,8 @@
+.sheetforge.sheet .item {
+  .description {
+    font-style: italic;
+    grid-area: description;
+    > span { justify-content: left; }
+    > input { text-align: left; }
+  }
+}
