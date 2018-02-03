@@ -1,0 +1,11 @@
+@import './variables';
+@import './Item';
+
+.weapon {
+  @include gridCell;
+  grid-template-areas:
+    "equipped name damage range accuracy"
+    ". description description description description"
+  ;
+  grid-template-columns: 30px auto 30px 30px 30px;
+}
