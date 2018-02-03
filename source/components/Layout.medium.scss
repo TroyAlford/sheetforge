@@ -1,11 +1,11 @@
 .sheetforge.sheet.axis.medium {
   grid-template-areas:
-    "header header"
-    "descriptors descriptors"
-    "attributes attributes"
-    "traits traits"
-    "skills skills"
-    "weapons armor"
+    "header"
+    "descriptors"
+    "attributes"
+    "traits"
+    "skills"
+    "equipment-section"
   ;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
 }
