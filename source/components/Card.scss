@@ -22,4 +22,8 @@
   &.expanded {
     border: 1px solid $color-highlight-border;
   }
+
+  .card-contents {
+    padding: 0;
+  }
 }
