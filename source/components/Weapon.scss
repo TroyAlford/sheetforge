@@ -7,11 +7,10 @@
     top: 15px;
   }
 }
-.weapon {
-  @include gridCell;
+.weapon.item {
   grid-template-areas:
     "equipped name damage range accuracy"
-    ". description description description description"
+    ". #{duplicate(description, 2)} #{duplicate(worth, 2)}"
   ;
   grid-template-columns: 30px auto 50px 50px 50px;
 

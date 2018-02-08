@@ -15,15 +15,14 @@ $properties:
     top: 15px;
   }
 }
-.armor {
-  @include gridCell;
+.armor.item {
   @each $property in $properties {
   .#{$property} { grid-area: #{$property}; }
   }
 
   grid-template-areas:
     "equipped name rating"
-    ". description #{duplicate(worth, 1)}"
+    ". description worth"
   ;
   grid-template-columns: 30px auto 100px;
 
