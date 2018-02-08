@@ -8,7 +8,7 @@ const Primary = types.compose(
     id: types.identifier(types.string),
     computed: types.literal(false),
     max: 10,
-    min: -10,
+    min: -1,
     name: types.string,
     value: -1,
   }).actions(self => ({
