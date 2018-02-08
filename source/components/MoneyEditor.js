@@ -2,13 +2,17 @@ import React, { Component } from 'react'
 import includes from '@/utilities/includes'
 import noop from '@/utilities/noop'
 
+import '@/components/Editable.scss'
+import '@/components/LabeledEditable.scss'
+
 const REGEX = /^([\d,]*)p ([\d,]*)g ([\d,]*)s ([\d,]*)c$/
 
 function splitNumber(number) {
-  const copper = number % 100
-  const silver = Math.floor(number / 100) % 100
-  const gold = Math.floor(number / (100 * 100)) % 100
-  const platinum = Math.floor(number / (100 * 100 * 100))
+  const n = number * 100
+  const copper = n % 100
+  const silver = Math.floor(n / 100) % 100
+  const gold = Math.floor(n / (100 * 100)) % 100
+  const platinum = Math.floor(n / (100 * 100 * 100))
   return { copper, silver, gold, platinum }
 }
 function formatNumber(number) {
@@ -46,7 +50,7 @@ function stringToNumbers(string) {
 }
 function stringToValue(string) {
   const { copper, silver, gold, platinum } = stringToNumbers(string)
-  return copper + (silver * 100) + (gold * 10000) + (platinum * 1000000)
+  return (copper / 100) + silver + (gold * 100) + (platinum * 10000)
 }
 
 const WHITELIST = [
@@ -83,17 +87,17 @@ export default class MoneyEditor extends Component {
     } else return
 
     const { silver, gold, platinum } = formatNumber(this.props.value)
-    const pEnd = platinum.length + 1
-    const gEnd = pEnd + 2 + gold.length
-    const sEnd = gEnd + 2 + silver.length
+    const platinumEnd = platinum.length + 1
+    const goldEnd = platinumEnd + 2 + gold.length
+    const silverEnd = goldEnd + 2 + silver.length
 
-    let adjustBy = 1
-    if (selectionStart <= pEnd) {
-      adjustBy = 1000000
-    } else if (selectionStart <= gEnd) {
+    let adjustBy = 0.01
+    if (selectionStart <= platinumEnd) {
       adjustBy = 10000
-    } else if (selectionStart <= sEnd) {
+    } else if (selectionStart <= goldEnd) {
       adjustBy = 100
+    } else if (selectionStart <= silverEnd) {
+      adjustBy = 1
     }
 
     if (event.key === 'ArrowUp') {
@@ -105,14 +109,19 @@ export default class MoneyEditor extends Component {
 
   createRef = (input) => { this.input = input }
   render = () => (
-    <input
-      data-value={this.props.value}
-      onChange={this.onChange}
-      onKeyDown={this.onKeyDown}
-      onKeyUp={this.onKeyUp}
-      ref={this.createRef}
-      type="text"
-      value={numberToString(this.props.value)}
-    />
+    <label className="labeled-editable">
+      <i className="icon-currency" />
+      <div className="editable">
+        <input
+          data-value={this.props.value.toFixed(2)}
+          onChange={this.onChange}
+          onKeyDown={this.onKeyDown}
+          onKeyUp={this.onKeyUp}
+          ref={this.createRef}
+          type="tel"
+          value={numberToString(this.props.value)}
+        />
+      </div>
+    </label>
   )
 }
