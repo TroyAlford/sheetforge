@@ -1,38 +1,36 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
-import Editable from '@/components/Editable'
-import noop from '@/utilities/noop'
+import { renderEditable } from '@/utilities/itemRendering'
+import Card from '@/components/Card'
 
 import './Weapon.scss'
 
 @observer export default class Weapon extends Component {
-  static defaultProps = {
-    onEditStart: noop,
-    onEditEnd: noop,
-  }
-
-  renderEditable = (propName, props) => (
-    <Editable
-      className={propName.toLowerCase()}
-      onChange={this.props.weapon[`set${propName}`]}
-      value={this.props.weapon[propName.toLowerCase()]}
-      {...props}
-    />
-  )
-
-  render() {
-    const { editing, onEditStart, onEditEnd, weapon } = this.props
-    const placeholder = weapon.description || 'Description'
-
+  renderAlways = () => {
+    const { editing, item, onEditEnd, onEditStart } = this.props
     return (
-      <div className="item weapon">
-        {this.renderEditable('Equipped', { type: 'boolean' })}
-        {this.renderEditable('Name', { forceEditMode: editing, onEditEnd, onEditStart })}
-        {this.renderEditable('Damage', { type: 'number' })}
-        {this.renderEditable('Range', { type: 'number' })}
-        {this.renderEditable('Accuracy', { type: 'number' })}
-        {this.renderEditable('Description', { placeholder })}
-      </div>
+      <Fragment>
+        {renderEditable(item, 'Equipped', { type: 'boolean' })}
+        {renderEditable(item, 'Name', { forceEditMode: editing, onEditEnd, onEditStart })}
+        {renderEditable(item, 'Damage', { type: 'number', caption: <abbr title="Damage">Dmg:</abbr> })}
+        {renderEditable(item, 'Range', { type: 'number', caption: <abbr title="Range">Rng:</abbr> })}
+        {renderEditable(item, 'Accuracy', { type: 'number', caption: <abbr title="Accuracy">Acc:</abbr> })}
+      </Fragment>
     )
   }
+  renderExpanded = () => {
+    const { item } = this.props
+    const placeholder = item.description || 'Description'
+    return renderEditable(item, 'Description', { placeholder })
+  }
+
+  render = () => (
+    <Card
+      className="item-card weapon-card"
+      contentsClassName="item weapon"
+      renderAlways={this.renderAlways}
+      renderCollapsed={this.renderCollapsed}
+      renderExpanded={this.renderExpanded}
+    />
+  )
 }

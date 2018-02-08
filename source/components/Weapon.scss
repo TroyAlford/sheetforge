@@ -1,11 +1,24 @@
 @import './variables';
 @import './Item';
 
+.weapon-card {
+  .expander {
+    margin-top: -10px;
+    top: 15px;
+  }
+}
 .weapon {
   @include gridCell;
   grid-template-areas:
     "equipped name damage range accuracy"
     ". description description description description"
   ;
-  grid-template-columns: 30px auto 30px 30px 30px;
+  grid-template-columns: 30px auto 50px 50px 50px;
+
+  .damage, .range, .accuracy {
+    font-size: .8em;
+    @include alignEditable(center);
+    abbr { flex-grow: 1; justify-content: flex-end; }
+    .editable { font-size: 1.2em; width: 30px; }
+  }
 }
