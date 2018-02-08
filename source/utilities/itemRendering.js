@@ -3,13 +3,17 @@ import LabeledEditable from '@/components/LabeledEditable'
 
 export function renderEditable(item, propName, props) {
   const loweredPropName = propName.toLowerCase()
+  const passedProps = {
+    ...props,
+    className: `${props.className || ''} ${loweredPropName}`.trim(),
+  }
   return (
     <LabeledEditable
       caption={props.caption || <i className={`icon-${loweredPropName}`} />}
       className={loweredPropName}
       onChange={item[`set${propName}`]}
       value={item[loweredPropName]}
-      {...props}
+      {...passedProps}
     />
   )
 }
