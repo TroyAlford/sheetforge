@@ -1,9 +1,9 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import compareBy from '@/utilities/compareBy'
-// import noop from '@/utilities/noop'
 import Armor from '@/components/Armor'
 import ArmorModel from '@/models/Armor'
+import Item from '@/components/Item'
 import Weapon from '@/components/Weapon'
 import WeaponModel from '@/models/Weapon'
 
@@ -16,14 +16,14 @@ const sortEquipment = equipment => (
 const EquipmentSection = observer(({ equipment = [], buttons }) => (
   <div className="equipment section">
     <header className="icon-backpack">Equipment{buttons}</header>
-    {sortEquipment(equipment).map((model) => {
-      if (WeaponModel.is(model)) {
-        return <Weapon key={model.id} weapon={model} />
-      } else if (ArmorModel.is(model)) {
-        return <Armor key={model.id} armor={model} />
+    {sortEquipment(equipment).map((item) => {
+      if (WeaponModel.is(item)) {
+        return <Weapon key={item.id} item={item} />
+      } else if (ArmorModel.is(item)) {
+        return <Armor key={item.id} item={item} />
       }
 
-      { /* return <Type key={model.id} weapon={model} /> */ }
+      return <Item key={item.id} item={item} />
     })}
   </div>
 ))
