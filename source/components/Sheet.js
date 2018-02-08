@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
+import { onSnapshot } from 'mobx-state-tree'
 import bound from '@/utilities/bound'
+import noop from '@/utilities/noop'
 import CharacterModel from '@/models/Character'
 import AttributeSection from '@/components/AttributeSection'
 import DescriptorSection from '@/components/DescriptorSection'
@@ -14,14 +16,20 @@ import '../../fontello/css/axis-sheet-embedded.css'
 import './Sheet.scss'
 
 @observer export default class Sheet extends Component {
+  static defaultProps = {
+    onChange: noop,
+  }
+
   constructor(props) {
     super(props)
     this.character = CharacterModel.create()
+    this.disposeOfSnapshotListener = onSnapshot(this.character, this.props.onChange)
 
     window.addEventListener('resize', this.handleWindowResize)
   }
   state = { sizeClass: 'large' }
   componentDidMount() { this.handleWindowResize() }
+  componentWillUnmount() { this.disposeOfSnapshotListener() }
 
   handleWindowResize = () => {
     if (!this.container) return
@@ -37,6 +45,7 @@ import './Sheet.scss'
     const c = this.character
     const { sizeClass = 'large' } = this.state
 
+    /* eslint-disable max-len */
     return (
       <div className={`sheetforge sheet axis ${sizeClass}`} ref={this.bindContainer}>
         <header>
@@ -72,5 +81,6 @@ import './Sheet.scss'
         />
       </div>
     )
+    /* eslint-enable max-len */
   }
 }
