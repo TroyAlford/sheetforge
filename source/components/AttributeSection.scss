@@ -1,35 +1,4 @@
 @import './variables';
-$attributes:
-  "accuracy",
-  "acuity",
-  "agility",
-  "body",
-  "combat",
-  "confidence",
-  "death",
-  "deep",
-  "devotion",
-  "fitness",
-  "focus",
-  "intellect",
-  "intuition",
-  "light",
-  "deep",
-  "death",
-  "might",
-  "mind",
-  "naturalArmor",
-  "potency",
-  "racial",
-  "reflex",
-  "resilience",
-  "size",
-  "speed",
-  "spirit",
-  "strength",
-  "thresholds",
-  "toughness"
-;
 
 .sheetforge.sheet .attributes {
   display: grid;
@@ -41,61 +10,14 @@ $attributes:
     "potency    strength  intellect confidence"
     "reflex     agility   acuity    intuition"
     "resilience fitness   focus     devotion"
-    "divider-1  divider-1 divider-1 divider-1"
+    "#{duplicate(divider-1, 4)}"
     "racial     size      speed     naturalArmor"
-    "combat     accuracy  might     toughness"
-    "divider-2  divider-2 divider-2 divider-2"
+    "#{duplicate(divider-2, 4)}"
     "thresholds light     deep      death"
   ;
   height: auto;
   white-space: nowrap;
 
-  hr.divider-1 { margin-top: 5px; grid-area: divider-1; }
-  hr.divider-2 { grid-area: divider-2; }
-}
-
-.sheetforge.sheet .attribute {
-  @include gridCell;
-  padding: 0 5px;
-  grid-template-columns: auto 40px;
-
-  @each $attribute in $attributes {
-  &.#{$attribute} { grid-area: #{$attribute}; }
-  }
-
-  &.highlight {
-    background-color: $color-highlight-bg;
-    border: 1px solid $color-highlight-border;
-  }
-
-  .name, .value, .editable, .temporary {
-    border: 1px solid transparent;
-    display: inline-flex;
-  }
-  .editable {
-    justify-content: flex-end;
-    text-align: right;
-
-    &.editing {
-      border-color: #eee;
-    }
-  }
-  &.modified {
-    grid-template-columns: auto 60px;
-
-    .value {
-      color: #bbb;
-    }
-
-    .editable span {
-      color: #bbb;
-      padding-right: 5px;
-    }
-
-    .temporary {
-      color: green;
-      font-weight: bold;
-      padding-left: 5px;
-    }
-  }
+  .divider-1 { grid-area: divider-1; }
+  .divider-2 { grid-area: divider-2; }
 }

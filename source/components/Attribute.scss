@@ -1,0 +1,75 @@
+@import './variables';
+$attributes:
+  "acuity",
+  "agility",
+  "body",
+  "combat",
+  "confidence",
+  "death",
+  "deep",
+  "devotion",
+  "fitness",
+  "focus",
+  "intellect",
+  "intuition",
+  "light",
+  "deep",
+  "death",
+  "mind",
+  "naturalArmor",
+  "potency",
+  "racial",
+  "reflex",
+  "resilience",
+  "size",
+  "speed",
+  "spirit",
+  "strength",
+  "thresholds"
+;
+
+.sheetforge.sheet .attribute {
+  @include gridCell;
+  padding: 0 5px;
+  grid-template-columns: auto 40px;
+
+  @each $attribute in $attributes {
+  &.#{$attribute} { grid-area: #{$attribute}; }
+  }
+
+  &.highlight {
+    background-color: $color-highlight-bg;
+    border: 1px solid $color-highlight-border;
+  }
+
+  .name, .value, .editable, .temporary {
+    border: 1px solid transparent;
+    display: inline-flex;
+  }
+  .editable {
+    justify-content: flex-end;
+    text-align: right;
+
+    &.editing {
+      border-color: #eee;
+    }
+  }
+  &.modified {
+    grid-template-columns: auto 60px;
+
+    .value {
+      color: #bbb;
+    }
+
+    .editable span {
+      color: #bbb;
+      padding-right: 5px;
+    }
+
+    .temporary {
+      color: green;
+      font-weight: bold;
+      padding-left: 5px;
+    }
+  }
+}

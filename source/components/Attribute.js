@@ -3,6 +3,8 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import Editable from '../components/Editable'
 
+import './Attribute.scss'
+
 @observer export default class Attribute extends Component {
   static defaultProps = {
     className: 'none',
