@@ -60,20 +60,17 @@ const Character = types
 
     /* eslint-disable max-len, object-property-newline */
     const computedAttributes = [
-      Attribute.create({ id: 'accuracy', value: () => average(attrs('acuity', 'focus', 'intuition')), name: 'Accuracy' }),
-      Attribute.create({ id: 'body', value: () => average(attrs('strength', 'agility', 'fitness')), name: 'Body' }),
-      Attribute.create({ id: 'might', value: () => attr('size') + average(attrs('strength', 'fitness')), name: 'Might' }),
-      Attribute.create({ id: 'mind', value: () => average(attrs('intellect', 'acuity', 'focus')), name: 'Mind' }),
-      Attribute.create({ id: 'potency', value: () => average(attrs('strength', 'intellect', 'confidence')), name: 'Potency' }),
-      Attribute.create({ id: 'reflex', value: () => average(attrs('agility', 'acuity', 'intuition')), name: 'Reflex' }),
-      Attribute.create({ id: 'resilience', value: () => average(attrs('fitness', 'focus', 'devotion')), name: 'Resilience' }),
+      Attribute.create({ id: 'body', value: () => average(attrs('agility', 'fitness', 'strength')), name: 'Body' }),
+      Attribute.create({ id: 'mind', value: () => average(attrs('acuity', 'focus', 'intellect')), name: 'Mind' }),
+      Attribute.create({ id: 'potency', value: () => average(attrs('confidence', 'intellect', 'strength')), name: 'Potency' }),
+      Attribute.create({ id: 'reflex', value: () => average(attrs('acuity', 'agility', 'intuition')), name: 'Reflex' }),
+      Attribute.create({ id: 'resilience', value: () => average(attrs('devotion', 'fitness', 'focus')), name: 'Resilience' }),
       Attribute.create({ id: 'speed', value: () => sum(6, attr('size'), Math.round(attr('fitness') / 2)), name: 'Speed' }),
-      Attribute.create({ id: 'spirit', value: () => average(attrs('confidence', 'intuition', 'devotion')), name: 'Spirit' }),
-      Attribute.create({ id: 'toughness', value: () => average(attrs('strength', 'fitness', 'size')) + sum(attrs('naturalArmor', 'armor')), name: 'Toughness' }),
+      Attribute.create({ id: 'spirit', value: () => average(attrs('confidence', 'devotion', 'intuition')), name: 'Spirit' }),
       Attribute.create({
         id: 'damageThresholdLight',
         name: 'Light',
-        value: () => (my.armorRating + attr('naturalArmor') + bound(sum(attrs('size', 'strength', 'fitness')), { min: 1 })),
+        value: () => (my.armorRating + bound(sum(attrs('fitness', 'size', 'strength')), { min: 1 })),
       }),
       Attribute.create({ id: 'damageThresholdDeep', value: () => attr('damageThresholdLight') * 2, name: 'Deep' }),
       Attribute.create({ id: 'damageThresholdDeath', value: () => attr('damageThresholdLight') * 4, name: 'Death' }),
@@ -92,7 +89,7 @@ const Character = types
       },
       get armor() { return my.equipment.filter(e => Armor.is(e)) },
       get armorRating() {
-        return sum(my.armor.map(e => (e.equipped ? e.rating : 0)))
+        return attr('naturalArmor') + sum(my.armor.map(e => (e.equipped ? e.rating : 0)))
       },
       get equipped() { return my.equipment.filter(e => e.equipped) },
       get power() {
