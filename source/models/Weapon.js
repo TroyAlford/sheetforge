@@ -1,5 +1,4 @@
 import { types } from 'mobx-state-tree'
-import Equippable from '@/models/Equippable'
 import Item from '@/models/Item'
 
 const weaponArray = types.refinement(types.array(types.number), a => a.length === 3)
@@ -10,7 +9,7 @@ const PROPS = {
   range: 2,
 }
 
-const Weapon = types.compose(Equippable, Item, types.model('Weapon', {
+const Weapon = types.compose(Item, types.model('Weapon', {
   name: 'New Weapon',
   type: types.optional(types.literal('weapon'), 'weapon'),
   values: types.optional(weaponArray, [0, 0, 0]),

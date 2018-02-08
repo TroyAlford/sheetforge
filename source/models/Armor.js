@@ -1,10 +1,9 @@
 import { types } from 'mobx-state-tree'
-import Equippable from '@/models/Equippable'
 import Item from '@/models/Item'
 
 const armorRating = types.refinement(types.number, n => n >= 0)
 
-const Armor = types.compose(Equippable, Item, types.model('Armor', {
+const Armor = types.compose(Item, types.model('Armor', {
   name: 'New Armor',
   type: types.optional(types.literal('armor'), 'armor'),
   rating: types.optional(armorRating, 0),
