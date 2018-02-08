@@ -1,6 +1,7 @@
 @import './variables.scss';
 
 .card {
+  border: 1px solid transparent;
   box-sizing: border-box;
   display: block;
   min-height: 20px;
@@ -20,7 +21,7 @@
   &.collapsed .expander { padding: 2px; }
   &.expanded .expander { padding: 3px 1px; }
   &.expanded {
-    border: 1px solid $color-highlight-border;
+    border-color: $color-highlight-border;
   }
 
   .card-contents {
