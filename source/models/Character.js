@@ -92,7 +92,7 @@ const Character = types
       },
       get armor() { return my.equipment.filter(e => Armor.is(e)) },
       get armorRating() {
-        return sum(my.armor.map(e => (e.equipped ? e.average : 0)))
+        return sum(my.armor.map(e => (e.equipped ? e.rating : 0)))
       },
       get equipped() { return my.equipment.filter(e => e.equipped) },
       get power() {

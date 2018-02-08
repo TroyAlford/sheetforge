@@ -1,16 +1,11 @@
 @import './variables';
+@import './Item';
 $properties:
-  "arms",
-  "average",
   "description",
   "equipped",
-  "feet",
-  "hands",
-  "head",
-  "legs",
   "name",
   "quantity",
-  "torso",
+  "rating",
   "worth"
 ;
 
@@ -27,28 +22,19 @@ $properties:
   }
 
   grid-template-areas:
-    "equipped name average"
-    "#{duplicate(description, 2)} #{duplicate(worth, 1)}"
-    "#{duplicate(armor-values, 3)}"
+    "equipped name rating"
+    ". description #{duplicate(worth, 1)}"
   ;
-  grid-template-columns: 30px auto 80px;
-  min-height: 30px;
-  padding: 0;
-
-  .armor-values {
-    border: 1px solid $color-highlight-bg;
-    border-width: 1px 0 0 1px;
-    border-radius: 5px 0 0 0;
-    display: grid;
-    grid-area: armor-values;
-    grid-template-areas: "head arms torso hands legs feet";
-    grid-template-columns: repeat(6, 50px);
-
-    .labeled-editable:nth-child(odd) {
-      background-color: lighten($color-highlight-bg, 5%);
-    }
-  }
+  grid-template-columns: 30px auto 100px;
 
   .name, .description { @include alignEditable(left); }
-  .head, .arms, .torso, .hands, .legs, .feet, .worth, .average { @include alignEditable(center); }
+  .rating, .worth {
+    font-size: .8em;
+    @include alignEditable(center);
+    .editable { font-size: 1.2em; }
+  }
+  .rating {
+    .caption { flex-grow: 1; justify-content: flex-end; }
+    .editable { width: 30px; }
+  }
 }
