@@ -11,7 +11,7 @@ import './Weapon.scss'
     return (
       <Fragment>
         {renderEditable(item, 'Equipped', { type: 'boolean' })}
-        {renderEditable(item, 'Name', { forceEditMode: editing, onEditEnd, onEditStart })}
+        {renderEditable(item, 'Name', { className: 'icon-weapon', forceEditMode: editing, onEditEnd, onEditStart })}
         {renderEditable(item, 'Damage', { type: 'number', caption: <abbr title="Damage">Dmg:</abbr> })}
         {renderEditable(item, 'Range', { type: 'number', caption: <abbr title="Range">Rng:</abbr> })}
         {renderEditable(item, 'Accuracy', { type: 'number', caption: <abbr title="Accuracy">Acc:</abbr> })}

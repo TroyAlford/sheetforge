@@ -15,12 +15,10 @@ import './Item.scss'
 
   renderAlways = () => {
     const { editing, onEditStart, onEditEnd, item } = this.props
-    const equippable = EquippableModel.is(item)
-
     return (
       <Fragment>
-        {equippable && renderEditable(item, 'Equipped', { type: 'boolean' })}
-        {renderEditable(item, 'Name', { forceEditMode: editing, onEditEnd, onEditStart })}
+        {renderEditable(item, 'Equipped', { type: 'boolean' })}
+        {renderEditable(item, 'Name', { className: 'icon-backpack', forceEditMode: editing, onEditEnd, onEditStart })}
       </Fragment>
     )
   }
