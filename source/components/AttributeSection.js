@@ -48,11 +48,6 @@ export default class AttributeSection extends Component {
       {this.renderComputed('speed')}
       {this.renderAttribute('naturalArmor')}
 
-      {this.renderHeader('combat', 'Combat')}
-      {this.renderComputed('accuracy')}
-      {this.renderComputed('might')}
-      {this.renderComputed('toughness')}
-
       <hr className="divider-2" />
 
       {this.renderHeader('thresholds', 'Damage')}
