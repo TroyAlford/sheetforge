@@ -29,7 +29,6 @@ import './Weapon.scss'
       className="item-card weapon-card"
       contentsClassName="item weapon"
       renderAlways={this.renderAlways}
-      renderCollapsed={this.renderCollapsed}
       renderExpanded={this.renderExpanded}
     />
   )
