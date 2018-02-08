@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import { renderEditable } from '@/utilities/itemRendering'
 import Card from '@/components/Card'
-import EquippableModel from '@/models/Equippable'
 import noop from '@/utilities/noop'
 
 import './Item.scss'
