@@ -2,6 +2,7 @@
 
 .descriptor {
   @include gridCell;
+  padding: 0 5px;
   grid-template-columns: 60px auto;
 
   .name, .value {
