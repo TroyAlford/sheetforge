@@ -26,7 +26,7 @@ import noop from '@/utilities/noop'
           className="value"
           type="number"
           onChange={trait.setValue}
-          value={trait.value || ''}
+          value={trait.value || '-'}
         />
       </div>
     )

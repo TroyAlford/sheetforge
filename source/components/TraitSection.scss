@@ -20,13 +20,8 @@
   @include gridCell;
   grid-template-columns: auto 30px;
 
-  .name, .value {
-    align-items: center;
-  }
-  .value {
-    justify-content: flex-end;
-    input { text-align: right; }
-  }
+  .name { @include alignEditable(left); }
+  .value { @include alignEditable(center); }
 }
 
 .sheetforge.sheet.medium .traits {

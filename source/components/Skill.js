@@ -28,7 +28,7 @@ import noop from '@/utilities/noop'
           min={0}
           type="number"
           onChange={skill.setTheory}
-          value={skill.theory || ''}
+          value={skill.theory || '-'}
         />
         <Editable
           className="mastery"
@@ -36,7 +36,7 @@ import noop from '@/utilities/noop'
           min={0}
           type="number"
           onChange={skill.setMastery}
-          value={skill.mastery || ''}
+          value={skill.mastery || '-'}
         />
       </div>
     )
