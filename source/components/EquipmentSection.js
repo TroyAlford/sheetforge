@@ -17,13 +17,13 @@ const EquipmentSection = observer(({ equipment = [], buttons }) => (
   <div className="equipment section">
     <header className="icon-backpack">Equipment{buttons}</header>
     {sortEquipment(equipment).map((item) => {
-      if (WeaponModel.is(item)) {
-        return <Weapon key={item.id} item={item} />
-      } else if (ArmorModel.is(item)) {
-        return <Armor key={item.id} item={item} />
-      }
+      const props = { key: item.id, item }
 
-      return <Item key={item.id} item={item} />
+      let Type = Item
+      if (WeaponModel.is(item)) Type = Weapon
+      if (ArmorModel.is(item)) Type = Armor
+
+      return <Type {...props} />
     })}
   </div>
 ))
