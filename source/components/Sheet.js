@@ -17,12 +17,13 @@ import './Sheet.scss'
 
 @observer export default class Sheet extends Component {
   static defaultProps = {
+    character: {},
     onChange: noop,
   }
 
   constructor(props) {
     super(props)
-    this.character = CharacterModel.create()
+    this.character = CharacterModel.create(props.character)
     this.disposeOfSnapshotListener = onSnapshot(this.character, this.props.onChange)
 
     window.addEventListener('resize', this.handleWindowResize)
