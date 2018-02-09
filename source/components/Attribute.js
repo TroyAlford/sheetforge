@@ -41,8 +41,6 @@ import './Attribute.scss'
 
   render = () => {
     const { className = '', model } = this.props
-    if (!model) console.log(model)
-
     return (
       <div className={`attribute ${className} ${model.id}`}>
         <span className="name">{model.name}</span>
