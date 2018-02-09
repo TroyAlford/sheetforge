@@ -8,6 +8,7 @@ const Item = types.compose(
     description: '',
     name: 'New Item',
     quantity: types.optional(types.refinement(types.number, n => n >= 0), 1),
+    type: types.optional(types.literal('item'), 'item'),
     worth: types.optional(types.refinement(types.number, n => n >= 0), 0),
   }).actions(my => ({
     /* eslint-disable no-param-reassign */
