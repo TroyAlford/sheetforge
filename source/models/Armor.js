@@ -5,8 +5,8 @@ const armorRating = types.refinement(types.number, n => n >= 0)
 
 const Armor = types.compose(Item, types.model('Armor', {
   name: 'New Armor',
-  type: types.optional(types.literal('armor'), 'armor'),
   rating: types.optional(armorRating, 0),
+  type: types.optional(types.literal('armor'), 'armor'),
 }).actions(self => ({
   /* eslint-disable no-param-reassign */
   setRating(rating) { self.rating = rating },
