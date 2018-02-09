@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@storybook/react": "^3.3.9",
+    "@storybook/storybook-deployer": "^2.3.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-jest": "^22.0.6",
@@ -44,6 +45,7 @@
     "react-dom": "^16.2.0"
   },
   "scripts": {
+    "deploy-storybook": "storybook-to-ghpages",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "jest"
   },
