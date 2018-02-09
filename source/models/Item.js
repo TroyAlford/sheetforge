@@ -10,19 +10,15 @@ const Item = types.compose(
     quantity: types.optional(types.refinement(types.number, n => n >= 0), 1),
     type: types.optional(types.literal('item'), 'item'),
     worth: types.optional(types.refinement(types.number, n => n >= 0), 0),
-  }).actions((self) => {
-    const getCharacter = () => getParent(self, 2)
-
-    return {
-      /* eslint-disable no-param-reassign */
-      remove() { return getCharacter().removeItem(self) },
-      setDescription(description) { self.description = description },
-      setName(name) { self.name = name },
-      setQuantity(quantity) { self.quantity = quantity },
-      setWorth(worth) { self.worth = worth },
-      /* eslint-enable no-param-reassign */
-    }
-  }),
+  }).actions(self => ({
+    /* eslint-disable no-param-reassign */
+    remove() { return getParent(self, 2).removeItem(self) },
+    setDescription(description) { self.description = description },
+    setName(name) { self.name = name },
+    setQuantity(quantity) { self.quantity = quantity },
+    setWorth(worth) { self.worth = worth },
+    /* eslint-enable no-param-reassign */
+  })),
   Equippable
 )
 

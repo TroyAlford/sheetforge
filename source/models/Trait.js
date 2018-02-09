@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { getParent, types } from 'mobx-state-tree'
 import { autoHash } from '@/utilities/types'
 import ExperienceCost from '@/models/ExperienceCost'
 
@@ -9,6 +9,7 @@ const Trait = types.compose(
     value: 0,
   }).actions(self => ({
     /* eslint-disable no-param-reassign */
+    remove() { return getParent(self, 2).removeTrait(self) },
     setName(name) { self.name = name },
     setValue(value) { self.value = value },
     /* eslint-enable no-param-reassign */

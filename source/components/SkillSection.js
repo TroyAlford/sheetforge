@@ -7,6 +7,8 @@ import './SkillSection.scss'
 
 const compareByName = compareBy('name')
 
+const REMOVERS = {}
+
 @observer export default class SkillSection extends Component {
   render = () => {
     const { addSkill, skills = [] } = this.props
@@ -31,7 +33,12 @@ const compareByName = compareBy('name')
             <abbr className="mastery" title="Mastery">Ms</abbr>
           </div>
         </header>
-        {skills.sort(compareByName).map(skill => <Skill key={skill.id} skill={skill} />)}
+        {skills.sort(compareByName).map((skill) => {
+          if (!REMOVERS[skill.id]) {
+            REMOVERS[skill.id] = () => { if (skill.name === '') skill.remove() }
+          }
+          return <Skill key={skill.id} skill={skill} onEditEnd={REMOVERS[skill.id]} />
+        })}
       </div>
     )
   }
