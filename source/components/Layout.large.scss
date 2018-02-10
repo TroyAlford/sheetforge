@@ -4,8 +4,9 @@
   border: 1px solid #eee;
   grid-template-areas:
     "#{duplicate(header, 2)}"
-    "left descriptors"
-    "left attributes"
+    "portrait descriptors"
+    "portrait attributes"
+    "health-bar attributes"
     "traits skills"
     "#{duplicate(equipment-section, 2)}"
   ;

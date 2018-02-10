@@ -8,6 +8,7 @@ import AttributeSection from '@/components/AttributeSection'
 import DescriptorSection from '@/components/DescriptorSection'
 import Editable from '@/components/Editable'
 import EquipmentSection from '@/components/EquipmentSection'
+import HealthBar from '@/components/HealthBar'
 import PortraitSection from '@/components/PortraitSection'
 import SkillSection from '@/components/SkillSection'
 import TraitSection from '@/components/TraitSection'
@@ -65,6 +66,7 @@ import './Sheet.scss'
           </div>
         </header>
         <PortraitSection url={c.portraitUrl} setter={c.setPortraitUrl} />
+        <HealthBar health={c.health} />
         <DescriptorSection descriptors={c.descriptors} />
         <AttributeSection attributes={c.attributes} modifiers={c.modifiers} />
         <TraitSection traits={c.traits} modifiers={c.modifiers} addTrait={c.addTrait} layout={sizeClass} />

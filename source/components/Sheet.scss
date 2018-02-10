@@ -15,14 +15,13 @@
     "header"
     "descriptors"
     "attributes"
-    "wounds"
+    "health-bar"
     "traits"
     "skills"
     "equipment-section"
   ;
   grid-gap: 10px;
   position: relative;
-  max-height: 11.5in;
   max-width: 8.5in;
 
   @import './Headers.scss';
