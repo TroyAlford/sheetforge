@@ -1,5 +1,4 @@
-import { autorun } from 'mobx'
-import { getParent, types } from 'mobx-state-tree'
+import { getParent, onSnapshot, types } from 'mobx-state-tree'
 import bound from '@/utilities/bound'
 
 const TYPES = ['ok', 'light', 'heavy', 'bane']
@@ -8,14 +7,16 @@ const HealthValue = types.union(...TYPES.map(type => types.literal(type)))
 
 const Health = types.model('Health', {
   levels: types.optional(types.array(HealthValue), []),
-}).views((self) => {
-  const attr = id => (getParent(self).attribute(id) || {}).value || 0
-
-  return ({
-    get damage() { return self.levels.filter(level => level !== 'ok').length },
-    get max() { return bound(5 + attr('fitness') + attr('size'), { min: 1 }) },
-  })
-}).actions(self => ({
+}).volatile(self => ({
+  get parent() { return getParent(self) },
+})).views(self => ({
+  get damage() { return self.levels.filter(level => level !== 'ok').length },
+  get max() {
+    const resilience = self.parent.attribute('resilience').value || 0
+    const size = self.parent.attribute('size').value || 0
+    return bound(5 + resilience + size, { min: 1 })
+  },
+})).actions(self => ({
   /* eslint-disable no-param-reassign */
   heal(numberOfLevels = 1) {
     const damage = self.levels.toJS().filter(level => level !== 'ok')
@@ -49,10 +50,10 @@ const Health = types.model('Health', {
     })
   },
   // Lifecycle hooks
-  afterCreate() {
-    autorun(self.resizeValues)
-    self.levels = self.levels.sort()
+  afterAttach() {
+    onSnapshot(self.parent, () => self.resizeValues())
     self.resizeValues()
+    self.levels = self.levels.sort()
   },
   resizeValues() {
     const { max, levels } = self

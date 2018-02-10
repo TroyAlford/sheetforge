@@ -6,6 +6,7 @@ import Attribute from '@/models/Attribute'
 import Armor from '@/models/Armor'
 import Descriptor from '@/models/Descriptor'
 import Item from '@/models/Item'
+import Health from '@/models/Health'
 import Skill from '@/models/Skill'
 import Trait from '@/models/Trait'
 import Weapon from '@/models/Weapon'
@@ -52,6 +53,7 @@ const Character = types
     descriptors: types.optional(types.array(Descriptor), descriptors),
     // effects: types.array(Effect, []),
     equipment: types.optional(types.array(types.union(Armor, Item, Weapon)), []),
+    health: types.optional(Health, {}),
     skills: types.optional(types.array(Skill), []),
     traits: types.optional(types.array(Trait), []),
   }).views((my) => {
