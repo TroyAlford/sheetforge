@@ -13,7 +13,7 @@
   }
 
   .attributes {
-    grid-template-areas: 
+    grid-template-areas:
       "header header header"
       "body mind spirit"
       "strength intellect confidence"
@@ -49,5 +49,11 @@
         display: none;
       }
     }
+  }
+}
+
+@media (max-width: 359px) {
+  .sheetforge.sheet.axis {
+    zoom: .8;
   }
 }
