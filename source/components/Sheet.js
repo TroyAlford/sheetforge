@@ -76,7 +76,7 @@ import './Sheet.scss'
             <div className="buttons">
               Add:
               <button className="icon-weapon" onClick={c.addWeapon} />
-              <button className="icon-torso" onClick={c.addArmor} />
+              <button className="icon-armor" onClick={c.addArmor} />
               <button className="icon-add" onClick={c.addItem} />
             </div>
           }

@@ -18,7 +18,7 @@ import './Armor.scss'
     return (
       <Fragment>
         {renderEditable(item, 'Equipped', { type: 'boolean' })}
-        {renderEditable(item, 'Name', { className: 'icon-torso', forceEditMode: editing, onEditEnd, onEditStart })}
+        {renderEditable(item, 'Name', { className: 'icon-armor', forceEditMode: editing, onEditEnd, onEditStart })}
         {renderEditable(item, 'Rating', { type: 'number', caption: 'Armor Rating:' })}
       </Fragment>
     )
