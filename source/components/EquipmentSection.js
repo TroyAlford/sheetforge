@@ -15,23 +15,30 @@ const sortEquipment = equipment => (
 
 const REMOVERS = {}
 
-const EquipmentSection = observer(({ equipment = [], buttons }) => (
-  <div className="equipment section">
-    <header className="icon-backpack">Equipment{buttons}</header>
-    {sortEquipment(equipment).map((item) => {
-      if (!REMOVERS[item.id]) {
-        REMOVERS[item.id] = () => { if (item.name === '') item.remove() }
-      }
-      const props = { key: item.id, item, onEditEnd: REMOVERS[item.id] }
+const EquipmentSection = observer(({ buttons, equipment = [], layout = 'large' }) => {
+  const rows = layout === 'large'
+    ? Math.ceil(equipment.length / 2) + 1
+    : equipment.length + 1
+  const style = { gridTemplateRows: `repeat(${rows}, auto)` }
 
-      let Type = Item
-      if (WeaponModel.is(item)) Type = Weapon
-      if (ArmorModel.is(item)) Type = Armor
+  return (
+    <div className="equipment section" style={style}>
+      <header className="icon-backpack">Equipment{buttons}</header>
+      {sortEquipment(equipment).map((item) => {
+        if (!REMOVERS[item.id]) {
+          REMOVERS[item.id] = () => { if (item.name === '') item.remove() }
+        }
+        const props = { key: item.id, item, onEditEnd: REMOVERS[item.id] }
 
-      return <Type {...props} />
-    })}
-  </div>
-))
+        let Type = Item
+        if (WeaponModel.is(item)) Type = Weapon
+        if (ArmorModel.is(item)) Type = Armor
+
+        return <Type {...props} />
+      })}
+    </div>
+  )
+})
 
 EquipmentSection.displayName = 'EquipmentSection'
 export default EquipmentSection

@@ -3,6 +3,7 @@
 .sheetforge.sheet.axis .equipment.section {
   display: grid;
   grid-area: equipment-section;
+  grid-auto-flow: column;
   grid-template-areas:
     "header"
   ;
@@ -12,6 +13,15 @@
   @import './Headers.scss';
 
   header {
+    grid-area: header;
     grid-template-columns: 25px auto 125px;
   }
+}
+
+.sheetforge.sheet.axis.large .equipment.section {
+  grid-template-areas:
+    "header header"
+    "left right"
+  ;
+  grid-template-columns: 1fr 1fr;
 }

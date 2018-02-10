@@ -70,7 +70,6 @@ import './Sheet.scss'
         <TraitSection traits={c.traits} modifiers={c.modifiers} addTrait={c.addTrait} layout={sizeClass} />
         <SkillSection skills={c.skills} modifiers={c.modifiers} addSkill={c.addSkill} />
         <EquipmentSection
-          equipment={c.equipment}
           buttons={
             <div className="buttons">
               Add:
@@ -79,6 +78,8 @@ import './Sheet.scss'
               <button className="icon-add" onClick={c.addItem} />
             </div>
           }
+          equipment={c.equipment}
+          layout={sizeClass}
         />
       </div>
     )
