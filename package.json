@@ -63,6 +63,9 @@
         "statements": 100
       }
     },
+    "moduleNameMapper": {
+      "@/(.*)$": "<rootDir>/source/$1"
+    },
     "transform": {
       ".*": "<rootDir>/node_modules/jest-css-modules"
     },
