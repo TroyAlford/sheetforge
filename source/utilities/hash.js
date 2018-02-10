@@ -1,4 +1,5 @@
-export default function hash(string = '', radix = 16) {
+export default function hash(value = '', radix = 16) {
+  const string = String(value)
   let h = 0
   string.split('').forEach((char) => {
     /* eslint-disable no-bitwise */
