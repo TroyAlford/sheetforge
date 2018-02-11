@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { storiesOf } from '@storybook/react' // eslint-disable-line
+import Character from '@/models/Character'
 import HealthBar from '@/components/HealthBar'
 
-class Wrapper extends Component {
-  state = { levels: [] }
-  handleChange = levels => this.setState({ levels })
-  render = () => <HealthBar wounds={this.state.levels} onChange={this.handleChange} />
-}
-
 storiesOf('HealthBar', module)
-  .add('basic', () => <Wrapper />)
+  .add('basic', () => {
+    const character = Character.create()
+    return (
+      <div style={{ width: 250 }}>
+        <HealthBar health={character.health} />
+      </div>
+    )
+  })
