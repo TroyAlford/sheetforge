@@ -3,6 +3,8 @@ import { observer } from 'mobx-react'
 import Editable from '@/components/Editable'
 import noop from '@/utilities/noop'
 
+import './Skill.scss'
+
 @observer export default class Skill extends Component {
   static defaultProps = {
     onEditStart: noop,

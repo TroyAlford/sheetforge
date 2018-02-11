@@ -14,7 +14,7 @@ const TraitSection = observer(({ addTrait = noop, layout = 'large', traits = [] 
   const rows = layout === 'medium' ? Math.ceil(traits.length / 2) : traits.length
   const style = { gridTemplateRows: `25px 25px repeat(${rows || 1}, 30px)` }
   return (
-    <div className="traits" style={style}>
+    <div className="traits section" style={style}>
       <header>
         Traits
         <button className="icon-add" onClick={addTrait} />

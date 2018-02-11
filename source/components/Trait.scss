@@ -1,0 +1,9 @@
+@import './variables';
+
+.trait {
+  @include gridCell;
+  grid-template-columns: auto 30px;
+
+  .name { @include alignEditable(left); }
+  .value { @include alignEditable(center); }
+}

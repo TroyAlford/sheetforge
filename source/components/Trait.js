@@ -3,6 +3,8 @@ import { observer } from 'mobx-react'
 import Editable from '@/components/Editable'
 import noop from '@/utilities/noop'
 
+import './Trait.scss'
+
 @observer export default class Trait extends Component {
   static defaultProps = {
     onEditStart: noop,

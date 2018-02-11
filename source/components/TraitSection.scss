@@ -1,6 +1,6 @@
 @import './variables';
 
-.sheetforge.sheet.axis .traits {
+.traits.section {
   display: grid;
   grid-area: traits;
   grid-auto-rows: 30px;
@@ -14,14 +14,10 @@
     grid-template-columns: 1fr;
     .trait:nth-child(2) { display: none; }
   }
-}
 
-.sheetforge.sheet .trait {
-  @include gridCell;
-  grid-template-columns: auto 30px;
-
-  .name { @include alignEditable(left); }
-  .value { @include alignEditable(center); }
+  > .trait:nth-child(even) {
+    background-color: $color-highlight-row;
+  }
 }
 
 .sheetforge.sheet.medium .traits {
