@@ -2,8 +2,8 @@
 
 .descriptor {
   @include gridCell;
+  display: inline-flex;
   padding: 0 5px;
-  grid-template-columns: 60px auto;
 
   .name, .value {
     display: inline-flex;
