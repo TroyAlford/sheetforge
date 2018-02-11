@@ -1,7 +1,7 @@
 import { getParent, onSnapshot, types } from 'mobx-state-tree'
 import bound from '@/utilities/bound'
 
-const TYPES = ['ok', 'light', 'heavy', 'bane']
+export const TYPES = ['ok', 'light', 'heavy', 'bane']
 
 const HealthValue = types.union(...TYPES.map(type => types.literal(type)))
 
@@ -19,10 +19,10 @@ const Health = types.model('Health', {
 })).actions(self => ({
   /* eslint-disable no-param-reassign */
   heal(numberOfLevels = 1) {
-    const damage = self.levels.toJS().filter(level => level !== 'ok')
+    const damage = self.levels.toJS().reverse().filter(level => level !== 'ok')
     damage.length -= bound(numberOfLevels, { max: damage.length })
 
-    self.levels = [...damage, ...Array(self.max - damage.length).fill('ok')]
+    self.levels = [...Array(self.max - damage.length).fill('ok'), ...damage.reverse()]
   },
   healAll() { self.levels = Array(self.max).fill('ok') },
   setLevel(level, severityName) {
@@ -40,10 +40,10 @@ const Health = types.model('Health', {
 
       const binding = {}
 
-      if (direction === '↑' && i < index) {
+      if (direction === '↓' && i < index) {
+        binding.max = bound(severity, { min: 0 })
+      } else if (direction === '↑' && i > index) {
         binding.min = severity
-      } else if (direction === '↓' && i > index) {
-        binding.max = bound(severity - 1, { min: 0 })
       }
 
       return TYPES[bound(TYPES.indexOf(lvl), binding)]
@@ -53,7 +53,7 @@ const Health = types.model('Health', {
   afterAttach() {
     onSnapshot(self.parent, () => self.resizeValues())
     self.resizeValues()
-    self.levels = self.levels.sort()
+    self.levels = self.levels.sort().reverse()
   },
   resizeValues() {
     const { max, levels } = self

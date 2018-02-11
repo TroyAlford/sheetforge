@@ -1,88 +1,85 @@
-import * as MST from 'mobx-state-tree'
-import Health from '@/models/Health'
+import Character from '@/models/Character'
+// import Health from '@/models/Health'
 
-jest.unmock('mobx-state-tree')
-const getAttribute = jest.fn(() => ({ value: 1 }))
-const getParent = jest.fn(() => ({ attribute: getAttribute }))
-MST.getParent = getParent
+const create = (levels) => {
+  const character = Character.create({ health: levels })
+  return character.health
+}
 
 beforeEach(() => {
   jest.clearAllMocks()
 })
 
 it('defaults to ok correctly', () => {
-  const health = Health.create()
-  expect(health.max).toBe(7)
-  expect(health.levels.toJS()).toEqual(Array(7).fill('ok'))
+  const health = create()
+  expect(health.max).toBe(4)
+  expect(health.levels.toJS()).toEqual(Array(4).fill('ok'))
 })
 
 it('sorts wound levels: bane, heavy, light, ok', () => {
-  const levels = ['bane', 'heavy', 'bane', 'heavy', 'light', 'ok', 'light']
-  const health = Health.create({ levels })
-  expect(health.max).toBe(7)
-  expect(health.levels.toJS()).toEqual(['bane', 'bane', 'heavy', 'heavy', 'light', 'light', 'ok'])
+  const levels = ['ok', 'heavy', 'bane', 'light']
+  const health = create({ levels })
+  expect(health.levels.toJS()).toEqual(['ok', 'light', 'heavy', 'bane'])
 })
 
 it('computes total wound level', () => {
-  const health = Health.create({ levels: ['bane', 'bane', 'heavy', 'light', 'light'] })
-  expect(health.max).toBe(7)
-  expect(health.damage).toEqual(5)
+  const health = create({ levels: ['bane', 'heavy', 'light', 'ok'] })
+  expect(health.damage).toEqual(3)
 })
 
 it('limits levels to max health', () => {
-  const health = Health.create({ bane: 9 })
+  const health = create({ levels: Array(9).fill('ok') })
   expect(health.levels.toJS().length).toBe(health.max)
-  expect(health.levels.toJS().every(l => l === 'bane'))
 })
 
 it('sets levels correctly', () => {
-  const health = Health.create()
-  expect(health.levels.toJS()).toEqual(Array(7).fill('ok'))
+  const health = create()
+  expect(health.levels.toJS()).toEqual(Array(health.max).fill('ok'))
 
-  health.setLevel(3, 'heavy')
+  health.setLevel(2, 'heavy')
   expect(health.levels.toJS()).toEqual(
-    ['heavy', 'heavy', 'heavy', 'ok', 'ok', 'ok', 'ok']
+    ['ok', 'heavy', 'heavy', 'heavy']
   )
 
-  health.setLevel(2, 'bane')
+  health.setLevel(3, 'bane')
   expect(health.levels.toJS()).toEqual(
-    ['bane', 'bane', 'heavy', 'ok', 'ok', 'ok', 'ok']
+    ['ok', 'heavy', 'bane', 'bane']
   )
 
-  health.setLevel(5, 'light')
+  health.setLevel(1, 'light')
   expect(health.levels.toJS()).toEqual(
-    ['bane', 'bane', 'heavy', 'light', 'light', 'ok', 'ok']
+    ['light', 'heavy', 'bane', 'bane']
   )
 
   health.setLevel(2, 'light')
   expect(health.levels.toJS()).toEqual(
-    ['bane', 'light', 'ok', 'ok', 'ok', 'ok', 'ok']
+    ['light', 'light', 'bane', 'bane']
   )
 
-  health.setLevel(1, 'ok')
-  expect(health.levels.toJS()).toEqual(Array(7).fill('ok'))
+  health.setLevel(4, 'ok')
+  expect(health.levels.toJS()).toEqual(Array(health.max).fill('ok'))
 })
 
 it('heal(level) heals', () => {
-  const health = Health.create()
-  health.setLevel(5, 'heavy')
-  expect(health.levels.toJS()).toEqual(['heavy', 'heavy', 'heavy', 'heavy', 'heavy', 'ok', 'ok'])
+  const health = create()
+  health.setLevel(1, 'heavy')
+  expect(health.levels.toJS()).toEqual(['heavy', 'heavy', 'heavy', 'heavy'])
 
   health.heal(2)
-  expect(health.levels.toJS()).toEqual(['heavy', 'heavy', 'heavy', 'ok', 'ok', 'ok', 'ok'])
+  expect(health.levels.toJS()).toEqual(['ok', 'ok', 'heavy', 'heavy'])
 
   health.heal() // should heal 1
-  expect(health.levels.toJS()).toEqual(['heavy', 'heavy', 'ok', 'ok', 'ok', 'ok', 'ok'])
+  expect(health.levels.toJS()).toEqual(['ok', 'ok', 'ok', 'heavy'])
 
   health.heal(5) // healing more damage than remains
-  expect(health.levels.toJS()).toEqual(Array(7).fill('ok'))
+  expect(health.levels.toJS()).toEqual(Array(health.max).fill('ok'))
 })
 
 it('healAll heals all damage', () => {
   const levels = ['bane', 'bane', 'bane', 'bane', 'bane', 'bane', 'bane']
-  const health = Health.create({ levels })
-  expect(health.levels.toJS()).toEqual(levels)
+  const health = create({ levels })
+  expect(health.levels.toJS()).toEqual(Array(health.max).fill('bane'))
 
   health.healAll()
-  expect(health.levels.toJS()).toEqual(Array(7).fill('ok'))
+  expect(health.levels.toJS()).toEqual(Array(health.max).fill('ok'))
 })
