@@ -12,7 +12,10 @@
     font-weight: bold;
   }
   .editable.value {
-    span { justify-content: flex-end; }
+    span {
+      justify-content: flex-end;
+      text-align: right;
+    }
     input { text-align: right; }
   }
 }
