@@ -11,6 +11,7 @@
     "#{duplicate(equipment-section, 2)}"
   ;
   grid-template-columns: 1fr 2fr;
+  grid-template-rows: 30px 130px 200px 60px;
   margin: 0 auto;
   padding: .25in;
 }
