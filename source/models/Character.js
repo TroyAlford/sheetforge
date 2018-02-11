@@ -49,6 +49,7 @@ const Character = types
     rp: 0,
     xp: 0,
 
+    portraitURL: '',
     primaryAttributes: types.optional(types.array(Attribute), primaries),
     descriptors: types.optional(types.array(Descriptor), descriptors),
     // effects: types.array(Effect, []),
@@ -116,6 +117,7 @@ const Character = types
     removeTrait(trait) { return my.traits.remove(trait) },
     setAttribute(id, value) { my.attribute(id).setValue(value) },
     setName(name) { my.name = name },
+    setPortraitURL(url) { my.portraitURL = url },
     setXP(xp) { my.xp = xp },
     setRP(rp) { my.rp = rp },
     /* eslint-enable no-param-reassign */
