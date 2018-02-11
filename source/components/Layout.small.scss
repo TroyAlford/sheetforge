@@ -1,4 +1,13 @@
 .sheetforge.sheet.axis.small {
+  grid-template-areas:
+    "header"
+    "descriptors"
+    "attributes"
+    "health-bar"
+    "skills"
+    "equipment-section"
+    "traits"
+  ;
   font-size: .7rem;
 }
 
