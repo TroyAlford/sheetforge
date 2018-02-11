@@ -1,6 +1,6 @@
 @import './variables';
 
-.sheetforge.sheet .skills {
+.skills.section {
   display: grid;
   grid-area: skills;
   grid-auto-rows: 30px;
@@ -16,4 +16,22 @@
 .sheetforge.sheet .skill {
   @include gridCell;
   grid-template-columns: auto 30px 30px;
+}
+
+.small .skills.section {
+  grid-auto-flow: row;
+  grid-template-areas:
+    "header"
+    "subheader"
+    "skills"
+  ;
+  grid-template-columns: 1fr;
+
+  header.subheader {
+    grid-template-columns: 1fr;
+
+    .skill:nth-child(2) {
+      display: none;
+    }
+  }
 }

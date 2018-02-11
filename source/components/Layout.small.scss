@@ -1,55 +1,5 @@
 .sheetforge.sheet.axis.small {
   font-size: .7rem;
-
-  .descriptors {
-    grid-template-areas:
-      "header header header header header header"
-      "homeland homeland homeland race race race"
-      "height height weight weight gender gender"
-      "eyes eyes hair hair age age"
-      "concept concept concept concept concept concept"
-    ;
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-  .attributes {
-    grid-template-areas:
-      "header header header"
-      "body mind spirit"
-      "strength intellect confidence"
-      "agility acuity intuition"
-      "fitness focus devotion"
-      "potency resilience reflex"
-      "divider-1 divider-1 divider-1"
-      "racial racial racial"
-      "size speed naturalArmor"
-      "combat combat combat"
-      "accuracy might toughness"
-      "thresholds thresholds thresholds"
-      "light deep death"
-    ;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: 0;
-
-    .divider-1, .divider-2 { display: none; }
-  }
-  .skills {
-    grid-auto-flow: row;
-    grid-template-areas:
-      "header"
-      "subheader"
-      "skills"
-    ;
-    grid-template-columns: 1fr;
-
-    header.subheader {
-      grid-template-columns: 1fr;
-
-      .skill:nth-child(2) {
-        display: none;
-      }
-    }
-  }
 }
 
 @media (max-width: 359px) {

@@ -1,6 +1,6 @@
 @import './variables';
 
-.sheetforge.sheet .attributes {
+.attributes.section {
   display: grid;
   grid-area: attributes;
   grid-gap: 5px;
@@ -15,9 +15,42 @@
     "#{duplicate(divider-2, 4)}"
     "thresholds light     deep      death"
   ;
+  grid-template-columns: repeat(4, 1fr);
   height: auto;
   white-space: nowrap;
 
   .divider-1 { grid-area: divider-1; }
   .divider-2 { grid-area: divider-2; }
+}
+
+.small .attributes.section {
+  grid-template-areas:
+    "header header header"
+    "body mind spirit"
+    "strength intellect confidence"
+    "agility acuity intuition"
+    "fitness focus devotion"
+    "potency resilience reflex"
+    "divider-1 divider-1 divider-1"
+    "racial racial racial"
+    "size speed naturalArmor"
+    "combat combat combat"
+    "accuracy might toughness"
+    "thresholds thresholds thresholds"
+    "light deep death"
+  ;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0;
+
+  .racial, .thresholds {
+    background-color: initial;
+    border: none;
+    border-bottom: 1px solid $color-divider;
+    border-radius: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-bottom: .2em;
+  }
+
+  .divider-1, .divider-2 { display: none; }
 }

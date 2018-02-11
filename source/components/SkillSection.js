@@ -16,7 +16,7 @@ const REMOVERS = {}
     const style = { gridTemplateRows: `25px 25px repeat(${rows || 1}, 30px)` }
 
     return (
-      <div className="skills" style={style}>
+      <div className="skills section" style={style}>
         <header>
           Skills
           <button className="icon-add" onClick={addSkill} />

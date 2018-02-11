@@ -19,7 +19,7 @@ export default class AttributeSection extends Component {
   )
 
   render = () => (
-    <div className="attributes">
+    <div className="attributes section">
       <header>Attributes</header>
 
       {this.renderComputed('potency', 'header highlight')}
