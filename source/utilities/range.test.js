@@ -1,7 +1,5 @@
 import range from '@/utilities/range'
 
-jest.unmock('./range')
-
 describe('range()', () => {
   it('returns 1 value when low === high', () => {
     const expected = [1]

@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import { Simulate } from 'react-dom/test-utils'
 import Editable from '@/components/Editable'
 
-jest.unmock('./Editable')
-
 describe('Editable', () => {
   let parent = null
   let component = null

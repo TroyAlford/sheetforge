@@ -1,7 +1,5 @@
 import Character, { PRIMARY_ATTRIBUTES, SECONDARY_ATTRIBUTES } from '@/models/Character'
 
-jest.unmock('./Character')
-
 const attr = (id, value) => ({ id, computed: false, name: '', value })
 
 it('defaults primary attributes correctly', () => {
@@ -38,16 +36,13 @@ it('computes secondary values correctly', () => {
     ],
   })
 
-  expect(c.attribute('accuracy').value).toBe(1)
   expect(c.attribute('body').value).toBe(2)
-  expect(c.attribute('might').value).toBe(3)
   expect(c.attribute('mind').value).toBe(1)
   expect(c.attribute('potency').value).toBe(1)
   expect(c.attribute('reflex').value).toBe(1)
   expect(c.attribute('resilience').value).toBe(1)
   expect(c.attribute('speed').value).toBe(8)
   expect(c.attribute('spirit').value).toBe(0)
-  expect(c.attribute('toughness').value).toBe(3)
 })
 
 it('allows assigning primary attribute values', () => {
@@ -62,7 +57,7 @@ it('allows assigning primary attribute values', () => {
 })
 it('rejects assigning secondary attribute values', () => {
   const c = Character.create()
-  expect(c.attribute('toughness').value).toBe(-1)
+  expect(c.attribute('size').value).toBe(0)
 
-  expect(() => c.setAttribute('toughness', 2)).toThrow(/is not a function/)
+  expect(() => c.setAttribute('size', 2)).toThrow(/is not a function/)
 })

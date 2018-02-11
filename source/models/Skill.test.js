@@ -6,7 +6,7 @@ it('defaults correctly', () => {
 
   expect(s.name).toBe('New Skill')
   expect(s.theory).toBe(0)
-  expect(s.mastery).toBe(1)
+  expect(s.mastery).toBe(0)
 })
 
 it('allows setting theory', () => {
@@ -18,7 +18,7 @@ it('allows setting theory', () => {
 })
 
 it('computes xp cost correctly', () => {
-  const s = Skill.create()
+  const s = Skill.create({ mastery: 1 })
   expect(s.theory).toBe(0)
   expect(s.mastery).toBe(1)
   expect(s.xpCost).toBe(2) // 1 + (0 ^ 2) + (1 ^ 2)

@@ -85,7 +85,7 @@ describe('Primary', () => {
     console.warn = () => { }
 
     const a = Primary.create(attributes)
-    expect(a.min).toBe(-10)
+    expect(a.min).toBe(-1)
     expect(a.max).toBe(10)
 
     a.setValue(a.max + 1)
