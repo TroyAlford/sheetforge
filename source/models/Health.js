@@ -57,7 +57,7 @@ const Health = types.model('Health', {
   },
   resizeValues() {
     const { max, levels } = self
-    if (levels.length < max) self.levels.push(...Array(max - levels.length).fill('ok'))
+    if (levels.length < max) self.levels.unshift(...Array(max - levels.length).fill('ok'))
 
     // eslint-disable-next-line no-param-reassign
     if (self.levels.length > max) self.levels.length = max
