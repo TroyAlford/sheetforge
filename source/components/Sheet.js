@@ -65,7 +65,7 @@ import './Sheet.scss'
             <Editable value={c.power} readonly />
           </div>
         </header>
-        <PortraitSection url={c.portraitUrl} setter={c.setPortraitUrl} />
+        <PortraitSection url={c.portraitURL} onChange={c.setPortraitURL} />
         <HealthBar health={c.health} />
         <DescriptorSection descriptors={c.descriptors} />
         <AttributeSection attributes={c.attributes} modifiers={c.modifiers} />

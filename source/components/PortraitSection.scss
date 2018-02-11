@@ -1,17 +1,27 @@
 .portrait.section {
   display: none;
 
+  .border-container {
+    border: 5px solid #eee;
+    border-radius: 5px;
+    height: 300px; width: 225px;
+    margin: 10px auto;
+  }
   .image {
     background-size: cover;
-    height: 300px;
-    margin: 10px auto;
-    width: 225px;
+    padding: 5px;
+    height: 100%; width: 100%;
+  }
+
+  .editable textarea {
+    border-radius: 5px;
+    height: 60px;
+    padding: 5px;
+    resize: none;
   }
 }
 
-.sheetforge.sheet.large {
-  .portrait.section {
-    display: block;
-    grid-area: portrait;
-  }
+.large .portrait.section {
+  display: block;
+  grid-area: portrait;
 }
