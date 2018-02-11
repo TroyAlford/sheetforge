@@ -28,7 +28,7 @@ $attributes:
   "thresholds"
 ;
 
-.sheetforge.sheet .attribute {
+.attribute {
   @include gridCell;
   padding: 0 5px;
   grid-template-columns: auto 40px;
