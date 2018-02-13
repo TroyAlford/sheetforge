@@ -1,5 +1,7 @@
 @import './variables';
 
+@import './Headers.scss';
+
 .sheetforge.sheet.axis .equipment.section {
   display: grid;
   grid-area: equipment-section;
@@ -9,8 +11,6 @@
   ;
   grid-template-columns: 1fr;
   grid-template-rows: 25px;
-
-  @import './Headers.scss';
 
   header {
     grid-area: header;
