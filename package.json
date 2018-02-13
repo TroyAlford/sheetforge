@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "license": "ISC",
   "author": "Troy Alford",
+  "main": "build/sheetforge.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/TroyAlford/sheetforge.git"
