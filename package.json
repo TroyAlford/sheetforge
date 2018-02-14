@@ -53,10 +53,12 @@
     "deploy-storybook": "STORYBOOK=true storybook-to-ghpages",
     "build": "yarn webpack",
     "build-prod": "NODE_ENV=production yarn build",
+    "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "preversion": "yarn build & yarn build-prod",
     "sourcemap": "SOURCEMAP=true yarn build && source-map-explorer ./build/sheetforge.min.js",
     "storybook": "STORYBOOK=true start-storybook -p 9001 -c .storybook",
-    "test": "jest"
+    "test": "jest",
+    "version": "yarn build && yarn build-prod && git add -A ./build"
   },
   "jest": {
     "collectCoverage": false,

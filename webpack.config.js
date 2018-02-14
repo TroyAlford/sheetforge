@@ -39,7 +39,7 @@ if (!STORYBOOK) {
 
 module.exports = {
   devtool: SOURCEMAP ? 'source-map' : 'none',
-  entry: `${__dirname}/source/components/Sheet.js`,
+  entry: `${__dirname}/source/index.js`,
   externals,
   module: {
     rules: [{
