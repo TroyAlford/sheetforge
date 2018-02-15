@@ -477,7 +477,6 @@ label.labeled-editable {
 .sheetforge.sheet.axis.large .equipment.section {
   grid-template-areas: "header header" "left right";
   grid-template-columns: 1fr 1fr; }
-@charset "UTF-8";
 .health-bar {
   display: grid;
   grid-template-areas: "header" "health-bar";
@@ -491,6 +490,7 @@ label.labeled-editable {
     display: grid;
     grid-area: health-bar;
     justify-items: center;
+    min-height: 20px;
     width: 100%; }
     .health-bar .levels > div {
       align-items: center;
@@ -515,7 +515,7 @@ label.labeled-editable {
         font-size: 6px; }
       .health-bar .levels > div.bane:before {
         color: #000;
-        content: '\E80C';
+        content: '\E902';
         font-size: 18px; }
 
 .large .health-bar header {

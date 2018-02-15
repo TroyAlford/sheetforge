@@ -17,6 +17,7 @@
     display: grid;
     grid-area: health-bar;
     justify-items: center;
+    min-height: 20px;
     width: 100%;
 
     > div {
@@ -42,7 +43,7 @@
       }
       &.bane:before {
         color: #000;
-        content: '';
+        content: '\E902';
         font-size: 18px;
       }
     }
