@@ -5597,7 +5597,7 @@ var Editable = (_temp2 = _class = function (_React$Component) {
   }]);
 
   return Editable;
-}(_react2.default.Component), _class.defaultProps = {
+}(_react2.default.Component), _class.displayName = 'Editable', _class.defaultProps = {
   className: '',
   forceEditMode: false,
   max: undefined,
@@ -11542,6 +11542,7 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
 
     _this.render = function () {
       var c = _this.character;
+      var readonly = _this.props.readonly;
       var _this$state$sizeClass = _this.state.sizeClass,
           sizeClass = _this$state$sizeClass === undefined ? 'large' : _this$state$sizeClass;
 
@@ -11553,7 +11554,7 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
         _react2.default.createElement(
           'header',
           null,
-          _react2.default.createElement(_Editable2.default, { className: 'character-name', value: c.name, onChange: c.setName }),
+          _react2.default.createElement(_Editable2.default, { className: 'character-name', value: c.name, onChange: c.setName, readonly: readonly }),
           _react2.default.createElement(
             'div',
             { className: 'xp attribute' },
@@ -11562,7 +11563,7 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
               { className: 'name' },
               'XP'
             ),
-            _react2.default.createElement(_Editable2.default, { min: 0, value: c.xp, onChange: c.setXP })
+            _react2.default.createElement(_Editable2.default, { min: 0, value: c.xp, onChange: c.setXP, readonly: readonly })
           ),
           _react2.default.createElement(
             'div',
@@ -11572,7 +11573,7 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
               { className: 'name' },
               'RP'
             ),
-            _react2.default.createElement(_Editable2.default, { min: 0, max: 5, value: c.rp, onChange: c.setRP })
+            _react2.default.createElement(_Editable2.default, { min: 0, max: 5, value: c.rp, onChange: c.setRP, readonly: readonly })
           ),
           _react2.default.createElement(
             'div',
@@ -11629,7 +11630,8 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
   return Sheet;
 }(_react.Component), _class2.defaultProps = {
   character: {},
-  onChange: _noop2.default
+  onChange: _noop2.default,
+  readonly: false
 }, _temp)) || _class;
 
 exports.default = Sheet;

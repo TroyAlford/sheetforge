@@ -17,9 +17,11 @@ import '../../fontello/css/axis-sheet-embedded.css'
 import './Sheet.scss'
 
 @observer export default class Sheet extends Component {
+  static displayName = 'Sheet';
   static defaultProps = {
     character: {},
     onChange: noop,
+    readonly: false,
   }
 
   constructor(props) {
@@ -45,11 +47,17 @@ import './Sheet.scss'
   bindContainer = (div) => { this.container = div }
   render = () => {
     const c = this.character
+    const { readonly } = this.props
     const { sizeClass = 'large' } = this.state
+    const classes = [
+      'sheetforge sheet axis',
+      sizeClass,
+      readonly ? 'readonly' : '',
+    ].filter(Boolean).join(' ')
 
     /* eslint-disable max-len */
     return (
-      <div className={`sheetforge sheet axis ${sizeClass}`} ref={this.bindContainer}>
+      <div className={classes} ref={this.bindContainer}>
         <header>
           <Editable className="character-name" value={c.name} onChange={c.setName} />
           <div className="xp attribute">

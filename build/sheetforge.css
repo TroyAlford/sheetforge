@@ -763,6 +763,8 @@ label.labeled-editable {
   max-width: 8.5in; }
   .sheetforge.sheet.axis * {
     box-sizing: border-box; }
+  .sheetforge.sheet.axis.readonly {
+    pointer-events: none; }
   .sheetforge.sheet.axis > header {
     border-bottom: none;
     grid-gap: 3px;
