@@ -11546,15 +11546,16 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
       var _this$state$sizeClass = _this.state.sizeClass,
           sizeClass = _this$state$sizeClass === undefined ? 'large' : _this$state$sizeClass;
 
-      /* eslint-disable max-len */
+      var classes = ['sheetforge sheet axis', sizeClass, readonly ? 'readonly' : ''].filter(Boolean).join(' ');
 
+      /* eslint-disable max-len */
       return _react2.default.createElement(
         'div',
-        { className: 'sheetforge sheet axis ' + sizeClass, ref: _this.bindContainer },
+        { className: classes, ref: _this.bindContainer },
         _react2.default.createElement(
           'header',
           null,
-          _react2.default.createElement(_Editable2.default, { className: 'character-name', value: c.name, onChange: c.setName, readonly: readonly }),
+          _react2.default.createElement(_Editable2.default, { className: 'character-name', value: c.name, onChange: c.setName }),
           _react2.default.createElement(
             'div',
             { className: 'xp attribute' },
@@ -11563,7 +11564,7 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
               { className: 'name' },
               'XP'
             ),
-            _react2.default.createElement(_Editable2.default, { min: 0, value: c.xp, onChange: c.setXP, readonly: readonly })
+            _react2.default.createElement(_Editable2.default, { min: 0, value: c.xp, onChange: c.setXP })
           ),
           _react2.default.createElement(
             'div',
@@ -11573,7 +11574,7 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
               { className: 'name' },
               'RP'
             ),
-            _react2.default.createElement(_Editable2.default, { min: 0, max: 5, value: c.rp, onChange: c.setRP, readonly: readonly })
+            _react2.default.createElement(_Editable2.default, { min: 0, max: 5, value: c.rp, onChange: c.setRP })
           ),
           _react2.default.createElement(
             'div',
@@ -11628,7 +11629,7 @@ var Sheet = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_Comp
   }]);
 
   return Sheet;
-}(_react.Component), _class2.defaultProps = {
+}(_react.Component), _class2.displayName = 'Sheet', _class2.defaultProps = {
   character: {},
   onChange: _noop2.default,
   readonly: false
