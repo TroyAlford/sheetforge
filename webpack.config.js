@@ -72,6 +72,9 @@ module.exports = {
       '@': path.resolve(__dirname, 'source/'),
     },
   },
+  stats: {
+    children: false,
+  },
   plugins,
 }
 /* eslint-enable no-undef */
