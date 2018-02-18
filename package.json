@@ -1,7 +1,7 @@
 {
   "name": "sheetforge",
   "description": "SheetForge - a CSS/JS library for RPG Character Sheets",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "ISC",
   "author": "Troy Alford",
   "main": "build/sheetforge.min.js",
