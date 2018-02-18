@@ -544,6 +544,7 @@ label.labeled-editable {
     width: 225px;
     margin: 10px auto; }
   .portrait.section .image {
+    background-position: center center;
     background-size: cover;
     padding: 5px;
     height: 100%;
