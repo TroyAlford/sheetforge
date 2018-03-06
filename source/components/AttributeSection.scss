@@ -1,6 +1,7 @@
 @import './variables';
 
 .attributes.section {
+  align-self: flex-start;
   display: grid;
   grid-area: attributes;
   grid-gap: 5px;
@@ -10,17 +11,20 @@
     "potency    strength  intellect confidence"
     "reflex     agility   acuity    intuition"
     "resilience fitness   focus     devotion"
-    "#{duplicate(divider-1, 4)}"
+    "#{duplicate(divider, 4)}"
     "racial     size      speed     naturalArmor"
-    "#{duplicate(divider-2, 4)}"
-    "thresholds light     deep      death"
   ;
   grid-template-columns: repeat(4, 1fr);
   height: auto;
   white-space: nowrap;
 
-  .divider-1 { grid-area: divider-1; }
-  .divider-2 { grid-area: divider-2; }
+  .header.attribute {
+    font-weight: bold;
+
+    > .name { height: 30px; }
+  }
+
+  .divider { grid-area: divider; }
 }
 
 .small .attributes.section {
@@ -30,14 +34,12 @@
     "strength intellect confidence"
     "agility acuity intuition"
     "fitness focus devotion"
-    "potency resilience reflex"
-    "divider-1 divider-1 divider-1"
+    "potency reflex resilience"
+    "#{duplicate(divider, 3)}"
     "racial racial racial"
     "size speed naturalArmor"
     "combat combat combat"
     "accuracy might toughness"
-    "thresholds thresholds thresholds"
-    "light deep death"
   ;
   grid-template-columns: 1fr 1fr 1fr;
   padding: 0;
@@ -52,5 +54,5 @@
     padding-bottom: .2em;
   }
 
-  .divider-1, .divider-2 { display: none; }
+  .divider { display: none; }
 }

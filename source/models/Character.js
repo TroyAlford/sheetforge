@@ -23,8 +23,6 @@ export const DERIVED_ATTRIBUTES = [
   'accuracy', 'might', 'toughness',
   'speed',
 
-  'damageThresholdLight', 'damageThresholdDeep', 'damageThresholdDeath',
-
   'power',
 ]
 
@@ -75,13 +73,6 @@ const Character = types
       Attribute.create({ id: 'resilience', value: () => average(attrs('devotion', 'fitness', 'focus')), name: 'Resilience' }),
       Attribute.create({ id: 'speed', value: () => sum(6, attr('size'), Math.round(attr('fitness') / 2)), name: 'Speed' }),
       Attribute.create({ id: 'spirit', value: () => average(attrs('confidence', 'devotion', 'intuition')), name: 'Spirit' }),
-      Attribute.create({
-        id: 'damageThresholdLight',
-        name: 'Light',
-        value: () => (my.armorRating + bound(sum(attrs('fitness', 'size', 'strength')), { min: 1 })),
-      }),
-      Attribute.create({ id: 'damageThresholdDeep', value: () => attr('damageThresholdLight') * 2, name: 'Deep' }),
-      Attribute.create({ id: 'damageThresholdDeath', value: () => attr('damageThresholdLight') * 4, name: 'Death' }),
     ]
     /* eslint-enable max-len, object-property-newline */
 

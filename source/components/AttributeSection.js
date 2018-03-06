@@ -41,19 +41,12 @@ export default class AttributeSection extends Component {
       {this.renderAttribute('intuition')}
       {this.renderAttribute('devotion')}
 
-      <hr className="divider-1" />
+      <hr className="divider" />
 
       {this.renderHeader('racial', 'Racial')}
       {this.renderAttribute('size')}
       {this.renderComputed('speed')}
       {this.renderAttribute('naturalArmor')}
-
-      <hr className="divider-2" />
-
-      {this.renderHeader('thresholds', 'Damage')}
-      {this.renderComputed('damageThresholdLight', 'light')}
-      {this.renderComputed('damageThresholdDeep', 'deep')}
-      {this.renderComputed('damageThresholdDeath', 'death')}
     </div>
   )
 }
