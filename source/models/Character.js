@@ -38,6 +38,10 @@ const capitalize = s => s.replace(/^./, s.charAt(0).toUpperCase())
 const primaries = PRIMARY_ATTRIBUTES.map(id => (
   { id, computed: false, name: capitalize(id), value: -1 }
 ))
+const secondaries = [
+  { id: 'size', name: 'Size', value: 0 },
+  { id: 'naturalArmor', name: 'N. Armor', value: 0 },
+]
 const descriptors = DEFAULT_DESCRIPTORS.map(id => (
   { id, name: capitalize(id), value: '' }
 ))
@@ -51,6 +55,7 @@ const Character = types
 
     portraitURL: '',
     primaryAttributes: types.optional(types.array(Attribute), primaries),
+    secondaryAttributes: types.optional(types.array(Attribute), secondaries),
     descriptors: types.optional(types.array(Descriptor), descriptors),
     // effects: types.array(Effect, []),
     equipment: types.optional(types.array(types.union(Armor, Item, Weapon)), []),
@@ -77,13 +82,17 @@ const Character = types
       }),
       Attribute.create({ id: 'damageThresholdDeep', value: () => attr('damageThresholdLight') * 2, name: 'Deep' }),
       Attribute.create({ id: 'damageThresholdDeath', value: () => attr('damageThresholdLight') * 4, name: 'Death' }),
-      Attribute.create({ id: 'size', value: () => 0, name: 'Size' }),
-      Attribute.create({ id: 'naturalArmor', value: () => 0, name: 'N. Armor' }),
     ]
     /* eslint-enable max-len, object-property-newline */
 
     return {
-      get attributes() { return [...my.primaryAttributes, ...computedAttributes] },
+      get attributes() {
+        return [
+          ...my.primaryAttributes,
+          ...my.secondaryAttributes,
+          ...computedAttributes,
+        ]
+      },
       get attributeIds() {
         return [
           ...my.primaryAttributes.map(a => a.id),

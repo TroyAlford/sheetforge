@@ -3,23 +3,27 @@ import bound from '@/utilities/bound'
 import range from '@/utilities/range'
 import ExperienceCost from '@/models/ExperienceCost'
 
+const Attribute = types.model('Attribute', {
+  id: types.identifier(types.string),
+  name: types.string,
+}).actions(self => ({
+  /* eslint-disable no-param-reassign */
+  setValue(value) {
+    const bounded = bound(value, { min: self.min, max: self.max })
+    if (bounded === self.value) return
+    self.value = bounded
+  },
+  /* eslint-enable no-param-reassign */
+}))
+
 const Primary = types.compose(
   types.model('Attribute', {
-    id: types.identifier(types.string),
-    computed: types.literal(false),
     max: 10,
     min: -1,
-    name: types.string,
+    type: types.optional(types.literal('primary'), 'primary'),
     value: -1,
-  }).actions(self => ({
-    /* eslint-disable no-param-reassign */
-    setValue(value) {
-      const bounded = bound(value, { min: self.min, max: self.max })
-      if (bounded === self.value) return
-      self.value = bounded
-    },
-    /* eslint-enable no-param-reassign */
-  })),
+  }),
+  Attribute,
   ExperienceCost((self) => {
     const values = range(-1, self.value)
     return values.reduce((total, value) => (
@@ -27,11 +31,17 @@ const Primary = types.compose(
     ), 0)
   }, ['setValue'])
 )
-
+const Secondary = types.compose(
+  types.model('Attribute', {
+    type: types.optional(types.literal('secondary'), 'secondary'),
+    value: 0,
+  }),
+  Attribute
+)
 const Computed = types.model('Attribute', {
   id: types.identifier(types.string),
-  computed: types.literal(true),
   name: types.string,
+  type: types.optional(types.literal('computed'), 'computed'),
 })
 
 const createComputed = fn => types.compose(
@@ -41,19 +51,19 @@ const createComputed = fn => types.compose(
   }))
 )
 
-const Attribute = types.union(Primary, Computed)
-Attribute.create = ({ computed, value, ...props }, ...args) => {
-  // Hijack the create method to automatically infer & create Computeds
-  if (computed || typeof value === 'function') {
-    return createComputed(value).create({ ...props, computed: true }, ...args)
-  }
+const AttributeType = types.union(
+  (snapshot) => {
+    if (typeof snapshot.value === 'function') return createComputed(snapshot.value)
+    if (['size', 'naturalArmor'].indexOf(snapshot.id) >= 0) return Secondary
+    return Primary
+  },
+  Primary, Secondary, Computed
+)
 
-  return Primary.create({ ...props, computed: false, value }, ...args)
-}
-
-export default Attribute
+export default AttributeType
 export {
   Primary,
+  Secondary,
   Computed,
   createComputed,
 }
