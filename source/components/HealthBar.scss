@@ -1,14 +1,21 @@
 @import 'variables';
 
 .health-bar {
+  border: 1px solid $color-highlight-border;
+  border-radius: 5px;
   display: grid;
-  grid-template-areas:
-    "header"
-    "health-bar"
-  ;
-  grid-template-rows: 30px auto;
+  grid-gap: 5px;
+  grid-template-areas: "header #{duplicate(health-bar, 3)}";
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 
-  header { margin-bottom: 5px; }
+  > .header {
+    @include gridCell;
+    background-color: $color-highlight-bg;
+    border-radius: 5px 0 0 5px;
+    font-weight: bold;
+    height: 100%;
+    padding: 0 5px;
+  }
 
   .levels {
     align-content: space-around;
@@ -27,6 +34,7 @@
       cursor: pointer;
       display: flex;
       height: 100%; width: 100%;
+      min-height: 30px;
       justify-content: center;
 
       &:hover { background-color: $color-divider; }

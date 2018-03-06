@@ -30,7 +30,7 @@ import './HealthBar.scss'
 
     return (
       <div className="health-bar">
-        <header>Health</header>
+        <div className="header">Health</div>
         <div className="levels" style={style}>
           {health.levels.map((level, ix) => (
             <div
