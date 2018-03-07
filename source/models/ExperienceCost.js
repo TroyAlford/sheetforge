@@ -20,7 +20,6 @@ export default function ExperienceCost(
         return self
       }
     }
-    const getAvailableXP = () => getCharacter().xp
     const adjustXP = (amount) => {
       const character = getCharacter()
       if (character && typeof character.setXP === 'function') {
@@ -32,13 +31,10 @@ export default function ExperienceCost(
       ...map,
       [`${name}Unguarded`]: self[name],
       [name]: (...args) => {
-        const availableXP = getAvailableXP()
-
         const copy = clone(self)
         copy[`${name}Unguarded`](...args)
 
         const xpDelta = copy.xpCost - self.xpCost
-        if (availableXP < xpDelta) return undefined
         adjustXP(-xpDelta)
         return self[`${name}Unguarded`](...args)
       },
