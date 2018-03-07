@@ -11164,6 +11164,8 @@ var _ExperienceCost2 = _interopRequireDefault(_ExperienceCost);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var Attribute = _mobxStateTree.types.model('Attribute', {
   id: _mobxStateTree.types.identifier(_mobxStateTree.types.string),
   name: _mobxStateTree.types.string
@@ -11186,9 +11188,10 @@ var Primary = _mobxStateTree.types.compose(_mobxStateTree.types.model('Attribute
   type: _mobxStateTree.types.optional(_mobxStateTree.types.literal('primary'), 'primary'),
   value: -1
 }), Attribute, (0, _ExperienceCost2.default)(function (self) {
-  var values = (0, _range2.default)(-1, self.value);
+  var values = [];
+  if (self.value >= 0) values.push.apply(values, _toConsumableArray((0, _range2.default)(0, self.value)));
   return values.reduce(function (total, value) {
-    return total + Math.pow(Math.abs(value + 1), 2) * (value < 0 ? -1 : 1);
+    return total + (0, _bound2.default)(value * 5, { min: 5 });
   }, 0);
 }, ['setValue']));
 var Secondary = _mobxStateTree.types.compose(_mobxStateTree.types.model('Attribute', {
@@ -11365,7 +11368,7 @@ var Skill = _mobxStateTree.types.compose(_mobxStateTree.types.model('Skill', {
   if (self.theory >= 1) values.push.apply(values, _toConsumableArray((0, _range2.default)(1, self.theory)));
   if (self.mastery >= 1) values.push.apply(values, _toConsumableArray((0, _range2.default)(1, self.mastery)));
   return values.reduce(function (total, next) {
-    return total + (0, _bound2.default)(Math.pow(next, 2), { min: 2 });
+    return total + (0, _bound2.default)(next * 3, { min: 3 });
   }, 0);
 }, ['setMastery', 'setTheory']));
 
