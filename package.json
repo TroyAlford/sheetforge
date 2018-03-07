@@ -55,6 +55,7 @@
     "build-prod": "NODE_ENV=production yarn build",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "preversion": "yarn build & yarn build-prod",
+    "prepublish": "yarn deploy-storybook",
     "sourcemap": "SOURCEMAP=true yarn build && source-map-explorer ./build/sheetforge.min.js",
     "storybook": "STORYBOOK=true start-storybook -p 9001 -c .storybook",
     "test": "jest",
