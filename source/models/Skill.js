@@ -1,5 +1,6 @@
 import { getParent, types } from 'mobx-state-tree'
 import { autoHash } from '@/utilities/types'
+import bound from '@/utilities/bound'
 import range from '@/utilities/range'
 import ExperienceCost from '@/models/ExperienceCost'
 
@@ -29,8 +30,10 @@ const Skill = types.compose(
     /* eslint-enable no-param-reassign */
   })),
   ExperienceCost((self) => {
-    const values = [...range(0, self.theory), ...range(1, self.mastery)]
-    return values.reduce((total, next) => total + (next ** 2), 1)
+    const values = []
+    if (self.theory >= 1) values.push(...range(1, self.theory))
+    if (self.mastery >= 1) values.push(...range(1, self.mastery))
+    return values.reduce((total, next) => total + bound(next ** 2, { min: 2 }), 0)
   }, ['setMastery', 'setTheory'])
 )
 
