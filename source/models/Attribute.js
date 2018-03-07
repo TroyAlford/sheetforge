@@ -25,9 +25,10 @@ const Primary = types.compose(
   }),
   Attribute,
   ExperienceCost((self) => {
-    const values = range(-1, self.value)
+    const values = []
+    if (self.value >= 0) values.push(...range(0, self.value))
     return values.reduce((total, value) => (
-      total + ((Math.abs(value + 1) ** 2) * (value < 0 ? -1 : 1))
+      total + bound(value * 5, { min: 5 })
     ), 0)
   }, ['setValue'])
 )

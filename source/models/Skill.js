@@ -33,7 +33,7 @@ const Skill = types.compose(
     const values = []
     if (self.theory >= 1) values.push(...range(1, self.theory))
     if (self.mastery >= 1) values.push(...range(1, self.mastery))
-    return values.reduce((total, next) => total + bound(next ** 2, { min: 2 }), 0)
+    return values.reduce((total, next) => total + bound(next * 3, { min: 3 }), 0)
   }, ['setMastery', 'setTheory'])
 )
 
