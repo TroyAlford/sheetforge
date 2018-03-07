@@ -5964,9 +5964,6 @@ function ExperienceCost(calcFn) {
         return self;
       }
     };
-    var getAvailableXP = function getAvailableXP() {
-      return getCharacter().xp;
-    };
     var adjustXP = function adjustXP(amount) {
       var character = getCharacter();
       if (character && typeof character.setXP === 'function') {
@@ -5978,19 +5975,19 @@ function ExperienceCost(calcFn) {
       var _extends2;
 
       return _extends({}, map, (_extends2 = {}, _defineProperty(_extends2, name + 'Unguarded', self[name]), _defineProperty(_extends2, name, function () {
-        var availableXP = getAvailableXP();
-
         var copy = (0, _mobxStateTree.clone)(self);
         copy[name + 'Unguarded'].apply(copy, arguments);
 
         var xpDelta = copy.xpCost - self.xpCost;
-        if (availableXP < xpDelta) return undefined;
         adjustXP(-xpDelta);
         return self[name + 'Unguarded'].apply(self, arguments);
       }), _extends2));
     }, {});
 
     return _extends({}, guardedActions, {
+      beforeDestroy: function beforeDestroy() {
+        adjustXP(self.xpCost);
+      },
       xpCostAfter: function xpCostAfter(xpFn) {
         var cloned = (0, _mobxStateTree.clone)(self);
         xpFn(cloned);
@@ -6358,7 +6355,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var PRIMARY_ATTRIBUTES = exports.PRIMARY_ATTRIBUTES = ['acuity', 'agility', 'confidence', 'devotion', 'fitness', 'focus', 'intellect', 'intuition', 'strength'];
 var SECONDARY_ATTRIBUTES = exports.SECONDARY_ATTRIBUTES = ['size', 'naturalArmor'];
-var DERIVED_ATTRIBUTES = exports.DERIVED_ATTRIBUTES = ['body', 'mind', 'spirit', 'potency', 'reflex', 'resilience', 'accuracy', 'might', 'toughness', 'speed', 'damageThresholdLight', 'damageThresholdDeep', 'damageThresholdDeath', 'power'];
+var DERIVED_ATTRIBUTES = exports.DERIVED_ATTRIBUTES = ['body', 'mind', 'spirit', 'potency', 'reflex', 'resilience', 'accuracy', 'might', 'toughness', 'speed', 'power'];
 
 var DEFAULT_DESCRIPTORS = exports.DEFAULT_DESCRIPTORS = ['age', 'concept', 'eyes', 'gender', 'hair', 'height', 'homeland', 'race', 'weight'];
 
@@ -6369,6 +6366,7 @@ var capitalize = function capitalize(s) {
 var primaries = PRIMARY_ATTRIBUTES.map(function (id) {
   return { id: id, computed: false, name: capitalize(id), value: -1 };
 });
+var secondaries = [{ id: 'size', name: 'Size', value: 0 }, { id: 'naturalArmor', name: 'N. Armor', value: 0 }];
 var descriptors = DEFAULT_DESCRIPTORS.map(function (id) {
   return { id: id, name: capitalize(id), value: '' };
 });
@@ -6381,6 +6379,7 @@ var Character = _mobxStateTree.types.model('Character', {
 
   portraitURL: '',
   primaryAttributes: _mobxStateTree.types.optional(_mobxStateTree.types.array(_Attribute2.default), primaries),
+  secondaryAttributes: _mobxStateTree.types.optional(_mobxStateTree.types.array(_Attribute2.default), secondaries),
   descriptors: _mobxStateTree.types.optional(_mobxStateTree.types.array(_Descriptor2.default), descriptors),
   // effects: types.array(Effect, []),
   equipment: _mobxStateTree.types.optional(_mobxStateTree.types.array(_mobxStateTree.types.union(_Armor2.default, _Item2.default, _Weapon2.default)), []),
@@ -6416,26 +6415,12 @@ var Character = _mobxStateTree.types.model('Character', {
       return (0, _math.sum)(6, attr('size'), Math.round(attr('fitness') / 2));
     }, name: 'Speed' }), _Attribute2.default.create({ id: 'spirit', value: function value() {
       return (0, _math.average)(attrs('confidence', 'devotion', 'intuition'));
-    }, name: 'Spirit' }), _Attribute2.default.create({
-    id: 'damageThresholdLight',
-    name: 'Light',
-    value: function value() {
-      return my.armorRating + (0, _bound2.default)((0, _math.sum)(attrs('fitness', 'size', 'strength')), { min: 1 });
-    }
-  }), _Attribute2.default.create({ id: 'damageThresholdDeep', value: function value() {
-      return attr('damageThresholdLight') * 2;
-    }, name: 'Deep' }), _Attribute2.default.create({ id: 'damageThresholdDeath', value: function value() {
-      return attr('damageThresholdLight') * 4;
-    }, name: 'Death' }), _Attribute2.default.create({ id: 'size', value: function value() {
-      return 0;
-    }, name: 'Size' }), _Attribute2.default.create({ id: 'naturalArmor', value: function value() {
-      return 0;
-    }, name: 'N. Armor' })];
+    }, name: 'Spirit' })];
   /* eslint-enable max-len, object-property-newline */
 
   return {
     get attributes() {
-      return [].concat(_toConsumableArray(my.primaryAttributes), computedAttributes);
+      return [].concat(_toConsumableArray(my.primaryAttributes), _toConsumableArray(my.secondaryAttributes), computedAttributes);
     },
     get attributeIds() {
       return [].concat(_toConsumableArray(my.primaryAttributes.map(function (a) {
@@ -11161,9 +11146,7 @@ var average = exports.average = arrayFn(function (values) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createComputed = exports.Computed = exports.Primary = undefined;
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+exports.createComputed = exports.Computed = exports.Secondary = exports.Primary = undefined;
 
 var _mobxStateTree = __webpack_require__(3);
 
@@ -11181,15 +11164,9 @@ var _ExperienceCost2 = _interopRequireDefault(_ExperienceCost);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-var Primary = _mobxStateTree.types.compose(_mobxStateTree.types.model('Attribute', {
+var Attribute = _mobxStateTree.types.model('Attribute', {
   id: _mobxStateTree.types.identifier(_mobxStateTree.types.string),
-  computed: _mobxStateTree.types.literal(false),
-  max: 10,
-  min: -1,
-  name: _mobxStateTree.types.string,
-  value: -1
+  name: _mobxStateTree.types.string
 }).actions(function (self) {
   return {
     /* eslint-disable no-param-reassign */
@@ -11201,17 +11178,27 @@ var Primary = _mobxStateTree.types.compose(_mobxStateTree.types.model('Attribute
   };
 }
 /* eslint-enable no-param-reassign */
-), (0, _ExperienceCost2.default)(function (self) {
+);
+
+var Primary = _mobxStateTree.types.compose(_mobxStateTree.types.model('Attribute', {
+  max: 10,
+  min: -1,
+  type: _mobxStateTree.types.optional(_mobxStateTree.types.literal('primary'), 'primary'),
+  value: -1
+}), Attribute, (0, _ExperienceCost2.default)(function (self) {
   var values = (0, _range2.default)(-1, self.value);
   return values.reduce(function (total, value) {
     return total + Math.pow(Math.abs(value + 1), 2) * (value < 0 ? -1 : 1);
   }, 0);
 }, ['setValue']));
-
+var Secondary = _mobxStateTree.types.compose(_mobxStateTree.types.model('Attribute', {
+  type: _mobxStateTree.types.optional(_mobxStateTree.types.literal('secondary'), 'secondary'),
+  value: 0
+}), Attribute);
 var Computed = _mobxStateTree.types.model('Attribute', {
   id: _mobxStateTree.types.identifier(_mobxStateTree.types.string),
-  computed: _mobxStateTree.types.literal(true),
-  name: _mobxStateTree.types.string
+  name: _mobxStateTree.types.string,
+  type: _mobxStateTree.types.optional(_mobxStateTree.types.literal('computed'), 'computed')
 });
 
 var createComputed = function createComputed(fn) {
@@ -11224,28 +11211,15 @@ var createComputed = function createComputed(fn) {
   }));
 };
 
-var Attribute = _mobxStateTree.types.union(Primary, Computed);
-Attribute.create = function (_ref) {
-  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
+var AttributeType = _mobxStateTree.types.union(function (snapshot) {
+  if (typeof snapshot.value === 'function') return createComputed(snapshot.value);
+  if (['size', 'naturalArmor'].indexOf(snapshot.id) >= 0) return Secondary;
+  return Primary;
+}, Primary, Secondary, Computed);
 
-  var computed = _ref.computed,
-      value = _ref.value,
-      props = _objectWithoutProperties(_ref, ['computed', 'value']);
-
-  // Hijack the create method to automatically infer & create Computeds
-  if (computed || typeof value === 'function') {
-    var _createComputed;
-
-    return (_createComputed = createComputed(value)).create.apply(_createComputed, [_extends({}, props, { computed: true })].concat(args));
-  }
-
-  return Primary.create.apply(Primary, [_extends({}, props, { computed: false, value: value })].concat(args));
-};
-
-exports.default = Attribute;
+exports.default = AttributeType;
 exports.Primary = Primary;
+exports.Secondary = Secondary;
 exports.Computed = Computed;
 exports.createComputed = createComputed;
 
@@ -11334,6 +11308,10 @@ var _mobxStateTree = __webpack_require__(3);
 
 var _types = __webpack_require__(10);
 
+var _bound = __webpack_require__(7);
+
+var _bound2 = _interopRequireDefault(_bound);
+
 var _range = __webpack_require__(24);
 
 var _range2 = _interopRequireDefault(_range);
@@ -11383,10 +11361,12 @@ var Skill = _mobxStateTree.types.compose(_mobxStateTree.types.model('Skill', {
 }
 /* eslint-enable no-param-reassign */
 ), (0, _ExperienceCost2.default)(function (self) {
-  var values = [].concat(_toConsumableArray((0, _range2.default)(0, self.theory)), _toConsumableArray((0, _range2.default)(1, self.mastery)));
+  var values = [];
+  if (self.theory >= 1) values.push.apply(values, _toConsumableArray((0, _range2.default)(1, self.theory)));
+  if (self.mastery >= 1) values.push.apply(values, _toConsumableArray((0, _range2.default)(1, self.mastery)));
   return values.reduce(function (total, next) {
-    return total + Math.pow(next, 2);
-  }, 1);
+    return total + (0, _bound2.default)(Math.pow(next, 2), { min: 2 });
+  }, 0);
 }, ['setMastery', 'setTheory']));
 
 exports.default = Skill;
@@ -29016,16 +28996,11 @@ var AttributeSection = function (_Component) {
         _this.renderAttribute('confidence'),
         _this.renderAttribute('intuition'),
         _this.renderAttribute('devotion'),
-        _react2.default.createElement('hr', { className: 'divider-1' }),
+        _react2.default.createElement('hr', { className: 'divider' }),
         _this.renderHeader('racial', 'Racial'),
         _this.renderAttribute('size'),
         _this.renderComputed('speed'),
-        _this.renderAttribute('naturalArmor'),
-        _react2.default.createElement('hr', { className: 'divider-2' }),
-        _this.renderHeader('thresholds', 'Damage'),
-        _this.renderComputed('damageThresholdLight', 'light'),
-        _this.renderComputed('damageThresholdDeep', 'deep'),
-        _this.renderComputed('damageThresholdDeath', 'death')
+        _this.renderAttribute('naturalArmor')
       );
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
@@ -30441,8 +30416,8 @@ var HealthBar = (0, _mobxReact.observer)(_class = function (_Component) {
         'div',
         { className: 'health-bar' },
         _react2.default.createElement(
-          'header',
-          null,
+          'div',
+          { className: 'header' },
           'Health'
         ),
         _react2.default.createElement(
