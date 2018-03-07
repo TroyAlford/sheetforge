@@ -46,6 +46,9 @@ export default function ExperienceCost(
 
     return {
       ...guardedActions,
+      beforeDestroy() {
+        adjustXP(self.xpCost)
+      },
       xpCostAfter(xpFn) {
         const cloned = clone(self)
         xpFn(cloned)
