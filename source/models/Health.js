@@ -3,7 +3,7 @@ import bound from '@/utilities/bound'
 
 export const TYPES = ['ok', 'light', 'heavy', 'bane']
 
-const HealthValue = types.union(...TYPES.map(type => types.literal(type)))
+const HealthValue = types.enumeration('HealthValue', TYPES, 'ok')
 
 const Health = types.model('Health', {
   levels: types.optional(types.array(HealthValue), []),
