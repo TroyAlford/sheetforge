@@ -5,7 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const ENVIRONMENT = process.env.NODE_ENV
 const PRODUCTION = ENVIRONMENT === 'production'
-const SOURCEMAP = !PRODUCTION || process.env.SOURCEMAP
+const SOURCEMAP = process.env.SOURCEMAP !== 'false'
 const STORYBOOK = Boolean(process.env.STORYBOOK)
 
 const plugins = []
@@ -30,11 +30,7 @@ if (PRODUCTION) {
   })
 }
 if (!STORYBOOK) {
-  plugins.push(new ExtractTextPlugin({
-    allChunks: true,
-    disable: STORYBOOK,
-    filename: 'sheetforge.css',
-  }))
+  plugins.push(new ExtractTextPlugin({ allChunks: true, filename: 'sheetforge.css' }))
 }
 
 module.exports = {
