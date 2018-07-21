@@ -1,11 +1,15 @@
 import Attribute, { Primary, Computed, createComputed } from '@/models/Attribute'
 
+beforeAll(() => {
+  console.warn = jest.fn()
+})
+
 describe('Attribute', () => {
   it('handles Attributes and Computeds', () => {
-    const a = Primary.create({ id: 'a', name: 'a', computed: false })
-    const c = Computed.create({ id: 'c', name: 'c', computed: true })
+    const a = Primary.create({ id: 'a', name: 'a', type: 'primary' })
+    const c = Computed.create({ id: 'c', name: 'c', type: 'computed' })
     const x = createComputed(self => `${self.name}!!`)
-      .create({ id: 'x', name: 'x', computed: true })
+      .create({ id: 'x', name: 'x', type: 'computed' })
 
     expect(Attribute.is(a))
     expect(Attribute.is(c))
@@ -13,12 +17,12 @@ describe('Attribute', () => {
   })
 
   it('can instantiate Attributes or Computeds', () => {
-    const a = Attribute.create({ id: 'a', name: 'a', computed: false })
+    const a = Attribute.create({ id: 'a', name: 'a', type: 'primary' })
     expect(Attribute.is(a))
     expect(Primary.is(a))
     expect(!Computed.is(a))
 
-    const b = Attribute.create({ id: 'c', name: 'c', computed: true })
+    const b = Attribute.create({ id: 'c', name: 'c', type: 'computed' })
     expect(Attribute.is(b))
     expect(!Primary.is(b))
     expect(Computed.is(b))
@@ -41,20 +45,14 @@ describe('Attribute', () => {
 })
 
 describe('Primary', () => {
-  const attributes = { id: 'a', name: 'a', computed: false }
+  const attributes = { id: 'a', name: 'a', type: 'primary' }
 
   it('requires id', () => {
-    expect(() => Primary.create()).toThrowError(/id.*is not a string/)
+    expect(() => Primary.create()).toThrowError(/id.*is not a valid identifier/)
   })
 
   it('requires name', () => {
     expect(() => Primary.create()).toThrowError(/name.*is not a string/)
-  })
-
-  it('requires computed = false', () => {
-    expect(() => Primary.create()).toThrowError(/computed.*is not a literal false/)
-    expect(() => Primary.create({ ...attributes, computed: true }))
-      .toThrowError(/computed.*is not a literal false/)
   })
 
   it('defaults and sets value', () => {
@@ -71,13 +69,13 @@ describe('Primary', () => {
     expect(a.xpCost).toBe(0)
 
     a.setValue(0)
-    expect(a.xpCost).toBe(1)
+    expect(a.xpCost).toBe(5) // 0 costs 5
 
     a.setValue(1)
-    expect(a.xpCost).toBe(5)
+    expect(a.xpCost).toBe(10) // 5 + 1x5 = 10
 
     a.setValue(2)
-    expect(a.xpCost).toBe(14)
+    expect(a.xpCost).toBe(20) // 5 + 1x5 + 2x5 = 20
   })
 
   it('honors min/max values', () => {
@@ -100,20 +98,14 @@ describe('Primary', () => {
 
 describe('Computed', () => {
   describe('Attribute', () => {
-    const attributes = { id: 'a', name: 'a', computed: false }
+    const attributes = { id: 'a', name: 'a', type: 'primary' }
 
     it('requires id', () => {
-      expect(() => Computed.create()).toThrowError(/id.*is not a string/)
+      expect(() => Computed.create()).toThrowError(/id.*is not a valid identifier/)
     })
 
     it('requires name', () => {
       expect(() => Computed.create()).toThrowError(/name.*is not a string/)
-    })
-
-    it('requires computed = true', () => {
-      expect(() => Computed.create()).toThrowError(/computed.*is not a literal true/)
-      expect(() => Computed.create({ ...attributes, computed: false }))
-        .toThrowError(/computed.*is not a literal true/)
     })
   })
 })
@@ -121,7 +113,7 @@ describe('Computed', () => {
 describe('createComputed', () => {
   it('creates Computed which computes correctly', () => {
     const MyComputed = createComputed(self => `${self.name} foo!`)
-    const computed = MyComputed.create({ id: 'a', name: 'a', computed: true })
+    const computed = MyComputed.create({ id: 'a', name: 'a', type: 'computed' })
 
     expect(Computed.is(computed))
     expect(computed.value).toBe('a foo!')

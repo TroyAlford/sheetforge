@@ -4,7 +4,7 @@ import range from '@/utilities/range'
 import ExperienceCost from '@/models/ExperienceCost'
 
 const Attribute = types.model('Attribute', {
-  id: types.identifier(types.string),
+  id: types.identifier,
   name: types.string,
 }).actions(self => ({
   /* eslint-disable no-param-reassign */
@@ -20,7 +20,7 @@ const Primary = types.compose(
   types.model('Attribute', {
     max: 10,
     min: -1,
-    type: types.optional(types.literal('primary'), 'primary'),
+    type: types.literal('primary'),
     value: -1,
   }),
   Attribute,
@@ -34,15 +34,15 @@ const Primary = types.compose(
 )
 const Secondary = types.compose(
   types.model('Attribute', {
-    type: types.optional(types.literal('secondary'), 'secondary'),
+    type: types.literal('secondary'),
     value: 0,
   }),
   Attribute
 )
 const Computed = types.model('Attribute', {
-  id: types.identifier(types.string),
+  id: types.identifier,
   name: types.string,
-  type: types.optional(types.literal('computed'), 'computed'),
+  type: types.literal('computed'),
 })
 
 const createComputed = fn => types.compose(
@@ -53,12 +53,24 @@ const createComputed = fn => types.compose(
 )
 
 const AttributeType = types.union(
-  (snapshot) => {
-    if (typeof snapshot.value === 'function') return createComputed(snapshot.value)
-    if (['size', 'naturalArmor'].indexOf(snapshot.id) >= 0) return Secondary
-    return Primary
-  },
-  Primary, Secondary, Computed
+  Primary, Secondary, Computed,
+  types.custom({
+    isTargetType: value => Primary.is(value) || Secondary.is(value) || Computed.is(value),
+    fromSnapshot: snapshot => {
+      let model = Primary, type = 'primary'
+      if (typeof snapshot.value === 'function') {
+        model = createComputed(snapshot.value)
+        type = 'computed'
+      } else if (['size', 'naturalArmor'].includes(snapshot.id)) {
+        model = Secondary
+        type = 'secondary'
+      }
+
+      return model.create({ ...snapshot, type })
+    },
+    toSnapshot: value => value.toJSON(),
+    getValidationMessage: value => (typeof value === 'object' ? '' : '${value} is not an object.'),
+  }),
 )
 
 export default AttributeType

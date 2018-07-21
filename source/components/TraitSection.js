@@ -29,7 +29,7 @@ const TraitSection = observer(({ addTrait = noop, layout = 'large', traits = [] 
           <span className="value">Cost</span>
         </div>
       </header>
-      {traits.sort(compareByName).map((trait) => {
+      {traits.slice().sort(compareByName).map((trait) => {
         if (!REMOVERS[trait.id]) {
           REMOVERS[trait.id] = () => { if (trait.name === '') trait.remove() }
         }

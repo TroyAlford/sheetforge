@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree'
 
 const Descriptor = types
   .model('Descriptor', {
-    id: types.identifier(types.string),
+    id: types.identifier,
     name: '',
     value: '',
   }).actions(my => ({

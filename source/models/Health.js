@@ -3,7 +3,7 @@ import bound from '@/utilities/bound'
 
 export const TYPES = ['ok', 'light', 'heavy', 'bane']
 
-const HealthValue = types.union(...TYPES.map(type => types.literal(type)))
+const HealthValue = types.enumeration('HealthValue', TYPES, 'ok')
 
 const Health = types.model('Health', {
   levels: types.optional(types.array(HealthValue), []),
@@ -53,7 +53,7 @@ const Health = types.model('Health', {
   afterAttach() {
     onSnapshot(self.parent, () => self.resizeValues())
     self.resizeValues()
-    self.levels = self.levels.sort().reverse()
+    self.levels.replace(self.levels.slice().sort().reverse())
   },
   resizeValues() {
     const { max, levels } = self

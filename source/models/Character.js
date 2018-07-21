@@ -1,7 +1,6 @@
 import { types } from 'mobx-state-tree'
 import { autoHash } from '@/utilities/types'
 import { average, sum } from '@/utilities/math'
-import bound from '@/utilities/bound'
 import Attribute from '@/models/Attribute'
 import Armor from '@/models/Armor'
 import Descriptor from '@/models/Descriptor'
@@ -34,11 +33,11 @@ export const DEFAULT_DESCRIPTORS = [
 const capitalize = s => s.replace(/^./, s.charAt(0).toUpperCase())
 
 const primaries = PRIMARY_ATTRIBUTES.map(id => (
-  { id, computed: false, name: capitalize(id), value: -1 }
+  { id, type: 'primary', name: capitalize(id), value: -1 }
 ))
 const secondaries = [
-  { id: 'size', name: 'Size', value: 0 },
-  { id: 'naturalArmor', name: 'N. Armor', value: 0 },
+  { id: 'size', type: 'secondary', name: 'Size', value: 0 },
+  { id: 'naturalArmor', type: 'secondary', name: 'N. Armor', value: 0 },
 ]
 const descriptors = DEFAULT_DESCRIPTORS.map(id => (
   { id, name: capitalize(id), value: '' }
