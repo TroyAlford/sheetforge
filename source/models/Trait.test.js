@@ -1,5 +1,9 @@
 import Trait from '@/models/Trait'
 
+beforeAll(() => {
+  console.warn = jest.fn()
+})
+
 it('defaults and sets name', () => {
   const a = Trait.create()
   expect(a.name).toBe('New Trait')

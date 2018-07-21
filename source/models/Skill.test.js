@@ -1,6 +1,10 @@
 import Skill from '@/models/Skill'
 import { randomHash } from '@/utilities/hash'
 
+beforeAll(() => {
+  console.warn = jest.fn()
+})
+
 it('defaults correctly', () => {
   const s = Skill.create({ id: randomHash() })
 

@@ -1,5 +1,9 @@
 import Attribute, { Primary, Computed, createComputed } from '@/models/Attribute'
 
+beforeAll(() => {
+  console.warn = jest.fn()
+})
+
 describe('Attribute', () => {
   it('handles Attributes and Computeds', () => {
     const a = Primary.create({ id: 'a', name: 'a', computed: false })
