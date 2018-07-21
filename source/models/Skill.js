@@ -5,9 +5,12 @@ import range from '@/utilities/range'
 import ExperienceCost from '@/models/ExperienceCost'
 
 const between = (min, max, defaultTo = min) => (
-  types.refinement(
-    types.optional(types.number, defaultTo),
-    n => n === undefined || (n >= min && n <= max)
+  types.optional(
+    types.refinement(
+      types.number,
+      n => n === undefined || (n >= min && n <= max)
+    ),
+    defaultTo
   )
 )
 
