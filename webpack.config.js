@@ -2,13 +2,15 @@
 const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const packageJson = require('./package.json')
 
 const ENVIRONMENT = process.env.NODE_ENV
 const PRODUCTION = ENVIRONMENT === 'production'
 const SOURCEMAP = process.env.SOURCEMAP !== 'false'
-const STORYBOOK = Boolean(process.env.STORYBOOK)
 
-const plugins = []
+const plugins = [
+  new ExtractTextPlugin({ allChunks: true, filename: 'sheetforge.css' })
+]
 const externals = {}
 
 if (PRODUCTION) {
@@ -21,22 +23,15 @@ if (PRODUCTION) {
       sourceMap: SOURCEMAP,
     })
   )
-  Object.assign(externals, {
-    'mobx-react': 'mobx-react',
-    'mobx-state-tree': 'mobx-state-tree',
-    'react-dom': 'react-dom',
-    mobx: 'mobx',
-    react: 'react',
-  })
-}
-if (!STORYBOOK) {
-  plugins.push(new ExtractTextPlugin({ allChunks: true, filename: 'sheetforge.css' }))
 }
 
 module.exports = {
   devtool: SOURCEMAP ? 'source-map' : 'none',
   entry: `${__dirname}/source/index.js`,
-  externals,
+  externals: Object.keys(packageJson.peerDependencies).reduce(
+    (all, key) => ({ ...all, [key]: key })
+    , {}
+  ),
   module: {
     rules: [{
       test: /\.js$/,
@@ -47,12 +42,10 @@ module.exports = {
       loader: 'url-loader?limit=100000',
     }, {
       test: /\.s?css$/,
-      use: STORYBOOK
-        ? ['style-loader', 'css-loader', 'sass-loader']
-        : ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader'],
-        }),
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: ['css-loader', 'sass-loader'],
+      }),
     }],
   },
   output: {

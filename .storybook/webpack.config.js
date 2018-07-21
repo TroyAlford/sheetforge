@@ -1,1 +1,4 @@
-module.exports = require('../webpack.config')
+const config = require('../webpack.config')
+config.externals = {}
+
+module.exports = config
