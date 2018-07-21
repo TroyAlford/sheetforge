@@ -4,7 +4,7 @@ import range from '@/utilities/range'
 import ExperienceCost from '@/models/ExperienceCost'
 
 const Attribute = types.model('Attribute', {
-  id: types.identifier(types.string),
+  id: types.identifier,
   name: types.string,
 }).actions(self => ({
   /* eslint-disable no-param-reassign */
@@ -40,7 +40,7 @@ const Secondary = types.compose(
   Attribute
 )
 const Computed = types.model('Attribute', {
-  id: types.identifier(types.string),
+  id: types.identifier,
   name: types.string,
   type: types.optional(types.literal('computed'), 'computed'),
 })
