@@ -55,10 +55,9 @@
     "deploy-storybook": "yarn storybook ",
     "build": "yarn webpack",
     "build-prod": "NODE_ENV=production yarn build",
-    "build-docs": "NODE_ENV=production SOURCEMAP=false STORYBOOK=true build-storybook -c .storybook -o ./docs",
+    "build-docs": "SOURCEMAP=false STORYBOOK=true build-storybook -c .storybook -o ./docs",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
-    "preversion": "yarn build & yarn build-prod && git add -A ./build",
-    "prepublishOnly": "yarn deploy-storybook",
+    "preversion": "yarn build & yarn build-prod & yarn build-docs && git add -A ./build ./docs",
     "sourcemap": "SOURCEMAP=true yarn build && source-map-explorer ./build/sheetforge.min.js",
     "storybook": "STORYBOOK=true start-storybook -p 9001 -c .storybook",
     "test": "jest"
