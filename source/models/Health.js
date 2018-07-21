@@ -53,7 +53,7 @@ const Health = types.model('Health', {
   afterAttach() {
     onSnapshot(self.parent, () => self.resizeValues())
     self.resizeValues()
-    self.levels = self.levels.sort().reverse()
+    self.levels.replace(self.levels.slice().sort().reverse())
   },
   resizeValues() {
     const { max, levels } = self

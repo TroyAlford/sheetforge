@@ -33,7 +33,7 @@ const REMOVERS = {}
             <abbr className="mastery" title="Mastery">Ms</abbr>
           </div>
         </header>
-        {skills.sort(compareByName).map((skill) => {
+        {skills.slice().sort(compareByName).map((skill) => {
           if (!REMOVERS[skill.id]) {
             REMOVERS[skill.id] = () => { if (skill.name === '') skill.remove() }
           }

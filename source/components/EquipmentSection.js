@@ -10,7 +10,7 @@ import WeaponModel from '@/models/Weapon'
 import './EquipmentSection.scss'
 
 const sortEquipment = equipment => (
-  equipment.sort(compareBy('name')).sort(compareBy('equipped', true))
+  equipment.slice().sort(compareBy('name')).sort(compareBy('equipped', true))
 )
 
 const REMOVERS = {}
