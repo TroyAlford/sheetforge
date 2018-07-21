@@ -48,6 +48,7 @@ it('computes secondary values correctly', () => {
 it('allows assigning primary attribute values', () => {
   const c = Character.create({ xp: 1000 })
   expect(c.attribute('strength').value).toBe(-1)
+  expect(c.attribute('strength').type).toBe('primary')
 
   c.attribute('strength').setValue(3)
   expect(c.attribute('strength').value).toBe(3)
@@ -55,9 +56,10 @@ it('allows assigning primary attribute values', () => {
   c.setAttribute('strength', 2)
   expect(c.attribute('strength').value).toBe(2)
 })
-it('rejects assigning secondary attribute values', () => {
+it('rejects assigning computed attribute values', () => {
   const c = Character.create()
-  expect(c.attribute('size').value).toBe(0)
+  expect(c.attribute('body').value).toBe(-1)
+  expect(c.attribute('body').type).toBe('computed')
 
-  expect(() => c.setAttribute('size', 2)).toThrow(/is not a function/)
+  expect(() => c.setAttribute('body', 2)).toThrow(/is not a function/)
 })
