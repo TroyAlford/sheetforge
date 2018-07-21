@@ -1,11 +1,20 @@
 import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import { renderEditable } from '@/utilities/itemRendering'
+import noop from '@/utilities/noop'
 import Card from '@/components/Card'
+import WeaponModel from '@/models/Weapon'
 
 import './Weapon.scss'
 
 @observer export default class Weapon extends Component {
+  static defaultProps = {
+    editing: false,
+    item: WeaponModel.create(),
+    onEditEnd: noop,
+    onEditStart: noop
+  }
+
   renderAlways = () => {
     const { editing, item, onEditEnd, onEditStart } = this.props
     return (
