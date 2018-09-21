@@ -22,6 +22,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-jest": "^23.2.0",
     "babel-preset-react": "^6.24.1",
+    "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "^17.0.0",
@@ -54,12 +55,12 @@
   "scripts": {
     "deploy-storybook": "yarn storybook ",
     "build": "yarn webpack",
-    "build-prod": "NODE_ENV=production yarn build",
-    "build-docs": "SOURCEMAP=false STORYBOOK=true build-storybook -c .storybook -o ./docs",
+    "build-prod": "cross-env NODE_ENV=production yarn build",
+    "build-docs": "cross-env SOURCEMAP=false STORYBOOK=true build-storybook -c .storybook -o ./docs",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "preversion": "yarn build & yarn build-prod & yarn build-docs && git add -A ./build ./docs",
-    "sourcemap": "SOURCEMAP=true yarn build && source-map-explorer ./build/sheetforge.min.js",
-    "storybook": "STORYBOOK=true start-storybook -p 9001 -c .storybook",
+    "sourcemap": "cross-env SOURCEMAP=true yarn build && source-map-explorer ./build/sheetforge.min.js",
+    "storybook": "cross-env STORYBOOK=true start-storybook -p 9001 -c .storybook",
     "test": "jest"
   },
   "jest": {
@@ -79,6 +80,7 @@
     "moduleNameMapper": {
       "@/(.*)$": "<rootDir>/source/$1"
     },
+    "testURL": "http://localhost",
     "transform": {
       ".*": "<rootDir>/node_modules/jest-css-modules"
     },
@@ -89,5 +91,8 @@
       "<rootDir>/node_modules/lodash/"
     ],
     "verbose": true
+  },
+  "dependencies": {
+    "deep-equal": "^1.0.1"
   }
 }

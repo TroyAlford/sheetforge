@@ -11,6 +11,7 @@ import EquipmentSection from '@/components/EquipmentSection'
 import HealthBar from '@/components/HealthBar'
 import PortraitSection from '@/components/PortraitSection'
 import SkillSection from '@/components/SkillSection'
+import SpellSection from '@/components/SpellSection'
 import TraitSection from '@/components/TraitSection'
 
 import '../../fontello/css/axis-sheet-embedded.css'
@@ -18,6 +19,7 @@ import './Sheet.scss'
 
 @observer export default class Sheet extends Component {
   static displayName = 'Sheet';
+
   static defaultProps = {
     character: {},
     onChange: noop,
@@ -27,12 +29,15 @@ import './Sheet.scss'
   constructor(props) {
     super(props)
     this.character = CharacterModel.create(props.character)
-    this.disposeOfSnapshotListener = onSnapshot(this.character, this.props.onChange)
+    this.disposeOfSnapshotListener = onSnapshot(this.character, props.onChange)
 
     window.addEventListener('resize', this.handleWindowResize)
   }
+
   state = { sizeClass: 'large' }
+
   componentDidMount() { this.handleWindowResize() }
+
   componentWillUnmount() { this.disposeOfSnapshotListener() }
 
   handleWindowResize = () => {
@@ -45,6 +50,7 @@ import './Sheet.scss'
   }
 
   bindContainer = (div) => { this.container = div }
+
   render = () => {
     const c = this.character
     const { readonly } = this.props
@@ -80,17 +86,18 @@ import './Sheet.scss'
         <TraitSection traits={c.traits} modifiers={c.modifiers} addTrait={c.addTrait} layout={sizeClass} />
         <SkillSection skills={c.skills} modifiers={c.modifiers} addSkill={c.addSkill} />
         <EquipmentSection
-          buttons={
+          buttons={(
             <div className="buttons">
               Add:
               <button className="icon-weapon" onClick={c.addWeapon} />
               <button className="icon-armor" onClick={c.addArmor} />
               <button className="icon-add" onClick={c.addItem} />
             </div>
-          }
+          )}
           equipment={c.equipment}
           layout={sizeClass}
         />
+        <SpellSection spells={c.spells} modifiers={c.modifiers} addSpell={c.addSpell} />
       </div>
     )
     /* eslint-enable max-len */

@@ -1,18 +1,9 @@
 import { getParent, types } from 'mobx-state-tree'
 import { autoHash } from '@/utilities/types'
+import between from '@/models/types/between'
 import bound from '@/utilities/bound'
 import range from '@/utilities/range'
 import ExperienceCost from '@/models/ExperienceCost'
-
-const between = (min, max, defaultTo = min) => (
-  types.optional(
-    types.refinement(
-      types.number,
-      n => n === undefined || (n >= min && n <= max)
-    ),
-    defaultTo
-  )
-)
 
 const Skill = types.compose(
   types.model('Skill', {

@@ -7,6 +7,7 @@ import Descriptor from '@/models/Descriptor'
 import Item from '@/models/Item'
 import Health from '@/models/Health'
 import Skill from '@/models/Skill'
+import Spell from '@/models/Spell'
 import Trait from '@/models/Trait'
 import Weapon from '@/models/Weapon'
 
@@ -57,6 +58,7 @@ const Character = types
     // effects: types.array(Effect, []),
     equipment: types.optional(types.array(types.union(Armor, Item, Weapon)), []),
     health: types.optional(Health, {}),
+    spells: types.optional(types.array(Spell), []),
     skills: types.optional(types.array(Skill), []),
     traits: types.optional(types.array(Trait), []),
   }).views((my) => {
@@ -108,6 +110,7 @@ const Character = types
     addArmor() { my.equipment.push(Armor.create()) },
     addItem() { my.equipment.push(Item.create()) },
     addSkill() { my.skills.push(Skill.create()) },
+    addSpell() { my.spells.push(Spell.create()) },
     addTrait() { my.traits.push(Trait.create()) },
     addWeapon() { my.equipment.push(Weapon.create()) },
     attribute(id) { return my.attributes.find(a => a.id === id) },
