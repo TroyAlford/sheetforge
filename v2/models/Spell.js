@@ -1,6 +1,10 @@
 import { types } from 'mobx-state-tree'
+import IEditable from '@/models/generic/IEditable'
 
-export default types.model('Skill', {
-  name: '',
-  value: 0,
-})
+export default types.compose(
+  IEditable,
+  types.model({
+    name: '',
+    value: 0,
+  })
+).named('Spell')

@@ -2,14 +2,16 @@ import { types } from 'mobx-state-tree'
 import flatten from '@/utilities/flatten'
 import Attribute from './Attribute'
 import Effect from './Effect'
+import IEditable from '@/models/generic/IEditable'
 import Item from './Item'
 import Trait from './Trait'
 import Skill from './Skill'
 import Spell from './Spell'
 import Spendable from './Spendable'
 
-export default types
-  .model({
+export default types.compose(
+  IEditable,
+  types.model({
     attributes: types.map(Attribute),
     conditions: types.array(types.string), // ['vs Goblins', 'Crinos Form']
     effects: types.array(Effect), // active/inactive, buffs Attribute OR Conditional
@@ -20,11 +22,9 @@ export default types
     spells: types.array(Spell),
     spendables: types.array(Spendable),
     traits: types.array(Trait), // have Effects
-  })
-  .volatile(() => ({
+  }).volatile(() => ({
     isCharacter: true,
-  }))
-  .views(self => ({
+  })).views(self => ({
     get activeEffects() {
       return [
         // Trait Effects first, because they're inherent
@@ -52,3 +52,4 @@ export default types
       )
     },
   }))
+).named('Character')
