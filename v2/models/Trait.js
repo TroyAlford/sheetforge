@@ -5,8 +5,8 @@ import IEditable from '@/models/generic/IEditable'
 export default types.compose(
   IEditable,
   types.model('Trait', {
+    displayName: types.string,
     effects: types.array(Effect),
-    name: '',
     value: 0,
   })
 ).named('Trait')
