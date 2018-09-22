@@ -1,5 +1,6 @@
 import { types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
+import Descriptor from './Descriptor'
 import Effect from './Effect'
 
 export default types.compose(
@@ -7,6 +8,7 @@ export default types.compose(
   types.model({
     displayName: 'New Item...',
     description: '',
+    descriptors: types.array(Descriptor),
     effects: types.array(Effect),
     equipped: false,
     referenceId: types.maybe(types.string), // to lookup description/flavor text/image

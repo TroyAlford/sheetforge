@@ -1,19 +1,21 @@
 import { types } from 'mobx-state-tree'
-import flatten from '@/utilities/flatten'
 import Attribute from './Attribute'
+import Descriptor from './Descriptor'
 import Effect from './Effect'
+import flatten from '@/utilities/flatten'
 import IEditable from '@/models/generic/IEditable'
 import Item from './Item'
-import Trait from './Trait'
+import Resource from './Resource'
 import Skill from './Skill'
 import Spell from './Spell'
-import Resource from './Resource'
+import Trait from './Trait'
 
 export default types.compose(
   IEditable,
   types.model({
     attributes: types.map(Attribute),
     conditions: types.array(types.string), // ['vs Goblins', 'Crinos Form']
+    descriptors: types.array(Descriptor),
     effects: types.array(Effect), // active/inactive, buffs Attribute OR Conditional
     experience: 0,
     items: types.array(Item), // equipped / unequipped, have Effects
