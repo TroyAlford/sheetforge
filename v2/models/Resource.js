@@ -8,4 +8,4 @@ export default types.compose(
     current: 0,
     maximum: 10,
   })
-).named('Spendable')
+).named('Resource')

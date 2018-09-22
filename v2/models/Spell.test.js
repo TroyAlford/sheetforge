@@ -1,10 +1,10 @@
 import { types } from 'mobx-state-tree'
 import Spell from './Spell'
-import Spendable from './Spendable'
+import Resource from './Resource'
 
 const DummyCharacter = types.model({
+  resources: types.map(Resource),
   spells: types.array(Spell),
-  spendables: types.map(Spendable),
 })
 
 describe('models/Spell', () => {
@@ -32,14 +32,14 @@ describe('models/Spell', () => {
         }, {
           displayName: 'Free Spell (Affordable)',
         }],
-        spendables: {
+        resources: {
           mana: { current: 6, maximum: 10 },
           willpower: { current: 8, maximum: 8 },
         },
       })
     })
 
-    it('determines isAffordable based on character Spendables', () => {
+    it('determines isAffordable based on character resources', () => {
       expect(character.spells[0].isAffordable).toEqual(false)
       expect(character.spells[1].isAffordable).toEqual(false)
       expect(character.spells[2].isAffordable).toEqual(true)
@@ -51,19 +51,19 @@ describe('models/Spell', () => {
       expect(character.spells[3].isAffordable).toEqual(true)
       expect(character.spells[3].cost.get('mana')).toEqual(3)
       expect(character.spells[3].cost.get('willpower')).toEqual(1)
-      expect(character.spendables.get('mana').current).toEqual(6)
-      expect(character.spendables.get('willpower').current).toEqual(8)
+      expect(character.resources.get('mana').current).toEqual(6)
+      expect(character.resources.get('willpower').current).toEqual(8)
 
       character.spells[3].cast()
 
-      expect(character.spendables.get('mana').current).toEqual(3)
-      expect(character.spendables.get('willpower').current).toEqual(7)
+      expect(character.resources.get('mana').current).toEqual(3)
+      expect(character.resources.get('willpower').current).toEqual(7)
       expect(character.spells[3].isAffordable).toEqual(true)
 
       character.spells[3].cast()
 
-      expect(character.spendables.get('mana').current).toEqual(0)
-      expect(character.spendables.get('willpower').current).toEqual(6)
+      expect(character.resources.get('mana').current).toEqual(0)
+      expect(character.resources.get('willpower').current).toEqual(6)
       expect(character.spells[3].isAffordable).toEqual(false)
     })
   })

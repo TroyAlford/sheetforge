@@ -7,7 +7,7 @@ import Item from './Item'
 import Trait from './Trait'
 import Skill from './Skill'
 import Spell from './Spell'
-import Spendable from './Spendable'
+import Resource from './Resource'
 
 export default types.compose(
   IEditable,
@@ -18,9 +18,9 @@ export default types.compose(
     experience: 0,
     items: types.array(Item), // equipped / unequipped, have Effects
     health: types.maybe(types.number, 0), // number || array of HealthLevels
+    resources: types.map(Resource),
     skills: types.array(Skill),
     spells: types.array(Spell),
-    spendables: types.map(Spendable),
     traits: types.array(Trait), // have Effects
   }).volatile(() => ({
     isCharacter: true,

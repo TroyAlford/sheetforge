@@ -4,7 +4,7 @@ import IEditable from '@/models/generic/IEditable'
 export default types.compose(
   IEditable,
   types.model({
-    cost: types.map(types.number), // Spendables
+    cost: types.map(types.number), // Resources
     description: '',
     displayName: types.string,
     level: 0,
@@ -16,8 +16,8 @@ export default types.compose(
 
       const costs = [...self.cost.entries()]
       return costs.length === costs.filter(([key, value]) => {
-        const spendable = self.character.spendables.get(key)
-        return Boolean(spendable && spendable.current >= value)
+        const resource = self.character.resources.get(key)
+        return Boolean(resource && resource.current >= value)
       }).length
     },
   })).actions(self => ({
@@ -30,8 +30,8 @@ export default types.compose(
     cast() {
       if (self.character && self.isAffordable) {
         [...self.cost.entries()].forEach(([key, value]) => {
-          const spendable = self.character.spendables.get(key)
-          spendable.set('current', spendable.current - value)
+          const resource = self.character.resources.get(key)
+          resource.set('current', resource.current - value)
         })
       }
     },
