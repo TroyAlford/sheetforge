@@ -3,10 +3,10 @@ import { getParent, types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
 
 const DAMAGE_TYPES = [
-  'none',
-  'bashing',
-  'lethal',
-  'aggravated',
+  'ok',
+  'light',
+  'heavy',
+  'bane',
 ]
 
 export default types.compose(
@@ -31,22 +31,31 @@ export default types.compose(
         }
       } catch (e) {}
     },
-    damage(damageType) {
-      if (self.healthBar) {
-        const damage = DAMAGE_TYPES.indexOf(damageType)
+    damage(severity) {
+      if (!DAMAGE_TYPES.includes(severity)) return
 
-        self.set({ damageType })
-        self.healthBar.forEach((healthLevel, index) => {
-          const current = DAMAGE_TYPES.indexOf(healthLevel.damageType)
-          if (index < self.index && current > damage) {
-            // Healing: left-of-target and current is WORSE than setting
-            healthLevel.set({ damageType })
-          } else if (index > self.index && current < damage) {
-            // Harming: right-of-target and current is BETTER than setting
-            healthLevel.set({ damageType })
-          }
-        })
+      const newSeverity = DAMAGE_TYPES.indexOf(severity)
+      const ownSeverity = DAMAGE_TYPES.indexOf(self.damageType)
+      if (newSeverity === ownSeverity) return
+
+      const ownIndex = self.index
+      const direction = newSeverity < ownSeverity ? '↑' : '↓'
+
+      if (!self.healthBar) {
+        self.set({ damageType: severity })
+        return
       }
+
+      self.healthBar.forEach((healthLevel, index) => {
+        const current = DAMAGE_TYPES.indexOf(healthLevel.damageType)
+
+        if (
+          (direction === '↑' && index <= ownIndex && current > newSeverity) ||
+          (direction === '↓' && index >= ownIndex && current < newSeverity)
+        ) {
+          healthLevel.set({ damageType: severity })
+        }
+      })
     },
     // heal() {
     //   if (self.healthBar) {

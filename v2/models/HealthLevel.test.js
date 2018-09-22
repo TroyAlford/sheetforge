@@ -9,7 +9,7 @@ describe('models/HealthLevel', () => {
 
   it('requires damageType', () => {
     expect(() => HealthLevel.create({ displayName: 'Foo!' }))
-      .toThrow(/damageType.*not assignable.*"none" \| "bashing" \| "lethal" \| "aggravated"/)
+      .toThrow(/damageType.*not assignable.*"ok" \| "light" \| "heavy" \| "bane"/)
   })
 
   describe('if attached', () => {
@@ -18,11 +18,11 @@ describe('models/HealthLevel', () => {
 
     beforeEach(() => {
       healthBar = HealthBar.create([
-        { displayName: 'Healthy', damageType: 'none' },
-        { displayName: 'Healthy', damageType: 'none' },
-        { displayName: 'Healthy', damageType: 'none' },
-        { displayName: 'Healthy', damageType: 'none' },
-        { displayName: 'Healthy', damageType: 'none' },
+        { displayName: 'Healthy', damageType: 'ok' },
+        { displayName: 'Healthy', damageType: 'ok' },
+        { displayName: 'Healthy', damageType: 'ok' },
+        { displayName: 'Healthy', damageType: 'ok' },
+        { displayName: 'Healthy', damageType: 'ok' },
       ])
     })
 
@@ -34,22 +34,22 @@ describe('models/HealthLevel', () => {
 
     it('damage() adjusts adjacent health levels', () => {
       expect(healthBar.map(hl => hl.damageType))
-        .toEqual(['none', 'none', 'none', 'none', 'none'])
+        .toEqual(['ok', 'ok', 'ok', 'ok', 'ok'])
 
-      healthBar[1].damage('bashing')
-
-      expect(healthBar.map(hl => hl.damageType))
-        .toEqual(['none', 'bashing', 'bashing', 'bashing', 'bashing'])
-
-      healthBar[2].damage('aggravated')
+      healthBar[1].damage('light')
 
       expect(healthBar.map(hl => hl.damageType))
-        .toEqual(['none', 'bashing', 'aggravated', 'aggravated', 'aggravated'])
+        .toEqual(['ok', 'light', 'light', 'light', 'light'])
 
-      healthBar[3].damage('none')
+      healthBar[2].damage('bane')
 
       expect(healthBar.map(hl => hl.damageType))
-        .toEqual(['none', 'bashing', 'aggravated', 'none', 'none'])
+        .toEqual(['ok', 'light', 'bane', 'bane', 'bane'])
+
+      healthBar[2].damage('ok')
+
+      expect(healthBar.map(hl => hl.damageType))
+        .toEqual(['ok', 'ok', 'ok', 'bane', 'bane'])
     })
   })
 })
