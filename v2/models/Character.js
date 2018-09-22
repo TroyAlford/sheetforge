@@ -3,6 +3,7 @@ import Attribute from './Attribute'
 import Descriptor from './Descriptor'
 import Effect from './Effect'
 import flatten from '@/utilities/flatten'
+import HealthLevel from './HealthLevel'
 import IEditable from '@/models/generic/IEditable'
 import Item from './Item'
 import Resource from './Resource'
@@ -19,7 +20,7 @@ export default types.compose(
     effects: types.array(Effect), // active/inactive, buffs Attribute OR Conditional
     experience: 0,
     items: types.array(Item), // equipped / unequipped, have Effects
-    health: types.maybe(types.number, 0), // number || array of HealthLevels
+    health: types.maybe(types.union(types.number, types.array(HealthLevel))),
     resources: types.map(Resource),
     skills: types.array(Skill),
     spells: types.array(Spell),
