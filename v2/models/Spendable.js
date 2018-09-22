@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import findMapKey from '@/utilities/findMapKey'
 import IEditable from '@/models/generic/IEditable'
 
 export default types.compose(

@@ -20,7 +20,7 @@ export default types.compose(
     health: types.maybe(types.number, 0), // number || array of HealthLevels
     skills: types.array(Skill),
     spells: types.array(Spell),
-    spendables: types.array(Spendable),
+    spendables: types.map(Spendable),
     traits: types.array(Trait), // have Effects
   }).volatile(() => ({
     isCharacter: true,
