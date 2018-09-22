@@ -15,6 +15,7 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/label-has-for": "off",
     "jsx-a11y/no-static-element-interactions": "off",
+    "no-empty": "off",
     "object-curly-newline": "off",
     "react/button-has-type": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
