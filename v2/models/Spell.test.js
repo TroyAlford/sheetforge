@@ -33,8 +33,8 @@ describe('models/Spell', () => {
           displayName: 'Free Spell (Affordable)',
         }],
         resources: {
-          mana: { current: 6, maximum: 10 },
-          willpower: { current: 8, maximum: 8 },
+          mana: { current: 6, displayName: 'Mana', maximum: 10 },
+          willpower: { current: 8, displayName: 'Willpower', maximum: 8 },
         },
       })
     })
