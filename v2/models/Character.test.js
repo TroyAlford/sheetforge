@@ -8,12 +8,12 @@ describe('models/Character', () => {
           { displayName: 'Item 1', equipped: true },
           {
             displayName: 'Item 2',
-            equipped: true,
             effects: [{
               displayName: 'Item Effect 1',
               isActive: false,
               modifies: { STR: 1 },
             }],
+            equipped: true,
           },
         ],
       })

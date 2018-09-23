@@ -2,14 +2,14 @@ import { types } from 'mobx-state-tree'
 import Attribute from './Attribute'
 import Descriptor from './Descriptor'
 import Effect from './Effect'
-import flatten from '@/utilities/flatten'
 import HealthLevel from './HealthLevel'
-import IEditable from '@/models/generic/IEditable'
 import Item from './Item'
 import Resource from './Resource'
 import Skill from './Skill'
 import Spell from './Spell'
 import Trait from './Trait'
+import IEditable from '@/models/generic/IEditable'
+import flatten from '@/utilities/flatten'
 
 export default types.compose(
   IEditable,
@@ -19,8 +19,8 @@ export default types.compose(
     descriptors: types.array(Descriptor),
     effects: types.array(Effect), // active/inactive, buffs Attribute OR Conditional
     experience: 0,
-    items: types.array(Item), // equipped / unequipped, have Effects
     health: types.maybe(types.union(types.number, types.array(HealthLevel))),
+    items: types.array(Item), // equipped / unequipped, have Effects
     resources: types.map(Resource),
     skills: types.array(Skill),
     spells: types.array(Spell),

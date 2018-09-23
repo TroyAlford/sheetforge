@@ -1,9 +1,9 @@
 import { getParent, types } from 'mobx-state-tree'
-import { autoHash } from '@/utilities/types'
+import ExperienceCost from '@/models/ExperienceCost'
 import between from '@/models/types/between'
 import bound from '@/utilities/bound'
 import range from '@/utilities/range'
-import ExperienceCost from '@/models/ExperienceCost'
+import { autoHash } from '@/utilities/types'
 
 const Spell = types.compose(
   types.model('Spell', {

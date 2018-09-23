@@ -1,13 +1,13 @@
 import findMapKey from './findMapKey'
 
-const foo = { foo: 'Foo!', bar: 'Bar!' }
-const bar = { foo: 'Foo!', bar: 'Bar!' }
+const foo = { bar: 'Bar!', foo: 'Foo!' }
+const bar = { bar: 'Bar!', foo: 'Foo!' }
 
 const map = new Map(Object.entries({
-  foo,
   bar,
+  foo,
   one: 1,
-  I: 1,
+  ONE: 1,
   string: 'string',
   string2: 'string',
 }))

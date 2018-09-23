@@ -1,6 +1,6 @@
 import { getParent, types } from 'mobx-state-tree'
-import { autoHash } from '@/utilities/types'
 import Equippable from '@/models/Equippable'
+import { autoHash } from '@/utilities/types'
 
 const Item = types.compose(
   types.model('Item', {

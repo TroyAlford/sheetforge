@@ -3,8 +3,8 @@ import Effect from './Effect'
 
 describe('models/Effect', () => {
   const mageArmor = Effect.create({
-    isActive: true,
     displayName: 'Mage Armor',
+    isActive: true,
     modifies: { ARMOR: 4 },
   })
 
@@ -13,14 +13,14 @@ describe('models/Effect', () => {
       const character = Character.create({
         conditions: ['vs Goblins'],
         effects: [{
-          isActive: true,
           condition: 'vs Goblins',
           displayName: '+1 vs Goblins',
+          isActive: true,
           modifies: { STR: 1 },
         }, {
-          isActive: true,
           condition: 'vs Orcs',
           displayName: '+1 vs Orcs',
+          isActive: true,
           modifies: { STR: 1 },
         }],
       })
@@ -34,18 +34,18 @@ describe('models/Effect', () => {
         conditions: ['vs Goblins'],
         items: [{
           displayName: 'Goblin Bane Greatsword',
-          equipped: false,
           effects: [{
-            isActive: true,
             condition: 'vs Goblins',
             displayName: '+1 vs Goblins',
+            isActive: true,
             modifies: { STR: 1 },
           }, {
-            isActive: true,
             condition: 'vs Orcs',
             displayName: '+1 vs Orcs',
+            isActive: true,
             modifies: { STR: 1 },
           }],
+          equipped: false,
         }],
       })
 

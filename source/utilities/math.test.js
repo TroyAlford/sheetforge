@@ -15,4 +15,3 @@ it('average() finds the rounded average', () => {
   expect(math.average(1, 2)).toBe(2)
   expect(math.average([1, 2, 3])).toBe(2)
 })
-

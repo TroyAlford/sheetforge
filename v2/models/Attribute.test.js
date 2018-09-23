@@ -10,14 +10,14 @@ const DummyCharacter = types.model({
 describe('models/Attribute', () => {
   describe('when attached', () => {
     const character = DummyCharacter.create({
-      attributes: {
-        STR: { displayName: 'Strength', value: 10 },
-        DEX: { displayName: 'Dexterity', value: 12 },
-      },
       activeEffects: [
         { active: true, displayName: '', modifies: { DEX: 1, STR: 1 } },
         { active: true, displayName: '', modifies: { STR: 4 } },
       ],
+      attributes: {
+        DEX: { displayName: 'Dexterity', value: 12 },
+        STR: { displayName: 'Strength', value: 10 },
+      },
     })
 
     it('computes its displayValue', () => {

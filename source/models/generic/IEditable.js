@@ -1,6 +1,6 @@
+import deepEqual from 'deep-equal'
 import { isObservableArray } from 'mobx'
 import { types } from 'mobx-state-tree'
-import deepEqual from 'deep-equal'
 import getPathValue from '@/utilities/getPathValue'
 import setPathValue from '@/utilities/setPathValue'
 

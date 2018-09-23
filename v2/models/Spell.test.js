@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
-import Spell from './Spell'
 import Resource from './Resource'
+import Spell from './Spell'
 
 const DummyCharacter = types.model({
   resources: types.map(Resource),
@@ -17,6 +17,10 @@ describe('models/Spell', () => {
 
     beforeEach(() => {
       character = DummyCharacter.create({
+        resources: {
+          mana: { current: 6, displayName: 'Mana', maximum: 10 },
+          willpower: { current: 8, displayName: 'Willpower', maximum: 8 },
+        },
         spells: [{
           cost: { mana: 8 },
           displayName: 'Unaffordable - mana cost too high',
@@ -32,10 +36,6 @@ describe('models/Spell', () => {
         }, {
           displayName: 'Free Spell (Affordable)',
         }],
-        resources: {
-          mana: { current: 6, displayName: 'Mana', maximum: 10 },
-          willpower: { current: 8, displayName: 'Willpower', maximum: 8 },
-        },
       })
     })
 

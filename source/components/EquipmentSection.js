@@ -1,11 +1,11 @@
-import React from 'react'
 import { observer } from 'mobx-react'
-import compareBy from '@/utilities/compareBy'
+import React from 'react'
 import Armor from '@/components/Armor'
-import ArmorModel from '@/models/Armor'
 import Item from '@/components/Item'
 import Weapon from '@/components/Weapon'
+import ArmorModel from '@/models/Armor'
 import WeaponModel from '@/models/Weapon'
+import compareBy from '@/utilities/compareBy'
 
 import './EquipmentSection.scss'
 

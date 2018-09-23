@@ -1,5 +1,5 @@
-import Character from '@/models/Character'
 import Sheet from '@/components/Sheet'
+import Character from '@/models/Character'
 
 export {
   Character,

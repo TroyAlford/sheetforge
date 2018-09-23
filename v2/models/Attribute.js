@@ -1,7 +1,7 @@
 import { getParent, types } from 'mobx-state-tree'
-import { sum } from '@/utilities/math'
-import findMapKey from '@/utilities/findMapKey'
 import IEditable from '@/models/generic/IEditable'
+import findMapKey from '@/utilities/findMapKey'
+import { sum } from '@/utilities/math'
 
 export default types.compose(
   IEditable,

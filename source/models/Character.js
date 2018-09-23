@@ -1,15 +1,15 @@
 import { types } from 'mobx-state-tree'
-import { autoHash } from '@/utilities/types'
-import { average, sum } from '@/utilities/math'
-import Attribute from '@/models/Attribute'
 import Armor from '@/models/Armor'
+import Attribute from '@/models/Attribute'
 import Descriptor from '@/models/Descriptor'
-import Item from '@/models/Item'
 import Health from '@/models/Health'
+import Item from '@/models/Item'
 import Skill from '@/models/Skill'
 import Spell from '@/models/Spell'
 import Trait from '@/models/Trait'
 import Weapon from '@/models/Weapon'
+import { average, sum } from '@/utilities/math'
+import { autoHash } from '@/utilities/types'
 
 export const PRIMARY_ATTRIBUTES = [
   'acuity', 'agility', 'confidence',

@@ -15,6 +15,7 @@ const TYPES = [
 
 export default class Editable extends React.Component {
   static displayName = 'Editable';
+
   static defaultProps = {
     className: '',
     forceEditMode: false,
@@ -51,6 +52,7 @@ export default class Editable extends React.Component {
 
     return 'text'
   }
+
   resetChanges = () => {
     this.props.onChange(this.state.resetValue, this.props.value)
     this.handleToggleEditing()
@@ -81,6 +83,7 @@ export default class Editable extends React.Component {
     }
     this.props.onChange(value, this.state.resetValue)
   }
+
   handleKeys = (event) => {
     const { target, key, ctrlKey, metaKey } = event
 
@@ -91,10 +94,12 @@ export default class Editable extends React.Component {
       }
     }
   }
+
   handleReceivingFocus = () => {
     if (this.props.readonly) return
     if (!this.state.editing) this.handleToggleEditing()
   }
+
   handleToggleEditing = () => {
     if (this.props.readonly) return
 
@@ -110,6 +115,7 @@ export default class Editable extends React.Component {
   }
 
   selectOnFocus = event => event.target.select()
+
   toggleBoolean = () => {
     this.props.onEditStart()
     this.props.onChange(!this.props.value, this.props.value)
@@ -124,11 +130,11 @@ export default class Editable extends React.Component {
       onChange={this.toggleBoolean}
     />
   )
+
   renderMultiline = () => {
     if (!this.editing) {
       const lines = (this.props.value || this.props.placeholder).split('\n')
-      const paragraphs = lines.map((line, index) =>
-        <p key={index}>{line}</p>
+      const paragraphs = lines.map((line, index) => <p key={index}>{line}</p>
       )
       const className = ['multiline', this.props.value ? '' : 'placeholder'].join(' ').trim()
       return <div className={className} onClick={this.handleToggleEditing}>{paragraphs}</div>
@@ -148,6 +154,7 @@ export default class Editable extends React.Component {
       />
     )
   }
+
   renderNumber = () => {
     if (!this.editing) return this.renderStatic()
 
@@ -168,6 +175,7 @@ export default class Editable extends React.Component {
       />
     )
   }
+
   renderSlider = () => (
     <input
       type="range"
@@ -181,6 +189,7 @@ export default class Editable extends React.Component {
       value={this.props.value}
     />
   )
+
   renderText = () => {
     if (!this.editing) return this.renderStatic()
 
@@ -198,6 +207,7 @@ export default class Editable extends React.Component {
       />
     )
   }
+
   renderStatic = () => {
     const showPlaceholder = this.props.placeholder && !this.props.value
     const className = showPlaceholder ? 'placeholder' : ''
@@ -222,6 +232,7 @@ export default class Editable extends React.Component {
         return this.renderText()
     }
   }
+
   render = () => {
     const { className, readonly } = this.props
 

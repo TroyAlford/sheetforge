@@ -1,6 +1,6 @@
 import { getParent, types } from 'mobx-state-tree'
-import { autoHash } from '@/utilities/types'
 import ExperienceCost from '@/models/ExperienceCost'
+import { autoHash } from '@/utilities/types'
 
 const Trait = types.compose(
   types.model('Trait', {

@@ -8,13 +8,13 @@ export default types.compose(
     displayName: '',
     value: types.union(types.number, types.array(types.number)),
   }).views(self => ({
-    get theory() {
-      if (self.type === 'complex') return self.value[0]
-      return 0
-    },
     get mastery() {
       if (self.type === 'complex') return self.value[1]
       return self.value
+    },
+    get theory() {
+      if (self.type === 'complex') return self.value[0]
+      return 0
     },
     get type() {
       if (isObservableArray(self.value)) return 'complex'

@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree'
+import ExperienceCost from '@/models/ExperienceCost'
 import bound from '@/utilities/bound'
 import range from '@/utilities/range'
-import ExperienceCost from '@/models/ExperienceCost'
 
 const Attribute = types.model('Attribute', {
   id: types.identifier,
@@ -56,8 +56,9 @@ const AttributeType = types.union(
   Primary, Secondary, Computed,
   types.custom({
     isTargetType: value => Primary.is(value) || Secondary.is(value) || Computed.is(value),
-    fromSnapshot: snapshot => {
-      let model = Primary, type = 'primary'
+    fromSnapshot: (snapshot) => {
+      let model = Primary; let
+        type = 'primary'
       if (typeof snapshot.value === 'function') {
         model = createComputed(snapshot.value)
         type = 'computed'

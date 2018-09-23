@@ -1,8 +1,8 @@
-import React from 'react'
 import { observer } from 'mobx-react'
+import React from 'react'
+import Trait from '@/components/Trait'
 import compareBy from '@/utilities/compareBy'
 import noop from '@/utilities/noop'
-import Trait from '@/components/Trait'
 
 import './TraitSection.scss'
 

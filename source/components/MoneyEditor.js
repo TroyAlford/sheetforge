@@ -78,6 +78,7 @@ export default class MoneyEditor extends Component {
       this.props.onChange(stringToValue(value))
     }
   }
+
   onKeyDown = (event) => {
     const { value: targetValue, selectionStart } = event.target
     this.distanceFromEnd = targetValue.length - selectionStart
@@ -108,6 +109,7 @@ export default class MoneyEditor extends Component {
   }
 
   createRef = (input) => { this.input = input }
+
   render = () => (
     <label className="labeled-editable">
       <i className="icon-currency" />

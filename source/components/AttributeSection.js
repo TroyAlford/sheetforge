@@ -8,10 +8,12 @@ export default class AttributeSection extends Component {
     const attr = this.props.attributes.find(a => a.id === id)
     return <Attribute model={attr} className={id} />
   }
+
   renderComputed = (id, className = '') => {
     const attr = this.props.attributes.find(a => a.id === id)
     return <Attribute model={attr} className={`${id} ${className} computed`} computed />
   }
+
   renderHeader = (id, name) => (
     <div className={`attribute ${id} header highlight`}>
       <span className="name">{name}</span>

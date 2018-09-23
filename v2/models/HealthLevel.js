@@ -12,8 +12,8 @@ const DAMAGE_LEVELS = [
 export default types.compose(
   IEditable,
   types.model({
-    displayName: types.string,
     damage: types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))),
+    displayName: types.string,
     penalty: 0,
   }).volatile(() => ({
     healthBar: null,

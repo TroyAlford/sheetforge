@@ -1,13 +1,13 @@
 import { types } from 'mobx-state-tree'
-import findParent from '@/utilities/findParent'
 import IEditable from '@/models/generic/IEditable'
+import findParent from '@/utilities/findParent'
 
 export default types.compose(
   IEditable,
   types.model({
-    isActive: false,
     condition: types.maybe(types.string),
     displayName: types.string,
+    isActive: false,
     modifies: types.map(types.number),
   }).views((self) => {
     let character
