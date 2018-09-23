@@ -12,11 +12,12 @@ const PRODUCTION = ENVIRONMENT === 'production'
 
 module.exports = {
   devtool: 'source-map',
-  entry: `${__dirname}/source/index.js`,
-  externals: Object.keys(packageJson.peerDependencies).reduce(
-    (all, key) => ({ ...all, [key]: key }),
-    {}
-  ),
+  entry: {
+    development: `${__dirname}/source/index.js`,
+  },
+  externals: PRODUCTION
+    ? Object.keys(packageJson.peerDependencies).reduce((all, key) => ({ ...all, [key]: key }), {})
+    : {},
   mode: ENVIRONMENT,
   module: {
     rules: [
@@ -34,20 +35,20 @@ module.exports = {
   },
   optimization: {
     minimize: PRODUCTION,
-    splitChunks: {
-      // cacheGroups: {
-      //   vendor: {
-      //     chunks: 'initial',
-      //     enforce: true,
-      //     name: 'vendor',
-      //     test: /[\\/]node_modules[\\/]/,
-      //   },
-      // },
+    splitChunks: PRODUCTION ? {} : {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          enforce: true,
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/]/,
+        },
+      },
       chunks: 'async',
     },
   },
   output: {
-    filename: PRODUCTION ? 'sheetforge.min.js' : 'sheetforge.js',
+    filename: PRODUCTION ? 'sheetforge.min.js' : 'sheetforge.[name].js',
     library: 'sheetforge',
     libraryTarget: 'umd',
     path: `${__dirname}/build`,
@@ -55,7 +56,7 @@ module.exports = {
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    new MiniCssExtractPlugin({ filename: 'sheetforge.css' }),
+    new MiniCssExtractPlugin({ filename: 'sheetforge.css', chunkFilename: 'sheetforge.[name].css' }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(ENVIRONMENT) }),
     new OptimizeCssAssetsPlugin({

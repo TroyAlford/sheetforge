@@ -1,16 +1,75 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("mobx-state-tree"), require("react"), require("mobx-react"));
+		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("sheetforge", ["mobx-state-tree", "react", "mobx-react"], factory);
+		define("sheetforge", [], factory);
 	else if(typeof exports === 'object')
-		exports["sheetforge"] = factory(require("mobx-state-tree"), require("react"), require("mobx-react"));
+		exports["sheetforge"] = factory();
 	else
-		root["sheetforge"] = factory(root["mobx-state-tree"], root["react"], root["mobx-react"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE_YeEv__, __WEBPACK_EXTERNAL_MODULE_cDcd__, __WEBPACK_EXTERNAL_MODULE_sGQ9__) {
+		root["sheetforge"] = factory();
+})(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	function webpackJsonpCallback(data) {
+/******/ 		var chunkIds = data[0];
+/******/ 		var moreModules = data[1];
+/******/ 		var executeModules = data[2];
+/******/
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, resolves = [];
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(installedChunks[chunkId]) {
+/******/ 				resolves.push(installedChunks[chunkId][0]);
+/******/ 			}
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
+/******/
+/******/ 		while(resolves.length) {
+/******/ 			resolves.shift()();
+/******/ 		}
+/******/
+/******/ 		// add entry modules from loaded chunk to deferred list
+/******/ 		deferredModules.push.apply(deferredModules, executeModules || []);
+/******/
+/******/ 		// run deferred modules when all chunks ready
+/******/ 		return checkDeferredModules();
+/******/ 	};
+/******/ 	function checkDeferredModules() {
+/******/ 		var result;
+/******/ 		for(var i = 0; i < deferredModules.length; i++) {
+/******/ 			var deferredModule = deferredModules[i];
+/******/ 			var fulfilled = true;
+/******/ 			for(var j = 1; j < deferredModule.length; j++) {
+/******/ 				var depId = deferredModule[j];
+/******/ 				if(installedChunks[depId] !== 0) fulfilled = false;
+/******/ 			}
+/******/ 			if(fulfilled) {
+/******/ 				deferredModules.splice(i--, 1);
+/******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
+/******/ 			}
+/******/ 		}
+/******/ 		return result;
+/******/ 	}
+/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
+/******/
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 	// Promise = chunk loading, 0 = chunk loaded
+/******/ 	var installedChunks = {
+/******/ 		"development": 0
+/******/ 	};
+/******/
+/******/ 	var deferredModules = [];
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -89,9 +148,18 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/ 	var jsonpArray = window["webpackJsonpsheetforge"] = window["webpackJsonpsheetforge"] || [];
+/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
+/******/ 	jsonpArray.push = webpackJsonpCallback;
+/******/ 	jsonpArray = jsonpArray.slice();
+/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
+/******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "05fm");
+/******/
+/******/ 	// add entry module to deferred list
+/******/ 	deferredModules.push(["05fm","vendor"]);
+/******/ 	// run deferred modules when ready
+/******/ 	return checkDeferredModules();
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -125,9 +193,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/toConsumableArray.js (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/typeof.js (<- Module is not an ECMAScript module) */
-/*! ModuleConcatenation bailout: Cannot concat with external "mobx-react" (<- Module is not an ECMAScript module) */
-/*! ModuleConcatenation bailout: Cannot concat with external "mobx-state-tree" (<- Module is not an ECMAScript module) */
-/*! ModuleConcatenation bailout: Cannot concat with external "react" (<- Module is not an ECMAScript module) */
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/mobx-react/index.js (<- Module is not an ECMAScript module) */
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/mobx-state-tree/dist/mobx-state-tree.js (<- Module is not an ECMAScript module) */
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/react/index.js (<- Module is not an ECMAScript module) */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -136,8 +204,8 @@ return /******/ (function(modules) { // webpackBootstrap
 var toConsumableArray = __webpack_require__("RIqP");
 var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
 
-// EXTERNAL MODULE: external "mobx-state-tree"
-var external_mobx_state_tree_ = __webpack_require__("YeEv");
+// EXTERNAL MODULE: ./node_modules/mobx-state-tree/dist/mobx-state-tree.js
+var mobx_state_tree = __webpack_require__("uqjs");
 
 // CONCATENATED MODULE: ./source/utilities/hash.js
 function hash() {
@@ -161,7 +229,7 @@ var randomHash = function randomHash() {
 
  // eslint-disable-next-line import/prefer-default-export
 
-var autoHash = external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].identifier, randomHash);
+var autoHash = mobx_state_tree["types"].optional(mobx_state_tree["types"].identifier, randomHash);
 // CONCATENATED MODULE: ./source/utilities/math.js
 
 
@@ -220,7 +288,7 @@ var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 function ExperienceCost(calcFn) {
   var guardedActionNames = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   var distanceToCharacter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
-  return external_mobx_state_tree_["types"].model({}).views(function (self) {
+  return mobx_state_tree["types"].model({}).views(function (self) {
     return {
       get xpCost() {
         return calcFn(self);
@@ -232,7 +300,7 @@ function ExperienceCost(calcFn) {
       if (!distanceToCharacter) return self;
 
       try {
-        return Object(external_mobx_state_tree_["getParent"])(self, distanceToCharacter);
+        return Object(mobx_state_tree["getParent"])(self, distanceToCharacter);
       } catch (e) {
         console.warn("Failed to find character ".concat(distanceToCharacter, " parents up from ExperienceCost model."));
         return self;
@@ -251,7 +319,7 @@ function ExperienceCost(calcFn) {
       var _objectSpread2;
 
       return objectSpread_default()({}, map, (_objectSpread2 = {}, defineProperty_default()(_objectSpread2, "".concat(name, "Unguarded"), self[name]), defineProperty_default()(_objectSpread2, name, function () {
-        var copy = Object(external_mobx_state_tree_["clone"])(self);
+        var copy = Object(mobx_state_tree["clone"])(self);
         copy["".concat(name, "Unguarded")].apply(copy, arguments);
         var xpDelta = copy.xpCost - self.xpCost;
         adjustXP(-xpDelta);
@@ -263,7 +331,7 @@ function ExperienceCost(calcFn) {
         adjustXP(self.xpCost);
       },
       xpCostAfter: function xpCostAfter(xpFn) {
-        var cloned = Object(external_mobx_state_tree_["clone"])(self);
+        var cloned = Object(mobx_state_tree["clone"])(self);
         xpFn(cloned);
         return cloned.xpCost;
       },
@@ -281,9 +349,9 @@ function ExperienceCost(calcFn) {
 
 
 
-var Attribute_Attribute = external_mobx_state_tree_["types"].model('Attribute', {
-  id: external_mobx_state_tree_["types"].identifier,
-  name: external_mobx_state_tree_["types"].string
+var Attribute_Attribute = mobx_state_tree["types"].model('Attribute', {
+  id: mobx_state_tree["types"].identifier,
+  name: mobx_state_tree["types"].string
 }).actions(function (self) {
   return {
     /* eslint-disable no-param-reassign */
@@ -297,10 +365,10 @@ var Attribute_Attribute = external_mobx_state_tree_["types"].model('Attribute', 
     }
   };
 });
-var Primary = external_mobx_state_tree_["types"].compose(external_mobx_state_tree_["types"].model('Attribute', {
+var Primary = mobx_state_tree["types"].compose(mobx_state_tree["types"].model('Attribute', {
   max: 10,
   min: -1,
-  type: external_mobx_state_tree_["types"].literal('primary'),
+  type: mobx_state_tree["types"].literal('primary'),
   value: -1
 }), Attribute_Attribute, ExperienceCost(function (self) {
   var values = [];
@@ -311,18 +379,18 @@ var Primary = external_mobx_state_tree_["types"].compose(external_mobx_state_tre
     });
   }, 0);
 }, ['setValue']));
-var Secondary = external_mobx_state_tree_["types"].compose(external_mobx_state_tree_["types"].model('Attribute', {
-  type: external_mobx_state_tree_["types"].literal('secondary'),
+var Secondary = mobx_state_tree["types"].compose(mobx_state_tree["types"].model('Attribute', {
+  type: mobx_state_tree["types"].literal('secondary'),
   value: 0
 }), Attribute_Attribute);
-var Computed = external_mobx_state_tree_["types"].model('Attribute', {
-  id: external_mobx_state_tree_["types"].identifier,
-  name: external_mobx_state_tree_["types"].string,
-  type: external_mobx_state_tree_["types"].literal('computed')
+var Computed = mobx_state_tree["types"].model('Attribute', {
+  id: mobx_state_tree["types"].identifier,
+  name: mobx_state_tree["types"].string,
+  type: mobx_state_tree["types"].literal('computed')
 });
 
 var Attribute_createComputed = function createComputed(fn) {
-  return external_mobx_state_tree_["types"].compose(Computed, external_mobx_state_tree_["types"].model('Attribute', {}).views(function (self) {
+  return mobx_state_tree["types"].compose(Computed, mobx_state_tree["types"].model('Attribute', {}).views(function (self) {
     return {
       get value() {
         return fn(self);
@@ -332,7 +400,7 @@ var Attribute_createComputed = function createComputed(fn) {
   }));
 };
 
-var AttributeType = external_mobx_state_tree_["types"].union(Primary, Secondary, Computed, external_mobx_state_tree_["types"].custom({
+var AttributeType = mobx_state_tree["types"].union(Primary, Secondary, Computed, mobx_state_tree["types"].custom({
   isTargetType: function isTargetType(value) {
     return Primary.is(value) || Secondary.is(value) || Computed.is(value);
   },
@@ -363,7 +431,7 @@ var AttributeType = external_mobx_state_tree_["types"].union(Primary, Secondary,
 
 // CONCATENATED MODULE: ./source/models/Equippable.js
 
-var Equippable = external_mobx_state_tree_["types"].model({
+var Equippable = mobx_state_tree["types"].model({
   equipped: false
 }).actions(function (self) {
   return {
@@ -387,22 +455,22 @@ var Equippable = external_mobx_state_tree_["types"].model({
 
 
 
-var Item_Item = external_mobx_state_tree_["types"].compose(external_mobx_state_tree_["types"].model('Item', {
+var Item_Item = mobx_state_tree["types"].compose(mobx_state_tree["types"].model('Item', {
   id: autoHash,
   description: '',
   name: 'New Item',
-  quantity: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].refinement(external_mobx_state_tree_["types"].number, function (n) {
+  quantity: mobx_state_tree["types"].optional(mobx_state_tree["types"].refinement(mobx_state_tree["types"].number, function (n) {
     return n >= 0;
   }), 1),
-  type: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].literal('item'), 'item'),
-  worth: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].refinement(external_mobx_state_tree_["types"].number, function (n) {
+  type: mobx_state_tree["types"].optional(mobx_state_tree["types"].literal('item'), 'item'),
+  worth: mobx_state_tree["types"].optional(mobx_state_tree["types"].refinement(mobx_state_tree["types"].number, function (n) {
     return n >= 0;
   }), 0)
 }).actions(function (self) {
   return {
     /* eslint-disable no-param-reassign */
     remove: function remove() {
-      return Object(external_mobx_state_tree_["getParent"])(self, 2).removeItem(self);
+      return Object(mobx_state_tree["getParent"])(self, 2).removeItem(self);
     },
     setDescription: function setDescription(description) {
       self.description = description;
@@ -422,13 +490,13 @@ var Item_Item = external_mobx_state_tree_["types"].compose(external_mobx_state_t
 // CONCATENATED MODULE: ./source/models/Armor.js
 
 
-var armorRating = external_mobx_state_tree_["types"].refinement(external_mobx_state_tree_["types"].number, function (n) {
+var armorRating = mobx_state_tree["types"].refinement(mobx_state_tree["types"].number, function (n) {
   return n >= 0;
 });
-var Armor_Armor = external_mobx_state_tree_["types"].compose(models_Item, external_mobx_state_tree_["types"].model('Armor', {
+var Armor_Armor = mobx_state_tree["types"].compose(models_Item, mobx_state_tree["types"].model('Armor', {
   name: 'New Armor',
-  rating: external_mobx_state_tree_["types"].optional(armorRating, 0),
-  type: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].literal('armor'), 'armor')
+  rating: mobx_state_tree["types"].optional(armorRating, 0),
+  type: mobx_state_tree["types"].optional(mobx_state_tree["types"].literal('armor'), 'armor')
 }).actions(function (self) {
   return {
     /* eslint-disable no-param-reassign */
@@ -440,8 +508,8 @@ var Armor_Armor = external_mobx_state_tree_["types"].compose(models_Item, extern
 /* harmony default export */ var models_Armor = (Armor_Armor);
 // CONCATENATED MODULE: ./source/models/Descriptor.js
 
-var Descriptor_Descriptor = external_mobx_state_tree_["types"].model('Descriptor', {
-  id: external_mobx_state_tree_["types"].identifier,
+var Descriptor_Descriptor = mobx_state_tree["types"].model('Descriptor', {
+  id: mobx_state_tree["types"].identifier,
   name: '',
   value: ''
 }).actions(function (my) {
@@ -461,13 +529,13 @@ var Descriptor_Descriptor = external_mobx_state_tree_["types"].model('Descriptor
 
 
 var TYPES = ['ok', 'light', 'heavy', 'bane'];
-var HealthValue = external_mobx_state_tree_["types"].enumeration('HealthValue', TYPES, 'ok');
-var Health = external_mobx_state_tree_["types"].model('Health', {
-  levels: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(HealthValue), [])
+var HealthValue = mobx_state_tree["types"].enumeration('HealthValue', TYPES, 'ok');
+var Health = mobx_state_tree["types"].model('Health', {
+  levels: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(HealthValue), [])
 }).volatile(function (self) {
   return {
     get parent() {
-      return Object(external_mobx_state_tree_["getParent"])(self);
+      return Object(mobx_state_tree["getParent"])(self);
     }
 
   };
@@ -531,7 +599,7 @@ var Health = external_mobx_state_tree_["types"].model('Health', {
     },
     // Lifecycle hooks
     afterAttach: function afterAttach() {
-      Object(external_mobx_state_tree_["onSnapshot"])(self.parent, function () {
+      Object(mobx_state_tree["onSnapshot"])(self.parent, function () {
         return self.resizeValues();
       });
       self.resizeValues();
@@ -553,7 +621,7 @@ var Health = external_mobx_state_tree_["types"].model('Health', {
 
 /* harmony default export */ var between = (function (min, max) {
   var defaultTo = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : min;
-  return external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].refinement(external_mobx_state_tree_["types"].number, function (n) {
+  return mobx_state_tree["types"].optional(mobx_state_tree["types"].refinement(mobx_state_tree["types"].number, function (n) {
     return n === undefined || n >= min && n <= max;
   }), defaultTo);
 });
@@ -565,7 +633,7 @@ var Health = external_mobx_state_tree_["types"].model('Health', {
 
 
 
-var Skill_Skill = external_mobx_state_tree_["types"].compose(external_mobx_state_tree_["types"].model('Skill', {
+var Skill_Skill = mobx_state_tree["types"].compose(mobx_state_tree["types"].model('Skill', {
   id: autoHash,
   name: 'New Skill',
   theory: between(0, 10),
@@ -573,7 +641,7 @@ var Skill_Skill = external_mobx_state_tree_["types"].compose(external_mobx_state
 }).views(function (self) {
   return {
     get modifier() {
-      return Object(external_mobx_state_tree_["getParent"])(self, 2).modifierFor(self.name);
+      return Object(mobx_state_tree["getParent"])(self, 2).modifierFor(self.name);
     }
 
   };
@@ -581,7 +649,7 @@ var Skill_Skill = external_mobx_state_tree_["types"].compose(external_mobx_state
   return {
     /* eslint-disable no-param-reassign */
     remove: function remove() {
-      return Object(external_mobx_state_tree_["getParent"])(self, 2).removeSkill(self);
+      return Object(mobx_state_tree["getParent"])(self, 2).removeSkill(self);
     },
     setName: function setName(name) {
       self.name = name;
@@ -612,7 +680,7 @@ var Skill_Skill = external_mobx_state_tree_["types"].compose(external_mobx_state
 
 
 
-var Spell_Spell = external_mobx_state_tree_["types"].compose(external_mobx_state_tree_["types"].model('Spell', {
+var Spell_Spell = mobx_state_tree["types"].compose(mobx_state_tree["types"].model('Spell', {
   id: autoHash,
   name: 'New Spell',
   description: '',
@@ -621,7 +689,7 @@ var Spell_Spell = external_mobx_state_tree_["types"].compose(external_mobx_state
   return {
     /* eslint-disable no-param-reassign */
     remove: function remove() {
-      return Object(external_mobx_state_tree_["getParent"])(self, 2).removeSpell(self);
+      return Object(mobx_state_tree["getParent"])(self, 2).removeSpell(self);
     },
     setDescription: function setDescription(description) {
       self.description = description;
@@ -647,7 +715,7 @@ var Spell_Spell = external_mobx_state_tree_["types"].compose(external_mobx_state
 
 
 
-var Trait_Trait = external_mobx_state_tree_["types"].compose(external_mobx_state_tree_["types"].model('Trait', {
+var Trait_Trait = mobx_state_tree["types"].compose(mobx_state_tree["types"].model('Trait', {
   id: autoHash,
   name: 'New Trait',
   value: 0
@@ -655,7 +723,7 @@ var Trait_Trait = external_mobx_state_tree_["types"].compose(external_mobx_state
   return {
     /* eslint-disable no-param-reassign */
     remove: function remove() {
-      return Object(external_mobx_state_tree_["getParent"])(self, 2).removeTrait(self);
+      return Object(mobx_state_tree["getParent"])(self, 2).removeTrait(self);
     },
     setName: function setName(name) {
       self.name = name;
@@ -671,7 +739,7 @@ var Trait_Trait = external_mobx_state_tree_["types"].compose(external_mobx_state
 // CONCATENATED MODULE: ./source/models/Weapon.js
 
 
-var weaponArray = external_mobx_state_tree_["types"].refinement(external_mobx_state_tree_["types"].array(external_mobx_state_tree_["types"].number), function (a) {
+var weaponArray = mobx_state_tree["types"].refinement(mobx_state_tree["types"].array(mobx_state_tree["types"].number), function (a) {
   return a.length === 3;
 });
 var PROPS = {
@@ -679,10 +747,10 @@ var PROPS = {
   damage: 0,
   range: 2
 };
-var Weapon_Weapon = external_mobx_state_tree_["types"].compose(models_Item, external_mobx_state_tree_["types"].model('Weapon', {
+var Weapon_Weapon = mobx_state_tree["types"].compose(models_Item, mobx_state_tree["types"].model('Weapon', {
   name: 'New Weapon',
-  type: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].literal('weapon'), 'weapon'),
-  values: external_mobx_state_tree_["types"].optional(weaponArray, [0, 0, 0])
+  type: mobx_state_tree["types"].optional(mobx_state_tree["types"].literal('weapon'), 'weapon'),
+  values: mobx_state_tree["types"].optional(weaponArray, [0, 0, 0])
 }).views(function (self) {
   return {
     get accuracy() {
@@ -768,21 +836,21 @@ var Character_descriptors = DEFAULT_DESCRIPTORS.map(function (id) {
     value: ''
   };
 });
-var Character = external_mobx_state_tree_["types"].model('Character', {
+var Character = mobx_state_tree["types"].model('Character', {
   id: autoHash,
   name: 'Unnamed Character',
   rp: 0,
   xp: 0,
   portraitURL: '',
-  primaryAttributes: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(models_Attribute), primaries),
-  secondaryAttributes: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(models_Attribute), secondaries),
-  descriptors: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(models_Descriptor), Character_descriptors),
+  primaryAttributes: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(models_Attribute), primaries),
+  secondaryAttributes: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(models_Attribute), secondaries),
+  descriptors: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(models_Descriptor), Character_descriptors),
   // effects: types.array(Effect, []),
-  equipment: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(external_mobx_state_tree_["types"].union(models_Armor, models_Item, models_Weapon)), []),
-  health: external_mobx_state_tree_["types"].optional(models_Health, {}),
-  spells: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(models_Spell), []),
-  skills: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(models_Skill), []),
-  traits: external_mobx_state_tree_["types"].optional(external_mobx_state_tree_["types"].array(models_Trait), [])
+  equipment: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(mobx_state_tree["types"].union(models_Armor, models_Item, models_Weapon)), []),
+  health: mobx_state_tree["types"].optional(models_Health, {}),
+  spells: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(models_Spell), []),
+  skills: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(models_Skill), []),
+  traits: mobx_state_tree["types"].optional(mobx_state_tree["types"].array(models_Trait), [])
 }).views(function (my) {
   var attr = function attr(id) {
     return (my.attribute(id) || {}).value || 0;
@@ -970,12 +1038,12 @@ var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 var assertThisInitialized = __webpack_require__("PJYZ");
 var assertThisInitialized_default = /*#__PURE__*/__webpack_require__.n(assertThisInitialized);
 
-// EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__("cDcd");
-var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__("q1tI");
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
-// EXTERNAL MODULE: external "mobx-react"
-var external_mobx_react_ = __webpack_require__("sGQ9");
+// EXTERNAL MODULE: ./node_modules/mobx-react/index.js
+var mobx_react = __webpack_require__("NbXW");
 
 // CONCATENATED MODULE: ./source/utilities/noop.js
 /* harmony default export */ var noop = (function () {});
@@ -1124,7 +1192,7 @@ function (_React$Component) {
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderBoolean", function () {
-      return external_react_default.a.createElement("input", {
+      return react_default.a.createElement("input", {
         type: "checkbox",
         checked: Boolean(_this.props.value),
         disabled: _this.props.readonly,
@@ -1137,18 +1205,18 @@ function (_React$Component) {
         var lines = (_this.props.value || _this.props.placeholder).split('\n');
 
         var paragraphs = lines.map(function (line, index) {
-          return external_react_default.a.createElement("p", {
+          return react_default.a.createElement("p", {
             key: index
           }, line);
         });
         var className = ['multiline', _this.props.value ? '' : 'placeholder'].join(' ').trim();
-        return external_react_default.a.createElement("div", {
+        return react_default.a.createElement("div", {
           className: className,
           onClick: _this.handleToggleEditing
         }, paragraphs);
       }
 
-      return external_react_default.a.createElement("textarea", {
+      return react_default.a.createElement("textarea", {
         disabled: _this.props.readonly,
         onBlur: _this.handleToggleEditing,
         onChange: _this.handleChange,
@@ -1163,7 +1231,7 @@ function (_React$Component) {
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderNumber", function () {
       if (!_this.editing) return _this.renderStatic();
-      return external_react_default.a.createElement("input", {
+      return react_default.a.createElement("input", {
         type: "number",
         disabled: _this.props.readonly,
         max: _this.props.max,
@@ -1180,7 +1248,7 @@ function (_React$Component) {
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderSlider", function () {
-      return external_react_default.a.createElement("input", {
+      return react_default.a.createElement("input", {
         type: "range",
         disabled: _this.props.readonly,
         max: _this.props.max,
@@ -1195,7 +1263,7 @@ function (_React$Component) {
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderText", function () {
       if (!_this.editing) return _this.renderStatic();
-      return external_react_default.a.createElement("input", {
+      return react_default.a.createElement("input", {
         type: "text",
         disabled: _this.props.readonly,
         onBlur: _this.handleToggleEditing,
@@ -1211,7 +1279,7 @@ function (_React$Component) {
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderStatic", function () {
       var showPlaceholder = _this.props.placeholder && !_this.props.value;
       var className = showPlaceholder ? 'placeholder' : '';
-      return external_react_default.a.createElement("span", {
+      return react_default.a.createElement("span", {
         className: className,
         onClick: _this.handleToggleEditing
       }, showPlaceholder ? _this.props.placeholder : _this.props.value);
@@ -1250,7 +1318,7 @@ function (_React$Component) {
         };
       }
 
-      return external_react_default.a.createElement("div", extends_default()({
+      return react_default.a.createElement("div", extends_default()({
         className: classes.join(' ')
       }, props), _this.renderEditor());
     });
@@ -1266,7 +1334,7 @@ function (_React$Component) {
   }]);
 
   return Editable;
-}(external_react_default.a.Component);
+}(react_default.a.Component);
 /* eslint-disable */
 
 
@@ -1326,7 +1394,7 @@ var _class, _temp, _class2;
 
 
 
-var components_Attribute_Attribute = (_temp = _class = Object(external_mobx_react_["observer"])(_class2 =
+var components_Attribute_Attribute = (_temp = _class = Object(mobx_react["observer"])(_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Attribute, _Component);
@@ -1354,21 +1422,21 @@ function (_Component) {
       var current = typeof value !== 'function' ? value : value();
       var isModified = Boolean(!computed && modifier);
       var displayValue = computed ? current + modifier : current;
-      var display = computed ? external_react_default.a.createElement(Editable_Editable, {
+      var display = computed ? react_default.a.createElement(Editable_Editable, {
         max: max,
         min: min,
         readonly: true,
         value: displayValue
-      }) : external_react_default.a.createElement(Editable_Editable, {
+      }) : react_default.a.createElement(Editable_Editable, {
         max: max,
         min: min,
         onChange: model.setValue,
         value: current
       });
       var classes = ['value', isModified ? 'modified' : ''].filter(Boolean);
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: classes.join(' ')
-      }, display, isModified && external_react_default.a.createElement(external_react_["Fragment"], null, "\u21A3", external_react_default.a.createElement("span", {
+      }, display, isModified && react_default.a.createElement(react["Fragment"], null, "\u21A3", react_default.a.createElement("span", {
         className: "temporary"
       }, modifier)));
     });
@@ -1378,9 +1446,9 @@ function (_Component) {
           _this$props$className = _this$props.className,
           className = _this$props$className === void 0 ? '' : _this$props$className,
           model = _this$props.model;
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "attribute ".concat(className, " ").concat(model.id)
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
       }, model.name), _this.renderValue());
     });
@@ -1389,7 +1457,7 @@ function (_Component) {
   }
 
   return Attribute;
-}(external_react_["Component"])) || _class2, defineProperty_default()(_class, "defaultProps", {
+}(react["Component"])) || _class2, defineProperty_default()(_class, "defaultProps", {
   className: 'none',
   min: -10,
   max: 10,
@@ -1437,7 +1505,7 @@ function (_Component) {
         return a.id === id;
       });
 
-      return external_react_default.a.createElement(components_Attribute_Attribute, {
+      return react_default.a.createElement(components_Attribute_Attribute, {
         model: attr,
         className: id
       });
@@ -1450,7 +1518,7 @@ function (_Component) {
         return a.id === id;
       });
 
-      return external_react_default.a.createElement(components_Attribute_Attribute, {
+      return react_default.a.createElement(components_Attribute_Attribute, {
         model: attr,
         className: "".concat(id, " ").concat(className, " computed"),
         computed: true
@@ -1458,17 +1526,17 @@ function (_Component) {
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderHeader", function (id, name) {
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "attribute ".concat(id, " header highlight")
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
       }, name));
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "render", function () {
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "attributes section"
-      }, external_react_default.a.createElement("header", null, "Attributes"), _this.renderComputed('potency', 'header highlight'), _this.renderComputed('reflex', 'header highlight'), _this.renderComputed('resilience', 'header highlight'), _this.renderComputed('body', 'header highlight'), _this.renderAttribute('strength'), _this.renderAttribute('agility'), _this.renderAttribute('fitness'), _this.renderComputed('mind', 'header highlight'), _this.renderAttribute('intellect'), _this.renderAttribute('acuity'), _this.renderAttribute('focus'), _this.renderComputed('spirit', 'header highlight'), _this.renderAttribute('confidence'), _this.renderAttribute('intuition'), _this.renderAttribute('devotion'), external_react_default.a.createElement("hr", {
+      }, react_default.a.createElement("header", null, "Attributes"), _this.renderComputed('potency', 'header highlight'), _this.renderComputed('reflex', 'header highlight'), _this.renderComputed('resilience', 'header highlight'), _this.renderComputed('body', 'header highlight'), _this.renderAttribute('strength'), _this.renderAttribute('agility'), _this.renderAttribute('fitness'), _this.renderComputed('mind', 'header highlight'), _this.renderAttribute('intellect'), _this.renderAttribute('acuity'), _this.renderAttribute('focus'), _this.renderComputed('spirit', 'header highlight'), _this.renderAttribute('confidence'), _this.renderAttribute('intuition'), _this.renderAttribute('devotion'), react_default.a.createElement("hr", {
         className: "divider"
       }), _this.renderHeader('racial', 'Racial'), _this.renderAttribute('size'), _this.renderComputed('speed'), _this.renderAttribute('naturalArmor'));
     });
@@ -1477,7 +1545,7 @@ function (_Component) {
   }
 
   return AttributeSection;
-}(external_react_["Component"]);
+}(react["Component"]);
 
 
 // EXTERNAL MODULE: ./source/components/Descriptor.scss
@@ -1492,18 +1560,18 @@ var components_Descriptor = __webpack_require__("bjTM");
 
 var components_Descriptor_Descriptor = function Descriptor(_ref) {
   var model = _ref.model;
-  return external_react_default.a.createElement("div", {
+  return react_default.a.createElement("div", {
     className: "descriptor ".concat(model.id)
-  }, external_react_default.a.createElement("div", {
+  }, react_default.a.createElement("div", {
     className: "name"
-  }, model.name), external_react_default.a.createElement(Editable_Editable, {
+  }, model.name), react_default.a.createElement(Editable_Editable, {
     className: "value",
     value: model.value,
     onChange: model.setValue
   }));
 };
 
-/* harmony default export */ var source_components_Descriptor = (Object(external_mobx_react_["observer"])(components_Descriptor_Descriptor));
+/* harmony default export */ var source_components_Descriptor = (Object(mobx_react["observer"])(components_Descriptor_Descriptor));
 // EXTERNAL MODULE: ./source/components/DescriptorSection.scss
 var components_DescriptorSection = __webpack_require__("x2/E");
 
@@ -1516,10 +1584,10 @@ var DISPLAY_ORDER = ['homeland', 'race', 'concept', 'height', 'weight', 'gender'
 
 var DescriptorSection_DescriptorSection = function DescriptorSection(_ref) {
   var descriptors = _ref.descriptors;
-  return external_react_default.a.createElement("div", {
+  return react_default.a.createElement("div", {
     className: "descriptors section"
-  }, external_react_default.a.createElement("header", null, "Descriptors"), DISPLAY_ORDER.map(function (id) {
-    return external_react_default.a.createElement(source_components_Descriptor, {
+  }, react_default.a.createElement("header", null, "Descriptors"), DISPLAY_ORDER.map(function (id) {
+    return react_default.a.createElement(source_components_Descriptor, {
       key: id,
       model: descriptors.find(function (d) {
         return d.id === id;
@@ -1528,7 +1596,7 @@ var DescriptorSection_DescriptorSection = function DescriptorSection(_ref) {
   }));
 };
 
-/* harmony default export */ var source_components_DescriptorSection = (Object(external_mobx_react_["observer"])(DescriptorSection_DescriptorSection));
+/* harmony default export */ var source_components_DescriptorSection = (Object(mobx_react["observer"])(DescriptorSection_DescriptorSection));
 // CONCATENATED MODULE: ./source/utilities/compareBy.js
 /* harmony default export */ var compareBy = (function (prop) {
   var reversed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -1556,11 +1624,11 @@ var LabeledEditable = __webpack_require__("Wv34");
       className = _ref.className,
       props = objectWithoutProperties_default()(_ref, ["caption", "className"]);
 
-  return external_react_default.a.createElement("label", {
+  return react_default.a.createElement("label", {
     className: "labeled-editable ".concat(className).trim()
-  }, typeof caption === 'string' ? external_react_default.a.createElement("span", {
+  }, typeof caption === 'string' ? react_default.a.createElement("span", {
     className: "caption"
-  }, caption) : caption, external_react_default.a.createElement(Editable_Editable, props));
+  }, caption) : caption, react_default.a.createElement(Editable_Editable, props));
 });
 // CONCATENATED MODULE: ./source/utilities/itemRendering.js
 
@@ -1574,8 +1642,8 @@ function renderEditable(item, propName, props) {
     className: "".concat(props.className || '', " ").concat(loweredPropName).trim()
   });
 
-  return external_react_default.a.createElement(components_LabeledEditable, extends_default()({
-    caption: props.caption || external_react_default.a.createElement("i", {
+  return react_default.a.createElement(components_LabeledEditable, extends_default()({
+    caption: props.caption || react_default.a.createElement("i", {
       className: "icon-".concat(loweredPropName)
     }),
     className: loweredPropName,
@@ -1585,7 +1653,7 @@ function renderEditable(item, propName, props) {
 }
 var itemRendering_renderPropWithIcon = function renderPropWithIcon(item, propName) {
   return renderEditable(item, propName, {
-    caption: external_react_default.a.createElement("abbr", {
+    caption: react_default.a.createElement("abbr", {
       className: "icon-".concat(propName.toLowerCase()),
       title: propName
     }),
@@ -1610,7 +1678,7 @@ var Card_class, Card_temp, Card_class2;
 
 
 
-var Card_Card = (Card_temp = Card_class = Object(external_mobx_react_["observer"])(Card_class2 =
+var Card_Card = (Card_temp = Card_class = Object(mobx_react["observer"])(Card_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Card, _Component);
@@ -1647,12 +1715,12 @@ function (_Component) {
           renderCollapsed = _this$props2.renderCollapsed,
           renderExpanded = _this$props2.renderExpanded;
       var expandedClassName = _this.state.expanded ? 'expanded' : 'collapsed';
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "card ".concat(expandedClassName, " ").concat(className || '').trim()
-      }, external_react_default.a.createElement("div", {
+      }, react_default.a.createElement("div", {
         className: "expander icon-".concat(expandedClassName),
         onClick: _this.toggleExpanded
-      }), external_react_default.a.createElement("div", {
+      }), react_default.a.createElement("div", {
         className: "card-contents ".concat(contentsClassName || '').trim()
       }, renderAlways(), _this.state.expanded ? renderExpanded() : renderCollapsed()));
     });
@@ -1661,7 +1729,7 @@ function (_Component) {
   }
 
   return Card;
-}(external_react_["Component"])) || Card_class2, defineProperty_default()(Card_class, "defaultProps", {
+}(react["Component"])) || Card_class2, defineProperty_default()(Card_class, "defaultProps", {
   renderAlways: noop,
   renderCollapsed: noop,
   renderExpanded: noop
@@ -1687,7 +1755,7 @@ var Armor_class, Armor_temp, Armor_class2;
 
 
 
-var components_Armor_Armor = (Armor_temp = Armor_class = Object(external_mobx_react_["observer"])(Armor_class2 =
+var components_Armor_Armor = (Armor_temp = Armor_class = Object(mobx_react["observer"])(Armor_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Armor, _Component);
@@ -1711,7 +1779,7 @@ function (_Component) {
           editing = _this$props.editing,
           onEditEnd = _this$props.onEditEnd,
           onEditStart = _this$props.onEditStart;
-      return external_react_default.a.createElement(external_react_["Fragment"], null, renderEditable(item, 'Equipped', {
+      return react_default.a.createElement(react["Fragment"], null, renderEditable(item, 'Equipped', {
         type: 'boolean'
       }), renderEditable(item, 'Name', {
         className: 'icon-armor',
@@ -1726,13 +1794,13 @@ function (_Component) {
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderExpanded", function () {
       var item = _this.props.item;
-      return external_react_default.a.createElement(external_react_["Fragment"], null, renderEditable(item, 'Description', {
+      return react_default.a.createElement(react["Fragment"], null, renderEditable(item, 'Description', {
         placeholder: 'Description'
       }));
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "render", function () {
-      return external_react_default.a.createElement(Card_Card, {
+      return react_default.a.createElement(Card_Card, {
         className: "armor-card",
         contentsClassName: "item armor",
         renderAlways: _this.renderAlways,
@@ -1744,7 +1812,7 @@ function (_Component) {
   }
 
   return Armor;
-}(external_react_["Component"])) || Armor_class2, defineProperty_default()(Armor_class, "defaultProps", {
+}(react["Component"])) || Armor_class2, defineProperty_default()(Armor_class, "defaultProps", {
   editing: false,
   item: models_Armor.create(),
   onEditStart: noop,
@@ -1770,7 +1838,7 @@ var Item_class, Item_temp, Item_class2;
 
 
 
-var components_Item_Item = (Item_temp = Item_class = Object(external_mobx_react_["observer"])(Item_class2 =
+var components_Item_Item = (Item_temp = Item_class = Object(mobx_react["observer"])(Item_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Item, _Component);
@@ -1794,7 +1862,7 @@ function (_Component) {
           onEditStart = _this$props.onEditStart,
           onEditEnd = _this$props.onEditEnd,
           item = _this$props.item;
-      return external_react_default.a.createElement(external_react_["Fragment"], null, renderEditable(item, 'Equipped', {
+      return react_default.a.createElement(react["Fragment"], null, renderEditable(item, 'Equipped', {
         type: 'boolean'
       }), renderEditable(item, 'Name', {
         className: 'icon-backpack',
@@ -1813,7 +1881,7 @@ function (_Component) {
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "render", function () {
-      return external_react_default.a.createElement(Card_Card, {
+      return react_default.a.createElement(Card_Card, {
         className: "item-card",
         contentsClassName: "item",
         renderAlways: _this.renderAlways,
@@ -1825,7 +1893,7 @@ function (_Component) {
   }
 
   return Item;
-}(external_react_["Component"])) || Item_class2, defineProperty_default()(Item_class, "defaultProps", {
+}(react["Component"])) || Item_class2, defineProperty_default()(Item_class, "defaultProps", {
   onEditStart: noop,
   onEditEnd: noop
 }), Item_temp);
@@ -1850,7 +1918,7 @@ var Weapon_class, Weapon_temp, Weapon_class2;
 
 
 
-var components_Weapon_Weapon = (Weapon_temp = Weapon_class = Object(external_mobx_react_["observer"])(Weapon_class2 =
+var components_Weapon_Weapon = (Weapon_temp = Weapon_class = Object(mobx_react["observer"])(Weapon_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Weapon, _Component);
@@ -1874,7 +1942,7 @@ function (_Component) {
           item = _this$props.item,
           onEditEnd = _this$props.onEditEnd,
           onEditStart = _this$props.onEditStart;
-      return external_react_default.a.createElement(external_react_["Fragment"], null, renderEditable(item, 'Equipped', {
+      return react_default.a.createElement(react["Fragment"], null, renderEditable(item, 'Equipped', {
         type: 'boolean'
       }), renderEditable(item, 'Name', {
         className: 'icon-weapon',
@@ -1883,17 +1951,17 @@ function (_Component) {
         onEditStart: onEditStart
       }), renderEditable(item, 'Damage', {
         type: 'number',
-        caption: external_react_default.a.createElement("abbr", {
+        caption: react_default.a.createElement("abbr", {
           title: "Damage"
         }, "Dmg:")
       }), renderEditable(item, 'Range', {
         type: 'number',
-        caption: external_react_default.a.createElement("abbr", {
+        caption: react_default.a.createElement("abbr", {
           title: "Range"
         }, "Rng:")
       }), renderEditable(item, 'Accuracy', {
         type: 'number',
-        caption: external_react_default.a.createElement("abbr", {
+        caption: react_default.a.createElement("abbr", {
           title: "Accuracy"
         }, "Acc:")
       }));
@@ -1908,7 +1976,7 @@ function (_Component) {
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "render", function () {
-      return external_react_default.a.createElement(Card_Card, {
+      return react_default.a.createElement(Card_Card, {
         className: "item-card weapon-card",
         contentsClassName: "item weapon",
         renderAlways: _this.renderAlways,
@@ -1920,7 +1988,7 @@ function (_Component) {
   }
 
   return Weapon;
-}(external_react_["Component"])) || Weapon_class2, defineProperty_default()(Weapon_class, "defaultProps", {
+}(react["Component"])) || Weapon_class2, defineProperty_default()(Weapon_class, "defaultProps", {
   editing: false,
   item: models_Weapon.create(),
   onEditEnd: noop,
@@ -1946,7 +2014,7 @@ var EquipmentSection_sortEquipment = function sortEquipment(equipment) {
 };
 
 var REMOVERS = {};
-var EquipmentSection_EquipmentSection = Object(external_mobx_react_["observer"])(function (_ref) {
+var EquipmentSection_EquipmentSection = Object(mobx_react["observer"])(function (_ref) {
   var buttons = _ref.buttons,
       _ref$equipment = _ref.equipment,
       equipment = _ref$equipment === void 0 ? [] : _ref$equipment,
@@ -1956,10 +2024,10 @@ var EquipmentSection_EquipmentSection = Object(external_mobx_react_["observer"])
   var style = {
     gridTemplateRows: "repeat(".concat(rows, ", auto)")
   };
-  return external_react_default.a.createElement("div", {
+  return react_default.a.createElement("div", {
     className: "equipment section",
     style: style
-  }, external_react_default.a.createElement("header", {
+  }, react_default.a.createElement("header", {
     className: "icon-backpack"
   }, "Equipment", buttons), EquipmentSection_sortEquipment(equipment).map(function (item) {
     if (!REMOVERS[item.id]) {
@@ -1976,7 +2044,7 @@ var EquipmentSection_EquipmentSection = Object(external_mobx_react_["observer"])
     var Type = components_Item_Item;
     if (models_Weapon.is(item)) Type = components_Weapon_Weapon;
     if (models_Armor.is(item)) Type = components_Armor_Armor;
-    return external_react_default.a.createElement(Type, props);
+    return react_default.a.createElement(Type, props);
   }));
 });
 EquipmentSection_EquipmentSection.displayName = 'EquipmentSection';
@@ -2000,7 +2068,7 @@ var HealthBar_class2;
 
 
 
-var HealthBar_HealthBar = Object(external_mobx_react_["observer"])(HealthBar_class2 =
+var HealthBar_HealthBar = Object(mobx_react["observer"])(HealthBar_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(HealthBar, _Component);
@@ -2039,15 +2107,15 @@ function (_Component) {
         gridTemplateColumns: "repeat(".concat(cols, ", 1fr)"),
         gridTemplateRows: "repeat(".concat(rows, ", 1fr)")
       };
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "health-bar"
-      }, external_react_default.a.createElement("div", {
+      }, react_default.a.createElement("div", {
         className: "header"
-      }, "Health"), external_react_default.a.createElement("div", {
+      }, "Health"), react_default.a.createElement("div", {
         className: "levels",
         style: style
       }, health.levels.map(function (level, ix) {
-        return external_react_default.a.createElement("div", {
+        return react_default.a.createElement("div", {
           className: "".concat(level, " icon-health"),
           index: ix,
           key: hash(ix),
@@ -2060,7 +2128,7 @@ function (_Component) {
   }
 
   return HealthBar;
-}(external_react_["Component"])) || HealthBar_class2;
+}(react["Component"])) || HealthBar_class2;
 
 
 // EXTERNAL MODULE: ./source/components/PortraitSection.scss
@@ -2087,7 +2155,7 @@ var buildUrl = function buildUrl(url) {
   return "url(".concat(url || DEFAULT_PORTRAIT_URL, ")");
 };
 
-var PortraitSection_PortraitSection = (PortraitSection_temp = PortraitSection_class = Object(external_mobx_react_["observer"])(PortraitSection_class2 =
+var PortraitSection_PortraitSection = (PortraitSection_temp = PortraitSection_class = Object(mobx_react["observer"])(PortraitSection_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(PortraitSection, _Component);
@@ -2116,7 +2184,7 @@ function (_Component) {
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "renderEditor", function () {
-      return external_react_default.a.createElement(Editable_Editable, {
+      return react_default.a.createElement(Editable_Editable, {
         forceEditMode: true,
         type: "multiline",
         onChange: _this.props.onChange,
@@ -2126,11 +2194,11 @@ function (_Component) {
     });
 
     defineProperty_default()(assertThisInitialized_default()(assertThisInitialized_default()(_this)), "render", function () {
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "portrait section"
-      }, external_react_default.a.createElement("header", null, "Portrait"), external_react_default.a.createElement("div", {
+      }, react_default.a.createElement("header", null, "Portrait"), react_default.a.createElement("div", {
         className: "border-container"
-      }, external_react_default.a.createElement("div", {
+      }, react_default.a.createElement("div", {
         className: "image",
         onClick: _this.toggleEditing,
         style: {
@@ -2143,7 +2211,7 @@ function (_Component) {
   }
 
   return PortraitSection;
-}(external_react_["Component"])) || PortraitSection_class2, defineProperty_default()(PortraitSection_class, "defaultProps", {
+}(react["Component"])) || PortraitSection_class2, defineProperty_default()(PortraitSection_class, "defaultProps", {
   onChange: noop,
   url: DEFAULT_PORTRAIT_URL
 }), PortraitSection_temp);
@@ -2166,7 +2234,7 @@ var Skill_class, Skill_temp, Skill_class2;
 
 
 
-var components_Skill_Skill = (Skill_temp = Skill_class = Object(external_mobx_react_["observer"])(Skill_class2 =
+var components_Skill_Skill = (Skill_temp = Skill_class = Object(mobx_react["observer"])(Skill_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Skill, _Component);
@@ -2185,23 +2253,23 @@ function (_Component) {
           onEditStart = _this$props.onEditStart,
           onEditEnd = _this$props.onEditEnd,
           skill = _this$props.skill;
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "skill"
-      }, external_react_default.a.createElement(Editable_Editable, {
+      }, react_default.a.createElement(Editable_Editable, {
         className: "name",
         forceEditMode: editing,
         onChange: skill.setName,
         onEditStart: onEditStart,
         onEditEnd: onEditEnd,
         value: skill.name
-      }), external_react_default.a.createElement(Editable_Editable, {
+      }), react_default.a.createElement(Editable_Editable, {
         className: "theory",
         max: 10,
         min: 0,
         type: "number",
         onChange: skill.setTheory,
         value: skill.theory || '-'
-      }), external_react_default.a.createElement(Editable_Editable, {
+      }), react_default.a.createElement(Editable_Editable, {
         className: "mastery",
         max: 10,
         min: 0,
@@ -2213,7 +2281,7 @@ function (_Component) {
   }]);
 
   return Skill;
-}(external_react_["Component"])) || Skill_class2, defineProperty_default()(Skill_class, "defaultProps", {
+}(react["Component"])) || Skill_class2, defineProperty_default()(Skill_class, "defaultProps", {
   onEditStart: noop,
   onEditEnd: noop
 }), Skill_temp);
@@ -2239,7 +2307,7 @@ var SkillSection_class2;
 var compareByName = compareBy('name');
 var SkillSection_REMOVERS = {};
 
-var SkillSection_SkillSection = Object(external_mobx_react_["observer"])(SkillSection_class2 =
+var SkillSection_SkillSection = Object(mobx_react["observer"])(SkillSection_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(SkillSection, _Component);
@@ -2266,32 +2334,32 @@ function (_Component) {
       var style = {
         gridTemplateRows: "25px 25px repeat(".concat(rows || 1, ", 30px)")
       };
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "skills section",
         style: style
-      }, external_react_default.a.createElement("header", null, "Skills", external_react_default.a.createElement("button", {
+      }, react_default.a.createElement("header", null, "Skills", react_default.a.createElement("button", {
         className: "icon-add",
         onClick: addSkill
-      })), external_react_default.a.createElement("header", {
+      })), react_default.a.createElement("header", {
         className: "subheader"
-      }, external_react_default.a.createElement("div", {
+      }, react_default.a.createElement("div", {
         className: "skill"
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
-      }, "Name"), external_react_default.a.createElement("abbr", {
+      }, "Name"), react_default.a.createElement("abbr", {
         className: "theory",
         title: "Theory"
-      }, "Th"), external_react_default.a.createElement("abbr", {
+      }, "Th"), react_default.a.createElement("abbr", {
         className: "mastery",
         title: "Mastery"
-      }, "Ms")), external_react_default.a.createElement("div", {
+      }, "Ms")), react_default.a.createElement("div", {
         className: "skill"
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
-      }, "Name"), external_react_default.a.createElement("abbr", {
+      }, "Name"), react_default.a.createElement("abbr", {
         className: "theory",
         title: "Theory"
-      }, "Th"), external_react_default.a.createElement("abbr", {
+      }, "Th"), react_default.a.createElement("abbr", {
         className: "mastery",
         title: "Mastery"
       }, "Ms"))), skills.slice().sort(compareByName).map(function (skill) {
@@ -2301,7 +2369,7 @@ function (_Component) {
           };
         }
 
-        return external_react_default.a.createElement(components_Skill_Skill, {
+        return react_default.a.createElement(components_Skill_Skill, {
           key: skill.id,
           skill: skill,
           onEditEnd: SkillSection_REMOVERS[skill.id]
@@ -2313,7 +2381,7 @@ function (_Component) {
   }
 
   return SkillSection;
-}(external_react_["Component"])) || SkillSection_class2;
+}(react["Component"])) || SkillSection_class2;
 
 
 // EXTERNAL MODULE: ./source/components/Spell.scss
@@ -2334,7 +2402,7 @@ var Spell_class, Spell_temp, Spell_class2;
 
 
 
-var components_Spell_Spell = (Spell_temp = Spell_class = Object(external_mobx_react_["observer"])(Spell_class2 =
+var components_Spell_Spell = (Spell_temp = Spell_class = Object(mobx_react["observer"])(Spell_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Spell, _Component);
@@ -2353,16 +2421,16 @@ function (_Component) {
           onEditStart = _this$props.onEditStart,
           onEditEnd = _this$props.onEditEnd,
           spell = _this$props.spell;
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "spell"
-      }, external_react_default.a.createElement(Editable_Editable, {
+      }, react_default.a.createElement(Editable_Editable, {
         className: "name",
         forceEditMode: editing,
         onChange: spell.setName,
         onEditStart: onEditStart,
         onEditEnd: onEditEnd,
         value: spell.name
-      }), external_react_default.a.createElement(Editable_Editable, {
+      }), react_default.a.createElement(Editable_Editable, {
         className: "level",
         max: 9,
         min: 0,
@@ -2374,7 +2442,7 @@ function (_Component) {
   }]);
 
   return Spell;
-}(external_react_["Component"])) || Spell_class2, defineProperty_default()(Spell_class, "defaultProps", {
+}(react["Component"])) || Spell_class2, defineProperty_default()(Spell_class, "defaultProps", {
   onEditStart: noop,
   onEditEnd: noop
 }), Spell_temp);
@@ -2400,7 +2468,7 @@ var SpellSection_class2;
 var SpellSection_compareByName = compareBy('name');
 var SpellSection_REMOVERS = {};
 
-var SpellSection_SpellSection = Object(external_mobx_react_["observer"])(SpellSection_class2 =
+var SpellSection_SpellSection = Object(mobx_react["observer"])(SpellSection_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(SpellSection, _Component);
@@ -2427,26 +2495,26 @@ function (_Component) {
       var style = {
         gridTemplateRows: "25px 25px repeat(".concat(rows || 1, ", 30px)")
       };
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "spells section",
         style: style
-      }, external_react_default.a.createElement("header", null, "Spells", external_react_default.a.createElement("button", {
+      }, react_default.a.createElement("header", null, "Spells", react_default.a.createElement("button", {
         className: "icon-add",
         onClick: addSpell
-      })), external_react_default.a.createElement("header", {
+      })), react_default.a.createElement("header", {
         className: "subheader"
-      }, external_react_default.a.createElement("div", {
+      }, react_default.a.createElement("div", {
         className: "spell"
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
-      }, "Name"), external_react_default.a.createElement("abbr", {
+      }, "Name"), react_default.a.createElement("abbr", {
         className: "level",
         title: "Level"
-      }, "Lv")), external_react_default.a.createElement("div", {
+      }, "Lv")), react_default.a.createElement("div", {
         className: "spell"
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
-      }, "Name"), external_react_default.a.createElement("abbr", {
+      }, "Name"), react_default.a.createElement("abbr", {
         className: "level",
         title: "Level"
       }, "Lv"))), spells.slice().sort(SpellSection_compareByName).map(function (spell) {
@@ -2456,7 +2524,7 @@ function (_Component) {
           };
         }
 
-        return external_react_default.a.createElement(components_Spell_Spell, {
+        return react_default.a.createElement(components_Spell_Spell, {
           key: spell.id,
           spell: spell,
           onEditEnd: SpellSection_REMOVERS[spell.id]
@@ -2468,7 +2536,7 @@ function (_Component) {
   }
 
   return SpellSection;
-}(external_react_["Component"])) || SpellSection_class2;
+}(react["Component"])) || SpellSection_class2;
 
 
 // EXTERNAL MODULE: ./source/components/Trait.scss
@@ -2489,7 +2557,7 @@ var Trait_class, Trait_temp, Trait_class2;
 
 
 
-var components_Trait_Trait = (Trait_temp = Trait_class = Object(external_mobx_react_["observer"])(Trait_class2 =
+var components_Trait_Trait = (Trait_temp = Trait_class = Object(mobx_react["observer"])(Trait_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Trait, _Component);
@@ -2508,16 +2576,16 @@ function (_Component) {
           onEditStart = _this$props.onEditStart,
           onEditEnd = _this$props.onEditEnd,
           trait = _this$props.trait;
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: "trait"
-      }, external_react_default.a.createElement(Editable_Editable, {
+      }, react_default.a.createElement(Editable_Editable, {
         className: "name",
         forceEditMode: editing,
         onChange: trait.setName,
         onEditStart: onEditStart,
         onEditEnd: onEditEnd,
         value: trait.name
-      }), external_react_default.a.createElement(Editable_Editable, {
+      }), react_default.a.createElement(Editable_Editable, {
         className: "value",
         type: "number",
         onChange: trait.setValue,
@@ -2527,7 +2595,7 @@ function (_Component) {
   }]);
 
   return Trait;
-}(external_react_["Component"])) || Trait_class2, defineProperty_default()(Trait_class, "defaultProps", {
+}(react["Component"])) || Trait_class2, defineProperty_default()(Trait_class, "defaultProps", {
   onEditStart: noop,
   onEditEnd: noop
 }), Trait_temp);
@@ -2544,7 +2612,7 @@ var TraitSection = __webpack_require__("a8h2");
 
 var TraitSection_compareByName = compareBy('name');
 var TraitSection_REMOVERS = {};
-var TraitSection_TraitSection = Object(external_mobx_react_["observer"])(function (_ref) {
+var TraitSection_TraitSection = Object(mobx_react["observer"])(function (_ref) {
   var _ref$addTrait = _ref.addTrait,
       addTrait = _ref$addTrait === void 0 ? noop : _ref$addTrait,
       _ref$layout = _ref.layout,
@@ -2555,25 +2623,25 @@ var TraitSection_TraitSection = Object(external_mobx_react_["observer"])(functio
   var style = {
     gridTemplateRows: "25px 25px repeat(".concat(rows || 1, ", 30px)")
   };
-  return external_react_default.a.createElement("div", {
+  return react_default.a.createElement("div", {
     className: "traits section",
     style: style
-  }, external_react_default.a.createElement("header", null, "Traits", external_react_default.a.createElement("button", {
+  }, react_default.a.createElement("header", null, "Traits", react_default.a.createElement("button", {
     className: "icon-add",
     onClick: addTrait
-  })), external_react_default.a.createElement("header", {
+  })), react_default.a.createElement("header", {
     className: "subheader"
-  }, external_react_default.a.createElement("div", {
+  }, react_default.a.createElement("div", {
     className: "trait"
-  }, external_react_default.a.createElement("span", {
+  }, react_default.a.createElement("span", {
     className: "name"
-  }, "Name"), external_react_default.a.createElement("span", {
+  }, "Name"), react_default.a.createElement("span", {
     className: "value"
-  }, "Cost")), external_react_default.a.createElement("div", {
+  }, "Cost")), react_default.a.createElement("div", {
     className: "trait"
-  }, external_react_default.a.createElement("span", {
+  }, react_default.a.createElement("span", {
     className: "name"
-  }, "Name"), external_react_default.a.createElement("span", {
+  }, "Name"), react_default.a.createElement("span", {
     className: "value"
   }, "Cost"))), traits.slice().sort(TraitSection_compareByName).map(function (trait) {
     if (!TraitSection_REMOVERS[trait.id]) {
@@ -2582,7 +2650,7 @@ var TraitSection_TraitSection = Object(external_mobx_react_["observer"])(functio
       };
     }
 
-    return external_react_default.a.createElement(components_Trait_Trait, {
+    return react_default.a.createElement(components_Trait_Trait, {
       key: trait.id,
       trait: trait,
       onEditEnd: TraitSection_REMOVERS[trait.id]
@@ -2625,7 +2693,7 @@ var Sheet_class, Sheet_temp, Sheet_class2;
 
 
 
-var Sheet_Sheet = (Sheet_temp = Sheet_class = Object(external_mobx_react_["observer"])(Sheet_class2 =
+var Sheet_Sheet = (Sheet_temp = Sheet_class = Object(mobx_react["observer"])(Sheet_class2 =
 /*#__PURE__*/
 function (_Component) {
   inherits_default()(Sheet, _Component);
@@ -2667,72 +2735,72 @@ function (_Component) {
       var classes = ['sheetforge sheet axis', sizeClass, readonly ? 'readonly' : ''].filter(Boolean).join(' ');
       /* eslint-disable max-len */
 
-      return external_react_default.a.createElement("div", {
+      return react_default.a.createElement("div", {
         className: classes,
         ref: _this.bindContainer
-      }, external_react_default.a.createElement("header", null, external_react_default.a.createElement(Editable_Editable, {
+      }, react_default.a.createElement("header", null, react_default.a.createElement(Editable_Editable, {
         className: "character-name",
         value: c.name,
         onChange: c.setName
-      }), external_react_default.a.createElement("div", {
+      }), react_default.a.createElement("div", {
         className: "xp attribute"
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
-      }, "XP"), external_react_default.a.createElement(Editable_Editable, {
+      }, "XP"), react_default.a.createElement(Editable_Editable, {
         min: 0,
         value: c.xp,
         onChange: c.setXP
-      })), external_react_default.a.createElement("div", {
+      })), react_default.a.createElement("div", {
         className: "rp attribute"
-      }, external_react_default.a.createElement("span", {
+      }, react_default.a.createElement("span", {
         className: "name"
-      }, "RP"), external_react_default.a.createElement(Editable_Editable, {
+      }, "RP"), react_default.a.createElement(Editable_Editable, {
         min: 0,
         max: 5,
         value: c.rp,
         onChange: c.setRP
-      })), external_react_default.a.createElement("div", {
+      })), react_default.a.createElement("div", {
         className: "power attribute"
-      }, external_react_default.a.createElement("div", {
+      }, react_default.a.createElement("div", {
         className: "name"
-      }, "CP"), external_react_default.a.createElement(Editable_Editable, {
+      }, "CP"), react_default.a.createElement(Editable_Editable, {
         value: c.power,
         readonly: true
-      }))), external_react_default.a.createElement(PortraitSection_PortraitSection, {
+      }))), react_default.a.createElement(PortraitSection_PortraitSection, {
         url: c.portraitURL,
         onChange: c.setPortraitURL
-      }), external_react_default.a.createElement(HealthBar_HealthBar, {
+      }), react_default.a.createElement(HealthBar_HealthBar, {
         health: c.health
-      }), external_react_default.a.createElement(source_components_DescriptorSection, {
+      }), react_default.a.createElement(source_components_DescriptorSection, {
         descriptors: c.descriptors
-      }), external_react_default.a.createElement(AttributeSection_AttributeSection, {
+      }), react_default.a.createElement(AttributeSection_AttributeSection, {
         attributes: c.attributes,
         modifiers: c.modifiers
-      }), external_react_default.a.createElement(components_TraitSection, {
+      }), react_default.a.createElement(components_TraitSection, {
         traits: c.traits,
         modifiers: c.modifiers,
         addTrait: c.addTrait,
         layout: sizeClass
-      }), external_react_default.a.createElement(SkillSection_SkillSection, {
+      }), react_default.a.createElement(SkillSection_SkillSection, {
         skills: c.skills,
         modifiers: c.modifiers,
         addSkill: c.addSkill
-      }), external_react_default.a.createElement(components_EquipmentSection, {
-        buttons: external_react_default.a.createElement("div", {
+      }), react_default.a.createElement(components_EquipmentSection, {
+        buttons: react_default.a.createElement("div", {
           className: "buttons"
-        }, "Add:", external_react_default.a.createElement("button", {
+        }, "Add:", react_default.a.createElement("button", {
           className: "icon-weapon",
           onClick: c.addWeapon
-        }), external_react_default.a.createElement("button", {
+        }), react_default.a.createElement("button", {
           className: "icon-armor",
           onClick: c.addArmor
-        }), external_react_default.a.createElement("button", {
+        }), react_default.a.createElement("button", {
           className: "icon-add",
           onClick: c.addItem
         })),
         equipment: c.equipment,
         layout: sizeClass
-      }), external_react_default.a.createElement(SpellSection_SpellSection, {
+      }), react_default.a.createElement(SpellSection_SpellSection, {
         spells: c.spells,
         modifiers: c.modifiers,
         addSpell: c.addSpell
@@ -2741,7 +2809,7 @@ function (_Component) {
     });
 
     _this.character = models_Character.create(props.character);
-    _this.disposeOfSnapshotListener = Object(external_mobx_state_tree_["onSnapshot"])(_this.character, props.onChange);
+    _this.disposeOfSnapshotListener = Object(mobx_state_tree["onSnapshot"])(_this.character, props.onChange);
     window.addEventListener('resize', _this.handleWindowResize);
     return _this;
   }
@@ -2759,7 +2827,7 @@ function (_Component) {
   }]);
 
   return Sheet;
-}(external_react_["Component"])) || Sheet_class2, defineProperty_default()(Sheet_class, "displayName", 'Sheet'), defineProperty_default()(Sheet_class, "defaultProps", {
+}(react["Component"])) || Sheet_class2, defineProperty_default()(Sheet_class, "displayName", 'Sheet'), defineProperty_default()(Sheet_class, "defaultProps", {
   character: {},
   onChange: noop,
   readonly: false
@@ -2770,42 +2838,6 @@ function (_Component) {
 /* concated harmony reexport Sheet */__webpack_require__.d(__webpack_exports__, "Sheet", function() { return Sheet_Sheet; });
 
 
-
-
-/***/ }),
-
-/***/ "17x9":
-/*!******************************************!*\
-  !*** ./node_modules/prop-types/index.js ***!
-  \******************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (true) {
-  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-    0xeac7;
-
-  var isValidElement = function(object) {
-    return typeof object === 'object' &&
-      object !== null &&
-      object.$$typeof === REACT_ELEMENT_TYPE;
-  };
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ "sHIV")(isValidElement, throwOnDirectAccess);
-} else {}
 
 
 /***/ }),
@@ -2834,94 +2866,6 @@ if (true) {
 
 /***/ }),
 
-/***/ "7W2i":
-/*!*********************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/inherits.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-var setPrototypeOf = __webpack_require__(/*! ./setPrototypeOf */ "SksO");
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) setPrototypeOf(subClass, superClass);
-}
-
-module.exports = _inherits;
-
-/***/ }),
-
-/***/ "8OQS":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-module.exports = _objectWithoutPropertiesLoose;
-
-/***/ }),
-
-/***/ "Bnag":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/nonIterableSpread.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-module.exports = _nonIterableSpread;
-
-/***/ }),
-
-/***/ "EbDI":
-/*!****************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/iterableToArray.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-}
-
-module.exports = _iterableToArray;
-
-/***/ }),
-
 /***/ "EvVW":
 /*!*********************************************!*\
   !*** ./source/components/SkillSection.scss ***!
@@ -2946,28 +2890,6 @@ module.exports = _iterableToArray;
 
 /***/ }),
 
-/***/ "Ijbi":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  }
-}
-
-module.exports = _arrayWithoutHoles;
-
-/***/ }),
-
 /***/ "J/AE":
 /*!************************************************!*\
   !*** ./source/components/PortraitSection.scss ***!
@@ -2977,39 +2899,6 @@ module.exports = _arrayWithoutHoles;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "MVZn":
-/*!*************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/objectSpread.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-var defineProperty = __webpack_require__(/*! ./defineProperty */ "lSNA");
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-
-    ownKeys.forEach(function (key) {
-      defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
-
-module.exports = _objectSpread;
 
 /***/ }),
 
@@ -3025,224 +2914,6 @@ module.exports = _objectSpread;
 
 /***/ }),
 
-/***/ "MgzW":
-/*!*********************************************!*\
-  !*** ./node_modules/object-assign/index.js ***!
-  \*********************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
-
-/* eslint-disable no-unused-vars */
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !==
-				'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (err) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
-};
-
-
-/***/ }),
-
-/***/ "Nsbk":
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/getPrototypeOf.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _getPrototypeOf(o) {
-  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
-module.exports = _getPrototypeOf;
-
-/***/ }),
-
-/***/ "PJYZ":
-/*!**********************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-module.exports = _assertThisInitialized;
-
-/***/ }),
-
-/***/ "QILm":
-/*!************************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/objectWithoutProperties.js ***!
-  \************************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-var objectWithoutPropertiesLoose = __webpack_require__(/*! ./objectWithoutPropertiesLoose */ "8OQS");
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = objectWithoutPropertiesLoose(source, excluded);
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
-}
-
-module.exports = _objectWithoutProperties;
-
-/***/ }),
-
-/***/ "RIqP":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/toConsumableArray.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayWithoutHoles = __webpack_require__(/*! ./arrayWithoutHoles */ "Ijbi");
-
-var iterableToArray = __webpack_require__(/*! ./iterableToArray */ "EbDI");
-
-var nonIterableSpread = __webpack_require__(/*! ./nonIterableSpread */ "Bnag");
-
-function _toConsumableArray(arr) {
-  return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
-}
-
-module.exports = _toConsumableArray;
-
-/***/ }),
-
-/***/ "SksO":
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/setPrototypeOf.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _setPrototypeOf(o, p) {
-  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-
-module.exports = _setPrototypeOf;
-
-/***/ }),
-
 /***/ "TRUF":
 /*!******************************************!*\
   !*** ./source/components/HealthBar.scss ***!
@@ -3252,59 +2923,6 @@ module.exports = _setPrototypeOf;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "W8MJ":
-/*!************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/createClass.js ***!
-  \************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-module.exports = _createClass;
-
-/***/ }),
-
-/***/ "WbBG":
-/*!*************************************************************!*\
-  !*** ./node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-module.exports = ReactPropTypesSecret;
-
 
 /***/ }),
 
@@ -3320,18 +2938,6 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
-/***/ "YeEv":
-/*!**********************************!*\
-  !*** external "mobx-state-tree" ***!
-  \**********************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_YeEv__;
-
-/***/ }),
-
 /***/ "YwVW":
 /*!*************************************************!*\
   !*** ./source/components/AttributeSection.scss ***!
@@ -3341,30 +2947,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_YeEv__;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "a1gu":
-/*!**************************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _typeof = __webpack_require__(/*! ../helpers/typeof */ "cDf5");
-
-var assertThisInitialized = __webpack_require__(/*! ./assertThisInitialized */ "PJYZ");
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (_typeof(call) === "object" || typeof call === "function")) {
-    return call;
-  }
-
-  return assertThisInitialized(self);
-}
-
-module.exports = _possibleConstructorReturn;
 
 /***/ }),
 
@@ -3389,46 +2971,6 @@ module.exports = _possibleConstructorReturn;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "cDcd":
-/*!************************!*\
-  !*** external "react" ***!
-  \************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_cDcd__;
-
-/***/ }),
-
-/***/ "cDf5":
-/*!*******************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/typeof.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
-function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
-    module.exports = _typeof = function _typeof(obj) {
-      return _typeof2(obj);
-    };
-  } else {
-    module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
-    };
-  }
-
-  return _typeof(obj);
-}
-
-module.exports = _typeof;
 
 /***/ }),
 
@@ -3492,185 +3034,6 @@ module.exports = _typeof;
 
 /***/ }),
 
-/***/ "lSNA":
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty;
-
-/***/ }),
-
-/***/ "lwsE":
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/classCallCheck.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-module.exports = _classCallCheck;
-
-/***/ }),
-
-/***/ "oVyQ":
-/*!***************************************************!*\
-  !*** ./node_modules/prop-types/checkPropTypes.js ***!
-  \***************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var printWarning = function() {};
-
-if (true) {
-  var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "WbBG");
-  var loggedTypeFailures = {};
-
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-}
-
-/**
- * Assert that the values match with the type specs.
- * Error messages are memorized and will only be shown once.
- *
- * @param {object} typeSpecs Map of name to a ReactPropType
- * @param {object} values Runtime values that need to be type-checked
- * @param {string} location e.g. "prop", "context", "child context"
- * @param {string} componentName Name of the component for error messages.
- * @param {?Function} getStack Returns the component stack.
- * @private
- */
-function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if (true) {
-    for (var typeSpecName in typeSpecs) {
-      if (typeSpecs.hasOwnProperty(typeSpecName)) {
-        var error;
-        // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
-        try {
-          // This is intentionally an invariant that gets caught. It's the same
-          // behavior as without this statement except with a better message.
-          if (typeof typeSpecs[typeSpecName] !== 'function') {
-            var err = Error(
-              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
-              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.'
-            );
-            err.name = 'Invariant Violation';
-            throw err;
-          }
-          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
-        } catch (ex) {
-          error = ex;
-        }
-        if (error && !(error instanceof Error)) {
-          printWarning(
-            (componentName || 'React class') + ': type specification of ' +
-            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
-            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
-            'You may have forgotten to pass an argument to the type checker ' +
-            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
-            'shape all require an argument).'
-          )
-
-        }
-        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-          // Only monitor this failure once because there tends to be a lot of the
-          // same error.
-          loggedTypeFailures[error.message] = true;
-
-          var stack = getStack ? getStack() : '';
-
-          printWarning(
-            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
-          );
-        }
-      }
-    }
-  }
-}
-
-module.exports = checkPropTypes;
-
-
-/***/ }),
-
-/***/ "pVnL":
-/*!********************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/extends.js ***!
-  \********************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-function _extends() {
-  module.exports = _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-module.exports = _extends;
-
-/***/ }),
-
 /***/ "q6KL":
 /*!*********************************************!*\
   !*** ./source/components/SpellSection.scss ***!
@@ -3680,586 +3043,6 @@ module.exports = _extends;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "sGQ9":
-/*!*****************************!*\
-  !*** external "mobx-react" ***!
-  \*****************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_sGQ9__;
-
-/***/ }),
-
-/***/ "sHIV":
-/*!************************************************************!*\
-  !*** ./node_modules/prop-types/factoryWithTypeCheckers.js ***!
-  \************************************************************/
-/*! no static exports found */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var assign = __webpack_require__(/*! object-assign */ "MgzW");
-
-var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "WbBG");
-var checkPropTypes = __webpack_require__(/*! ./checkPropTypes */ "oVyQ");
-
-var printWarning = function() {};
-
-if (true) {
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-}
-
-function emptyFunctionThatReturnsNull() {
-  return null;
-}
-
-module.exports = function(isValidElement, throwOnDirectAccess) {
-  /* global Symbol */
-  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-  /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */
-  function getIteratorFn(maybeIterable) {
-    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-    if (typeof iteratorFn === 'function') {
-      return iteratorFn;
-    }
-  }
-
-  /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */
-
-  var ANONYMOUS = '<<anonymous>>';
-
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-  var ReactPropTypes = {
-    array: createPrimitiveTypeChecker('array'),
-    bool: createPrimitiveTypeChecker('boolean'),
-    func: createPrimitiveTypeChecker('function'),
-    number: createPrimitiveTypeChecker('number'),
-    object: createPrimitiveTypeChecker('object'),
-    string: createPrimitiveTypeChecker('string'),
-    symbol: createPrimitiveTypeChecker('symbol'),
-
-    any: createAnyTypeChecker(),
-    arrayOf: createArrayOfTypeChecker,
-    element: createElementTypeChecker(),
-    instanceOf: createInstanceTypeChecker,
-    node: createNodeChecker(),
-    objectOf: createObjectOfTypeChecker,
-    oneOf: createEnumTypeChecker,
-    oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker,
-    exact: createStrictShapeTypeChecker,
-  };
-
-  /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */
-  /*eslint-disable no-self-compare*/
-  function is(x, y) {
-    // SameValue algorithm
-    if (x === y) {
-      // Steps 1-5, 7-10
-      // Steps 6.b-6.e: +0 != -0
-      return x !== 0 || 1 / x === 1 / y;
-    } else {
-      // Step 6.a: NaN == NaN
-      return x !== x && y !== y;
-    }
-  }
-  /*eslint-enable no-self-compare*/
-
-  /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */
-  function PropTypeError(message) {
-    this.message = message;
-    this.stack = '';
-  }
-  // Make `instanceof Error` still work for returned errors.
-  PropTypeError.prototype = Error.prototype;
-
-  function createChainableTypeChecker(validate) {
-    if (true) {
-      var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
-    }
-    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-
-      if (secret !== ReactPropTypesSecret) {
-        if (throwOnDirectAccess) {
-          // New behavior only for users of `prop-types` package
-          var err = new Error(
-            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-            'Use `PropTypes.checkPropTypes()` to call them. ' +
-            'Read more at http://fb.me/use-check-prop-types'
-          );
-          err.name = 'Invariant Violation';
-          throw err;
-        } else if ("development" !== 'production' && typeof console !== 'undefined') {
-          // Old behavior for people using React.PropTypes
-          var cacheKey = componentName + ':' + propName;
-          if (
-            !manualPropTypeCallCache[cacheKey] &&
-            // Avoid spamming the console because they are often not actionable except for lib authors
-            manualPropTypeWarningCount < 3
-          ) {
-            printWarning(
-              'You are manually calling a React.PropTypes validation ' +
-              'function for the `' + propFullName + '` prop on `' + componentName  + '`. This is deprecated ' +
-              'and will throw in the standalone `prop-types` package. ' +
-              'You may be seeing this warning due to a third-party PropTypes ' +
-              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
-            );
-            manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
-          }
-        }
-      }
-      if (props[propName] == null) {
-        if (isRequired) {
-          if (props[propName] === null) {
-            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
-          }
-          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
-        }
-        return null;
-      } else {
-        return validate(props, propName, componentName, location, propFullName);
-      }
-    }
-
-    var chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-
-    return chainedCheckType;
-  }
-
-  function createPrimitiveTypeChecker(expectedType) {
-    function validate(props, propName, componentName, location, propFullName, secret) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== expectedType) {
-        // `propValue` being instance of, say, date/regexp, pass the 'object'
-        // check, but we can offer a more precise error message here rather than
-        // 'of type `object`'.
-        var preciseType = getPreciseType(propValue);
-
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
-  }
-
-  function createArrayOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
-      }
-      var propValue = props[propName];
-      if (!Array.isArray(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
-      }
-      for (var i = 0; i < propValue.length; i++) {
-        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
-        if (error instanceof Error) {
-          return error;
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      if (!isValidElement(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createInstanceTypeChecker(expectedClass) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!(props[propName] instanceof expectedClass)) {
-        var expectedClassName = expectedClass.name || ANONYMOUS;
-        var actualClassName = getClassName(props[propName]);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createEnumTypeChecker(expectedValues) {
-    if (!Array.isArray(expectedValues)) {
-       true ? printWarning('Invalid argument supplied to oneOf, expected an instance of array.') : undefined;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      for (var i = 0; i < expectedValues.length; i++) {
-        if (is(propValue, expectedValues[i])) {
-          return null;
-        }
-      }
-
-      var valuesString = JSON.stringify(expectedValues);
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createObjectOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
-      }
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
-      }
-      for (var key in propValue) {
-        if (propValue.hasOwnProperty(key)) {
-          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-          if (error instanceof Error) {
-            return error;
-          }
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createUnionTypeChecker(arrayOfTypeCheckers) {
-    if (!Array.isArray(arrayOfTypeCheckers)) {
-       true ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : undefined;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
-      if (typeof checker !== 'function') {
-        printWarning(
-          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
-        );
-        return emptyFunctionThatReturnsNull;
-      }
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-        var checker = arrayOfTypeCheckers[i];
-        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
-          return null;
-        }
-      }
-
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createNodeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!isNode(props[propName])) {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      for (var key in shapeTypes) {
-        var checker = shapeTypes[key];
-        if (!checker) {
-          continue;
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createStrictShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      // We need to check all keys in case some are required but missing from
-      // props.
-      var allKeys = assign({}, props[propName], shapeTypes);
-      for (var key in allKeys) {
-        var checker = shapeTypes[key];
-        if (!checker) {
-          return new PropTypeError(
-            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
-            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
-            '\nValid keys: ' +  JSON.stringify(Object.keys(shapeTypes), null, '  ')
-          );
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function isNode(propValue) {
-    switch (typeof propValue) {
-      case 'number':
-      case 'string':
-      case 'undefined':
-        return true;
-      case 'boolean':
-        return !propValue;
-      case 'object':
-        if (Array.isArray(propValue)) {
-          return propValue.every(isNode);
-        }
-        if (propValue === null || isValidElement(propValue)) {
-          return true;
-        }
-
-        var iteratorFn = getIteratorFn(propValue);
-        if (iteratorFn) {
-          var iterator = iteratorFn.call(propValue);
-          var step;
-          if (iteratorFn !== propValue.entries) {
-            while (!(step = iterator.next()).done) {
-              if (!isNode(step.value)) {
-                return false;
-              }
-            }
-          } else {
-            // Iterator will provide entry [k,v] tuples rather than values.
-            while (!(step = iterator.next()).done) {
-              var entry = step.value;
-              if (entry) {
-                if (!isNode(entry[1])) {
-                  return false;
-                }
-              }
-            }
-          }
-        } else {
-          return false;
-        }
-
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  function isSymbol(propType, propValue) {
-    // Native Symbol.
-    if (propType === 'symbol') {
-      return true;
-    }
-
-    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-    if (propValue['@@toStringTag'] === 'Symbol') {
-      return true;
-    }
-
-    // Fallback for non-spec compliant Symbols which are polyfilled.
-    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
-      return true;
-    }
-
-    return false;
-  }
-
-  // Equivalent of `typeof` but with special handling for array and regexp.
-  function getPropType(propValue) {
-    var propType = typeof propValue;
-    if (Array.isArray(propValue)) {
-      return 'array';
-    }
-    if (propValue instanceof RegExp) {
-      // Old webkits (at least until Android 4.0) return 'function' rather than
-      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-      // passes PropTypes.object.
-      return 'object';
-    }
-    if (isSymbol(propType, propValue)) {
-      return 'symbol';
-    }
-    return propType;
-  }
-
-  // This handles more types than `getPropType`. Only used for error messages.
-  // See `createPrimitiveTypeChecker`.
-  function getPreciseType(propValue) {
-    if (typeof propValue === 'undefined' || propValue === null) {
-      return '' + propValue;
-    }
-    var propType = getPropType(propValue);
-    if (propType === 'object') {
-      if (propValue instanceof Date) {
-        return 'date';
-      } else if (propValue instanceof RegExp) {
-        return 'regexp';
-      }
-    }
-    return propType;
-  }
-
-  // Returns a string that is postfixed to a warning about an invalid type.
-  // For example, "undefined" or "of type array"
-  function getPostfixForTypeWarning(value) {
-    var type = getPreciseType(value);
-    switch (type) {
-      case 'array':
-      case 'object':
-        return 'an ' + type;
-      case 'boolean':
-      case 'date':
-      case 'regexp':
-        return 'a ' + type;
-      default:
-        return type;
-    }
-  }
-
-  // Returns class name of the object, if any.
-  function getClassName(propValue) {
-    if (!propValue.constructor || !propValue.constructor.name) {
-      return ANONYMOUS;
-    }
-    return propValue.constructor.name;
-  }
-
-  ReactPropTypes.checkPropTypes = checkPropTypes;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
 
 /***/ }),
 
@@ -4301,4 +3084,4 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 /******/ });
 });
-//# sourceMappingURL=sheetforge.js.map
+//# sourceMappingURL=sheetforge.development.js.map
