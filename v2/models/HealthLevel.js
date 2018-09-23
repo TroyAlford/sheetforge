@@ -2,8 +2,8 @@ import { isObservableArray } from 'mobx'
 import { getParent, types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
 
-const DAMAGE_TYPES = [
-  'ok',
+const DAMAGE_LEVELS = [
+  'none',
   'light',
   'heavy',
   'bane',
@@ -12,9 +12,9 @@ const DAMAGE_TYPES = [
 export default types.compose(
   IEditable,
   types.model({
-    damageType: types.union(...DAMAGE_TYPES.map(dt => types.literal(dt))),
     displayName: types.string,
-    woundPenalty: 0,
+    damage: types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))),
+    penalty: 0,
   }).volatile(() => ({
     healthBar: null,
   })).views(self => ({
@@ -31,40 +31,32 @@ export default types.compose(
         }
       } catch (e) {}
     },
-    damage(severity) {
-      if (!DAMAGE_TYPES.includes(severity)) return
+    apply(damage) {
+      if (!DAMAGE_LEVELS.includes(damage)) return
 
-      const newSeverity = DAMAGE_TYPES.indexOf(severity)
-      const ownSeverity = DAMAGE_TYPES.indexOf(self.damageType)
+      const newSeverity = DAMAGE_LEVELS.indexOf(damage)
+      const ownSeverity = DAMAGE_LEVELS.indexOf(self.damage)
       if (newSeverity === ownSeverity) return
 
       const ownIndex = self.index
       const direction = newSeverity < ownSeverity ? '↑' : '↓'
 
       if (!self.healthBar) {
-        self.set({ damageType: severity })
+        self.set({ damage })
         return
       }
 
       self.healthBar.forEach((healthLevel, index) => {
-        const current = DAMAGE_TYPES.indexOf(healthLevel.damageType)
+        const current = DAMAGE_LEVELS.indexOf(healthLevel.damage)
 
         if (
           (direction === '↑' && index <= ownIndex && current > newSeverity) ||
           (direction === '↓' && index >= ownIndex && current < newSeverity)
         ) {
-          healthLevel.set({ damageType: severity })
+          healthLevel.set({ damage })
         }
       })
     },
-    // heal() {
-    //   if (self.healthBar) {
-    //     self.healthBar.forEach((healthLevel, index) => {
-    //       if (index <= self.index) healthLevel.set('damageType', 'none')
-    //     })
-    //   } else {
-    //     self.set('damageType', 'none')
-    //   }
-    // },
+    heal() { self.apply('none') },
   }))
 ).named('HealthLevel')
