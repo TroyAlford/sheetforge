@@ -15,6 +15,7 @@
     "@babel/node": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-decorators": "^7.1.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
@@ -26,6 +27,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "directory-named-webpack-plugin": "^4.0.0",
+    "docz": "^0.11.2",
     "eslint": "^5.6.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
@@ -52,7 +54,8 @@
     "style-loader": "^0.23.0",
     "url-loader": "^1.0.1",
     "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^3.1.0",
+    "webpack-merge": "^4.1.4"
   },
   "peerDependencies": {
     "mobx": "^5.0.3",

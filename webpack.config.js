@@ -67,6 +67,7 @@ module.exports = {
   resolve: {
     alias: {
       '@': `${__dirname}/source/`,
+      '@fontello': `${__dirname}/fontello/`,
     },
     extensions: ['.css', '.js', '.scss'],
     modules: ['node_modules'],
