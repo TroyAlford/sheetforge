@@ -11,6 +11,5 @@ export default types.compose(
     descriptors: types.array(Descriptor),
     effects: types.array(Effect),
     equipped: false,
-    referenceId: types.maybe(types.string), // to lookup description/flavor text/image
   }),
 ).named('Item')

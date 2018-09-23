@@ -6,7 +6,6 @@ export default types.compose(
   IEditable,
   types.model({
     displayName: '',
-    referenceId: types.maybe(types.string), // to lookup description/flavor text/link
     value: types.union(types.number, types.array(types.number)),
   }).views(self => ({
     get theory() {
