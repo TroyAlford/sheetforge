@@ -8,5 +8,18 @@ export default {
     webpackConfig,
   ),
   src: './source',
+  themeConfig: {
+    styles: {
+      body: {
+        fontFamily: 'Ubuntu',
+      },
+      h1: {
+        '&:before': {
+          display: 'none',
+        },
+        fontWeight: 'bold',
+      },
+    },
+  },
   title: 'Sheetforge Documentation',
 }
