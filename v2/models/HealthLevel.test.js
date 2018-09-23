@@ -25,7 +25,7 @@ describe('models/HealthLevel', () => {
     })
 
     it('heal() sets health level to "ok"', () => {
-      const healthLevel = HealthLevel.create({ displayName: 'Healthy', damage: 'bane' });
+      const healthLevel = HealthLevel.create({ displayName: 'Healthy', damage: 'bane' })
 
       healthLevel.heal()
       expect(healthLevel.damage).toEqual('none')
