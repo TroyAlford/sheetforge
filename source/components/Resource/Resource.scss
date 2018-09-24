@@ -1,0 +1,14 @@
+.resource {
+  align-items: stretch;
+  display: flex;
+  height: auto;
+  min-height: 2em;
+  min-width: 250px;
+
+  .displayName {
+    flex: 1;
+    height: auto;
+  }
+  .rating {
+  }
+}
