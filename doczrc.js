@@ -13,10 +13,11 @@ export default {
       body: {
         fontFamily: 'Ubuntu',
       },
-      h1: {
+      h2: {
         '&:before': {
           display: 'none',
         },
+        display: 'flex',
         fontWeight: 'bold',
       },
     },
