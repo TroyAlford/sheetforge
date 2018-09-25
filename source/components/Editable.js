@@ -25,7 +25,7 @@ export default class Editable extends React.Component {
     onEditStart: noop,
     placeholder: '',
     readOnly: false,
-    step: '1',
+    step: 1,
     type: undefined,
     value: '',
   }
