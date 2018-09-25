@@ -1,6 +1,0 @@
-@import './variables';
-
-.spell {
-  @include gridCell;
-  grid-template-columns: auto 30px 30px;
-}

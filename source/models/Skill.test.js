@@ -1,38 +1,18 @@
-import Skill from '@/models/Skill'
-import { randomHash } from '@/utilities/hash'
+import Skill from './Skill'
 
-beforeAll(() => {
-  console.warn = jest.fn()
-})
+const simple = Skill.create({ displayName: 'Survival', value: 4 })
+const complex = Skill.create({ displayName: 'Combat: Karate', value: [2, 3] })
 
-it('defaults correctly', () => {
-  const s = Skill.create({ id: randomHash() })
+describe('models/Skill', () => {
+  it('identifies type as simple vs complex', () => {
+    expect(simple.type).toEqual('simple')
+    expect(complex.type).toEqual('complex')
+  })
 
-  expect(s.name).toBe('New Skill')
-  expect(s.theory).toBe(0)
-  expect(s.mastery).toBe(0)
-})
-
-it('allows setting theory', () => {
-  const s = Skill.create({ id: randomHash() })
-
-  expect(s.theory).toBe(0)
-  s.setTheory(2)
-  expect(s.theory).toBe(2)
-})
-
-it('computes xp cost correctly', () => {
-  const s = Skill.create({ mastery: 1 })
-  expect(s.theory).toBe(0)
-  expect(s.mastery).toBe(1)
-  expect(s.xpCost).toBe(3) // Th(0x3) = 0, Ms(1x3) = 3
-
-  s.setTheory(1)
-  expect(s.xpCost).toBe(6) // Th (1x3) = 3, Ms (1x3) = 3
-
-  s.setTheory(2)
-  expect(s.xpCost).toBe(12) // Th (1x3 + 2x3) = 9, Ms (1x3) = 3
-
-  s.setMastery(2)
-  expect(s.xpCost).toBe(18) // Th (1x3 + 2x3) = 9, Ms(1x3 + 2x3) = 9
+  it('returns correct theory/mastery for simple & complex types', () => {
+    expect(simple.theory).toEqual(0)
+    expect(simple.mastery).toEqual(4)
+    expect(complex.theory).toEqual(2)
+    expect(complex.mastery).toEqual(3)
+  })
 })

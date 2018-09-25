@@ -1,34 +1,24 @@
-import { getParent, types } from 'mobx-state-tree'
-import ExperienceCost from '@/models/ExperienceCost'
-import between from '@/models/types/between'
-import bound from '@/utilities/bound'
-import range from '@/utilities/range'
-import { autoHash } from '@/utilities/types'
+import { isObservableArray } from 'mobx'
+import { types } from 'mobx-state-tree'
+import IEditable from '@/models/generic/IEditable'
 
-const Skill = types.compose(
-  types.model('Skill', {
-    id: autoHash,
-    name: 'New Skill',
-    theory: between(0, 10),
-    mastery: between(0, 10),
+export default types.compose(
+  IEditable,
+  types.model({
+    displayName: '',
+    value: types.union(types.number, types.array(types.number)),
   }).views(self => ({
-    get modifier() {
-      return getParent(self, 2).modifierFor(self.name)
+    get mastery() {
+      if (self.type === 'complex') return self.value[1]
+      return self.value
     },
-  })).actions(self => ({
-    /* eslint-disable no-param-reassign */
-    remove() { return getParent(self, 2).removeSkill(self) },
-    setName(name) { self.name = name },
-    setTheory(theory) { self.theory = theory },
-    setMastery(mastery) { self.mastery = mastery },
-    /* eslint-enable no-param-reassign */
-  })),
-  ExperienceCost((self) => {
-    const values = []
-    if (self.theory >= 1) values.push(...range(1, self.theory))
-    if (self.mastery >= 1) values.push(...range(1, self.mastery))
-    return values.reduce((total, next) => total + bound(next * 3, { min: 3 }), 0)
-  }, ['setMastery', 'setTheory'])
-)
-
-export default Skill
+    get theory() {
+      if (self.type === 'complex') return self.value[0]
+      return 0
+    },
+    get type() {
+      if (isObservableArray(self.value)) return 'complex'
+      return 'simple'
+    },
+  }))
+).named('Skill')

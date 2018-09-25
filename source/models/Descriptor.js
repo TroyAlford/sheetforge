@@ -1,15 +1,10 @@
 import { types } from 'mobx-state-tree'
+import IEditable from '@/models/generic/IEditable'
 
-const Descriptor = types
-  .model('Descriptor', {
-    id: types.identifier,
-    name: '',
-    value: '',
-  }).actions(my => ({
-    /* eslint-disable no-param-reassign */
-    setName(name) { my.name = name },
-    setValue(value) { my.value = value },
-    /* eslint-enable no-param-reassign */
-  }))
-
-export default Descriptor
+export default types.compose(
+  IEditable,
+  types.model({
+    displayName: types.string,
+    value: types.union(types.string, types.number),
+  })
+).named('Descriptor')

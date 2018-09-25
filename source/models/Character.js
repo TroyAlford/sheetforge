@@ -1,128 +1,58 @@
 import { types } from 'mobx-state-tree'
-import Armor from '@/models/Armor'
-import Attribute from '@/models/Attribute'
-import Descriptor from '@/models/Descriptor'
-import Health from '@/models/Health'
-import Item from '@/models/Item'
-import Skill from '@/models/Skill'
-import Spell from '@/models/Spell'
-import Trait from '@/models/Trait'
-import Weapon from '@/models/Weapon'
-import { average, sum } from '@/utilities/math'
-import { autoHash } from '@/utilities/types'
+import Attribute from './Attribute'
+import Descriptor from './Descriptor'
+import Effect from './Effect'
+import HealthLevel from './HealthLevel'
+import Item from './Item'
+import Resource from './Resource'
+import Skill from './Skill'
+import Spell from './Spell'
+import Trait from './Trait'
+import IEditable from '@/models/generic/IEditable'
+import flatten from '@/utilities/flatten'
 
-export const PRIMARY_ATTRIBUTES = [
-  'acuity', 'agility', 'confidence',
-  'devotion', 'fitness', 'focus',
-  'intellect', 'intuition', 'strength',
-]
-export const SECONDARY_ATTRIBUTES = ['size', 'naturalArmor']
-export const DERIVED_ATTRIBUTES = [
-  'body', 'mind', 'spirit',
-  'potency', 'reflex', 'resilience',
-  'accuracy', 'might', 'toughness',
-  'speed',
-
-  'power',
-]
-
-export const DEFAULT_DESCRIPTORS = [
-  'age', 'concept', 'eyes', 'gender', 'hair',
-  'height', 'homeland', 'race', 'weight',
-]
-
-const capitalize = s => s.replace(/^./, s.charAt(0).toUpperCase())
-
-const primaries = PRIMARY_ATTRIBUTES.map(id => (
-  { id, type: 'primary', name: capitalize(id), value: -1 }
-))
-const secondaries = [
-  { id: 'size', type: 'secondary', name: 'Size', value: 0 },
-  { id: 'naturalArmor', type: 'secondary', name: 'N. Armor', value: 0 },
-]
-const descriptors = DEFAULT_DESCRIPTORS.map(id => (
-  { id, name: capitalize(id), value: '' }
-))
-
-const Character = types
-  .model('Character', {
-    id: autoHash,
-    name: 'Unnamed Character',
-    rp: 0,
-    xp: 0,
-
-    portraitURL: '',
-    primaryAttributes: types.optional(types.array(Attribute), primaries),
-    secondaryAttributes: types.optional(types.array(Attribute), secondaries),
-    descriptors: types.optional(types.array(Descriptor), descriptors),
-    // effects: types.array(Effect, []),
-    equipment: types.optional(types.array(types.union(Armor, Item, Weapon)), []),
-    health: types.optional(Health, {}),
-    spells: types.optional(types.array(Spell), []),
-    skills: types.optional(types.array(Skill), []),
-    traits: types.optional(types.array(Trait), []),
-  }).views((my) => {
-    const attr = id => (my.attribute(id) || {}).value || 0
-    const attrs = (...ids) => ids.map(id => attr(id))
-
-    /* eslint-disable max-len, object-property-newline */
-    const computedAttributes = [
-      Attribute.create({ id: 'body', value: () => average(attrs('agility', 'fitness', 'strength')), name: 'Body' }),
-      Attribute.create({ id: 'mind', value: () => average(attrs('acuity', 'focus', 'intellect')), name: 'Mind' }),
-      Attribute.create({ id: 'potency', value: () => average(attrs('confidence', 'intellect', 'strength')), name: 'Potency' }),
-      Attribute.create({ id: 'reflex', value: () => average(attrs('acuity', 'agility', 'intuition')), name: 'Reflex' }),
-      Attribute.create({ id: 'resilience', value: () => average(attrs('devotion', 'fitness', 'focus')), name: 'Resilience' }),
-      Attribute.create({ id: 'speed', value: () => sum(6, attr('size'), Math.round(attr('fitness') / 2)), name: 'Speed' }),
-      Attribute.create({ id: 'spirit', value: () => average(attrs('confidence', 'devotion', 'intuition')), name: 'Spirit' }),
-    ]
-    /* eslint-enable max-len, object-property-newline */
-
-    return {
-      get attributes() {
-        return [
-          ...my.primaryAttributes,
-          ...my.secondaryAttributes,
-          ...computedAttributes,
-        ]
-      },
-      get attributeIds() {
-        return [
-          ...my.primaryAttributes.map(a => a.id),
-          ...computedAttributes.map(a => a.id),
-        ]
-      },
-      get armor() { return my.equipment.filter(e => Armor.is(e)) },
-      get armorRating() {
-        return attr('naturalArmor') + sum(my.armor.map(e => (e.equipped ? e.rating : 0)))
-      },
-      get equipped() { return my.equipment.filter(e => e.equipped) },
-      get power() {
-        return sum([
-          ...my.primaryAttributes.map(a => a.xpCost),
-          ...my.skills.map(s => s.xpCost),
-          ...my.traits.map(s => s.xpCost),
-        ])
-      },
-      get weapons() { return my.equipment.filter(e => Weapon.is(e)) },
-    }
-  }).actions(my => ({
-    /* eslint-disable no-param-reassign */
-    addArmor() { my.equipment.push(Armor.create()) },
-    addItem() { my.equipment.push(Item.create()) },
-    addSkill() { my.skills.push(Skill.create()) },
-    addSpell() { my.spells.push(Spell.create()) },
-    addTrait() { my.traits.push(Trait.create()) },
-    addWeapon() { my.equipment.push(Weapon.create()) },
-    attribute(id) { return my.attributes.find(a => a.id === id) },
-    removeItem(item) { return my.equipment.remove(item) },
-    removeSkill(skill) { return my.skills.remove(skill) },
-    removeTrait(trait) { return my.traits.remove(trait) },
-    setAttribute(id, value) { my.attribute(id).setValue(value) },
-    setName(name) { my.name = name },
-    setPortraitURL(url) { my.portraitURL = url },
-    setXP(xp) { my.xp = xp },
-    setRP(rp) { my.rp = rp },
-    /* eslint-enable no-param-reassign */
+export default types.compose(
+  IEditable,
+  types.model({
+    attributes: types.map(Attribute),
+    conditions: types.array(types.string), // ['vs Goblins', 'Crinos Form']
+    descriptors: types.array(Descriptor),
+    effects: types.array(Effect), // active/inactive, buffs Attribute OR Conditional
+    experience: 0,
+    health: types.maybe(types.union(types.number, types.array(HealthLevel))),
+    items: types.array(Item), // equipped / unequipped, have Effects
+    resources: types.map(Resource),
+    skills: types.array(Skill),
+    spells: types.array(Spell),
+    traits: types.array(Trait), // have Effects
+  }).volatile(() => ({
+    isCharacter: true,
+  })).views(self => ({
+    get activeEffects() {
+      return [
+        // Trait Effects first, because they're inherent
+        ...self.activeTraitEffects,
+        // Direct Effects second, because they're cast on the character
+        ...self.effects.filter(effect => effect.isActive && effect.isApplicable),
+        // Item Effects third, because they're indirect
+        ...self.activeItemEffects,
+      ].filter(Boolean)
+    },
+    get activeItemEffects() {
+      // item effects are active if item is equipped
+      return flatten(
+        self.items
+          .filter(item => item.equipped)
+          .map(item => item.effects.filter(effect => effect.isApplicable))
+      )
+    },
+    get activeTraitEffects() {
+      // trait effects are active all the time
+      return flatten(
+        self.traits.map(trait => (
+          trait.effects.filter(effect => effect.isApplicable)
+        ))
+      )
+    },
   }))
-
-export default Character
+).named('Character')

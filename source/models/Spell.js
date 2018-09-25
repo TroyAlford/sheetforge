@@ -1,29 +1,41 @@
 import { getParent, types } from 'mobx-state-tree'
-import ExperienceCost from '@/models/ExperienceCost'
-import between from '@/models/types/between'
-import bound from '@/utilities/bound'
-import range from '@/utilities/range'
-import { autoHash } from '@/utilities/types'
+import IEditable from '@/models/generic/IEditable'
 
-const Spell = types.compose(
-  types.model('Spell', {
-    id: autoHash,
-    name: 'New Spell',
+export default types.compose(
+  IEditable,
+  types.model({
+    cost: types.map(types.number), // Resources
     description: '',
-    level: between(0, 9),
-  }).actions(self => ({
-    /* eslint-disable no-param-reassign */
-    remove() { return getParent(self, 2).removeSpell(self) },
-    setDescription(description) { self.description = description },
-    setName(name) { self.name = name },
-    setLevel(level) { self.level = level },
-    /* eslint-enable no-param-reassign */
-  })),
-  ExperienceCost((self) => {
-    const values = []
-    if (self.level >= 1) values.push(...range(1, self.level))
-    return values.reduce((total, next) => total + bound(next * 3, { min: 3 }), 0)
-  }, ['setLevel'])
-)
+    displayName: types.string,
+    level: 0,
+  }).volatile(() => ({
+    character: null,
+  })).views(self => ({
+    get isAffordable() {
+      if (!self.character) return true
 
-export default Spell
+      const costs = [...self.cost.entries()]
+      return costs.length === costs.filter(([key, value]) => {
+        const resource = self.character.resources.get(key)
+        return Boolean(resource && resource.current >= value)
+      }).length
+    },
+  })).actions(self => ({
+    /* eslint-disable no-param-reassign */
+
+    afterAttach() {
+      // self => spell array => character
+      try { self.character = getParent(self, 2) } catch (e) {}
+    },
+    cast() {
+      if (self.character && self.isAffordable) {
+        [...self.cost.entries()].forEach(([key, value]) => {
+          const resource = self.character.resources.get(key)
+          resource.set('current', resource.current - value)
+        })
+      }
+    },
+
+    /* eslint-enable no-param-reassign */
+  }))
+).named('Spell')

@@ -1,20 +1,12 @@
-import { getParent, types } from 'mobx-state-tree'
-import ExperienceCost from '@/models/ExperienceCost'
-import { autoHash } from '@/utilities/types'
+import { types } from 'mobx-state-tree'
+import Effect from './Effect'
+import IEditable from '@/models/generic/IEditable'
 
-const Trait = types.compose(
+export default types.compose(
+  IEditable,
   types.model('Trait', {
-    id: autoHash,
-    name: 'New Trait',
+    displayName: types.string,
+    effects: types.array(Effect),
     value: 0,
-  }).actions(self => ({
-    /* eslint-disable no-param-reassign */
-    remove() { return getParent(self, 2).removeTrait(self) },
-    setName(name) { self.name = name },
-    setValue(value) { self.value = value },
-    /* eslint-enable no-param-reassign */
-  })),
-  ExperienceCost(self => self.value, ['setValue']),
-)
-
-export default Trait
+  })
+).named('Trait')
