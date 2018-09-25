@@ -22,6 +22,7 @@ export default @observer class Descriptor extends Component {
         />
         <Editable
           className="value"
+          type="text"
           onChange={this.onChangeValue}
           value={this.props.model.value}
         />

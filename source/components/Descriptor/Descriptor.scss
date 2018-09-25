@@ -2,4 +2,10 @@
 
 .descriptor {
   @include widget;
+
+  .displayName { flex: 1; }
+  .value {
+    justify-content: flex-end;
+    text-align: right;
+  }
 }
