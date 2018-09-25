@@ -8,7 +8,9 @@
 .icon-currency:before { content: '\e806'; } /* '' */
 .icon-add:before { content: '\e807'; } /* '' */
 .icon-remove:before { content: '\e808'; } /* '' */
-.icon-health:before { content: '\e901'; } /* '' */
+.icon-damage-light:before { content: '\e80a'; } /* '' */
+.icon-damage-heavy:before { content: '\e80b'; } /* '' */
+.icon-damage-none:before { content: '\e901'; } /* '' */
 .icon-health-bane:before { content: '\e902'; } /* '' */
 .icon-collapsed:before { content: '\e903'; } /* '' */
 .icon-expanded:before { content: '\e904'; } /* '' */
