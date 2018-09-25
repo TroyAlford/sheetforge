@@ -1,14 +1,15 @@
-div.editable {
+.editable {
   box-sizing: border-box;
   display: block;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
+  min-height: 40px;
   min-width: 40px;
   position: relative;
 
   &:not(.readonly) {
-    > span, > p {
+    > div, > p, > span {
       cursor: pointer;
     }
   }
