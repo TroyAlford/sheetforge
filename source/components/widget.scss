@@ -1,0 +1,22 @@
+@mixin widget {
+  align-items: stretch;
+  display: flex;
+  justify-items: stretch;
+  min-height: 2em;
+  min-width: 250px;
+
+  > * {
+    height: auto;
+  }
+
+  > .editable {
+    justify-content: center;
+    text-align: center;
+  }
+
+  > .displayName {
+    flex: 1;
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
