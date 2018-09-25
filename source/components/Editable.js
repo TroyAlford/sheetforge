@@ -1,245 +1,258 @@
 import React from 'react'
+import bound from '@/utilities/bound'
 import noop from '@/utilities/noop'
-import bindToRange from '@/utilities/number/bindToRange'
+import './Editable.scss'
 
 const TYPES = [
-	// Strings
-	'text', 'multiline',
-	// Checkboxes
-	'boolean',
-	// Numbers
-	'number', 'slider',
+  // Strings
+  'text', 'multiline',
+  // Checkboxes
+  'boolean',
+  // Numbers
+  'number', 'slider',
 ]
 
 export default class Editable extends React.Component {
-	static displayName = 'Editable'
-	static defaultProps = {
-		className: '',
-		forceEditMode: false,
-		max: undefined,
-		min: undefined,
-		onChange: noop,
-		onEditEnd: noop,
-		onEditStart: noop,
-		placeholder: '',
-		readOnly: false,
-		step: '1',
-		type: undefined,
-		value: '',
-	}
+  static displayName = 'Editable'
 
-	state = {
-		editing: false,
-		resetValue: this.props.value,
-	}
+  static defaultProps = {
+    className: '',
+    forceEditMode: false,
+    max: undefined,
+    min: undefined,
+    onChange: noop,
+    onEditEnd: noop,
+    onEditStart: noop,
+    placeholder: '',
+    readOnly: false,
+    step: '1',
+    type: undefined,
+    value: '',
+  }
 
-	get editing() {
-		return this.props.forceEditMode || this.state.editing
-	}
+  state = {
+    editing: false,
+    resetValue: this.props.value,
+  }
 
-	getEditorType = () => {
-		const { value } = this.props
-		let { type } = this.props
+  get editing() {
+    return this.props.forceEditMode || this.state.editing
+  }
 
-		if (type !== undefined && TYPES.includes(type)) { return type }
+  getEditorType = () => {
+    const { value } = this.props
+    let { type } = this.props
 
-		type = typeof value
-		if (type === 'string') { return value.includes('\n') ? 'multiline' : 'text' }
-		if (['boolean', 'number'].includes(type)) { return type }
+    if (type !== undefined && TYPES.includes(type)) { return type }
 
-		return 'text'
-	}
-	resetChanges = () => {
-		this.props.onChange(this.state.resetValue, this.props.value)
-		this.handleToggleEditing()
-	}
+    type = typeof value
+    if (type === 'string') { return value.includes('\n') ? 'multiline' : 'text' }
+    if (['boolean', 'number'].includes(type)) { return type }
 
-	createRefWithAutoFocus = editor => {
-		if (!editor) { return }
-		this.editor = editor
+    return 'text'
+  }
 
-		if (typeof editor.focus === 'function') { editor.focus() }
-		if (['boolean', 'number'].includes(this.getEditorType())) { return }
-		if (this.props.forceEditMode && typeof editor.setSelectionRange === 'function') {
-			editor.setSelectionRange(editor.value.length, editor.value.length)
-		}
-	}
+  resetChanges = () => {
+    this.props.onChange(this.state.resetValue, this.props.value)
+    this.handleToggleEditing()
+  }
 
-	handleChange = ({ target }) => {
-		const { min, max } = this.props
-		let { value } = target
+  createRefWithAutoFocus = (editor) => {
+    if (!editor) { return }
+    this.editor = editor
 
-		// eslint-disable-next-line default-case
-		switch (this.getEditorType()) {
-			case 'slider':
-			case 'number':
-				value = parseFloat(value || 0)
-				// eslint-disable-next-line prefer-destructuring
-				if (Number.isNaN(value)) { value = this.props.value }
-				value = bindToRange(value, { max, min })
-		}
-		this.props.onChange(value, this.state.resetValue)
-	}
-	handleKeys = (event) => {
-		const { target, key, ctrlKey, metaKey } = event
+    if (typeof editor.focus === 'function') { editor.focus() }
+    if (['boolean', 'number'].includes(this.getEditorType())) { return }
+    if (this.props.forceEditMode && typeof editor.setSelectionRange === 'function') {
+      editor.setSelectionRange(editor.value.length, editor.value.length)
+    }
+  }
 
-		if (key === 'Escape') { this.resetChanges() }
-		if (key === 'Enter') {
-			if (target.nodeName !== 'TEXTAREA' || ctrlKey || metaKey) {
-				this.handleToggleEditing()
-			}
-		}
-	}
-	handleReceivingFocus = () => {
-		if (this.props.readOnly) { return }
-		if (!this.state.editing) { this.handleToggleEditing() }
-	}
-	handleToggleEditing = () => {
-		if (this.props.readOnly) { return }
+  handleChange = ({ target }) => {
+    const { min, max } = this.props
+    let { value } = target
 
-		const editing = !this.editing
+    // eslint-disable-next-line default-case
+    switch (this.getEditorType()) {
+      case 'slider':
+      case 'number':
+        value = parseFloat(value || 0)
+        // eslint-disable-next-line prefer-destructuring
+        if (Number.isNaN(value)) { value = this.props.value }
+        value = bound(value, { max, min })
+    }
+    this.props.onChange(value, this.state.resetValue)
+  }
 
-		this.setState({ editing, resetValue: this.props.value }, () => {
-			if (this.state.editing) {
-				this.props.onEditStart()
-			} else {
-				this.props.onEditEnd()
-			}
-		})
-	}
+  handleKeys = (event) => {
+    const { target, key, ctrlKey, metaKey } = event
 
-	selectOnFocus = event => event.target.select()
-	toggleBoolean = () => {
-		this.props.onEditStart()
-		this.props.onChange(!this.props.value, this.props.value)
-		this.props.onEditEnd()
-	}
+    if (key === 'Escape') { this.resetChanges() }
+    if (key === 'Enter') {
+      if (target.nodeName !== 'TEXTAREA' || ctrlKey || metaKey) {
+        this.handleToggleEditing()
+      }
+    }
+  }
 
-	renderBoolean = () => (
-		<input
-			type="checkbox"
-			checked={Boolean(this.props.value)}
-			disabled={this.props.readOnly}
-			onChange={this.toggleBoolean}
-			ref={this.createRefWithAutoFocus}
-		/>
-	)
-	renderMultiline = () => {
-		if (!this.editing) {
-			const lines = (this.props.value || this.props.placeholder).split('\n')
-			const paragraphs = lines.map((line, index) => <p key={index}>{line}</p>
-			)
-			const className = ['multiline', this.props.value ? '' : 'placeholder'].join(' ').trim()
-			return <div className={className} onClick={this.handleToggleEditing}>{paragraphs}</div>
-		}
+  handleReceivingFocus = () => {
+    if (this.props.readOnly) { return }
+    if (!this.state.editing) { this.handleToggleEditing() }
+  }
 
-		return (
-			<textarea
-				disabled={this.props.readOnly}
-				onBlur={this.handleToggleEditing}
-				onChange={this.handleChange}
-				onFocus={this.selectOnFocus}
-				onKeyDown={this.handleKeys}
-				placeholder={this.props.placeholder}
-				ref={this.createRefWithAutoFocus}
-				rows={this.props.value.split('\n').length}
-				value={this.props.value}
-			/>
-		)
-	}
-	renderNumber = () => {
-		if (!this.editing) { return this.renderStatic() }
+  handleToggleEditing = () => {
+    if (this.props.readOnly) { return }
 
-		return (
-			<input
-				type="number"
-				disabled={this.props.readOnly}
-				max={this.props.max}
-				min={this.props.min}
-				onBlur={this.handleToggleEditing}
-				onChange={this.handleChange}
-				onFocus={this.selectOnFocus}
-				onKeyDown={this.handleKeys}
-				placeholder={this.props.placeholder}
-				ref={this.createRefWithAutoFocus}
-				step={this.props.step}
-				value={this.props.value}
-			/>
-		)
-	}
-	renderSlider = () => (
-		<input
-			type="range"
-			disabled={this.props.readOnly}
-			max={this.props.max}
-			min={this.props.min}
-			onBlur={this.handleToggleEditing}
-			onChange={this.handleChange}
-			ref={this.createRefWithAutoFocus}
-			step={this.props.step}
-			value={this.props.value}
-		/>
-	)
-	renderText = () => {
-		if (!this.editing) { return this.renderStatic() }
+    const editing = !this.editing
 
-		return (
-			<input
-				type="text"
-				disabled={this.props.readOnly}
-				onBlur={this.handleToggleEditing}
-				onChange={this.handleChange}
-				onFocus={this.selectOnFocus}
-				onKeyDown={this.handleKeys}
-				placeholder={this.props.placeholder}
-				ref={this.createRefWithAutoFocus}
-				value={this.props.value}
-			/>
-		)
-	}
-	renderStatic = () => {
-		const showPlaceholder = this.props.placeholder && !this.props.value
-		const className = showPlaceholder ? 'placeholder' : ''
-		return (
-			<span className={className} onClick={this.handleToggleEditing}>
-				{showPlaceholder ? this.props.placeholder : this.props.value}
-			</span>
-		)
-	}
+    this.setState({ editing, resetValue: this.props.value }, () => {
+      if (this.state.editing) {
+        this.props.onEditStart()
+      } else {
+        this.props.onEditEnd()
+      }
+    })
+  }
 
-	renderEditor = () => {
-		switch (this.getEditorType()) {
-			case 'boolean':
-				return this.renderBoolean()
-			case 'slider':
-				return this.renderSlider()
-			case 'multiline':
-				return this.renderMultiline()
-			case 'number':
-				return this.renderNumber()
-			default:
-				return this.renderText()
-		}
-	}
-	render = () => {
-		const { className, readOnly } = this.props
+  selectOnFocus = event => event.target.select()
 
-		const classes = [
-			'editable',
-			this.editing ? 'editing' : '',
-			className || '',
-			readOnly ? 'readonly' : '',
-		].filter(Boolean)
+  toggleBoolean = () => {
+    this.props.onEditStart()
+    this.props.onChange(!this.props.value, this.props.value)
+    this.props.onEditEnd()
+  }
 
-		let props = {}
-		if (!readOnly && !this.editing) {
-			props = { onFocus: this.handleReceivingFocus, tabIndex: '0' }
-		}
+  renderBoolean = () => (
+    <input
+      type="checkbox"
+      checked={Boolean(this.props.value)}
+      disabled={this.props.readOnly}
+      onChange={this.toggleBoolean}
+      ref={this.createRefWithAutoFocus}
+    />
+  )
 
-		return (
-			<div className={classes.join(' ')} {...props}>
-				{this.renderEditor()}
-			</div>
-		)
-	}
+  renderMultiline = () => {
+    if (!this.editing) {
+      const lines = (this.props.value || this.props.placeholder).split('\n')
+      const paragraphs = lines.map((line, index) => <p key={index}>{line}</p>
+      )
+      const className = ['multiline', this.props.value ? '' : 'placeholder'].join(' ').trim()
+      return <div className={className} onClick={this.handleToggleEditing}>{paragraphs}</div>
+    }
+
+    return (
+      <textarea
+        disabled={this.props.readOnly}
+        onBlur={this.handleToggleEditing}
+        onChange={this.handleChange}
+        onFocus={this.selectOnFocus}
+        onKeyDown={this.handleKeys}
+        placeholder={this.props.placeholder}
+        ref={this.createRefWithAutoFocus}
+        rows={this.props.value.split('\n').length}
+        value={this.props.value}
+      />
+    )
+  }
+
+  renderNumber = () => {
+    if (!this.editing) { return this.renderStatic() }
+
+    return (
+      <input
+        type="number"
+        disabled={this.props.readOnly}
+        max={this.props.max}
+        min={this.props.min}
+        onBlur={this.handleToggleEditing}
+        onChange={this.handleChange}
+        onFocus={this.selectOnFocus}
+        onKeyDown={this.handleKeys}
+        placeholder={this.props.placeholder}
+        ref={this.createRefWithAutoFocus}
+        step={this.props.step}
+        value={this.props.value}
+      />
+    )
+  }
+
+  renderSlider = () => (
+    <input
+      type="range"
+      disabled={this.props.readOnly}
+      max={this.props.max}
+      min={this.props.min}
+      onBlur={this.handleToggleEditing}
+      onChange={this.handleChange}
+      ref={this.createRefWithAutoFocus}
+      step={this.props.step}
+      value={this.props.value}
+    />
+  )
+
+  renderText = () => {
+    if (!this.editing) { return this.renderStatic() }
+
+    return (
+      <input
+        type="text"
+        disabled={this.props.readOnly}
+        onBlur={this.handleToggleEditing}
+        onChange={this.handleChange}
+        onFocus={this.selectOnFocus}
+        onKeyDown={this.handleKeys}
+        placeholder={this.props.placeholder}
+        ref={this.createRefWithAutoFocus}
+        value={this.props.value}
+      />
+    )
+  }
+
+  renderStatic = () => {
+    const showPlaceholder = this.props.placeholder && !this.props.value
+    const className = showPlaceholder ? 'placeholder' : ''
+    return (
+      <span className={className} onClick={this.handleToggleEditing}>
+        {showPlaceholder ? this.props.placeholder : this.props.value}
+      </span>
+    )
+  }
+
+  renderEditor = () => {
+    switch (this.getEditorType()) {
+      case 'boolean':
+        return this.renderBoolean()
+      case 'slider':
+        return this.renderSlider()
+      case 'multiline':
+        return this.renderMultiline()
+      case 'number':
+        return this.renderNumber()
+      default:
+        return this.renderText()
+    }
+  }
+
+  render = () => {
+    const { className, readOnly } = this.props
+
+    const classes = [
+      'editable',
+      this.editing ? 'editing' : '',
+      className || '',
+      readOnly ? 'readonly' : '',
+    ].filter(Boolean)
+
+    let props = {}
+    if (!readOnly && !this.editing) {
+      props = { onFocus: this.handleReceivingFocus, tabIndex: '0' }
+    }
+
+    return (
+      <div className={classes.join(' ')} {...props}>
+        {this.renderEditor()}
+      </div>
+    )
+  }
 }
