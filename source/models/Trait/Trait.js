@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-import Effect from './Effect'
+import Effect from '@/models/Effect'
 import IEditable from '@/models/generic/IEditable'
 
 export default types.compose(

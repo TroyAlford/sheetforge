@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
-import Descriptor from './Descriptor'
-import Effect from './Effect'
+import Descriptor from '@/models/Descriptor'
+import Effect from '@/models/Effect'
 import IEditable from '@/models/generic/IEditable'
 
 export default types.compose(
