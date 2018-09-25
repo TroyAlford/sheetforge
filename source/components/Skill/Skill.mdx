@@ -1,0 +1,14 @@
+import { Playground } from 'docz'
+import Skill from './Skill'
+import SkillModel from '@/models/Skill'
+
+## Skill
+
+<Playground>
+  <Skill model={SkillModel.create({ displayName: 'Survival' })} />
+  <Skill model={SkillModel.create({
+    displayName: 'Fighting Style: Sword & Board',
+    mastery: 4,
+    theory: 2,
+  })} />
+</Playground>

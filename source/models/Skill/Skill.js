@@ -1,4 +1,3 @@
-import { isObservableArray } from 'mobx'
 import { types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
 
@@ -6,19 +5,10 @@ export default types.compose(
   IEditable,
   types.model({
     displayName: '',
-    value: types.union(types.number, types.array(types.number)),
+    mastery: 1,
+    theory: 0,
   }).views(self => ({
-    get mastery() {
-      if (self.type === 'complex') return self.value[1]
-      return self.value
-    },
-    get theory() {
-      if (self.type === 'complex') return self.value[0]
-      return 0
-    },
-    get type() {
-      if (isObservableArray(self.value)) return 'complex'
-      return 'simple'
-    },
+    get isComplex() { return self.theory !== 0 },
+    get isSimple() { return self.theory === 0 },
   }))
 ).named('Skill')

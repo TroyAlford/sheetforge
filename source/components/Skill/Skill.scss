@@ -1,0 +1,9 @@
+@import '~@/components/widget.scss';
+
+.skill {
+  @include widget;
+
+  .theory.is-zero > span {
+    display: none;
+  }
+}
