@@ -1,0 +1,5 @@
+@import '~@/components/widget.scss';
+
+.descriptor {
+  @include widget;
+}
