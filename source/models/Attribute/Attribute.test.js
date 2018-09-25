@@ -11,8 +11,8 @@ describe('models/Attribute', () => {
   describe('when attached', () => {
     const character = DummyCharacter.create({
       activeEffects: [
-        { active: true, displayName: '', modifies: { DEX: 1, STR: 1 } },
-        { active: true, displayName: '', modifies: { STR: 4 } },
+        { displayName: '', modifies: { DEX: 1, STR: 1 } },
+        { displayName: '', modifies: { STR: 4 } },
       ],
       attributes: {
         DEX: { displayName: 'Dexterity', value: 12 },

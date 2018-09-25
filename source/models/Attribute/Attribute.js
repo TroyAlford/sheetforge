@@ -19,9 +19,16 @@ export default types.compose(
       },
       get displayValue() { return self.value + self.modifier },
       get key() { return findMapKey(attributeMap, self) },
-      get modifier() {
-        if (!character) return 0
-        return sum(character.activeEffects.map(effect => effect.modifierFor(self.key)))
+      get modifiedBy() {
+        if (!character) return []
+        return character.activeEffects.map(effect => ({
+          displayName: effect.displayName,
+          modifier: effect.modifierFor(self.key),
+        })).filter(effect => effect.modifier)
+      },
+      get modifier() { return sum(self.modifiedBy.map(effect => effect.modifier)) },
+      get modifierText() {
+        return self.modifiedBy.map(effect => `${effect.displayName}: ${effect.modifier}`)
       },
     }
   })

@@ -6,13 +6,13 @@
   min-height: 2em;
   min-width: 250px;
 
-  > * {
+  > *, > .editable {
+    align-items: center;
+    display: flex;
     height: auto;
-  }
-
-  > .editable {
     justify-content: center;
     text-align: center;
+    min-width: 40px;
   }
 
   > .displayName {

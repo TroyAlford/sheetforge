@@ -1,0 +1,13 @@
+@import '~@/components/widget.scss';
+
+.attribute {
+  @include widget;
+
+  .modifier {
+    min-width: 45px;
+
+    &.positive { color: green; &:before { content: '+'; } }
+    &.negative { color: red; }
+    &.zero { color: gray; }
+  }
+}
