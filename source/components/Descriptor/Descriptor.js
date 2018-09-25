@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import './Descriptor.scss'
 
-export default @observer class Descriptor extends Component {
+@observer class Descriptor extends Component {
   static defaultProps = {
     model: {},
   }
@@ -30,3 +30,5 @@ export default @observer class Descriptor extends Component {
     )
   }
 }
+
+export default Descriptor

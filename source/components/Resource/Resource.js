@@ -4,7 +4,7 @@ import Editable from '@/components/Editable'
 import Rating from '@/components/Rating'
 import './Resource.scss'
 
-export default @observer class Resource extends Component {
+@observer class Resource extends Component {
   static defaultProps = {
     model: {},
   }
@@ -32,3 +32,5 @@ export default @observer class Resource extends Component {
     )
   }
 }
+
+export default Resource
