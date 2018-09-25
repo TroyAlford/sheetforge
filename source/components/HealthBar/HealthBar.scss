@@ -1,0 +1,37 @@
+@import '../../../fontello/css/sheetforge-embedded.css';
+
+.health-bar {
+  display: flex;
+
+  .health-level { display: flex; }
+
+  &.horizontal {
+    flex-direction: row-reverse;
+    height: 40px;
+    justify-content: center;
+
+    .displayName { display: none; }
+    .damage { min-width: 20px; }
+  }
+  &.vertical {
+    flex-direction: column;
+
+    .displayName { flex: 1; }
+    .damage { min-width: 40px; }
+  }
+
+  .health-level {
+    .damage {
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      font-family: sheetforge;
+      justify-content: center;
+    }
+
+    &.none { color: #000000; .damage:before { content: ''; } }
+    &.light { color: #007bff; .damage:before { content: ''; } }
+    &.heavy { color: #ffc107; .damage:before { content: ''; } }
+    &.bane { color: #dc3545; .damage:before { content: ''; } }
+  }
+}

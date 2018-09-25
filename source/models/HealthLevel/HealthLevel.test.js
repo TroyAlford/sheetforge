@@ -3,14 +3,9 @@ import HealthLevel from './HealthLevel'
 
 describe('models/HealthLevel', () => {
   describe('onCreate', () => {
-    it('requires displayName', () => {
-      expect(() => HealthLevel.create())
-        .toThrow(/displayName.*is not a string/)
-    })
-
-    it('requires damage', () => {
-      expect(() => HealthLevel.create({ displayName: 'Foo!' }))
-        .toThrow(/damage.*not assignable.*"none" \| "light" \| "heavy" \| "bane"/)
+    it('defaults damage to "none"', () => {
+      const healthLevel = HealthLevel.create({ displayName: 'Foo!' })
+      expect(healthLevel.damage).toEqual('none')
     })
   })
 
@@ -56,30 +51,30 @@ describe('models/HealthLevel', () => {
       expect(healthBar.map(hl => hl.damage))
         .toEqual(['none', 'none', 'none', 'none', 'none'])
 
-      healthBar[1].apply('light')
+      healthBar[3].apply('light')
 
       expect(healthBar.map(hl => hl.damage))
-        .toEqual(['none', 'light', 'light', 'light', 'light'])
+        .toEqual(['light', 'light', 'light', 'light', 'none'])
 
       healthBar[2].apply('bane')
 
       expect(healthBar.map(hl => hl.damage))
-        .toEqual(['none', 'light', 'bane', 'bane', 'bane'])
+        .toEqual(['bane', 'bane', 'bane', 'light', 'none'])
 
-      healthBar[2].apply('none')
+      healthBar[1].apply('none')
 
       expect(healthBar.map(hl => hl.damage))
-        .toEqual(['none', 'none', 'none', 'bane', 'bane'])
+        .toEqual(['bane', 'none', 'none', 'none', 'none'])
     })
 
     it('heal() adjusts adjacent health levels', () => {
       expect(healthBar.map(hl => hl.damage)).toEqual(['none', 'none', 'none', 'none', 'none'])
 
-      healthBar[0].apply('bane')
+      healthBar[4].apply('bane')
       expect(healthBar.map(hl => hl.damage)).toEqual(['bane', 'bane', 'bane', 'bane', 'bane'])
 
       healthBar[2].heal()
-      expect(healthBar.map(hl => hl.damage)).toEqual(['none', 'none', 'none', 'bane', 'bane'])
+      expect(healthBar.map(hl => hl.damage)).toEqual(['bane', 'bane', 'none', 'none', 'none'])
     })
   })
 })

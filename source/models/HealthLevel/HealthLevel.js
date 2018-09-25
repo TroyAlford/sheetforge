@@ -1,6 +1,7 @@
 import { isObservableArray } from 'mobx'
 import { getParent, types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
+import bound from '@/utilities/bound'
 
 const DAMAGE_LEVELS = [
   'none',
@@ -12,8 +13,8 @@ const DAMAGE_LEVELS = [
 export default types.compose(
   IEditable,
   types.model({
-    damage: types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))),
-    displayName: types.string,
+    damage: types.optional(types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))), 'none'),
+    displayName: '',
     penalty: 0,
   }).volatile(() => ({
     healthBar: null,
@@ -22,7 +23,12 @@ export default types.compose(
       if (self.healthBar) return self.healthBar.indexOf(self)
       return null
     },
+    get severity() { return DAMAGE_LEVELS.indexOf(self.damage) },
   })).actions(self => ({
+    adjust(byAmount) {
+      const index = bound(self.severity + byAmount, { max: 3, min: 0 })
+      self.apply(DAMAGE_LEVELS[index])
+    },
     afterAttach() {
       try {
         const healthBar = getParent(self)
@@ -35,11 +41,10 @@ export default types.compose(
       if (!DAMAGE_LEVELS.includes(damage)) return
 
       const newSeverity = DAMAGE_LEVELS.indexOf(damage)
-      const ownSeverity = DAMAGE_LEVELS.indexOf(self.damage)
-      if (newSeverity === ownSeverity) return
+      if (newSeverity === self.severity) return
 
       const ownIndex = self.index
-      const direction = newSeverity < ownSeverity ? '↑' : '↓'
+      const direction = newSeverity < self.severity ? '↑' : '↓'
 
       if (!self.healthBar) {
         self.set({ damage })
@@ -47,11 +52,9 @@ export default types.compose(
       }
 
       self.healthBar.forEach((healthLevel, index) => {
-        const current = DAMAGE_LEVELS.indexOf(healthLevel.damage)
-
         if (
-          (direction === '↑' && index <= ownIndex && current > newSeverity) ||
-          (direction === '↓' && index >= ownIndex && current < newSeverity)
+          (direction === '↑' && index >= ownIndex && healthLevel.severity > newSeverity) ||
+          (direction === '↓' && index <= ownIndex && healthLevel.severity < newSeverity)
         ) {
           healthLevel.set({ damage })
         }

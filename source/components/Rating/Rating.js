@@ -31,7 +31,7 @@ export default class Rating extends Component {
     return (
       <div className="rating">
         {range(1, maximum).map(number => (
-          <span data-number={number} onClick={this.handleIconClick} title={number}>
+          <span key={number} data-number={number} onClick={this.handleIconClick} title={number}>
             {number <= current ? iconOn : iconOff}
           </span>
         ))}
