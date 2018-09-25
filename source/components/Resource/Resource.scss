@@ -1,14 +1,10 @@
+@import '~@/components/widget.scss';
+
 .resource {
-  align-items: stretch;
-  display: flex;
-  height: auto;
-  min-height: 2em;
-  min-width: 250px;
+  @include widget;
 
   .displayName {
     flex: 1;
     height: auto;
-  }
-  .rating {
   }
 }
