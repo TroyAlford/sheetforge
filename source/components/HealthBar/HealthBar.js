@@ -21,7 +21,14 @@ import './HealthBar.scss'
   }
 
   handleHealthLevelClick = (event, healthLevel) => {
-    healthLevel.adjust(event.ctrlKey ? -1 : 1)
+    const healing = event.ctrlKey
+
+    if (healthLevel.damage === 'bane' && event.type === 'tap') {
+      // Allow finger-clicks to heal bane damage
+      healthLevel.set({ damage: 'none' })
+    } else {
+      healthLevel.adjust(healing ? -1 : 1)
+    }
   }
 
   render() {
