@@ -1,0 +1,12 @@
+@import '~@/components/styles/widget.scss';
+
+.trait {
+  @include widget;
+
+  flex-direction: column;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+  }
+}

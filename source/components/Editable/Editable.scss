@@ -1,3 +1,5 @@
+@import "~@/components/styles/placeholder.scss";
+
 .editable {
   box-sizing: border-box;
   display: block;
@@ -26,6 +28,7 @@
     justify-content: inherit;
     line-height: inherit;
     margin: 0;
+    outline: none;
     padding: 0;
     position: absolute; top: 0; right: 0; bottom: 0; left: 0;
     text-align: inherit;
@@ -43,7 +46,17 @@
     }
   }
 
-  .placeholder, input::placeholder, textarea::placeholder {
-    font-style: italic;
+  .placeholder, input, textarea {
+    @include placeholder;
+  }
+
+  &:focus-within { outline: -webkit-focus-ring-color auto 1px; }
+
+  input[type="checkbox"] {
+    height: 1em;
+    margin: -.5em auto 0;
+    position: absolute;
+    top: 50%;
+    width: 1em;
   }
 }
