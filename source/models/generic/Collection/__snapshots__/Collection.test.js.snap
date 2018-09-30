@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/Collection can serialize/deserialize 1`] = `
+Object {
+  "values": Array [
+    Object {
+      "value": "Foo!",
+    },
+    Object {
+      "value": "Bar!",
+    },
+    Object {
+      "value": "Baz!",
+    },
+    Object {
+      "value": "Qux!",
+    },
+  ],
+}
+`;
+
+exports[`models/Collection supports delete(item) 1`] = `
+Object {
+  "values": Array [
+    Object {
+      "value": "Foo!",
+    },
+    Object {
+      "value": "Bar!",
+    },
+    Object {
+      "value": "Qux!",
+    },
+  ],
+}
+`;
+
+exports[`models/Collection supports deleteAt(item) 1`] = `
+Object {
+  "values": Array [
+    Object {
+      "value": "Foo!",
+    },
+    Object {
+      "value": "Bar!",
+    },
+    Object {
+      "value": "Qux!",
+    },
+  ],
+}
+`;
+
+exports[`models/Collection supports map(fn) 1`] = `
+Array [
+  Object {
+    "value": "Foo!",
+  },
+  Object {
+    "value": "Bar!",
+  },
+  Object {
+    "value": "Baz!",
+  },
+  Object {
+    "value": "Qux!",
+  },
+]
+`;
