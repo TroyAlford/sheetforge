@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
-import Resource from './Resource'
 import Spell from './Spell'
+import Resource from '@/models/Resource'
 
 const DummyCharacter = types.model({
   resources: types.map(Resource),

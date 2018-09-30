@@ -1,18 +1,23 @@
 import { types } from 'mobx-state-tree'
 import Attribute from './Attribute'
-import Effect from './Effect'
 
 const DummyCharacter = types.model({
-  activeEffects: types.array(Effect),
+  activeEffects: types.array(types.model({
+    modifier: 0,
+    modifies: '',
+    sourceName: '',
+  })),
   attributes: types.map(Attribute),
+  isCharacter: true,
 })
 
 describe('models/Attribute', () => {
   describe('when attached', () => {
     const character = DummyCharacter.create({
       activeEffects: [
-        { displayName: '', modifies: { DEX: 1, STR: 1 } },
-        { displayName: '', modifies: { STR: 4 } },
+        { modifier: 1, modifies: 'DEX', sourceName: 'Dexterity!' },
+        { modifier: 4, modifies: 'STR', sourceName: 'Strength!' },
+        { modifier: 1, modifies: 'STR', sourceName: 'Strength Again!' },
       ],
       attributes: {
         DEX: { displayName: 'Dexterity', value: 12 },
@@ -34,6 +39,11 @@ describe('models/Attribute', () => {
       expect(character.attributes.get('STR').modifier).toEqual(5)
       expect(character.attributes.get('DEX').modifier).toEqual(1)
     })
+
+    it('returns sourceName', () => {
+      expect(character.attributes.get('STR').modifierText).toEqual('Strength!: 4, Strength Again!: 1')
+      expect(character.attributes.get('DEX').modifierText).toEqual('Dexterity!: 1')
+    })
   })
 
   describe('when detached', () => {
@@ -49,6 +59,10 @@ describe('models/Attribute', () => {
 
     it('returns a modifier of 0', () => {
       expect(STR.modifier).toEqual(0)
+    })
+
+    it('returns "" for modifierText', () => {
+      expect(STR.modifierText).toEqual('')
     })
   })
 })

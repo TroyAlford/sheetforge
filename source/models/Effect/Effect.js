@@ -5,25 +5,25 @@ import findParent from '@/utilities/findParent'
 export default types.compose(
   IEditable,
   types.model({
-    condition: types.maybe(types.string),
-    displayName: types.string,
-    isActive: false,
-    modifies: types.map(types.number),
+    condition: '',
+    modifier: 0,
+    modifies: types.string,
   }).views((self) => {
     let character
+    let displayItem
 
     return ({
       afterAttach() {
         try { character = findParent(self, p => p.isCharacter) } catch (e) {}
+        try { displayItem = findParent(self, p => p.displayName) } catch (e) { }
       },
+      get availableTargets() { return character ? [...character.attributes.keys()] : [] },
       get isApplicable() {
         return Boolean(
-          !self.condition || (
-            character && character.conditions.includes(self.condition)
-          )
+          !self.condition || (character && character.conditions.includes(self.condition))
         )
       },
-      modifierFor(key) { return self.modifies.get(key) || 0 },
+      get sourceName() { return displayItem ? displayItem.displayName : undefined },
     })
   })
 ).named('Effect')

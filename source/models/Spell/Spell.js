@@ -1,4 +1,6 @@
 import { getParent, types } from 'mobx-state-tree'
+import Effect from '@/models/Effect'
+import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
 
 export default types.compose(
@@ -7,6 +9,8 @@ export default types.compose(
     cost: types.map(types.number), // Resources
     description: '',
     displayName: types.string,
+    effects: CollectionOf(Effect),
+    isActive: false,
     level: 0,
   }).volatile(() => ({
     character: null,

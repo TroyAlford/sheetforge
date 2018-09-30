@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree'
 import Attribute from '@/models/Attribute'
 import Descriptor from '@/models/Descriptor'
-import Effect from '@/models/Effect'
+import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
 import HealthLevel from '@/models/HealthLevel'
 import Item from '@/models/Item'
@@ -16,43 +16,30 @@ export default types.compose(
   types.model({
     attributes: types.map(Attribute),
     conditions: types.array(types.string), // ['vs Goblins', 'Crinos Form']
-    descriptors: types.array(Descriptor),
-    effects: types.array(Effect), // active/inactive, buffs Attribute OR Conditional
+    descriptors: CollectionOf(Descriptor),
+    enchantments: '',
     experience: 0,
     health: types.maybe(types.union(types.number, types.array(HealthLevel))),
-    items: types.array(Item), // equipped / unequipped, have Effects
+    items: CollectionOf(Item), // equipped / unequipped, have Effects
     resources: types.map(Resource),
-    skills: types.array(Skill),
-    spells: types.array(Spell),
-    traits: types.array(Trait), // have Effects
+    skills: CollectionOf(Skill),
+    spells: CollectionOf(Spell),
+    traits: CollectionOf(Trait), // have Effects
   }).volatile(() => ({
     isCharacter: true,
   })).views(self => ({
     get activeEffects() {
-      return [
+      return self.effects.filter(effect => effect && effect.isApplicable)
+    },
+    get effects() {
+      return flatten([
         // Trait Effects first, because they're inherent
-        ...self.activeTraitEffects,
+        flatten(self.traits.map(trait => trait.effects.asArray)),
         // Direct Effects second, because they're cast on the character
-        ...self.effects.filter(effect => effect.isActive && effect.isApplicable),
+        flatten(self.spells.filter(spell => spell.isActive).map(spell => spell.effects.asArray)),
         // Item Effects third, because they're indirect
-        ...self.activeItemEffects,
-      ].filter(Boolean)
-    },
-    get activeItemEffects() {
-      // item effects are active if item is equipped
-      return flatten(
-        self.items
-          .filter(item => item.equipped)
-          .map(item => item.effects.filter(effect => effect.isApplicable))
-      )
-    },
-    get activeTraitEffects() {
-      // trait effects are active all the time
-      return flatten(
-        self.traits.map(trait => (
-          trait.effects.filter(effect => effect.isApplicable)
-        ))
-      )
+        flatten(self.items.filter(item => item.equipped).map(item => item.effects.asArray)),
+      ]).filter(Boolean)
     },
   }))
 ).named('Character')
