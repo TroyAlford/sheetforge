@@ -70,6 +70,12 @@ describe('models/Collection', () => {
     })
   })
 
+  it('supports includes(searchElement, fromIndex)', () => {
+    expect(collection.includes(collection.at(0))).toBe(true)
+    expect(collection.includes(collection.at(0), 1)).toBe(false)
+    expect(collection.includes('foo')).toBe(false)
+  })
+
   it('supports insert(object, index)', () => {
     collection.insert({ value: 'Inserted!' }, 2)
     expect(collection.map(({ value }) => value)).toEqual(['Foo!', 'Bar!', 'Inserted!', 'Baz!', 'Qux!'])

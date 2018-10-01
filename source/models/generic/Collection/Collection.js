@@ -18,6 +18,7 @@ export default (TYPE, options = {}) => {
     filter: fn => self.asArray.filter(fn),
     find: fn => self.asArray.find(fn),
     forEach: fn => self.asArray.forEach(fn),
+    includes: (searchElement, fromIndex) => self.values.includes(searchElement, fromIndex),
     insert: (object, index) => { self.splice(index, 0, object) },
     map: fn => self.asArray.map(fn),
     pop: () => self.values.pop(),
