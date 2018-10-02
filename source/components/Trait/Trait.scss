@@ -3,9 +3,19 @@
 .trait {
   @include widget;
 
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-  .row {
+  .first.row {
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 40px);
+  }
+  .effect-list-toggle {
+    width: 40px;
+  }
+
+  .trait-list.row {
     display: flex;
     flex-direction: row;
   }
