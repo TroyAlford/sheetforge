@@ -46,9 +46,15 @@
     }
   }
 
-  .placeholder, input, textarea {
+  .placeholder {
     color: rgba(200, 200, 200, .8);
-    @include placeholder(rgba(200, 200, 200, .8));
+    font-style: italic;
+  }
+  input, textarea {
+    @include placeholder(rgba(200, 200, 200, .8)) {
+      color: rgba(200, 200, 200, .8);
+      font-style: italic;
+    };
   }
 
   &:focus-within { outline: -webkit-focus-ring-color auto 1px; }
