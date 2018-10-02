@@ -4,28 +4,33 @@ describe('models/Character', () => {
   let character
   beforeEach(() => {
     character = Character.create({
+      attributes: [
+        { displayName: 'Strength', id: 'STR', value: 4 },
+        { displayName: 'Dexterity', id: 'DEX', value: 2 },
+        { displayName: 'Stamina', id: 'STA', value: 3 },
+      ],
       conditions: ['vs Orcs'],
       items: [{
         displayName: 'Greatsword of Greenblood Bane',
         effects: [
-          { condition: 'vs Goblins', modifier: 1, modifies: 'I-ATK' },
-          { condition: 'vs Orcs', modifier: 1, modifies: 'I-ATK' },
+          { condition: 'vs Goblins', modifier: 1, modifies: 'STR' },
+          { condition: 'vs Orcs', modifier: 1, modifies: 'STR' },
         ],
         equipped: true,
       }],
       spells: [{
         displayName: 'Favored Enemy: Goblinoid',
         effects: [
-          { condition: 'vs Goblins', modifier: 1, modifies: 'S-ATK' },
-          { condition: 'vs Orcs', modifier: 1, modifies: 'S-ATK' },
+          { condition: 'vs Goblins', modifier: 1, modifies: 'STR' },
+          { condition: 'vs Orcs', modifier: 1, modifies: 'STR' },
         ],
         isActive: true,
       }],
       traits: [{
         displayName: 'Favored Enemy: Goblinoid',
         effects: [
-          { condition: 'vs Goblins', modifier: 1, modifies: 'T-ATK' },
-          { condition: 'vs Orcs', modifier: 1, modifies: 'T-ATK' },
+          { condition: 'vs Goblins', modifier: 1, modifies: 'STR' },
+          { condition: 'vs Orcs', modifier: 1, modifies: 'STR' },
         ],
       }],
     })

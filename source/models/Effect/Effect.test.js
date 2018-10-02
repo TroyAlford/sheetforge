@@ -6,7 +6,9 @@ describe('models/Effect', () => {
     modifies: 'ARMOR',
   })
   const character = Character.create({
-    attributes: { STR: { displayName: 'Strength' } },
+    attributes: [
+      { displayName: 'Strength', id: 'STR', value: 10 },
+    ],
     conditions: ['vs Goblins'],
     traits: [{
       displayName: 'Favored Enemy: Greenbloods',
@@ -31,10 +33,10 @@ describe('models/Effect', () => {
   })
   describe('availableTargets', () => {
     it('returns [] if unattached', () => {
-      expect(mageArmor.availableTargets).toEqual([])
+      expect(mageArmor.availableTargets.asArray).toEqual([])
     })
     it('returns a list if attached', () => {
-      expect(character.effects[0].availableTargets).toEqual(['STR'])
+      expect(character.effects[0].availableTargets).toEqual(character.attributes)
     })
   })
 })

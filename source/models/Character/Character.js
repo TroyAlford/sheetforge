@@ -14,14 +14,13 @@ import flatten from '@/utilities/flatten'
 export default types.compose(
   IEditable,
   types.model({
-    attributes: types.map(Attribute),
-    conditions: types.array(types.string), // ['vs Goblins', 'Crinos Form']
+    attributes: CollectionOf(Attribute),
+    conditions: CollectionOf(types.string), // ['vs Goblins', 'Crinos Form']
     descriptors: CollectionOf(Descriptor),
-    enchantments: '',
     experience: 0,
-    health: types.maybe(types.union(types.number, types.array(HealthLevel))),
+    health: types.maybe(types.union(types.number, CollectionOf(HealthLevel))),
     items: CollectionOf(Item), // equipped / unequipped, have Effects
-    resources: types.map(Resource),
+    resources: CollectionOf(Resource),
     skills: CollectionOf(Skill),
     spells: CollectionOf(Spell),
     traits: CollectionOf(Trait), // have Effects

@@ -1,4 +1,6 @@
 import { types } from 'mobx-state-tree'
+import Attribute from '@/models/Attribute'
+import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
 import findParent from '@/utilities/findParent'
 
@@ -7,23 +9,27 @@ export default types.compose(
   types.model({
     condition: '',
     modifier: 0,
-    modifies: types.string,
+    modifies: '',
   }).views((self) => {
     let character
-    let displayItem
+    let source
 
     return ({
       afterAttach() {
-        try { character = findParent(self, p => p.isCharacter) } catch (e) {}
-        try { displayItem = findParent(self, p => p.displayName) } catch (e) { }
+        character = findParent(self, p => p.isCharacter)
+        source = findParent(self, p => p.displayName)
       },
-      get availableTargets() { return character ? [...character.attributes.keys()] : [] },
+      get availableTargets() {
+        if (!character) return CollectionOf(Attribute).create([])
+        return character.attributes
+      },
       get isApplicable() {
         return Boolean(
           !self.condition || (character && character.conditions.includes(self.condition))
         )
       },
-      get sourceName() { return displayItem ? displayItem.displayName : undefined },
+      get source() { return source || { displayName: 'Unknown', id: self.modifies } },
+      get sourceName() { return self.source.displayName },
     })
   })
 ).named('Effect')

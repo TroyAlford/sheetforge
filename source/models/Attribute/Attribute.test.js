@@ -1,13 +1,11 @@
 import { types } from 'mobx-state-tree'
 import Attribute from './Attribute'
+import Effect from '@/models/Effect'
+import CollectionOf from '@/models/generic/Collection'
 
 const DummyCharacter = types.model({
-  activeEffects: types.array(types.model({
-    modifier: 0,
-    modifies: '',
-    sourceName: '',
-  })),
-  attributes: types.map(Attribute),
+  activeEffects: CollectionOf(Effect),
+  attributes: CollectionOf(Attribute),
   isCharacter: true,
 })
 
@@ -15,39 +13,39 @@ describe('models/Attribute', () => {
   describe('when attached', () => {
     const character = DummyCharacter.create({
       activeEffects: [
-        { modifier: 1, modifies: 'DEX', sourceName: 'Dexterity!' },
-        { modifier: 4, modifies: 'STR', sourceName: 'Strength!' },
-        { modifier: 1, modifies: 'STR', sourceName: 'Strength Again!' },
+        { modifier: 1, modifies: 'DEX' },
+        { modifier: 4, modifies: 'STR' },
+        { modifier: 1, modifies: 'STR' },
       ],
-      attributes: {
-        DEX: { displayName: 'Dexterity', value: 12 },
-        STR: { displayName: 'Strength', value: 10 },
-      },
+      attributes: [
+        { displayName: 'Dexterity', id: 'DEX', value: 12 },
+        { displayName: 'Strength', id: 'STR', value: 10 },
+      ],
     })
 
     it('computes its displayValue', () => {
-      expect(character.attributes.get('STR').displayValue).toEqual(15)
-      expect(character.attributes.get('DEX').displayValue).toEqual(13)
+      expect(character.attributes.at(0).displayValue).toEqual(13)
+      expect(character.attributes.at(1).displayValue).toEqual(15)
     })
 
-    it('can determine its own key', () => {
-      expect(character.attributes.get('STR').key).toEqual('STR')
-      expect(character.attributes.get('DEX').key).toEqual('DEX')
+    it('computes its effects', () => {
+      expect(character.attributes.at(0).effects).toHaveLength(1)
+      expect(character.attributes.at(1).effects).toHaveLength(2)
     })
 
     it('computes its modifier', () => {
-      expect(character.attributes.get('STR').modifier).toEqual(5)
-      expect(character.attributes.get('DEX').modifier).toEqual(1)
+      expect(character.attributes.at(0).modifier).toEqual(1)
+      expect(character.attributes.at(1).modifier).toEqual(5)
     })
 
-    it('returns sourceName', () => {
-      expect(character.attributes.get('STR').modifierText).toEqual('Strength!: 4, Strength Again!: 1')
-      expect(character.attributes.get('DEX').modifierText).toEqual('Dexterity!: 1')
+    it('returns modifierText', () => {
+      expect(character.attributes.at(0).modifierText).toEqual('Unknown: 1')
+      expect(character.attributes.at(1).modifierText).toEqual('Unknown: 4, Unknown: 1')
     })
   })
 
   describe('when detached', () => {
-    const STR = Attribute.create({ displayName: 'Strength', value: 10 })
+    const STR = Attribute.create({ displayName: 'Strength', id: 'STR', value: 10 })
 
     it('returns a displayValue equal to its value', () => {
       expect(STR.displayValue).toEqual(STR.value)
