@@ -1,0 +1,30 @@
+import { Playground } from 'docz'
+import { types } from 'mobx-state-tree'
+import Character from '@/models/Character'
+import ItemModel from '@/models/Item'
+import Item from './Item'
+
+## Item Component
+
+<Playground>
+  {() => {
+    const character = Character.create({
+      attributes: [
+        { displayName: 'Strength', id: 'STR' },
+        { displayName: 'Charisma', id: 'CHA' },
+      ],
+      items: [{
+        displayName: 'Greatsword of Maiming',
+        description: 'The family sword of House Ednyzil.',
+        effects: [
+          { modifier: 2, modifies: 'STR' },
+          { modifier: 4, modifies: 'CHA' },
+          { modifier: 2, modifies: 'CHA', condition: 'in Ft. Ednyzil' },
+        ],
+        equipped: true,
+      }],
+    })
+
+    return <Item model={character.items.at(0)} />
+  }}
+</Playground>

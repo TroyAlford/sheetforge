@@ -1,0 +1,33 @@
+.item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .expanded-toggle {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
+  }
+
+  .displayName {
+    flex: 1;
+  }
+
+  &.equipped .displayName { font-weight: bold; }
+
+  .description {
+    margin-left: 40px;
+    min-height: 80px;
+    width: 100%;
+
+    textarea { resize: none; }
+  }
+
+  .effect-list-toggle { display: none; }
+  .effect-list {
+    margin-left: 40px;
+  }
+}
