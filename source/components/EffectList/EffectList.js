@@ -24,19 +24,19 @@ import './EffectList.scss'
     expanded: this.props.expanded,
   }
 
-  onAddClicked = () => {
+  handleAdd = () => {
     this.props.model.push({})
     this.forceUpdate()
   }
 
-  onDeleteClicked = ({ target }) => {
+  handleDelete = ({ target }) => {
     const index = parseInt(target.getAttribute('data-index'), 10)
     this.props.model.deleteAt(index)
     this.forceUpdate()
   }
 
   // eslint-disable-next-line react/no-access-state-in-setstate
-  onToggle = () => this.setState({ expanded: !this.state.expanded })
+  handleToggle = () => this.setState({ expanded: !this.state.expanded })
 
   render() {
     const { className, model } = this.props
@@ -44,15 +44,15 @@ import './EffectList.scss'
 
     return (
       <Fragment>
-        <div className={`effect-list-toggle icon-${toggleState}`} onClick={this.onToggle} />
+        <div className={`effect-list-toggle icon-${toggleState}`} onClick={this.handleToggle} />
         <div className={`effect-list ${className}`}>
-          <button className="icon-add" onClick={this.onAddClicked}>
+          <button className="icon-add" onClick={this.handleAdd}>
             Add Effect
           </button>
           {model.map((effect, index) => (
             <div className="effect-wrapper" key={index}>
               <Effect model={effect} />
-              <button className="icon-remove" data-index={index} onClick={this.onDeleteClicked} />
+              <button className="icon-remove" data-index={index} onClick={this.handleDelete} />
             </div>
           ))}
         </div>
