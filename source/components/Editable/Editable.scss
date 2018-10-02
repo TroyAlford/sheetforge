@@ -47,7 +47,8 @@
   }
 
   .placeholder, input, textarea {
-    @include placeholder;
+    color: rgba(200, 200, 200, .8);
+    @include placeholder(rgba(200, 200, 200, .8));
   }
 
   &:focus-within { outline: -webkit-focus-ring-color auto 1px; }
