@@ -5,8 +5,7 @@ export default types.compose(
   IEditable,
   types.model({
     current: 0,
-    displayName: types.string,
-    id: types.identifier,
+    displayName: types.identifier,
     maximum: 10,
   })
 ).named('Resource')

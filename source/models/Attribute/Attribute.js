@@ -6,8 +6,7 @@ import { sum } from '@/utilities/math'
 export default types.compose(
   IEditable,
   types.model({
-    displayName: '',
-    id: types.identifier,
+    displayName: types.identifier,
     value: 0,
   }).views((self) => {
     let character
@@ -19,7 +18,7 @@ export default types.compose(
       get displayValue() { return self.value + self.modifier },
       get effects() {
         if (!character) return []
-        return character.activeEffects.filter(effect => effect.modifies === self.id)
+        return character.activeEffects.filter(effect => effect.target === self)
       },
       get modifier() { return sum(self.effects.map(effect => effect.modifier)) },
       get modifierText() {

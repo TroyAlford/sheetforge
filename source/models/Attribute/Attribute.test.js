@@ -13,13 +13,13 @@ describe('models/Attribute', () => {
   describe('when attached', () => {
     const character = DummyCharacter.create({
       activeEffects: [
-        { modifier: 1, modifies: 'DEX' },
-        { modifier: 4, modifies: 'STR' },
-        { modifier: 1, modifies: 'STR' },
+        { modifier: 1, target: 'Dexterity' },
+        { modifier: 4, target: 'Strength' },
+        { modifier: 1, target: 'Strength' },
       ],
       attributes: [
-        { displayName: 'Dexterity', id: 'DEX', value: 12 },
-        { displayName: 'Strength', id: 'STR', value: 10 },
+        { displayName: 'Dexterity', value: 12 },
+        { displayName: 'Strength', value: 10 },
       ],
     })
 
@@ -45,7 +45,7 @@ describe('models/Attribute', () => {
   })
 
   describe('when detached', () => {
-    const STR = Attribute.create({ displayName: 'Strength', id: 'STR', value: 10 })
+    const STR = Attribute.create({ displayName: 'Strength', value: 10 })
 
     it('returns a displayValue equal to its value', () => {
       expect(STR.displayValue).toEqual(STR.value)

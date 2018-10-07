@@ -16,20 +16,20 @@ describe('models/Spell', () => {
     beforeEach(() => {
       character = DummyCharacter.create({
         resources: [
-          { current: 6, displayName: 'Mana', id: 'mana', maximum: 10 },
-          { current: 8, displayName: 'Willpower', id: 'willpower', maximum: 8 },
+          { current: 6, displayName: 'Mana', maximum: 10 },
+          { current: 8, displayName: 'Willpower', maximum: 8 },
         ],
         spells: [{
-          costs: [{ amount: 8, resource: 'mana' }],
+          costs: [{ amount: 8, resource: 'Mana' }],
           displayName: 'Unaffordable - mana cost too high',
         }, {
-          costs: [{ amount: 5, resource: 'rage' }],
+          costs: [{ amount: 5, resource: 'Rage' }],
           displayName: 'Unaffordable - costs unavailable resource',
         }, {
-          costs: [{ amount: 5, resource: 'mana' }],
+          costs: [{ amount: 5, resource: 'Mana' }],
           displayName: 'Affordable Spell',
         }, {
-          costs: [{ amount: 3, resource: 'mana' }, { amount: 1, resource: 'willpower' }],
+          costs: [{ amount: 3, resource: 'Mana' }, { amount: 1, resource: 'Willpower' }],
           displayName: 'Affordable Spell',
         }, {
           displayName: 'Free Spell (Affordable)',
@@ -45,7 +45,7 @@ describe('models/Spell', () => {
     })
 
     it('errors on unresolvable resource references', () => {
-      expect(() => character.spells.at(1).isAffordable).toThrow(/Failed to resolve reference 'rage'/)
+      expect(() => character.spells.at(1).isAffordable).toThrow(/Failed to resolve reference 'Rage'/)
     })
 
     it('can spend character resources', () => {
@@ -78,7 +78,7 @@ describe('models/Spell', () => {
   describe('when unattached', () => {
     it('isAffordable is always true', () => {
       const spell = Spell.create({
-        cost: [{ amount: 25, resource: 'mana' }],
+        cost: [{ amount: 25, resource: 'Mana' }],
         displayName: 'Big Bad Spell',
         level: 9,
       })
