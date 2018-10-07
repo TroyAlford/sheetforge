@@ -1,0 +1,29 @@
+@import '~@fontello/css/sheetforge-embedded.css';
+
+.list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  button.icon-add {
+    cursor: pointer;
+    height: 40px;
+    width: 100%;
+  }
+
+  .list-item-wrapper {
+    display: flex;
+    width: 100%;
+
+    button.icon-remove {
+      background: transparent;
+      border: none;
+      border-radius: .5em;
+      cursor: pointer;
+      height: 40px;
+    }
+    .effect {
+      flex: 1;
+    }
+  }
+}
