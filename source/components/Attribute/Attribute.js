@@ -19,8 +19,8 @@ import './Attribute.scss'
   onChangeValue = value => this.props.model.set({ value })
 
   renderModifier = () => {
-    const { displayValue, modifiedBy, modifier, modifierText } = this.props.model
-    if (!modifiedBy.length) return null
+    const { displayValue, effects, modifier, modifierText } = this.props.model
+    if (!effects.length) return null
 
     const classNames = [
       'modifier',
@@ -41,16 +41,8 @@ import './Attribute.scss'
 
     return (
       <div className="attribute">
-        <Editable
-          className="displayName"
-          onChange={this.onChangeName}
-          value={model.displayName}
-        />
-        <Editable
-          className="value"
-          onChange={this.onChangeValue}
-          value={model.value}
-        />
+        <Editable className="displayName" onChange={this.onChangeName} value={model.displayName} />
+        <Editable className="value" onChange={this.onChangeValue} value={model.value} />
         {this.renderModifier()}
       </div>
     )
