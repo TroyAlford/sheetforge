@@ -1,0 +1,37 @@
+.spell {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .expanded-toggle {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
+  }
+
+  .displayName {
+    flex: 1;
+  }
+
+  .description {
+    margin-left: 40px;
+    min-height: 80px;
+    width: 100%;
+
+    textarea { resize: none; }
+  }
+
+  .expandable {
+    margin-left: 40px;
+    min-width: calc(100% - 40px);
+  }
+
+  &.active {
+    order: 0;
+
+    .displayName { font-weight: bold; }
+  }
+}

@@ -1,0 +1,9 @@
+.resource-cost {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+
+  .amount {
+    justify-content: center;
+  }
+}
