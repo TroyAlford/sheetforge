@@ -18,7 +18,7 @@ export default types.compose(
     conditions: CollectionOf(types.string), // ['vs Goblins', 'Crinos Form']
     descriptors: CollectionOf(Descriptor),
     experience: 0,
-    health: types.maybe(types.union(types.number, CollectionOf(HealthLevel))),
+    health: CollectionOf(HealthLevel),
     items: CollectionOf(Item), // equipped / unequipped, have Effects
     resources: CollectionOf(Resource),
     skills: CollectionOf(Skill),

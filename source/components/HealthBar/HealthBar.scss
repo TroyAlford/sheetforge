@@ -1,37 +1,43 @@
-@import '../../../fontello/css/sheetforge-embedded.css';
-
 .health-bar {
   display: flex;
+  flex-wrap: wrap;
 
-  .health-level { display: flex; }
+  .summary, .penalty {
+    align-items: center;
+    display: flex;
+    min-height: 40px;
+  }
+  .summary { flex: 1; }
+  .penalty {
+    justify-content: center;
+    padding: 0 1em;
+  }
 
-  &.horizontal {
-    flex-direction: row-reverse;
+  button {
+    cursor: pointer;
     height: 40px;
+    width: 40px;
+  }
+
+  &.horizontal > .expandable {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 80px;
     justify-content: center;
 
-    .damage { min-width: 20px; }
-    .name { display: none; }
+    .health-level {
+      display: flex;
+      flex-direction: column;
+
+      .damage { min-width: 20px; }
+      .name { display: none; }
+    }
   }
-  &.vertical {
+  &.vertical > .expandable {
+    display: flex;
     flex-direction: column;
 
     .damage { min-width: 40px; }
     .name { flex: 1; }
-  }
-
-  .health-level {
-    .damage {
-      align-items: center;
-      cursor: pointer;
-      display: flex;
-      font-family: sheetforge;
-      justify-content: center;
-    }
-
-    &.none { color: #000000; .damage:before { content: ''; } }
-    &.light { color: #007bff; .damage:before { content: ''; } }
-    &.heavy { color: #ffc107; .damage:before { content: ''; } }
-    &.bane { color: #dc3545; .damage:before { content: ''; } }
   }
 }

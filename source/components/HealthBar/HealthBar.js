@@ -1,11 +1,17 @@
 import { observer } from 'mobx-react'
-import { types } from 'mobx-state-tree'
 import PropTypes from 'prop-types' // eslint-disable-line
 import React, { Component } from 'react'
-import Editable from '@/components/Editable'
-import HealthLevel from '@/models/HealthLevel/HealthLevel'
+import Expandable from '@/components/Expandable'
+import HealthLevel from '@/components/HealthBar/Healthlevel'
+import ListOf from '@/components/List'
+import CollectionOf from '@/models/generic/Collection'
+import HealthLevelModel from '@/models/HealthLevel'
 import modelPropType from '@/utilities/prop-types/model'
 import './HealthBar.scss'
+
+const HealthLevelList = ListOf(HealthLevelModel, HealthLevel, {
+  prepend: true,
+})
 
 @observer class HealthBar extends Component {
   static defaultProps = {
@@ -16,23 +22,24 @@ import './HealthBar.scss'
 
   static propTypes = {
     horizontal: PropTypes.bool,
-    model: modelPropType(types.array(HealthLevel)),
+    model: modelPropType(CollectionOf(HealthLevelModel)),
     vertical: PropTypes.bool,
   }
 
-  handleHealthLevelClick = (event, healthLevel) => {
-    const healing = event.ctrlKey
+  handleHeal = () => {
+    const injury = [...this.props.model.slice().reverse()].find(level => level.damage !== 'none')
+    if (injury) injury.apply('none')
+  }
 
-    if (healthLevel.damage === 'bane' && event.type === 'tap') {
-      // Allow finger-clicks to heal bane damage
-      healthLevel.set({ damage: 'none' })
-    } else {
-      healthLevel.adjust(healing ? -1 : 1)
-    }
+  handleHarm = () => {
+    const healthy = [...this.props.model.asArray].find(level => level.damage === 'none')
+    if (healthy) healthy.apply('heavy')
   }
 
   render() {
     const { horizontal, model, vertical } = this.props
+    const current = model.filter(level => level.damage === 'none').length
+    const worstInjury = [...model.slice().reverse()].find(level => level.damage !== 'none')
     const classNames = [
       'health-bar',
       horizontal && !vertical && 'horizontal',
@@ -41,20 +48,15 @@ import './HealthBar.scss'
 
     return (
       <div className={classNames}>
-        {model.map((level, index) => (
-          <div key={index} className={`health-level ${level.damage}`}>
-            <div
-              className="damage"
-              onClick={e => this.handleHealthLevelClick(e, level)}
-              title={level.damage === 'none' ? 'healthy' : `${level.damage} damage`}
-            />
-            <Editable
-              className="name"
-              onChange={name => level.set({ name })}
-              value={level.name}
-            />
-          </div>
-        ))}
+        <div className="summary">
+          <b>Health</b>:&nbsp;{current} of {model.length} {worstInjury && `(${worstInjury.name})`}
+        </div>
+        {worstInjury && <div className="penalty">Penalty: {worstInjury.penalty}</div>}
+        <button onClick={this.handleHarm}> - </button>
+        <button onClick={this.handleHeal}> + </button>
+        <Expandable>
+          <HealthLevelList collection={model} />
+        </Expandable>
       </div>
     )
   }

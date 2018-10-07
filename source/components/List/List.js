@@ -11,6 +11,7 @@ export default (Model, Component, props = {}) => observer(
       addButtonText: 'Add',
       className: '',
       collection: [],
+      prepend: false,
       ...props,
     }
 
@@ -21,7 +22,11 @@ export default (Model, Component, props = {}) => observer(
     }
 
     handleAdd = () => {
-      this.props.collection.push({})
+      if (this.props.prepend) {
+        this.props.collection.unshift({})
+      } else {
+        this.props.collection.push({})
+      }
       this.forceUpdate()
     }
 

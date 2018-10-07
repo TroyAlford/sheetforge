@@ -1,6 +1,7 @@
 import { Playground } from 'docz'
 import { types } from 'mobx-state-tree'
 import CharacterModel from '@/models/Character'
+import CollectionOf from '@/models/generic/Collection'
 import HealthBar from './HealthBar'
 import HealthLevel from '@/models/HealthLevel'
 
@@ -15,13 +16,13 @@ Each `HealthLevel` allows one of four possible settings for its `damage` propert
 
 <Playground>
   {() => {
-    const HealthBarModel = types.array(HealthLevel)
+    const HealthBarModel = CollectionOf(HealthLevel)
     const health = HealthBarModel.create([
       { name: 'Healthy', damage: 'bane' },
-      { name: 'Bruised', damage: 'heavy', penalty: 1 },
-      { name: 'Injured', damage: 'light', penalty: 2 },
-      { name: 'Crippled', damage: 'none', penalty: 3 },
-      { name: 'Incapacitated', penalty: 5 },
+      { name: 'Bruised', damage: 'heavy', penalty: -1 },
+      { name: 'Injured', damage: 'light', penalty: -2 },
+      { name: 'Crippled', damage: 'none', penalty: -3 },
+      { name: 'Incapacitated', penalty: -5 },
     ])
 
     return (<>
@@ -29,13 +30,6 @@ Each `HealthLevel` allows one of four possible settings for its `damage` propert
       <HealthBar model={health} vertical />
       <h2>Rendered Horizontally</h2>
       <HealthBar model={health} />
-      <style>{`
-        .health-bar {
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          padding: 10px;
-        }
-      `}</style>
     </>)
   }}
 </Playground>
