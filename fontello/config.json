@@ -153,6 +153,12 @@
       ]
     },
     {
+      "uid": "ff70f7b3228702e0d590e60ed3b90bea",
+      "css": "magic",
+      "code": 61648,
+      "src": "fontawesome"
+    },
+    {
       "uid": "1fd1b4da373238652f7fe3b32ebec8ab",
       "css": "armor-1",
       "code": 59410,

@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'sheetforge';
-  src: url('../font/sheetforge.eot?65722798');
-  src: url('../font/sheetforge.eot?65722798#iefix') format('embedded-opentype'),
-       url('../font/sheetforge.woff2?65722798') format('woff2'),
-       url('../font/sheetforge.woff?65722798') format('woff'),
-       url('../font/sheetforge.ttf?65722798') format('truetype'),
-       url('../font/sheetforge.svg?65722798#sheetforge') format('svg');
+  src: url('../font/sheetforge.eot?92626487');
+  src: url('../font/sheetforge.eot?92626487#iefix') format('embedded-opentype'),
+       url('../font/sheetforge.woff2?92626487') format('woff2'),
+       url('../font/sheetforge.woff?92626487') format('woff'),
+       url('../font/sheetforge.ttf?92626487') format('truetype'),
+       url('../font/sheetforge.svg?92626487#sheetforge') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'sheetforge';
-    src: url('../font/sheetforge.svg?65722798#sheetforge') format('svg');
+    src: url('../font/sheetforge.svg?92626487#sheetforge') format('svg');
   }
 }
 */
@@ -70,3 +70,4 @@
 .icon-health-bane:before { content: '\e902'; } /* '' */
 .icon-collapsed:before { content: '\e903'; } /* '' */
 .icon-expanded:before { content: '\e904'; } /* '' */
+.icon-magic:before { content: '\f0d0'; } /* '' */
