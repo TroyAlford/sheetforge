@@ -19,8 +19,7 @@ import './Attribute.scss'
   onChangeValue = value => this.props.model.set({ value })
 
   renderModifier = () => {
-    const { displayValue, effects, modifier, modifierText } = this.props.model
-    if (!effects.length) return null
+    const { displayValue, modifier, modifierText } = this.props.model
 
     const classNames = [
       'modifier',
@@ -30,9 +29,7 @@ import './Attribute.scss'
     ].join(' ')
 
     return (
-      <div className={classNames} title={modifierText}>
-        {modifier} = {displayValue}
-      </div>
+      <div className={classNames} title={modifierText}>{displayValue}</div>
     )
   }
 

@@ -6,7 +6,7 @@
   .modifier {
     min-width: 45px;
 
-    &.positive { color: green; &:before { content: '+'; } }
+    &.positive { color: green; }
     &.negative { color: red; }
     &.zero { color: gray; }
   }
