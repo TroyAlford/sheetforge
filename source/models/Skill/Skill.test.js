@@ -4,7 +4,7 @@ describe('models/Skill', () => {
   let skill
 
   beforeEach(() => {
-    skill = Skill.create({ displayName: 'Survival' })
+    skill = Skill.create({ name: 'Survival' })
   })
 
   it('defaults to theory 0, mastery 1', () => {

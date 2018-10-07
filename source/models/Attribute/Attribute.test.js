@@ -18,8 +18,8 @@ describe('models/Attribute', () => {
         { modifier: 1, target: 'Strength' },
       ],
       attributes: [
-        { displayName: 'Dexterity', value: 12 },
-        { displayName: 'Strength', value: 10 },
+        { name: 'Dexterity', value: 12 },
+        { name: 'Strength', value: 10 },
       ],
     })
 
@@ -45,7 +45,7 @@ describe('models/Attribute', () => {
   })
 
   describe('when detached', () => {
-    const STR = Attribute.create({ displayName: 'Strength', value: 10 })
+    const STR = Attribute.create({ name: 'Strength', value: 10 })
 
     it('returns a displayValue equal to its value', () => {
       expect(STR.displayValue).toEqual(STR.value)

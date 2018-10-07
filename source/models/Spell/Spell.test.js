@@ -16,23 +16,23 @@ describe('models/Spell', () => {
     beforeEach(() => {
       character = DummyCharacter.create({
         resources: [
-          { current: 6, displayName: 'Mana', maximum: 10 },
-          { current: 8, displayName: 'Willpower', maximum: 8 },
+          { current: 6, maximum: 10, name: 'Mana' },
+          { current: 8, maximum: 8, name: 'Willpower' },
         ],
         spells: [{
           costs: [{ amount: 8, resource: 'Mana' }],
-          displayName: 'Unaffordable - mana cost too high',
+          name: 'Unaffordable - mana cost too high',
         }, {
           costs: [{ amount: 5, resource: 'Rage' }],
-          displayName: 'Unaffordable - costs unavailable resource',
+          name: 'Unaffordable - costs unavailable resource',
         }, {
           costs: [{ amount: 5, resource: 'Mana' }],
-          displayName: 'Affordable Spell',
+          name: 'Affordable Spell',
         }, {
           costs: [{ amount: 3, resource: 'Mana' }, { amount: 1, resource: 'Willpower' }],
-          displayName: 'Affordable Spell',
+          name: 'Affordable Spell',
         }, {
-          displayName: 'Free Spell (Affordable)',
+          name: 'Free Spell (Affordable)',
         }],
       })
     })
@@ -79,8 +79,8 @@ describe('models/Spell', () => {
     it('isAffordable is always true', () => {
       const spell = Spell.create({
         cost: [{ amount: 25, resource: 'Mana' }],
-        displayName: 'Big Bad Spell',
         level: 9,
+        name: 'Big Bad Spell',
       })
 
       expect(spell.isAffordable).toEqual(true)

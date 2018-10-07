@@ -3,7 +3,7 @@
 .descriptor {
   @include widget;
 
-  .displayName { flex: 1; }
+  .name { flex: 1; }
   .value {
     flex: 1;
     justify-content: flex-end;

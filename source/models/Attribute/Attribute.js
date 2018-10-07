@@ -6,7 +6,7 @@ import { sum } from '@/utilities/math'
 export default types.compose(
   IEditable,
   types.model({
-    displayName: types.identifier,
+    name: types.identifier,
     value: 0,
   }).views((self) => {
     let character

@@ -3,16 +3,7 @@
   flex-direction: row;
   flex-wrap: wrap;
 
-  .expanded-toggle {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    height: 40px;
-    justify-content: center;
-    width: 40px;
-  }
-
-  .displayName {
+  .name {
     flex: 1;
   }
 
@@ -32,6 +23,6 @@
   &.active {
     order: 0;
 
-    .displayName { font-weight: bold; }
+    .name { font-weight: bold; }
   }
 }

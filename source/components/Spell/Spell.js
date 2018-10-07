@@ -31,17 +31,17 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
 
   handleChangeDescription = description => this.props.model.set({ description })
 
-  handleChangeName = displayName => this.props.model.set({ displayName })
+  handleChangeName = name => this.props.model.set({ name })
 
   handleToggleActive = () => this.props.model.set({ isActive: !this.props.model.isActive })
 
   render() {
-    const { costs, description, displayName, effects, isActive, isAffordable } = this.props.model
+    const { costs, description, name, effects, isActive, isAffordable } = this.props.model
 
     return (
       <div className={`spell ${isActive ? '' : 'in'}active`}>
         <Editable className="is-active" onChange={this.handleToggleActive} value={isActive} />
-        <Editable className="displayName" onChange={this.handleChangeName} value={displayName} />
+        <Editable className="name" onChange={this.handleChangeName} value={name} />
         <button className="cast icon-magic" onClick={this.handleCast} disabled={!isAffordable}>Cast</button>
         <Expandable>
           <Editable

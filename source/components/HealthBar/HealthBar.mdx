@@ -17,11 +17,11 @@ Each `HealthLevel` allows one of four possible settings for its `damage` propert
   {() => {
     const HealthBarModel = types.array(HealthLevel)
     const health = HealthBarModel.create([
-      { displayName: 'Healthy', damage: 'bane' },
-      { displayName: 'Bruised', damage: 'heavy', penalty: 1 },
-      { displayName: 'Injured', damage: 'light', penalty: 2 },
-      { displayName: 'Crippled', damage: 'none', penalty: 3 },
-      { displayName: 'Incapacitated', penalty: 5 },
+      { name: 'Healthy', damage: 'bane' },
+      { name: 'Bruised', damage: 'heavy', penalty: 1 },
+      { name: 'Injured', damage: 'light', penalty: 2 },
+      { name: 'Crippled', damage: 'none', penalty: 3 },
+      { name: 'Incapacitated', penalty: 5 },
     ])
 
     return (<>

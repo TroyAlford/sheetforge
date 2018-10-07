@@ -9,19 +9,18 @@ import Spell from './Spell'
   {() => {
     const character = Character.create({
       attributes: [
-        { displayName: 'Armor Rating' },
-        { displayName: 'Charisma' },
+        { name: 'Armor Rating' },
+        { name: 'Charisma' },
       ],
       resources: [
-        { current: 16, displayName: 'Mana', maximum: 25 },
-        { current: 5, displayName: 'Rage', maximum: 5 },
-        { current: 10, displayName: 'Willpower', maximum: 10 },
+        { current: 16, maximum: 25, name: 'Mana' },
+        { current: 5, maximum: 5, name: 'Rage' },
+        { current: 10, maximum: 10, name: 'Willpower' },
       ],
       spells: [{
         costs: [
           { amount: 8, resource: 'Mana' }
         ],
-        displayName: 'Spell-Shield of the Magi',
         description: 'A powerful shielding spell, which cloaks the enchanted in radiance.',
         effects: [
           { modifier: 4, modifies: 'Armor Rating' },
@@ -29,6 +28,7 @@ import Spell from './Spell'
         ],
         isActive: true,
         level: 7,
+        name: 'Spell-Shield of the Magi',
       }],
     })
 

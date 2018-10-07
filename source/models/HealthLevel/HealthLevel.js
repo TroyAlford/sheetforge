@@ -14,7 +14,7 @@ export default types.compose(
   IEditable,
   types.model({
     damage: types.optional(types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))), 'none'),
-    displayName: '',
+    name: '',
     penalty: 0,
   }).volatile(() => ({
     healthBar: null,

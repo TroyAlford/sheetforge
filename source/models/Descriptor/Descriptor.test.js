@@ -1,23 +1,23 @@
 import Descriptor from './Descriptor'
 
 describe('models/Descriptor', () => {
-  it('requires displayName', () => {
+  it('requires name', () => {
     expect(() => Descriptor.create({ value: 'foo' }))
-      .toThrow(/displayName.*is not a string/)
+      .toThrow(/name.*is not a string/)
   })
 
   it('requires value', () => {
-    expect(() => Descriptor.create({ displayName: 'foo' }))
+    expect(() => Descriptor.create({ name: 'foo' }))
       .toThrow(/value.*not assignable.*string | number/)
   })
 
   it('accepts strings or numbers as values', () => {
     const descriptor1 = Descriptor.create({
-      displayName: 'string',
+      name: 'string',
       value: 'foo!',
     })
     const descriptor2 = Descriptor.create({
-      displayName: 'number',
+      name: 'number',
       value: 1,
     })
 

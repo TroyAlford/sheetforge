@@ -4,14 +4,14 @@ import HealthLevel from './HealthLevel'
 describe('models/HealthLevel', () => {
   describe('onCreate', () => {
     it('defaults damage to "none"', () => {
-      const healthLevel = HealthLevel.create({ displayName: 'Foo!' })
+      const healthLevel = HealthLevel.create({ name: 'Foo!' })
       expect(healthLevel.damage).toEqual('none')
     })
   })
 
   describe('if detached', () => {
     it('damage() adjusts own health level', () => {
-      const healthLevel = HealthLevel.create({ damage: 'none', displayName: 'Healthy' });
+      const healthLevel = HealthLevel.create({ damage: 'none', name: 'Healthy' });
 
       ['none', 'light', 'heavy', 'bane', 'light', 'none', 'heavy', 'none'].forEach((severity) => {
         healthLevel.apply(severity)
@@ -20,7 +20,7 @@ describe('models/HealthLevel', () => {
     })
 
     it('heal() sets health level to "ok"', () => {
-      const healthLevel = HealthLevel.create({ damage: 'bane', displayName: 'Healthy' })
+      const healthLevel = HealthLevel.create({ damage: 'bane', name: 'Healthy' })
 
       healthLevel.heal()
       expect(healthLevel.damage).toEqual('none')
@@ -33,11 +33,11 @@ describe('models/HealthLevel', () => {
 
     beforeEach(() => {
       healthBar = HealthBar.create([
-        { damage: 'none', displayName: 'Healthy' },
-        { damage: 'none', displayName: 'Bruised' },
-        { damage: 'none', displayName: 'Wounded' },
-        { damage: 'none', displayName: 'Crippled' },
-        { damage: 'none', displayName: 'Incapacitated' },
+        { damage: 'none', name: 'Healthy' },
+        { damage: 'none', name: 'Bruised' },
+        { damage: 'none', name: 'Wounded' },
+        { damage: 'none', name: 'Crippled' },
+        { damage: 'none', name: 'Incapacitated' },
       ])
     })
 

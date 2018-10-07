@@ -26,8 +26,8 @@ import './Effect.scss'
     return (
       <div className={`effect ${isApplicable ? 'applicable' : ''}`.trim()}>
         <select className="modifies" value={modifies} onChange={this.handleChangeModifies}>
-          {availableTargets.map(({ id, displayName }) => (
-            <option key={id} value={id}>{displayName}</option>
+          {availableTargets.map(({ id, name }) => (
+            <option key={id} value={id}>{name}</option>
           ))}
         </select>
         <Editable className="modifier" onChange={this.handleChangeModifier} value={modifier} />

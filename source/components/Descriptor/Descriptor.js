@@ -8,7 +8,7 @@ import './Descriptor.scss'
     model: {},
   }
 
-  onChangeName = displayName => this.props.model.set({ displayName })
+  onChangeName = name => this.props.model.set({ name })
 
   onChangeValue = value => this.props.model.set({ value })
 
@@ -16,9 +16,9 @@ import './Descriptor.scss'
     return (
       <div className="descriptor">
         <Editable
-          className="displayName"
+          className="name"
           onChange={this.onChangeName}
-          value={this.props.model.displayName}
+          value={this.props.model.name}
         />
         <Editable
           className="value"

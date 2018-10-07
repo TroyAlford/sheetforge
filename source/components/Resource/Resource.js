@@ -11,17 +11,17 @@ import './Resource.scss'
 
   onChangeCurrent = current => this.props.model.set({ current })
 
-  onChangeName = displayName => this.props.model.set({ displayName })
+  onChangeName = name => this.props.model.set({ name })
 
   render() {
-    const { current, displayName, maximum } = this.props.model
+    const { current, name, maximum } = this.props.model
 
     return (
       <div className="resource">
         <Editable
-          className="displayName"
+          className="name"
           onChange={this.onChangeName}
-          value={displayName}
+          value={name}
         />
         <Rating
           current={current}

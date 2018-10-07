@@ -23,9 +23,9 @@ import './ResourceCost.scss'
 
     return (
       <div className="resource-cost">
-        <select className="resource-id" value={resource.displayName} onChange={this.handleChangeResourceId}>
-          {availableResources.map(({ displayName }) => (
-            <option key={displayName} value={displayName}>{displayName}</option>
+        <select className="resource-id" value={resource.name} onChange={this.handleChangeResourceId}>
+          {availableResources.map(({ name }) => (
+            <option key={name} value={name}>{name}</option>
           ))}
         </select>
         <Editable className="amount" onChange={this.handleChangeAmount} value={amount} />

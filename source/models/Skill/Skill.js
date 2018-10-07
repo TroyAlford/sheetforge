@@ -4,8 +4,8 @@ import IEditable from '@/models/generic/IEditable'
 export default types.compose(
   IEditable,
   types.model({
-    displayName: '',
     mastery: 1,
+    name: '',
     theory: 0,
   }).views(self => ({
     get isComplex() { return self.theory !== 0 },

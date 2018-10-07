@@ -5,33 +5,33 @@ describe('models/Character', () => {
   beforeEach(() => {
     character = Character.create({
       attributes: [
-        { displayName: 'Strength', id: 'STR', value: 4 },
-        { displayName: 'Dexterity', id: 'DEX', value: 2 },
-        { displayName: 'Stamina', id: 'STA', value: 3 },
+        { name: 'Strength', value: 4 },
+        { name: 'Dexterity', value: 2 },
+        { name: 'Stamina', value: 3 },
       ],
       conditions: ['vs Orcs'],
       items: [{
-        displayName: 'Greatsword of Greenblood Bane',
         effects: [
-          { condition: 'vs Goblins', modifier: 1, modifies: 'STR' },
-          { condition: 'vs Orcs', modifier: 1, modifies: 'STR' },
+          { condition: 'vs Goblins', modifier: 1, target: 'Strength' },
+          { condition: 'vs Orcs', modifier: 1, target: 'Strength' },
         ],
         equipped: true,
+        name: 'Greatsword of Greenblood Bane',
       }],
       spells: [{
-        displayName: 'Favored Enemy: Goblinoid',
         effects: [
-          { condition: 'vs Goblins', modifier: 1, modifies: 'STR' },
-          { condition: 'vs Orcs', modifier: 1, modifies: 'STR' },
+          { condition: 'vs Goblins', modifier: 1, target: 'STR' },
+          { condition: 'vs Orcs', modifier: 1, target: 'STR' },
         ],
         isActive: true,
+        name: 'Favored Enemy: Goblinoid',
       }],
       traits: [{
-        displayName: 'Favored Enemy: Goblinoid',
         effects: [
-          { condition: 'vs Goblins', modifier: 1, modifies: 'STR' },
-          { condition: 'vs Orcs', modifier: 1, modifies: 'STR' },
+          { condition: 'vs Goblins', modifier: 1, target: 'STR' },
+          { condition: 'vs Orcs', modifier: 1, target: 'STR' },
         ],
+        name: 'Favored Enemy: Goblinoid',
       }],
     })
   })

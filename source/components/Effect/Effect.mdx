@@ -9,17 +9,17 @@ import Effect from './Effect'
   {() => {
     const character = Character.create({
       attributes: [
-        { displayName: 'Armor Rating' },
-        { displayName: 'Charisma' },
+        { name: 'Armor Rating' },
+        { name: 'Charisma' },
       ],
       resources: [
-        { current: 16, displayName: 'Mana', maximum: 25 },
+        { current: 16, name: 'Mana', maximum: 25 },
       ],
       spells: [{
         costs: [
           { amount: 8, resource: 'Mana' }
         ],
-        displayName: 'Spell-Shield of the Magi',
+        name: 'Spell-Shield of the Magi',
         description: 'A powerful shielding spell, which cloaks the enchanted in radiance.',
         effects: [
           { modifier: 4, modifies: 'Armor Rating' },

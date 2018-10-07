@@ -10,10 +10,10 @@ export default types.compose(
   types.model({
     costs: CollectionOf(ResourceCost), // Resources
     description: '',
-    displayName: '',
     effects: CollectionOf(Effect),
     isActive: false,
     level: 0,
+    name: '',
   }).volatile(() => ({
     character: null,
   })).views(self => ({

@@ -9,16 +9,16 @@ import Item from './Item'
   {() => {
     const character = Character.create({
       attributes: [
-        { displayName: 'Strength', id: 'STR' },
-        { displayName: 'Charisma', id: 'CHA' },
+        { name: 'Strength' },
+        { name: 'Charisma' },
       ],
       items: [{
-        displayName: 'Greatsword of Maiming',
+        name: 'Greatsword of Maiming',
         description: 'The family sword of House Ednyzil.',
         effects: [
-          { modifier: 2, modifies: 'STR' },
-          { modifier: 4, modifies: 'CHA' },
-          { modifier: 2, modifies: 'CHA', condition: 'in Ft. Ednyzil' },
+          { modifier: 2, modifies: 'Strength' },
+          { modifier: 4, modifies: 'Charisma' },
+          { modifier: 2, modifies: 'Charisma', condition: 'in Ft. Ednyzil' },
         ],
         equipped: true,
       }],

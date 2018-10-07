@@ -14,7 +14,7 @@ import './Skill.scss'
     model: modelPropType(SkillModel),
   }
 
-  onChangeName = displayName => this.props.model.set({ displayName })
+  onChangeName = name => this.props.model.set({ name })
 
   onChangeMastery = mastery => this.props.model.set({ mastery })
 
@@ -26,9 +26,9 @@ import './Skill.scss'
     return (
       <div className="skill">
         <Editable
-          className="displayName"
+          className="name"
           onChange={this.onChangeName}
-          value={model.displayName}
+          value={model.name}
         />
         <Editable
           className={`theory ${(!model.theory && 'is-zero') || ''}`}

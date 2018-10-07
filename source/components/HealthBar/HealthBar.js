@@ -49,9 +49,9 @@ import './HealthBar.scss'
               title={level.damage === 'none' ? 'healthy' : `${level.damage} damage`}
             />
             <Editable
-              className="displayName"
-              onChange={displayName => level.set({ displayName })}
-              value={level.displayName}
+              className="name"
+              onChange={name => level.set({ name })}
+              value={level.name}
             />
           </div>
         ))}

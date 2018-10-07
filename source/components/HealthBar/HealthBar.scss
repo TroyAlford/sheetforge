@@ -10,14 +10,14 @@
     height: 40px;
     justify-content: center;
 
-    .displayName { display: none; }
     .damage { min-width: 20px; }
+    .name { display: none; }
   }
   &.vertical {
     flex-direction: column;
 
-    .displayName { flex: 1; }
     .damage { min-width: 40px; }
+    .name { flex: 1; }
   }
 
   .health-level {

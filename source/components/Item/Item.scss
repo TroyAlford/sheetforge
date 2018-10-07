@@ -12,7 +12,7 @@
     width: 40px;
   }
 
-  .displayName {
+  .name {
     flex: 1;
   }
 
@@ -31,6 +31,6 @@
   &.equipped {
     order: 0;
 
-    .displayName { font-weight: bold; }
+    .name { font-weight: bold; }
   }
 }

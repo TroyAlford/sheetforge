@@ -9,8 +9,8 @@ export default types.compose(
   types.model({
     description: '',
     // descriptors: CollectionOf(Descriptor),
-    displayName: 'New Item...',
     effects: CollectionOf(Effect),
     equipped: false,
+    name: 'New Item...',
   }),
 ).named('Item')

@@ -7,16 +7,16 @@ describe('models/Effect', () => {
   })
   const character = Character.create({
     attributes: [
-      { displayName: 'Strength', id: 'STR', value: 10 },
+      { name: 'Strength', value: 10 },
     ],
     conditions: ['vs Goblins'],
     traits: [{
-      displayName: 'Favored Enemy: Greenbloods',
       effects: [
         { condition: 'vs Goblins', modifier: 1, modifies: 'STR' },
         { condition: 'vs Orcs', modifier: 1, modifies: 'STR' },
       ],
       equipped: true,
+      name: 'Favored Enemy: Greenbloods',
     }],
   })
 

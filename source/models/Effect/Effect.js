@@ -17,7 +17,7 @@ export default types.compose(
     return ({
       afterAttach() {
         character = findParent(self, p => p.isCharacter)
-        source = findParent(self, p => p.displayName)
+        source = findParent(self, p => p.name)
       },
       get availableTargets() {
         return character ? character.attributes : CollectionOf(Attribute).create([])
@@ -27,8 +27,8 @@ export default types.compose(
           !self.condition || (character && character.conditions.includes(self.condition))
         )
       },
-      get source() { return source || { displayName: 'Unknown', id: self.modifies, value: 0 } },
-      get sourceName() { return self.source.displayName },
+      get source() { return source || { name: 'Unknown', value: 0 } },
+      get sourceName() { return self.source.name },
     })
   })
 ).named('Effect')

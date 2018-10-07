@@ -3,16 +3,12 @@
 .trait {
   @include widget;
 
-  flex-direction: row;
+  display: flex;
   flex-wrap: wrap;
 
-  .first.row {
-    display: flex;
-    flex-direction: row;
-    width: calc(100% - 40px);
-  }
-  .effect-list-toggle {
-    width: 40px;
+  .expandable {
+    margin-left: 40px;
+    min-width: calc(100% - 40px);
   }
 
   .trait-list.row {

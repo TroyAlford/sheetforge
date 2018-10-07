@@ -9,19 +9,19 @@ import TraitModel from '@/models/Trait'
   {() => {
     const character = Character.create({
       attributes: [
-        { displayName: 'Strength', id: 'STR', value: 2 },
-        { displayName: 'Dexterity', id: 'DEX', value: 4 },
-        { displayName: 'Perception', id: 'PER', value: 3 },
+        { name: 'Strength', value: 2 },
+        { name: 'Dexterity', value: 4 },
+        { name: 'Perception', value: 3 },
       ],
       traits: [
-        { displayName: 'Magical Aptitude', value: 4 },
+        { name: 'Magical Aptitude', value: 4 },
         {
-          displayName: 'Blind',
           effects: [{
             condition: 'Vision-based',
             modifier: -5,
-            modifies: 'PER',
+            modifies: 'Perception',
           }],
+          name: 'Blind',
           value: -3,
         },
       ]

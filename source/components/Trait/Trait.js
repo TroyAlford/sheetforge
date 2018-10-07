@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import EffectList from '@/components/EffectList'
+import Expandable from '@/components/Expandable'
 import TraitModel from '@/models/Trait'
 import modelPropType from '@/utilities/prop-types/model'
 import './Trait.scss'
@@ -15,7 +16,7 @@ import './Trait.scss'
     model: modelPropType(TraitModel),
   }
 
-  onChangeName = displayName => this.props.model.set({ displayName })
+  onChangeName = name => this.props.model.set({ name })
 
   onChangeValue = value => this.props.model.set({ value })
 
@@ -24,19 +25,11 @@ import './Trait.scss'
 
     return (
       <div className="trait">
-        <div className="first row">
-          <Editable
-            className="displayName"
-            onChange={this.onChangeName}
-            value={model.displayName}
-          />
-          <Editable
-            className="value"
-            onChange={this.onChangeValue}
-            value={model.value}
-          />
-        </div>
-        <EffectList className="row" model={model.effects} />
+        <Editable className="name" onChange={this.onChangeName} value={model.name} />
+        <Editable className="value" onChange={this.onChangeValue} value={model.value} />
+        <Expandable>
+          <EffectList collection={model.effects} />
+        </Expandable>
       </div>
     )
   }
