@@ -16,18 +16,21 @@
     flex: 1;
   }
 
-  &.equipped .displayName { font-weight: bold; }
-
   .description {
-    margin-left: 40px;
     min-height: 80px;
     width: 100%;
 
     textarea { resize: none; }
   }
 
-  .effect-list-toggle { display: none; }
-  .effect-list {
+  .expandable {
     margin-left: 40px;
+    min-width: calc(100% - 40px);
+  }
+
+  &.equipped {
+    order: 0;
+
+    .displayName { font-weight: bold; }
   }
 }
