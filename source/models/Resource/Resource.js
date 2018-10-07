@@ -6,6 +6,7 @@ export default types.compose(
   types.model({
     current: 0,
     displayName: types.string,
+    id: types.identifier,
     maximum: 10,
   })
 ).named('Resource')

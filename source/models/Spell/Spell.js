@@ -1,14 +1,16 @@
-import { getParent, types } from 'mobx-state-tree'
+import { types } from 'mobx-state-tree'
 import Effect from '@/models/Effect'
 import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
+import ResourceCost from '@/models/ResourceCost'
+import findParent from '@/utilities/findParent'
 
 export default types.compose(
   IEditable,
   types.model({
-    cost: types.map(types.number), // Resources
+    costs: CollectionOf(ResourceCost), // Resources
     description: '',
-    displayName: types.string,
+    displayName: '',
     effects: CollectionOf(Effect),
     isActive: false,
     level: 0,
@@ -16,26 +18,21 @@ export default types.compose(
     character: null,
   })).views(self => ({
     get isAffordable() {
-      if (!self.character) return true
-
-      const costs = [...self.cost.entries()]
-      return costs.length === costs.filter(([key, value]) => {
-        const resource = self.character.resources.get(key)
-        return Boolean(resource && resource.current >= value)
-      }).length
+      if (!self.character || self.costs.length === 0) return true
+      return self.costs.asArray.every(({ amount, resource }) => (
+        resource && resource.current >= amount
+      ))
     },
   })).actions(self => ({
     /* eslint-disable no-param-reassign */
 
     afterAttach() {
-      // self => spell array => character
-      try { self.character = getParent(self, 2) } catch (e) {}
+      self.character = findParent(self, p => p.isCharacter)
     },
     cast() {
-      if (self.character && self.isAffordable) {
-        [...self.cost.entries()].forEach(([key, value]) => {
-          const resource = self.character.resources.get(key)
-          resource.set('current', resource.current - value)
+      if (self.isAffordable) {
+        self.costs.forEach(({ amount, resource }) => {
+          resource.set({ current: resource.current - amount })
         })
       }
     },

@@ -1,0 +1,35 @@
+import { Playground } from 'docz'
+import { types } from 'mobx-state-tree'
+import Character from '@/models/Character'
+import Effect from './Effect'
+
+## Effect Component
+
+<Playground>
+  {() => {
+    const character = Character.create({
+      attributes: [
+        { displayName: 'Armor Rating', id: 'ARMOR' },
+        { displayName: 'Charisma', id: 'CHA' },
+      ],
+      resources: [
+        { id: 'mana', current: 16, displayName: 'Mana', maximum: 25 },
+      ],
+      spells: [{
+        costs: [
+          { amount: 8, resource: 'mana' }
+        ],
+        displayName: 'Spell-Shield of the Magi',
+        description: 'A powerful shielding spell, which cloaks the enchanted in radiance.',
+        effects: [
+          { modifier: 4, modifies: 'ARMOR' },
+          { modifier: 2, modifies: 'CHA' },
+        ],
+        isActive: true,
+        level: 7,
+      }],
+    })
+
+    return <Effect model={character.spells.at(0).effects.at(0)} />
+  }}
+</Playground>
