@@ -17,6 +17,10 @@ export default (TYPE, options = {}) => {
     every: fn => self.asArray.every(fn),
     filter: fn => self.asArray.filter(fn),
     find: fn => self.asArray.find(fn),
+    findById: (id) => {
+      if (!TYPE.identifierAttribute) return null
+      return self.find(item => item[TYPE.identifierAttribute] === id) || null
+    },
     forEach: fn => self.asArray.forEach(fn),
     includes: (searchElement, fromIndex) => self.values.includes(searchElement, fromIndex),
     insert: (object, index) => { self.splice(index, 0, object) },

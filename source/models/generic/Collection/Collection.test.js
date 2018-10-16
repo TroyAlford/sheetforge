@@ -2,6 +2,7 @@ import { types } from 'mobx-state-tree'
 import Collection from './Collection'
 
 const Foo = types.model('Foo', {
+  id: types.identifier,
   value: types.string,
 })
 const MyCollection = Collection(Foo)
@@ -11,10 +12,10 @@ describe('models/Collection', () => {
 
   beforeEach(() => {
     collection = MyCollection.create([
-      { value: 'Foo!' },
-      { value: 'Bar!' },
-      { value: 'Baz!' },
-      { value: 'Qux!' },
+      { id: '1', value: 'Foo!' },
+      { id: '2', value: 'Bar!' },
+      { id: '3', value: 'Baz!' },
+      { id: '4', value: 'Qux!' },
     ])
   })
 
@@ -56,12 +57,17 @@ describe('models/Collection', () => {
 
   it('supports filter(fn)', () => {
     expect(collection.filter(({ value }) => value.match(/a/)))
-      .toEqual([{ value: 'Bar!' }, { value: 'Baz!' }])
+      .toEqual([{ id: '2', value: 'Bar!' }, { id: '3', value: 'Baz!' }])
   })
 
   it('supports find(fn)', () => {
     expect(collection.find(({ value }) => value.match(/^F/)).toJSON())
-      .toEqual({ value: 'Foo!' })
+      .toEqual({ id: '1', value: 'Foo!' })
+  })
+
+  it('supports findById(id)', () => {
+    expect(collection.findById('1')).toEqual({ id: '1', value: 'Foo!' })
+    expect(collection.findById('5')).toEqual(null)
   })
 
   it('supports forEach(fn)', () => {
@@ -77,9 +83,9 @@ describe('models/Collection', () => {
   })
 
   it('supports insert(object, index)', () => {
-    collection.insert({ value: 'Inserted!' }, 2)
+    collection.insert({ id: '5', value: 'Inserted!' }, 2)
     expect(collection.map(({ value }) => value)).toEqual(['Foo!', 'Bar!', 'Inserted!', 'Baz!', 'Qux!'])
-    collection.insert({ value: 'First!' })
+    collection.insert({ id: '0', value: 'First!' })
     expect(collection.map(({ value }) => value)).toEqual(['First!', 'Foo!', 'Bar!', 'Inserted!', 'Baz!', 'Qux!'])
   })
 
@@ -93,15 +99,15 @@ describe('models/Collection', () => {
 
   it('supports pop()', () => {
     expect(collection).toHaveLength(4)
-    expect(collection.pop().toJSON()).toEqual({ value: 'Qux!' })
+    expect(collection.pop().toJSON()).toEqual({ id: '4', value: 'Qux!' })
     expect(collection).toHaveLength(3)
   })
 
   it('supports push()', () => {
     expect(collection).toHaveLength(4)
-    collection.push({ value: 'Yay!' })
+    collection.push({ id: '5', value: 'Yay!' })
     expect(collection).toHaveLength(5)
-    expect(collection.at(4).toJSON()).toEqual({ value: 'Yay!' })
+    expect(collection.at(4).toJSON()).toEqual({ id: '5', value: 'Yay!' })
   })
 
   it('supports reduce(fn, initial)', () => {
@@ -113,13 +119,13 @@ describe('models/Collection', () => {
 
   it('supports shift()', () => {
     expect(collection).toHaveLength(4)
-    expect(collection.shift().toJSON()).toEqual({ value: 'Foo!' })
+    expect(collection.shift().toJSON()).toEqual({ id: '1', value: 'Foo!' })
     expect(collection).toHaveLength(3)
   })
 
   it('supports slice(start, end)', () => {
-    expect(collection.slice(2)).toEqual([{ value: 'Baz!' }, { value: 'Qux!' }])
-    expect(collection.slice(0, 1)).toEqual([{ value: 'Foo!' }])
+    expect(collection.slice(2)).toEqual([{ id: '3', value: 'Baz!' }, { id: '4', value: 'Qux!' }])
+    expect(collection.slice(0, 1)).toEqual([{ id: '1', value: 'Foo!' }])
   })
 
   it('supports some(fn)', () => {
@@ -128,14 +134,14 @@ describe('models/Collection', () => {
   })
 
   it('supports splice(index, deleteCount, value)', () => {
-    collection.splice(1, 2, { value: 'Inserted!' })
+    collection.splice(1, 2, { id: '5', value: 'Inserted!' })
     expect(collection.map(({ value }) => value)).toEqual(['Foo!', 'Inserted!', 'Qux!'])
   })
 
   it('supports unshift()', () => {
     expect(collection).toHaveLength(4)
-    collection.unshift({ value: 'Yay!' })
+    collection.unshift({ id: '5', value: 'Yay!' })
     expect(collection).toHaveLength(5)
-    expect(collection.at(0).toJSON()).toEqual({ value: 'Yay!' })
+    expect(collection.at(0).toJSON()).toEqual({ id: '5', value: 'Yay!' })
   })
 })
