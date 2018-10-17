@@ -14,4 +14,9 @@ describe('utilities/resolvePath', () => {
     expect(getPathValue(object, "array[0].0['0']")).toEqual(0)
     expect(getPathValue(object, "mixed['a'].0.c[0]")).toEqual(1)
   })
+
+  it('returns undefined for invalid paths', () => {
+    expect(getPathValue({})).toBe(undefined)
+    expect(getPathValue({}, '')).toBe(undefined)
+  })
 })
