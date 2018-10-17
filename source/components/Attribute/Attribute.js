@@ -28,6 +28,8 @@ import './Attribute.scss'
       modifier === 0 && 'zero',
     ].join(' ')
 
+    if (modifier === 0) return ''
+
     return (
       <div className={classNames} title={modifierText}>{displayValue}</div>
     )
