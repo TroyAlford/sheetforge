@@ -2,9 +2,16 @@
 
 .resource {
   @include widget;
+  flex-direction: column;
 
   .name {
+    align-content: center;
+    justify-content: center;
     flex: 1;
-    height: auto;
+    height: 40px;
+  }
+
+  .rating {
+    margin: auto;
   }
 }
