@@ -41,13 +41,13 @@ export default (Model, Component, props = {}) => observer(
 
       return (
         <div className={`list ${className}`.trim()}>
-          <button className="icon-add" onClick={this.handleAdd}>{addButtonText}</button>
           {collection.map((model, index) => (
             <div className="list-item-wrapper" key={index}>
               <Component model={model} />
               <button className="icon-remove" data-index={index} onClick={this.handleDelete} />
             </div>
           ))}
+          <button className="icon-add" onClick={this.handleAdd}>{addButtonText}</button>
         </div>
       )
     }

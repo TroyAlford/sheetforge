@@ -2,25 +2,50 @@
 
 .list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   flex: 1;
+
+  &:hover, &:focus-within {
+    button.icon-add { visibility: visible; }
+  }
 
   button.icon-add {
     cursor: pointer;
+    flex: 1;
     height: 40px;
-    width: 100%;
+    min-width: 250px;
+    max-width: 100%;
+    visibility: hidden;
   }
 
   .list-item-wrapper {
     display: flex;
-    width: 100%;
+    flex: 1;
+    max-width: 100%;
+    min-width: 2.5in;
+    position: relative;
+    width: 2.5in;
+
+    &:focus-within {
+      background: #fff;
+      border: 1px solid #333;
+      z-index: 1;
+
+      button.icon-remove { visibility: visible; }
+    }
 
     button.icon-remove {
+      align-self: flex-start;
       background: transparent;
-      border: none;
       border-radius: .5em;
+      border: none;
       cursor: pointer;
       height: 40px;
+      position: absolute;
+      right: -40px;
+      visibility: hidden;
+      width: 40px;
     }
     .effect {
       flex: 1;
