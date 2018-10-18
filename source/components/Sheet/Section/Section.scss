@@ -1,5 +1,15 @@
 .section {
+  align-items: flex-start;
   box-sizing: border-box;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   padding: .5em;
+
+  > h1 {
+    font-size: 1.5em;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+  }
 }
