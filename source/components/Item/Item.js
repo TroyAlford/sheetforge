@@ -1,11 +1,15 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
-import EffectList from '@/components/EffectList'
+import Effect from '@/components/Effect'
 import Expandable from '@/components/Expandable'
+import ListOf from '@/components/List'
+import EffectModel from '@/models/Effect'
 import ItemModel from '@/models/Item'
 import modelPropType from '@/utilities/prop-types/model'
 import './Item.scss'
+
+const EffectList = ListOf(EffectModel, Effect)
 
 @observer class Item extends Component {
   static defaultProps = {

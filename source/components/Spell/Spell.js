@@ -1,14 +1,17 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
-import EffectList from '@/components/EffectList'
+import Effect from '@/components/Effect'
 import Expandable from '@/components/Expandable'
 import ListOf from '@/components/List'
 import ResourceCost from '@/components/ResourceCost'
+import EffectModel from '@/models/Effect'
 import ResourceCostModel from '@/models/ResourceCost'
 import SpellModel from '@/models/Spell'
 import modelPropType from '@/utilities/prop-types/model'
 import './Spell.scss'
+
+const EffectList = ListOf(EffectModel, Effect)
 
 const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
   addButtonText: 'Add Cost',
