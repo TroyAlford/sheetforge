@@ -1,10 +1,14 @@
 @mixin widget {
   align-items: stretch;
+  box-sizing: border-box;
   display: flex;
+  flex: 1;
   justify-items: stretch;
   line-height: 1em;
   min-height: 2em;
-  min-width: 250px;
+  min-width: 2.5in;
+  padding: 0 .1in;
+  width: 2.5in;
 
   > *, > .editable {
     align-items: center;
