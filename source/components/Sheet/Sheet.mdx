@@ -1,0 +1,111 @@
+import { Playground } from 'docz'
+import { types } from 'mobx-state-tree'
+import Character from '@/models/Character'
+import Sheet from './Sheet'
+
+## Character Sheet
+
+<Sheet
+  character={Character.create({
+    attributes: [
+      { name: 'Acuity', value: 3 },
+      { name: 'Agility', value: 2 },
+      { name: 'Confidence', value: 3 },
+      { name: 'Devotion', value: 2 },
+      { name: 'Fitness', value: 2 },
+      { name: 'Focus', value: 4 },
+      { name: 'Intellect', value: 5 },
+      { name: 'Intuition', value: 3 },
+      { name: 'Natural Armor', value: 0 },
+      { name: 'Size', value: 0 },
+      { name: 'Strength', value: 1 },
+    ],
+    descriptors: [
+      { name: 'Age', value: '27' },
+      { name: 'Concept', value: 'Merchant Mage' },
+      { name: 'Eyes', value: 'Green' },
+      { name: 'Gender', value: 'Female' },
+      { name: 'Hair', value: 'Blonde' },
+      { name: 'Height', value: '5\'6"' },
+      { name: 'Homeland', value: 'Alloria' },
+      { name: 'Race', value: 'Human' },
+      { name: 'Weight', value: '110lbs' },
+    ],
+    experience: 11,
+    health: [
+      { name: 'Healthy', penalty: 0 },
+      { name: 'Healthy', penalty: 0 },
+      { name: 'Healthy', penalty: 0 },
+      { name: 'Bruised', penalty: -1 },
+      { name: 'Bruised', penalty: -1 },
+      { name: 'Injured', penalty: -2 },
+      { name: 'Crippled', penalty: -3 },
+      { name: 'Incapacitated', penalty: -5 },
+    ],
+    items: [
+      { name: 'Ring of Fire Immunity', equipped: true },
+      { name: 'Ring of Lightning Immunity', equipped: true },
+      { name: 'Sentinel of Shul\'s Spear', equipped: true },
+      { name: 'Artifact: Staff of Pan', equipped: true },
+    ],
+    resources: [
+      { name: 'Mana', current: 40, maximum: 40 },
+      { name: 'Willpower', current: 8, maximum: 8 },
+    ],
+    skills: [
+      { name: 'Academics', mastery: 5 },
+      { name: 'Alchemy', mastery: 3 },
+      { name: 'Arcane: Abjuration', mastery: 6 },
+      { name: 'Arcane: Conjuration', mastery: 8 },
+      { name: 'Arcane: Divination', mastery: 6 },
+      { name: 'Arcane: Evocation', mastery: 1 },
+      { name: 'Arcane: Transmutation', mastery: 2 },
+      { name: 'Combat: Dodge', mastery: 1 },
+      { name: 'Craft: Gem Cutting', mastery: 3 },
+      { name: 'Empathy', mastery: 3 },
+      { name: 'Investigation', mastery: 4 },
+      { name: 'Magic: Quasith to Mana', mastery: 4 },
+      { name: 'Quasith: Body', mastery: 2 },
+      { name: 'Quasith: Evocation', mastery: 2 },
+      { name: 'Quasith: Mind', mastery: 2 },
+      { name: 'Quasith: Recondite', mastery: 3 },
+      { name: 'Quasith: Substance', mastery: 2 },
+      { name: 'Medicine', mastery: 1 },
+      { name: 'Occult', mastery: 3 },
+      { name: 'Persuasion', mastery: 3 },
+      { name: 'Sleight of Hand', mastery: 4 },
+      { name: 'Streetwise', mastery: 3 },
+      { name: 'Subterfuge', mastery: 4 },
+    ],
+    spells: [
+      { name: 'Mage Armor', effects: [{ target: 'Armor', modifier: 8 }] },
+    ],
+    traits: [
+      { name: 'Permanent: Comprehend Languages', value: 5 },
+      { name: 'Permanent: Detect Magic', value: 5 },
+      { name: 'Permanent: Read Magic', value: 5 },
+    ]
+  })}
+  layout={[
+    { type: 'Section', children: [
+      { type: 'Descriptor', list: true, path: 'descriptors', title: 'Description' },
+    ] },
+    { type: 'Section', children: [
+      { type: 'Attribute', list: true, path: 'attributes', title: 'Attributes' },
+    ] },
+    { type: 'Row', children: [
+      { type: 'Section', flex: 1, children: [
+        { type: 'Trait', list: true, path: 'traits', title: 'Traits' },
+        { type: 'HealthBar', path: 'health', vertical: true },
+        { type: 'Resource', list: true, path: 'resources', title: 'Resources' },
+      ] },
+      { type: 'Section', flex: 2, children: [
+        { type: 'Skill', list: true, path: 'skills', title: 'Skills' },
+      ] },
+    ] },
+    { type: 'Column', children: [
+      { type: 'Item', list: true, path: 'items', title: 'Inventory' },
+      { type: 'Spell', list: true, path: 'spells', title: 'Spellbook' },
+    ] }
+  ]}
+/>
