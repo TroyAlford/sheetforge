@@ -1,20 +1,45 @@
 import { observer } from 'mobx-react'
+import { onSnapshot } from 'mobx-state-tree'
+import PropTypes from 'prop-types' // eslint-disable-line
 import React from 'react'
 import components from '@/components'
 import ListOf from '@/components/List'
 import models from '@/models'
 import CharacterModel from '@/models/Character'
 import getPathValue from '@/utilities/getPathValue'
+import noop from '@/utilities/noop'
 import modelPropType from '@/utilities/prop-types/model'
 import './Sheet.scss'
 
 @observer class Sheet extends React.Component {
   static defaultProps = {
     character: {},
+    onChange: noop,
   }
 
   static propTypes = {
     character: modelPropType(CharacterModel),
+    onChange: PropTypes.func,
+  }
+
+  state = { size: 'large' }
+
+  constructor(props) {
+    super(props)
+    this.disposeOfSnapshotListener = onSnapshot(this.props.character, this.props.onChange)
+    window.addEventListener('resize', this.handleWindowResize)
+  }
+
+  componentWillUnmount() { this.disposeOfSnapshotListener() }
+
+  handleWindowResize = () => {
+    let size = 'large'
+    if (window.matchMedia('(min-width: 5in) and (max-width: 7.5in)').matches) {
+      size = 'medium'
+    } else if (window.matchMedia('(max-width: 5in)').matches) {
+      size = 'small'
+    }
+    this.setState({ size })
   }
 
   renderComponent = ({ children, list, lookup, path, type, ...props }, key) => {
@@ -44,9 +69,10 @@ import './Sheet.scss'
 
   render() {
     const { layout = [] } = this.props
+    const { size } = this.state
 
     return (
-      <div className="sheet">
+      <div className={`sheet ${size}`}>
         {layout.map(this.renderComponent)}
       </div>
     )
