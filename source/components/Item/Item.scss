@@ -1,15 +1,19 @@
+@import '~@/components/styles/widget.scss';
+
 .item {
-  display: flex;
+  @include widget;
+
   flex-direction: row;
   flex-wrap: wrap;
+  width: 100%;
 
   .expanded-toggle {
     align-items: center;
     cursor: pointer;
     display: flex;
-    height: 40px;
+    height: 30px;
     justify-content: center;
-    width: 40px;
+    width: 30px;
   }
 
   .name {
@@ -24,8 +28,8 @@
   }
 
   .expandable {
-    margin-left: 40px;
-    min-width: calc(100% - 40px);
+    margin-left: 30px;
+    min-width: calc(100% - 30px);
   }
 
   &.equipped {
@@ -33,4 +37,8 @@
 
     .name { font-weight: bold; }
   }
+}
+
+.list.item-list > .list-item-wrapper {
+  min-width: 100%;
 }

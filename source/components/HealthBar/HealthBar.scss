@@ -1,43 +1,51 @@
+@import '~@/components/styles/widget.scss';
+
 .health-bar {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 
-  .summary, .penalty {
-    align-items: center;
-    display: flex;
-    min-height: 40px;
-  }
-  .summary { flex: 1; }
-  .penalty {
-    justify-content: center;
-    padding: 0 1em;
+  > .list {
+    > .title-bar > .text {
+      font-size: 1em;
+
+      > .wound-level {
+        font-size: .8em;
+        font-weight: normal;
+      }
+    }
+
+    > .list-item-wrapper {
+      min-width: auto;
+      width: auto;
+
+      > .health-level {
+        @include widget;
+      }
+    }
   }
 
-  button {
-    cursor: pointer;
-    height: 40px;
-    width: 40px;
-  }
-
-  &.horizontal > .expandable {
+  &.horizontal > .list {
     display: flex;
     flex-direction: row-reverse;
-    height: 80px;
+    min-height: 80px;
     justify-content: center;
 
     .health-level {
       display: flex;
       flex-direction: column;
+      min-width: auto;
+      width: auto;
 
       .damage { min-width: 20px; }
       .name { display: none; }
     }
   }
-  &.vertical > .expandable {
+  &.vertical > .list {
     display: flex;
     flex-direction: column;
 
-    .damage { min-width: 40px; }
+    .damage { min-width: 30px; }
     .name { flex: 1; }
   }
 }

@@ -5,50 +5,68 @@
   flex-direction: row;
   flex-wrap: wrap;
   flex: 1;
+  justify-content: space-between;
+  padding: .5em 0;
 
-  &:hover, &:focus-within {
-    button.icon-add { visibility: visible; }
+  &:focus-within {
+    button.icon-add { display: flex; }
   }
 
-  button.icon-add {
-    cursor: pointer;
-    flex: 1;
-    height: 40px;
-    min-width: 250px;
-    max-width: 100%;
-    visibility: hidden;
+  .title-bar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: .25em 0;
+    padding: 0 .1in;
+    position: relative;
+    width: 100%;
+
+    .text {
+      flex: 1;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    button.icon-add {
+      background: none;
+      border: none;
+      cursor: pointer;
+      height: 30px;
+      position: absolute;
+      right: .1in;
+      width: 30px;
+    }
   }
 
   .list-item-wrapper {
     display: flex;
-    flex: 1;
+    // flex: 1;
     max-width: 100%;
     min-width: 2.5in;
     position: relative;
-    width: 2.5in;
+    width: 33%;
 
-    &:focus-within {
-      background: #fff;
-      border: 1px solid #333;
-      z-index: 1;
+    &:focus-within, &:hover {
+      background: #eee;
 
-      button.icon-remove { visibility: visible; }
+      > button.icon-remove { display: flex; }
     }
 
-    button.icon-remove {
-      align-self: flex-start;
-      background: transparent;
-      border-radius: .5em;
+    > button.icon-remove {
+      align-items: center;
+      background: #eee;
       border: none;
+      bottom: -1px;
       cursor: pointer;
-      height: 40px;
+      display: none;
+      height: 30px;
+      justify-content: center;
       position: absolute;
-      right: -40px;
-      visibility: hidden;
-      width: 40px;
-    }
-    .effect {
-      flex: 1;
+      right: -20px;
+      top: 0px;
+      width: 30px;
+      z-index: 1;
     }
   }
 }

@@ -6,13 +6,16 @@
   display: flex;
   flex-wrap: wrap;
 
-  .expandable {
-    margin-left: 40px;
-    min-width: calc(100% - 40px);
-  }
-
   .trait-list.row {
     display: flex;
     flex-direction: row;
+  }
+
+  .expandable {
+    width: 100%;
+
+    .title-bar > .text {
+      font-size: 1em;
+    }
   }
 }
