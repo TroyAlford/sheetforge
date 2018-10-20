@@ -3,6 +3,9 @@ import webpackConfig from './webpack.config'
 
 export default {
   dest: './docs',
+  head: {
+    meta: [{ content: 'width=device-width, initial-scale=1', name: 'viewport' }],
+  },
   modifyBundlerConfig: config => merge(
     config,
     webpackConfig,
