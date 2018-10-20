@@ -1,8 +1,5 @@
 import { observer } from 'mobx-react'
-import PropTypes from 'prop-types' // eslint-disable-line import/no-extraneous-dependencies
 import React from 'react'
-import CollectionOf from '@/models/generic/Collection'
-import modelPropType from '@/utilities/prop-types/model'
 import './List.scss'
 
 export default (Model, Component, props = {}) => observer(
@@ -12,13 +9,8 @@ export default (Model, Component, props = {}) => observer(
       className: '',
       collection: [],
       prepend: false,
+      title: props.title || Model.name || '',
       ...props,
-    }
-
-    static propTypes = {
-      addButtonText: PropTypes.string,
-      className: PropTypes.string,
-      collection: modelPropType(CollectionOf(Model)),
     }
 
     handleAdd = () => {
@@ -37,17 +29,20 @@ export default (Model, Component, props = {}) => observer(
     }
 
     render() {
-      const { addButtonText, className, collection } = this.props
+      const { className, collection, title } = this.props
 
       return (
         <div className={`list ${className}`.trim()}>
+          <div className="title-bar">
+            <div className="text">{title}</div>
+            <button className="icon-add" onClick={this.handleAdd} />
+          </div>
           {collection.map((model, index) => (
             <div className="list-item-wrapper" key={index}>
               <Component model={model} />
               <button className="icon-remove" data-index={index} onClick={this.handleDelete} />
             </div>
           ))}
-          <button className="icon-add" onClick={this.handleAdd}>{addButtonText}</button>
         </div>
       )
     }

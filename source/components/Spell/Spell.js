@@ -45,7 +45,7 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
       <div className={`spell ${isActive ? '' : 'in'}active`}>
         <Editable className="is-active" onChange={this.handleToggleActive} value={isActive} />
         <Editable className="name" onChange={this.handleChangeName} value={name} />
-        <button className="cast icon-magic" onClick={this.handleCast} disabled={!isAffordable}>Cast</button>
+        <button className="cast icon-magic" onClick={this.handleCast} disabled={!isAffordable} />
         <Expandable>
           <Editable
             className="description"

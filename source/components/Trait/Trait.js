@@ -32,7 +32,7 @@ const EffectList = ListOf(EffectModel, Effect)
         <Editable className="name" onChange={this.onChangeName} value={model.name} />
         <Editable className="value" onChange={this.onChangeValue} value={model.value} />
         <Expandable>
-          <EffectList collection={model.effects} />
+          <EffectList collection={model.effects} title="Effects" />
         </Expandable>
       </div>
     )

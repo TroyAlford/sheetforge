@@ -7,7 +7,7 @@ export default types.compose(
   IEditable,
   types.model('Trait', {
     effects: CollectionOf(Effect),
-    name: types.string,
+    name: 'New Trait',
     value: 0,
   })
 ).named('Trait')
