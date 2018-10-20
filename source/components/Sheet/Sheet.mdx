@@ -92,11 +92,11 @@ import Sheet from './Sheet'
     ] },
     { type: 'Section', children: [
       { type: 'Attribute', list: true, path: 'attributes', title: 'Attributes' },
+      { type: 'HealthBar', path: 'health' },
     ] },
     { type: 'Row', children: [
       { type: 'Section', flex: 1, children: [
         { type: 'Trait', list: true, path: 'traits', title: 'Traits' },
-        { type: 'HealthBar', path: 'health', vertical: true },
         { type: 'Resource', list: true, path: 'resources', title: 'Resources' },
       ] },
       { type: 'Section', flex: 2, children: [

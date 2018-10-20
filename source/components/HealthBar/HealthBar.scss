@@ -7,11 +7,15 @@
 
   > .list {
     > .title-bar > .text {
+      align-items: center;
+      display: flex;
       font-size: 1em;
+      justify-content: center;
 
       > .wound-level {
         font-size: .8em;
         font-weight: normal;
+        margin: 0 1em;
       }
     }
 
@@ -21,6 +25,8 @@
 
       > .health-level {
         @include widget;
+
+        user-select: none;
       }
     }
   }
@@ -31,14 +37,25 @@
     min-height: 80px;
     justify-content: center;
 
+    > .title-bar > .text > .wound-level {
+      display: none;
+    }
+
     .health-level {
       display: flex;
       flex-direction: column;
       min-width: auto;
       width: auto;
 
-      .damage { min-width: 20px; }
+      .damage { min-height: 30px; min-width: 20px; }
       .name { display: none; }
+    }
+
+    > .list-item-wrapper > .icon-remove {
+      left: 0;
+      margin-top: 1px;
+      top: 100%;
+      width: 100%;
     }
   }
   &.vertical > .list {
