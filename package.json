@@ -45,7 +45,6 @@
     "mobx-react": "^5.3.4",
     "mobx-state-tree": "^3.7.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "rimraf": "^2.6.2",

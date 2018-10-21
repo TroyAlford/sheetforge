@@ -1,25 +1,17 @@
 import { observer } from 'mobx-react'
 import { onSnapshot } from 'mobx-state-tree'
-import PropTypes from 'prop-types' // eslint-disable-line
 import React from 'react'
 import components from '@/components'
 import ListOf from '@/components/List'
 import models from '@/models'
-import CharacterModel from '@/models/Character'
 import getPathValue from '@/utilities/getPathValue'
 import noop from '@/utilities/noop'
-import modelPropType from '@/utilities/prop-types/model'
 import './Sheet.scss'
 
 @observer class Sheet extends React.Component {
   static defaultProps = {
     character: {},
     onChange: noop,
-  }
-
-  static propTypes = {
-    character: modelPropType(CharacterModel),
-    onChange: PropTypes.func,
   }
 
   state = { size: 'large' }

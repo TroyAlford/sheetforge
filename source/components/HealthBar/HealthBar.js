@@ -1,12 +1,8 @@
 import { observer } from 'mobx-react'
-import PropTypes from 'prop-types' // eslint-disable-line
 import React, { Component } from 'react'
-import Expandable from '@/components/Expandable'
 import HealthLevel from '@/components/HealthBar/Healthlevel'
 import ListOf from '@/components/List'
-import CollectionOf from '@/models/generic/Collection'
 import HealthLevelModel from '@/models/HealthLevel'
-import modelPropType from '@/utilities/prop-types/model'
 import './HealthBar.scss'
 
 const HealthLevelList = ListOf(HealthLevelModel, HealthLevel, {
@@ -18,12 +14,6 @@ const HealthLevelList = ListOf(HealthLevelModel, HealthLevel, {
     model: [],
     title: '',
     vertical: false,
-  }
-
-  static propTypes = {
-    model: modelPropType(CollectionOf(HealthLevelModel)),
-    title: PropTypes.string,
-    vertical: PropTypes.bool,
   }
 
   render() {

@@ -5,8 +5,6 @@ import Effect from '@/components/Effect'
 import Expandable from '@/components/Expandable'
 import ListOf from '@/components/List'
 import EffectModel from '@/models/Effect'
-import TraitModel from '@/models/Trait'
-import modelPropType from '@/utilities/prop-types/model'
 import './Trait.scss'
 
 const EffectList = ListOf(EffectModel, Effect)
@@ -14,10 +12,6 @@ const EffectList = ListOf(EffectModel, Effect)
 @observer class Trait extends Component {
   static defaultProps = {
     model: {},
-  }
-
-  static propTypes = {
-    model: modelPropType(TraitModel),
   }
 
   onChangeName = name => this.props.model.set({ name })

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types' // eslint-disable-line
 import React, { Component } from 'react'
 import noop from '@/utilities/noop'
 import range from '@/utilities/range'
@@ -11,14 +10,6 @@ export default class Rating extends Component {
     iconOn: <span className="dot filled" />,
     maximum: 5,
     onChange: noop,
-  }
-
-  static propTypes = {
-    current: PropTypes.number,
-    iconOff: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-    iconOn: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-    maximum: PropTypes.number,
-    onChange: PropTypes.func,
   }
 
   handleIconClick = (event) => {

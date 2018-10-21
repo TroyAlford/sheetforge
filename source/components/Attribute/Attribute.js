@@ -1,17 +1,11 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
-import AttributeModel from '@/models/Attribute'
-import modelPropType from '@/utilities/prop-types/model'
 import './Attribute.scss'
 
 @observer class Attribute extends Component {
   static defaultProps = {
     model: {},
-  }
-
-  static propTypes = {
-    model: modelPropType(AttributeModel),
   }
 
   onChangeName = name => this.props.model.set({ name })

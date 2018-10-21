@@ -7,8 +7,6 @@ import ListOf from '@/components/List'
 import ResourceCost from '@/components/ResourceCost'
 import EffectModel from '@/models/Effect'
 import ResourceCostModel from '@/models/ResourceCost'
-import SpellModel from '@/models/Spell'
-import modelPropType from '@/utilities/prop-types/model'
 import './Spell.scss'
 
 const EffectList = ListOf(EffectModel, Effect)
@@ -21,10 +19,6 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
 @observer class Spell extends Component {
   static defaultProps = {
     model: {},
-  }
-
-  static propTypes = {
-    model: modelPropType(SpellModel),
   }
 
   handleCast = () => {

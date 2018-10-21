@@ -1,17 +1,11 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
-import EffectModel from '@/models/Effect'
-import modelPropType from '@/utilities/prop-types/model'
 import './Effect.scss'
 
 @observer class Effect extends Component {
   static defaultProps = {
     model: {},
-  }
-
-  static propTypes = {
-    model: modelPropType(EffectModel),
   }
 
   handleChangeCondition = condition => this.props.model.set({ condition })
