@@ -19,19 +19,19 @@ import './Attribute.scss'
   onChangeValue = value => this.props.model.set({ value })
 
   renderModifier = () => {
-    const { displayValue, modifier, modifierText } = this.props.model
+    const { model } = this.props
 
     const classNames = [
       'modifier',
-      modifier > 0 && 'positive',
-      modifier < 0 && 'negative',
-      modifier === 0 && 'zero',
+      model.modifier > 0 && 'positive',
+      model.modifier < 0 && 'negative',
+      model.modifier === 0 && 'zero',
     ].join(' ')
 
-    if (modifier === 0) return ''
+    if (model.modifier === 0) return ''
 
     return (
-      <div className={classNames} title={modifierText}>{displayValue}</div>
+      <div className={classNames} title={model.modifierText}>{model.displayValue}</div>
     )
   }
 
