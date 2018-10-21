@@ -14,21 +14,15 @@ export default types.compose(
     isActive: false,
     level: 0,
     name: '',
-  }).volatile(() => ({
-    character: null,
-  })).views(self => ({
+  }).views(self => ({
+    get character() { return findParent(self, p => p.isCharacter) },
     get isAffordable() {
       if (!self.character || self.costs.length === 0) return true
-      return self.costs.asArray.every(({ amount, resource }) => (
+      return self.costs.every(({ amount, resource }) => (
         resource && resource.current >= amount
       ))
     },
   })).actions(self => ({
-    /* eslint-disable no-param-reassign */
-
-    afterAttach() {
-      self.character = findParent(self, p => p.isCharacter)
-    },
     cast() {
       if (self.isAffordable) {
         self.costs.forEach(({ amount, resource }) => {
@@ -36,7 +30,5 @@ export default types.compose(
         })
       }
     },
-
-    /* eslint-enable no-param-reassign */
   }))
 ).named('Spell')

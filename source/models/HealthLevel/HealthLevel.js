@@ -1,7 +1,8 @@
 import { isObservableArray } from 'mobx'
-import { getParent, types } from 'mobx-state-tree'
+import { types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
 import bound from '@/utilities/bound'
+import findParent from '@/utilities/findParent'
 
 const DAMAGE_LEVELS = [
   'none',
@@ -16,26 +17,17 @@ export default types.compose(
     damage: types.optional(types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))), 'none'),
     name: '',
     penalty: 0,
-  }).volatile(() => ({
-    healthBar: null,
-  })).views(self => ({
-    get index() {
-      if (self.healthBar) return self.healthBar.indexOf(self)
-      return null
+  }).views(self => ({
+    get healthBar() {
+      const parent = findParent(self)
+      return isObservableArray(parent) ? parent : null
     },
+    get index() { return self.healthBar ? self.healthBar.indexOf(self) : null },
     get severity() { return DAMAGE_LEVELS.indexOf(self.damage) },
   })).actions(self => ({
     adjust(byAmount) {
       const index = bound(self.severity + byAmount, { max: 3, min: 0 })
       self.apply(DAMAGE_LEVELS[index])
-    },
-    afterAttach() {
-      try {
-        const healthBar = getParent(self)
-        if (isObservableArray(healthBar)) {
-          self.healthBar = healthBar // eslint-disable-line no-param-reassign
-        }
-      } catch (e) {}
     },
     apply(damage) {
       if (!DAMAGE_LEVELS.includes(damage)) return

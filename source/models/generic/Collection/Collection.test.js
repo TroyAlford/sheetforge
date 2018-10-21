@@ -65,6 +65,10 @@ describe('models/Collection', () => {
       .toEqual({ id: '1', value: 'Foo!' })
   })
 
+  it('supports findBy(key, value)', () => {
+    expect(collection.findBy('value', 'Bar!')).toBe(collection.at(1))
+  })
+
   it('supports findById(id)', () => {
     expect(collection.findById('1')).toEqual({ id: '1', value: 'Foo!' })
     expect(collection.findById('5')).toEqual(null)

@@ -9,26 +9,23 @@ export default types.compose(
   types.model({
     condition: '',
     modifier: 0,
-    target: types.maybe(types.reference(types.union(Attribute))),
-  }).views((self) => {
-    let character
-    let source
-
-    return ({
-      afterAttach() {
-        character = findParent(self, p => p.isCharacter)
-        source = findParent(self, p => p.name)
-      },
-      get availableTargets() {
-        return character ? character.attributes : CollectionOf(Attribute).create([])
-      },
-      get isApplicable() {
-        return Boolean(
-          !self.condition || (character && character.conditions.includes(self.condition))
-        )
-      },
-      get source() { return source || { name: 'Unknown', value: 0 } },
-      get sourceName() { return self.source.name },
-    })
-  })
+    targetName: '',
+  }).views(self => ({
+    get availableTargets() {
+      return self.character ? self.character.attributes : CollectionOf(Attribute).create([])
+    },
+    get character() { return findParent(self, p => p.isCharacter) },
+    get isApplicable() {
+      return Boolean(
+        !self.condition ||
+        (self.character && self.character.conditions.includes(self.condition))
+      )
+    },
+    get source() { return findParent(self, p => p.name) || null },
+    get sourceName() { return self.source ? self.source.name : 'Unknown' },
+    get target() {
+      if (!self.character) return null
+      return self.character.attributes.findBy('name', self.targetName)
+    },
+  }))
 ).named('Effect')

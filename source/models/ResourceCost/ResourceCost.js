@@ -8,20 +8,15 @@ export default types.compose(
   IEditable,
   types.model({
     amount: 0,
-    resource: types.maybe(types.reference(Resource)),
-  }).volatile(() => ({
-    character: null,
-  })).views(self => ({
+    resourceName: '',
+  }).views(self => ({
     get availableResources() {
       return self.character ? self.character.resources : CollectionOf(Resource).create([])
     },
-  })).actions(self => ({
-    /* eslint-disable no-param-reassign */
-
-    afterAttach() {
-      self.character = findParent(self, p => p.isCharacter)
+    get character() { return findParent(self, p => p.isCharacter) },
+    get resource() {
+      if (!self.character) return null
+      return self.character.resources.find(r => r.name === this.resourceName) || null
     },
-
-    /* eslint-enable no-param-reassign */
   }))
 ).named('Cost')

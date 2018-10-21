@@ -20,16 +20,19 @@ describe('models/Spell', () => {
           { current: 8, maximum: 8, name: 'Willpower' },
         ],
         spells: [{
-          costs: [{ amount: 8, resource: 'Mana' }],
+          costs: [{ amount: 8, resourceName: 'Mana' }],
           name: 'Unaffordable - mana cost too high',
         }, {
-          costs: [{ amount: 5, resource: 'Rage' }],
+          costs: [{ amount: 5, resourceName: 'Rage' }],
           name: 'Unaffordable - costs unavailable resource',
         }, {
-          costs: [{ amount: 5, resource: 'Mana' }],
+          costs: [{ amount: 5, resourceName: 'Mana' }],
           name: 'Affordable Spell',
         }, {
-          costs: [{ amount: 3, resource: 'Mana' }, { amount: 1, resource: 'Willpower' }],
+          costs: [
+            { amount: 3, resourceName: 'Mana' },
+            { amount: 1, resourceName: 'Willpower' },
+          ],
           name: 'Affordable Spell',
         }, {
           name: 'Free Spell (Affordable)',
@@ -42,10 +45,6 @@ describe('models/Spell', () => {
       expect(character.spells.at(2).isAffordable).toEqual(true)
       expect(character.spells.at(3).isAffordable).toEqual(true)
       expect(character.spells.at(4).isAffordable).toEqual(true)
-    })
-
-    it('errors on unresolvable resource references', () => {
-      expect(() => character.spells.at(1).isAffordable).toThrow(/Failed to resolve reference 'Rage'/)
     })
 
     it('can spend character resources', () => {

@@ -8,9 +8,8 @@ export default types.compose(
   types.model({
     name: types.identifier,
     value: 0,
-  }).volatile(() => ({
-    character: null,
-  })).views(self => ({
+  }).views(self => ({
+    get character() { return findParent(self, p => p.isCharacter) },
     get displayValue() { return self.value + self.modifier },
     get effects() {
       if (!self.character) return []
@@ -19,11 +18,6 @@ export default types.compose(
     get modifier() { return sum(self.effects.map(effect => effect.modifier)) },
     get modifierText() {
       return self.effects.map(({ modifier, sourceName }) => `${sourceName}: ${modifier}`).join(', ')
-    },
-  })).actions(self => ({
-    afterAttach() {
-      // eslint-disable-next-line no-param-reassign
-      try { self.character = findParent(self, p => p.isCharacter) } catch (e) { }
     },
   }))
 ).named('Attribute')

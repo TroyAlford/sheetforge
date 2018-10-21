@@ -13,9 +13,9 @@ describe('models/Attribute', () => {
   describe('when attached', () => {
     const character = DummyCharacter.create({
       activeEffects: [
-        { modifier: 1, target: 'Dexterity' },
-        { modifier: 4, target: 'Strength' },
-        { modifier: 1, target: 'Strength' },
+        { modifier: 1, targetName: 'Dexterity' },
+        { modifier: 4, targetName: 'Strength' },
+        { modifier: 1, targetName: 'Strength' },
       ],
       attributes: [
         { name: 'Dexterity', value: 12 },

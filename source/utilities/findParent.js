@@ -1,7 +1,6 @@
 import { getParent, hasParent } from 'mobx-state-tree'
-import noop from '@/utilities/noop'
 
-export default (child, filterFunction = noop) => {
+export default (child, filterFunction = Boolean) => {
   if (!hasParent(child)) { return null }
 
   let parent = getParent(child)
