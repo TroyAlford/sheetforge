@@ -30,11 +30,11 @@ const HealthLevelList = ListOf(HealthLevelModel, HealthLevel, {
     const { model, title, vertical } = this.props
     const current = model.filter(level => level.damage === 'none').length
     const worstInjury = [...model.slice().reverse()].find(level => level.damage !== 'none')
-    const classNames = [
-      'health-bar',
-      vertical ? 'vertical' : 'horizontal',
-    ].filter(Boolean).join(' ')
 
+    let direction = vertical ? 'vertical' : 'horizontal'
+    if (window.matchMedia('(max-width: 5in)').matches) direction = 'vertical'
+
+    const classNames = ['health-bar', direction].filter(Boolean).join(' ')
     const titleText = <>
       {title || 'Health'} {current}/{model.length}
       {Boolean(worstInjury) && (
