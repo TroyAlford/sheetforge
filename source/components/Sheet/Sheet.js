@@ -30,6 +30,10 @@ import './Sheet.scss'
     window.addEventListener('resize', this.handleWindowResize)
   }
 
+  componentDidMount() {
+    this.handleWindowResize()
+  }
+
   componentWillUnmount() { this.disposeOfSnapshotListener() }
 
   handleWindowResize = () => {
@@ -43,9 +47,8 @@ import './Sheet.scss'
   }
 
   renderComponent = ({ children, list, lookup, path, type, ...props }, key) => {
-    const { character } = this.props
     const Component = components[type]
-    const data = getPathValue(character, path)
+    const data = getPathValue(this.props.character, path)
 
     if (list) {
       const ModelType = models[type]
@@ -72,7 +75,7 @@ import './Sheet.scss'
     const { size } = this.state
 
     return (
-      <div className={`sheet ${size}`}>
+      <div className={`sheetforge sheet ${size}`}>
         {layout.map(this.renderComponent)}
       </div>
     )
