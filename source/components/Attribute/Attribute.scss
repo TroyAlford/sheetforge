@@ -4,7 +4,7 @@
   @include widget;
 
   .modifier {
-    min-width: 45px;
+    min-width: 30px;
 
     &.positive { color: green; }
     &.negative { color: red; }
