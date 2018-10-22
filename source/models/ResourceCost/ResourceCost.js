@@ -10,11 +10,18 @@ export default types.compose(
     amount: 0,
     resourceName: '',
   }).views(self => ({
-    get availableResources() {
+    get available() {
       return self.character ? self.character.resources : CollectionOf(Resource).create([])
     },
     get character() { return findParent(self, p => p.isCharacter) },
-    get resource() {
+  })).actions(self => ({
+    afterAttach() {
+      if (!self.resourceName && self.available.length) {
+        // eslint-disable-next-line no-param-reassign
+        self.resourceName = self.available.first.name
+      }
+    },
+    resource() {
       if (!self.character) return null
       return self.character.resources.find(r => r.name === this.resourceName) || null
     },

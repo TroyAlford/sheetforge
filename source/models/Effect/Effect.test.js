@@ -31,12 +31,12 @@ describe('models/Effect', () => {
       expect(character.effects()[1].isApplicable).toEqual(false)
     })
   })
-  describe('availableTargets', () => {
+  describe('available', () => {
     it('returns [] if unattached', () => {
-      expect(mageArmor.availableTargets.asArray).toEqual([])
+      expect(mageArmor.available.asArray).toEqual([])
     })
     it('returns a list if attached', () => {
-      expect(character.effects()[0].availableTargets).toEqual(character.attributes)
+      expect(character.effects()[0].available).toEqual(character.attributes)
     })
   })
 })

@@ -10,15 +10,15 @@ import './ResourceCost.scss'
 
   handleChangeAmount = amount => this.props.model.set({ amount })
 
-  handleChangeResourceId = ({ target }) => this.props.model.set({ resource: target.value })
+  handleChangeResource = ({ target: { value } }) => this.props.model.set({ resourceName: value })
 
   render() {
-    const { amount, availableResources, resource = {} } = this.props.model
+    const { amount, available, resourceName } = this.props.model
 
     return (
       <div className="resource-cost">
-        <select className="resource-id" value={resource.name} onChange={this.handleChangeResourceId}>
-          {availableResources.map(({ name }) => (
+        <select className="resource-id" value={resourceName} onChange={this.handleChangeResource}>
+          {available.map(({ name }) => (
             <option key={name} value={name}>{name}</option>
           ))}
         </select>

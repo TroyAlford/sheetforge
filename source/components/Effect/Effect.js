@@ -12,15 +12,15 @@ import './Effect.scss'
 
   handleChangeModifier = modifier => this.props.model.set({ modifier })
 
-  handleChangeTargetName = ({ target: { value } }) => this.props.model.set({ targetName: value })
+  handleChangeTarget = ({ target: { value } }) => this.props.model.set({ targetName: value })
 
   render() {
-    const { availableTargets, condition = '', isApplicable, modifier, targetName } = this.props.model
+    const { available, condition = '', isApplicable, modifier, targetName } = this.props.model
 
     return (
       <div className={`effect ${isApplicable ? 'applicable' : ''}`.trim()}>
-        <select className="target" value={targetName} onChange={this.handleChangeTargetName}>
-          {availableTargets.map(({ name }) => (
+        <select className="target" value={targetName} onChange={this.handleChangeTarget}>
+          {available.map(({ name }) => (
             <option key={name} value={name}>{name}</option>
           ))}
         </select>

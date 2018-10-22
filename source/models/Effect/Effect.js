@@ -11,7 +11,7 @@ export default types.compose(
     modifier: 0,
     targetName: '',
   }).views(self => ({
-    get availableTargets() {
+    get available() {
       return self.character ? self.character.attributes : CollectionOf(Attribute).create([])
     },
     get character() { return findParent(self, p => p.isCharacter) },
@@ -29,9 +29,9 @@ export default types.compose(
     },
   })).actions(self => ({
     afterAttach() {
-      if (!self.targetName && self.availableTargets.length) {
+      if (!self.targetName && self.available.length) {
         // eslint-disable-next-line no-param-reassign
-        self.targetName = self.availableTargets.first.name
+        self.targetName = self.available.first.name
       }
     },
   }))
