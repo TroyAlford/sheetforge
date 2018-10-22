@@ -40,11 +40,11 @@ describe('models/Spell', () => {
       })
     })
 
-    it('determines isAffordable based on character resources', () => {
-      expect(character.spells.at(0).isAffordable).toEqual(false)
-      expect(character.spells.at(2).isAffordable).toEqual(true)
-      expect(character.spells.at(3).isAffordable).toEqual(true)
-      expect(character.spells.at(4).isAffordable).toEqual(true)
+    it('determines isAffordable() based on character resources', () => {
+      expect(character.spells.at(0).isAffordable()).toEqual(false)
+      expect(character.spells.at(2).isAffordable()).toEqual(true)
+      expect(character.spells.at(3).isAffordable()).toEqual(true)
+      expect(character.spells.at(4).isAffordable()).toEqual(true)
     })
 
     it('can spend character resources', () => {
@@ -54,7 +54,7 @@ describe('models/Spell', () => {
       const manaCost = spell.costs.at(0)
       const willCost = spell.costs.at(1)
 
-      expect(spell.isAffordable).toEqual(true)
+      expect(spell.isAffordable()).toEqual(true)
       expect(manaCost.amount).toEqual(3)
       expect(willCost.amount).toEqual(1)
       expect(mana.current).toEqual(6)
@@ -64,25 +64,25 @@ describe('models/Spell', () => {
 
       expect(mana.current).toEqual(3)
       expect(will.current).toEqual(7)
-      expect(spell.isAffordable).toEqual(true)
+      expect(spell.isAffordable()).toEqual(true)
 
       spell.cast()
 
       expect(mana.current).toEqual(0)
       expect(will.current).toEqual(6)
-      expect(spell.isAffordable).toEqual(false)
+      expect(spell.isAffordable()).toEqual(false)
     })
   })
 
   describe('when unattached', () => {
-    it('isAffordable is always true', () => {
+    it('isAffordable() is always true', () => {
       const spell = Spell.create({
         cost: [{ amount: 25, resource: 'Mana' }],
         level: 9,
         name: 'Big Bad Spell',
       })
 
-      expect(spell.isAffordable).toEqual(true)
+      expect(spell.isAffordable()).toEqual(true)
     })
   })
 })

@@ -81,7 +81,9 @@ import Sheet from './Sheet'
       { name: 'Mage Armor', effects: [{ target: 'Armor', modifier: 8 }] },
     ],
     traits: [
-      { name: 'Permanent: Comprehend Languages', value: 5 },
+      { name: 'Permanent: Comprehend Languages', value: 5,
+        effects: [{ targetName: 'Acuity', modifier: 3 }]
+      },
       { name: 'Permanent: Detect Magic', value: 5 },
       { name: 'Permanent: Read Magic', value: 5 },
     ]
@@ -108,4 +110,5 @@ import Sheet from './Sheet'
       { type: 'Spell', list: true, path: 'spells', title: 'Spellbook' },
     ] }
   ]}
+  // onChange={console.log}
 />

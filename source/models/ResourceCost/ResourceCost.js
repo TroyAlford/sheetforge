@@ -23,7 +23,7 @@ export default types.compose(
     },
     resource() {
       if (!self.character) return null
-      return self.character.resources.find(r => r.name === this.resourceName) || null
+      return self.character.resources.findBy('name', self.resourceName)
     },
   }))
 ).named('Cost')
