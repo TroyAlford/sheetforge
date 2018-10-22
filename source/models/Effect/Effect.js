@@ -27,5 +27,12 @@ export default types.compose(
       if (!self.character) return null
       return self.character.attributes.findBy('name', self.targetName)
     },
+  })).actions(self => ({
+    afterAttach() {
+      if (!self.targetName && self.availableTargets.length) {
+        // eslint-disable-next-line no-param-reassign
+        self.targetName = self.availableTargets.first.name
+      }
+    },
   }))
 ).named('Effect')

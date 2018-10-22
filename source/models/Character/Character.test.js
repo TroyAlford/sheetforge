@@ -38,34 +38,34 @@ describe('models/Character', () => {
 
   describe('effects', () => {
     it('lists all effects in priority order', () => {
-      expect(character.effects).toHaveLength(6)
+      expect(character.effects()).toHaveLength(6)
     })
   })
 
   describe('activeEffects', () => {
     it('filters out inapplicables, unequipped items, inactive spells', () => {
-      expect(character.activeEffects).toHaveLength(3)
+      expect(character.activeEffects()).toHaveLength(3)
 
       character.items.at(0).set('equipped', false)
-      expect(character.activeEffects).toHaveLength(2)
+      expect(character.activeEffects()).toHaveLength(2)
 
       character.spells.at(0).set('isActive', false)
-      expect(character.activeEffects).toHaveLength(1)
+      expect(character.activeEffects()).toHaveLength(1)
     })
   })
 
   describe('reactions', () => {
     it('adds effects when its children do', () => {
-      expect(character.effects).toHaveLength(6)
+      expect(character.effects()).toHaveLength(6)
 
       character.traits.at(0).effects.push({ modifier: 2, target: 'STR' })
-      expect(character.effects).toHaveLength(7)
+      expect(character.effects()).toHaveLength(7)
 
       character.spells.at(0).effects.push({ modifier: 2, target: 'DEX' })
-      expect(character.effects).toHaveLength(8)
+      expect(character.effects()).toHaveLength(8)
 
       character.items.at(0).effects.push({ modifier: 2, target: 'STA' })
-      expect(character.effects).toHaveLength(9)
+      expect(character.effects()).toHaveLength(9)
     })
   })
 })

@@ -22,13 +22,13 @@ describe('models/Effect', () => {
 
   describe('isApplicable', () => {
     it('applies or not as a child of Character', () => {
-      expect(character.effects[0].isApplicable).toEqual(true)
-      expect(character.effects[1].isApplicable).toEqual(false)
+      expect(character.effects()[0].isApplicable).toEqual(true)
+      expect(character.effects()[1].isApplicable).toEqual(false)
     })
 
     it('applies or not as a grandchild of Character', () => {
-      expect(character.effects[0].isApplicable).toEqual(true)
-      expect(character.effects[1].isApplicable).toEqual(false)
+      expect(character.effects()[0].isApplicable).toEqual(true)
+      expect(character.effects()[1].isApplicable).toEqual(false)
     })
   })
   describe('availableTargets', () => {
@@ -36,7 +36,7 @@ describe('models/Effect', () => {
       expect(mageArmor.availableTargets.asArray).toEqual([])
     })
     it('returns a list if attached', () => {
-      expect(character.effects[0].availableTargets).toEqual(character.attributes)
+      expect(character.effects()[0].availableTargets).toEqual(character.attributes)
     })
   })
 })

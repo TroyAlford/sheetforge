@@ -9,6 +9,7 @@ const MyCollection = Collection(Foo)
 
 describe('models/Collection', () => {
   let collection
+  let emptyCollection
 
   beforeEach(() => {
     collection = MyCollection.create([
@@ -17,6 +18,7 @@ describe('models/Collection', () => {
       { id: '3', value: 'Baz!' },
       { id: '4', value: 'Qux!' },
     ])
+    emptyCollection = MyCollection.create([])
   })
 
   it('can serialize/deserialize', () => {
@@ -74,6 +76,11 @@ describe('models/Collection', () => {
     expect(collection.findById('5')).toEqual(null)
   })
 
+  it('supports first', () => {
+    expect(collection.first).toEqual(collection.values[0])
+    expect(emptyCollection.first).toEqual(undefined)
+  })
+
   it('supports forEach(fn)', () => {
     collection.forEach(({ value }) => {
       expect(value).toBeTruthy()
@@ -91,6 +98,11 @@ describe('models/Collection', () => {
     expect(collection.map(({ value }) => value)).toEqual(['Foo!', 'Bar!', 'Inserted!', 'Baz!', 'Qux!'])
     collection.insert({ id: '0', value: 'First!' })
     expect(collection.map(({ value }) => value)).toEqual(['First!', 'Foo!', 'Bar!', 'Inserted!', 'Baz!', 'Qux!'])
+  })
+
+  it('supports last', () => {
+    expect(collection.last).toEqual(collection.values[collection.values.length - 1])
+    expect(emptyCollection.last).toEqual(undefined)
   })
 
   it('supports map(fn)', () => {

@@ -10,14 +10,15 @@ export default types.compose(
     value: 0,
   }).views(self => ({
     get character() { return findParent(self, p => p.isCharacter) },
-    get displayValue() { return self.value + self.modifier },
-    get effects() {
+  })).actions(self => ({
+    displayValue() { return self.value + self.modifier() },
+    effects() {
       if (!self.character) return []
-      return self.character.activeEffects.filter(effect => effect.target === self)
+      return self.character.activeEffects().filter(effect => effect.target === self)
     },
-    get modifier() { return sum(self.effects.map(effect => effect.modifier)) },
-    get modifierText() {
-      return self.effects.map(({ modifier, sourceName }) => `${sourceName}: ${modifier}`).join(', ')
+    modifier() { return sum(self.effects().map(effect => effect.modifier)) },
+    modifierText() {
+      return self.effects().map(effect => `${effect.sourceName}: ${effect.modifier}`).join(', ')
     },
   }))
 ).named('Attribute')

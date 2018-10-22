@@ -26,18 +26,18 @@ export default types.compose(
     traits: CollectionOf(Trait), // have Effects
   }).volatile(() => ({
     isCharacter: true,
-  })).views(self => ({
-    get activeEffects() {
-      return self.effects.filter(effect => effect && effect.isApplicable)
+  })).actions(self => ({
+    activeEffects() {
+      return self.effects().filter(effect => effect && effect.isApplicable)
     },
-    get effects() {
+    effects() {
       return flatten([
         // Trait Effects first, because they're inherent
-        flatten(self.traits.map(trait => trait.effects.asArray)),
+        self.traits.filter(Boolean).map(trait => trait.effects.values),
         // Direct Effects second, because they're cast on the character
-        flatten(self.spells.filter(spell => spell.isActive).map(spell => spell.effects.asArray)),
+        self.spells.filter(spell => spell.isActive).map(spell => spell.effects.values),
         // Item Effects third, because they're indirect
-        flatten(self.items.filter(item => item.equipped).map(item => item.effects.asArray)),
+        self.items.filter(item => item.equipped).map(item => item.effects.values),
       ]).filter(Boolean)
     },
   }))

@@ -1,46 +1,43 @@
-import { types } from 'mobx-state-tree'
 import Attribute from './Attribute'
-import Effect from '@/models/Effect'
-import CollectionOf from '@/models/generic/Collection'
-
-const DummyCharacter = types.model({
-  activeEffects: CollectionOf(Effect),
-  attributes: CollectionOf(Attribute),
-  isCharacter: true,
-})
+import Character from '@/models/Character'
 
 describe('models/Attribute', () => {
   describe('when attached', () => {
-    const character = DummyCharacter.create({
-      activeEffects: [
-        { modifier: 1, targetName: 'Dexterity' },
-        { modifier: 4, targetName: 'Strength' },
-        { modifier: 1, targetName: 'Strength' },
-      ],
+    const character = Character.create({
       attributes: [
         { name: 'Dexterity', value: 12 },
         { name: 'Strength', value: 10 },
       ],
+      traits: [
+        {
+          effects: [
+            { modifier: 1, targetName: 'Dexterity' },
+            { modifier: 4, targetName: 'Strength' },
+            { modifier: 1, targetName: 'Strength' },
+          ],
+          name: 'Foo',
+        },
+      ],
     })
 
     it('computes its displayValue', () => {
-      expect(character.attributes.at(0).displayValue).toEqual(13)
-      expect(character.attributes.at(1).displayValue).toEqual(15)
+      expect(character.attributes.at(0).displayValue()).toEqual(13)
+      expect(character.attributes.at(1).displayValue()).toEqual(15)
     })
 
     it('computes its effects', () => {
-      expect(character.attributes.at(0).effects).toHaveLength(1)
-      expect(character.attributes.at(1).effects).toHaveLength(2)
+      expect(character.attributes.at(0).effects()).toHaveLength(1)
+      expect(character.attributes.at(1).effects()).toHaveLength(2)
     })
 
     it('computes its modifier', () => {
-      expect(character.attributes.at(0).modifier).toEqual(1)
-      expect(character.attributes.at(1).modifier).toEqual(5)
+      expect(character.attributes.at(0).modifier()).toEqual(1)
+      expect(character.attributes.at(1).modifier()).toEqual(5)
     })
 
     it('returns modifierText', () => {
-      expect(character.attributes.at(0).modifierText).toEqual('Unknown: 1')
-      expect(character.attributes.at(1).modifierText).toEqual('Unknown: 4, Unknown: 1')
+      expect(character.attributes.at(0).modifierText()).toEqual('Foo: 1')
+      expect(character.attributes.at(1).modifierText()).toEqual('Foo: 4, Foo: 1')
     })
   })
 
@@ -48,19 +45,15 @@ describe('models/Attribute', () => {
     const STR = Attribute.create({ name: 'Strength', value: 10 })
 
     it('returns a displayValue equal to its value', () => {
-      expect(STR.displayValue).toEqual(STR.value)
-    })
-
-    it('returns a key of undefined', () => {
-      expect(STR.key).toEqual(undefined)
+      expect(STR.displayValue()).toEqual(STR.value)
     })
 
     it('returns a modifier of 0', () => {
-      expect(STR.modifier).toEqual(0)
+      expect(STR.modifier()).toEqual(0)
     })
 
     it('returns "" for modifierText', () => {
-      expect(STR.modifierText).toEqual('')
+      expect(STR.modifierText()).toEqual('')
     })
   })
 })

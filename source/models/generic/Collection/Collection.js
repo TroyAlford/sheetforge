@@ -5,40 +5,50 @@ export default (TYPE, options = {}) => {
   const TypedArrayWrapper = types.model({
     values: types.array(TYPE),
   }).views(self => ({
-    get asArray() { return [...self.values] },
+    get asArray() { return self.values.slice() },
+    get first() { return self.length ? self.at(0) : undefined },
+    get last() { return self.length ? self.at(self.length - 1) : undefined },
     get length() { return self.values.length },
   })).actions(self => ({
     /* eslint-disable no-param-reassign */
 
     at: n => self.values[n],
-    clear: () => { self.values = [] },
-    delete: (object) => { self.values = self.values.filter(item => item !== object) },
-    deleteAt: (index) => { self.values = self.values.filter((_, n) => n !== index) },
-    every: fn => self.asArray.every(fn),
-    filter: fn => self.asArray.filter(fn),
-    find: fn => self.asArray.find(fn),
+    clear: () => self.values.clear(),
+    delete: (object) => { self.values.replace(self.values.filter(item => item !== object)) },
+    deleteAt: (index) => { self.values.replace(self.values.filter((_, n) => n !== index)) },
+    every: fn => self.values.every(fn),
+    filter: fn => self.values.filter(fn),
+    find: fn => self.values.find(fn),
+    findBy: (key, value) => self.find(item => item[key] === value),
     findById: (id) => {
       if (!TYPE.identifierAttribute) return null
       return self.find(item => item[TYPE.identifierAttribute] === id) || null
     },
-    forEach: fn => self.asArray.forEach(fn),
+    forEach: fn => self.values.forEach(fn),
     includes: (searchElement, fromIndex) => self.values.includes(searchElement, fromIndex),
-    insert: (object, index) => { self.splice(index, 0, object) },
-    map: fn => self.asArray.map(fn),
+    insert: (object, index) => self.splice(index, 0, object),
+    map: fn => self.values.map(fn),
     pop: () => self.values.pop(),
-    push: (...values) => self.values.push(...values),
+    push: (...values) => self.values.replace([].concat(self.values, values)),
     reduce: (fn, initial) => self.values.reduce(fn, initial),
     shift: () => self.values.shift(),
     slice: (start, end) => self.values.slice(start, end),
-    some: fn => self.asArray.some(fn),
-    splice: (index, deleteCount, value) => { self.values.splice(index, deleteCount, value) },
-    unshift: (...values) => self.values.unshift(...values),
+    some: fn => self.values.some(fn),
+    splice: (index, deleteCount, value) => self.values.splice(index, deleteCount, value),
+    unshift: (...values) => self.values.replace([].concat(values, self.values)),
+
+    // eslint-disable-next-line sort-keys
+    afterCreate: () => {
+      Object.defineProperty(self.$treenode, 'snapshot', {
+        get: () => self.$treenode._getActualSnapshot().values, // eslint-disable-line
+      })
+    },
 
     /* eslint-enable no-param-reassign */
   }))
 
   return types.custom({
-    name: options.name || 'Collection', // eslint-disable-next-line sort-keys
+    ...options,
     fromSnapshot: (snapshot = []) => TypedArrayWrapper.create({ values: snapshot }),
     getValidationMessage: (snapshot) => {
       if (!snapshot) return ''
@@ -48,10 +58,7 @@ export default (TYPE, options = {}) => {
 
       return 'Collection types must be assigned an array of values or null'
     },
-    isTargetType: target => (
-      target && target.values && isObservableArray(target.values) && target.values.every(TYPE.is)
-    ),
-    toSnapshot: value => (value ? value.values.toJSON() : []),
-    ...options,
+    isTargetType: target => TypedArrayWrapper.is(target),
+    name: options.name || 'Collection',
   })
 }
