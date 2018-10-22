@@ -1,4 +1,8 @@
+@import '~@/components/styles/widget.scss';
+
 .resource-cost {
+  @include widget;
+
   display: flex;
   flex-wrap: wrap;
   flex: 1;

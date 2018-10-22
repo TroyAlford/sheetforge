@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  flex: 1;
   justify-content: space-between;
   padding: .5em 0;
 
@@ -41,7 +40,6 @@
 
   .list-item-wrapper {
     display: flex;
-    // flex: 1;
     max-width: 100%;
     min-width: 2.5in;
     position: relative;
@@ -63,10 +61,20 @@
       height: 30px;
       justify-content: center;
       position: absolute;
-      right: -20px;
+      right: -29px;
       top: 0px;
       width: 30px;
       z-index: 1;
+    }
+
+    > .expandable-wrapper-expanded, > .expandable-wrapper-expanded + button.icon-remove {
+      background: #fff;
+      border: 1px solid #666;
+      box-shadow: 3px 3px #666;
+
+      + button.icon-remove {
+        border-left: none;
+      }
     }
   }
 }

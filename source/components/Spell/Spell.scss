@@ -22,12 +22,20 @@
     flex-direction: column;
     width: 100%;
 
+    .title-bar > .text {
+      font-size: 1em;
+    }
+
     > .description {
       margin-left: 30px;
       min-height: 80px;
       width: 100%;
 
       textarea { resize: none; }
+    }
+
+    > .effect-list, > .resource-cost-list {
+      width: 100%;
     }
   }
 

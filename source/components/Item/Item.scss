@@ -7,29 +7,28 @@
   flex-wrap: wrap;
   width: 100%;
 
-  .expanded-toggle {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    height: 30px;
-    justify-content: center;
-    width: 30px;
-  }
-
   .name {
     flex: 1;
   }
 
-  .description {
-    min-height: 80px;
+  > .expandable {
+    flex-wrap: wrap;
     width: 100%;
 
-    textarea { resize: none; }
-  }
+    .title-bar > .text {
+      font-size: 1em;
+    }
 
-  .expandable {
-    margin-left: 30px;
-    min-width: calc(100% - 30px);
+    .description {
+      min-height: 80px;
+      width: 100%;
+
+      textarea { resize: none; }
+    }
+
+    > .effect-list {
+      width: 100%;
+    }
   }
 
   &.equipped {
