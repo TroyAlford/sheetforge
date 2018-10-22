@@ -15,9 +15,9 @@ export default (Model, Component, props = {}) => observer(
 
     handleAdd = () => {
       if (this.props.prepend) {
-        this.props.collection.unshift({})
+        this.props.collection.unshift(Model.create({}))
       } else {
-        this.props.collection.push({})
+        this.props.collection.push(Model.create({}))
       }
       this.forceUpdate()
     }
