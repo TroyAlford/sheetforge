@@ -13,7 +13,7 @@ export default types.compose(
     effects: CollectionOf(Effect),
     isActive: false,
     level: 0,
-    name: '',
+    name: 'New Spell...',
   }).views(self => ({
     get character() { return findParent(self, p => p.isCharacter) },
     get isAffordable() {

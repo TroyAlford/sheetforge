@@ -5,7 +5,7 @@ export default types.compose(
   IEditable,
   types.model({
     mastery: 1,
-    name: '',
+    name: 'New Skill...',
     theory: 0,
   }).views(self => ({
     get isComplex() { return self.theory !== 0 },

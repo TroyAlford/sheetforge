@@ -15,7 +15,7 @@ export default types.compose(
   IEditable,
   types.model({
     damage: types.optional(types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))), 'none'),
-    name: '',
+    name: 'New Health Level...',
     penalty: 0,
   }).views(self => ({
     get healthBar() {

@@ -4,7 +4,7 @@ import IEditable from '@/models/generic/IEditable'
 export default types.compose(
   IEditable,
   types.model({
-    name: 'New Descriptor',
+    name: 'New Descriptor...',
     value: '',
   })
 ).named('Descriptor')
