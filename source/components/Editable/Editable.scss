@@ -36,10 +36,11 @@
     width: 100%; min-width: 30px;
   }
 
-  div.multiline {
+  div.multiline, textarea {
     align-items: flex-start;
     flex-direction: column;
     justify-content: flex-start;
+    text-align: left;
 
     > p {
       margin: 0 0 .5rem 0;
