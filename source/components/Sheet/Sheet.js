@@ -46,7 +46,6 @@ import './Sheet.scss'
       const ModelType = models[type]
 
       const List = ListOf(ModelType, Component, {
-        addButtonText: `Add ${type}`,
         className: `${type.toLowerCase()}-list`,
       })
       return <List key={key} collection={data} {...props} />

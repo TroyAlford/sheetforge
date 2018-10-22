@@ -5,7 +5,6 @@ import './List.scss'
 export default (Model, Component, props = {}) => observer(
   class List extends React.Component {
     static defaultProps = {
-      addButtonText: 'Add',
       className: '',
       collection: [],
       prepend: false,

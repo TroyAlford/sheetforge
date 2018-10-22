@@ -9,11 +9,10 @@ import EffectModel from '@/models/Effect'
 import ResourceCostModel from '@/models/ResourceCost'
 import './Spell.scss'
 
-const EffectList = ListOf(EffectModel, Effect)
+const EffectList = ListOf(EffectModel, Effect, { className: 'effect-list' })
 
 const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
-  addButtonText: 'Add Cost',
-  className: 'resource-costs',
+  className: 'resource-cost-list',
 })
 
 @observer class Spell extends Component {
@@ -48,8 +47,8 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
             placeholder="Description..."
             value={description}
           />
-          <ListOfCosts collection={costs} />
-          <EffectList collection={effects} />
+          <ListOfCosts collection={costs} title="Casting Costs" />
+          <EffectList collection={effects} title="Effects" />
         </Expandable>
       </div>
     )

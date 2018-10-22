@@ -7,7 +7,7 @@ import ListOf from '@/components/List'
 import EffectModel from '@/models/Effect'
 import './Item.scss'
 
-const EffectList = ListOf(EffectModel, Effect)
+const EffectList = ListOf(EffectModel, Effect, { className: 'effect-list' })
 
 @observer class Item extends Component {
   static defaultProps = {
@@ -35,7 +35,7 @@ const EffectList = ListOf(EffectModel, Effect)
             placeholder="Description..."
             value={description}
           />
-          <EffectList collection={effects} />
+          <EffectList collection={effects} title="Effects" />
         </Expandable>
       </div>
     )
