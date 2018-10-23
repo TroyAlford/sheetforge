@@ -30,6 +30,12 @@ export default types.compose(
     activeEffects() {
       return self.effects().filter(effect => effect && effect.isApplicable)
     },
+    availableConditions() {
+      return self.effects()
+        .map(e => e.condition)
+        .sort()
+        .filter((effect, i, all) => !i || effect !== all[i - 1])
+    },
     effects() {
       return flatten([
         // Trait Effects first, because they're inherent
