@@ -37,15 +37,8 @@ export default (TYPE, options = {}) => {
     splice: (index, deleteCount, value) => self.values.splice(index, deleteCount, value),
     unshift: (...values) => self.values.replace([].concat(values, self.values)),
 
-    // eslint-disable-next-line sort-keys
-    afterCreate: () => {
-      Object.defineProperty(self.$treenode, 'snapshot', {
-        get: () => self.$treenode._getActualSnapshot().values, // eslint-disable-line
-      })
-    },
-
     /* eslint-enable no-param-reassign */
-  }))
+  })).postProcessSnapshot(({ values }) => values)
 
   return types.custom({
     ...options,
