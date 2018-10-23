@@ -17,11 +17,11 @@ const HealthLevelList = ListOf(HealthLevelModel, HealthLevel, {
   }
 
   render() {
-    const { model, title, vertical } = this.props
+    const { model, size, title, vertical } = this.props
     const current = model.filter(level => level.damage === 'none').length
     const worstInjury = [...model.slice().reverse()].find(level => level.damage !== 'none')
 
-    let direction = vertical ? 'vertical' : 'horizontal'
+    let direction = (vertical || size === 'small') ? 'vertical' : 'horizontal'
     if (window.matchMedia('(max-width: 5in)').matches) direction = 'vertical'
 
     const classNames = ['health-bar', direction].filter(Boolean).join(' ')
