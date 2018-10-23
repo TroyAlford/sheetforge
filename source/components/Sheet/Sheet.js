@@ -41,6 +41,7 @@ import './Sheet.scss'
   renderComponent = ({ children, list, lookup, path, type, ...props }, key) => {
     const Component = components[type]
     const data = getPathValue(this.props.character, path)
+    Object.assign(props, { size: this.state.size })
 
     if (list) {
       const ModelType = models[type]
