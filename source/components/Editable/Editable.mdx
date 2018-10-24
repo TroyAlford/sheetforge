@@ -3,15 +3,19 @@ import Editable from './Editable'
 
 ## Editable Component
 
-<Playground>
-  <b>Numeric</b>
-  <Editable value={4} />
-  <b>String</b>
-  <Editable value="Single Line String" />
+<style>{`
+  .editable {
+    border: 1px solid #ddd;
+    padding: .25em;
+  }
+`}</style>
 
-  <style>{`
-    .editable {
-      border: 1px solid #ccc;
-    }
-  `}</style>
+### Numeric
+<Playground>
+  <Editable value={4} />
+</Playground>
+
+### String
+<Playground>
+  <Editable value="Single Line String" />
 </Playground>

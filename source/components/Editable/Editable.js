@@ -61,7 +61,9 @@ export default class Editable extends React.Component {
     if (!editor) { return }
     this.editor = editor
 
-    if (typeof editor.focus === 'function') { editor.focus() }
+    const editorType = this.getEditorType()
+    if (editorType !== 'boolean' && typeof editor.focus === 'function') { editor.focus() }
+
     if (['boolean', 'number'].includes(this.getEditorType())) { return }
     if (this.props.forceEditMode && typeof editor.setSelectionRange === 'function') {
       editor.setSelectionRange(editor.value.length, editor.value.length)
