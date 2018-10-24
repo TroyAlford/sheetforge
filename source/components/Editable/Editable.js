@@ -25,6 +25,7 @@ export default class Editable extends React.Component {
     onEditStart: noop,
     placeholder: '',
     readOnly: false,
+    readOnlyValue: undefined,
     step: 1,
     type: undefined,
     value: '',
@@ -212,11 +213,13 @@ export default class Editable extends React.Component {
   }
 
   renderStatic = () => {
-    const showPlaceholder = this.props.placeholder && !this.props.value
+    const { placeholder, readOnlyValue, value } = this.props
+    const showPlaceholder = placeholder && !value
+    const displayValue = readOnlyValue !== undefined ? readOnlyValue : value
     const className = showPlaceholder ? 'placeholder' : ''
     return (
       <span className={className} onClick={this.handleToggleEditing}>
-        {showPlaceholder ? this.props.placeholder : this.props.value}
+        {showPlaceholder ? placeholder : displayValue}
       </span>
     )
   }

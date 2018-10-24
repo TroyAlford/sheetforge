@@ -21,15 +21,19 @@ import './Attribute.scss'
 
   handleSnapshot = () => {
     const effects = this.props.model.effects().map(e => e.toJSON())
-    if (JSON.stringify(effects) !== JSON.stringify(this.CACHE.effects)) {
+    if (
+      JSON.stringify(effects) !== JSON.stringify(this.CACHE.effects) ||
+      this.CACHE.value !== this.props.model.value()
+    ) {
       this.CACHE.effects = effects
+      this.CACHE.value = this.props.model.value()
       this.forceUpdate()
     }
   }
 
   onChangeName = name => this.props.model.set({ name })
 
-  onChangeValue = value => this.props.model.set({ value })
+  onChangeValue = raw => this.props.model.set({ raw })
 
   render() {
     const { model } = this.props
@@ -41,13 +45,17 @@ import './Attribute.scss'
       modifier === 0 && 'zero',
     ].join(' ')
 
-    // <div className="attribute" effects={model.effects().length}>
     return (
-      <div className="attribute">
+      <div className={`attribute ${model.isComputed ? 'computed' : 'numeric'}`}>
         <Editable className="name" onChange={this.onChangeName} value={model.name} />
-        <Editable className="value" onChange={this.onChangeValue} value={model.value} />
+        <Editable
+          className="value"
+          onChange={this.onChangeValue}
+          readOnlyValue={model.value()}
+          value={model.raw}
+        />
         {modifier !== 0 && (
-          <div className={modifierClass} title={model.modifierText()}>{model.displayValue()}</div>
+          <div className={modifierClass} title={model.modifierText()}>{model.modifiedValue()}</div>
         )}
       </div>
     )

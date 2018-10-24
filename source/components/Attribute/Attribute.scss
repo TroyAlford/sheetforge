@@ -3,11 +3,43 @@
 .attribute {
   @include widget;
 
+  border-radius: 5px;
+
+  &.computed {
+    background-color: #ccf8f8;
+    border: 1px solid #b5f5f5;
+    color: #666;
+    font-weight: bold;
+
+    > .value.editing {
+      border-radius: 5px;
+      left: 2px;
+      overflow: hidden;
+      position: absolute;
+      right: 2px;
+    }
+  }
+
   .modifier {
     min-width: 30px;
 
     &.positive { color: green; }
     &.negative { color: red; }
     &.zero { color: gray; }
+  }
+}
+
+.list .list-item-wrapper {
+  &:hover > .attribute {
+    border-radius: 5px 0 0 5px;
+  }
+
+  > .attribute {
+    margin: 1px;
+
+    + button.icon-remove {
+      height: 100%;
+      padding: 1px;
+    }
   }
 }
