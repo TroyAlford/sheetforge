@@ -149,6 +149,10 @@ describe('models/Collection', () => {
     expect(collection.some(({ value }) => value === 'Random!')).toEqual(false)
   })
 
+  it('supports sortBy(property)', () => {
+    expect(collection.sortBy('value').map(i => i.value)).toEqual(['Bar!', 'Baz!', 'Foo!', 'Qux!'])
+  })
+
   it('supports splice(index, deleteCount, value)', () => {
     collection.splice(1, 2, { id: '5', value: 'Inserted!' })
     expect(collection.map(({ value }) => value)).toEqual(['Foo!', 'Inserted!', 'Qux!'])

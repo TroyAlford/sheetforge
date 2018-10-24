@@ -1,5 +1,6 @@
 import { isObservableArray } from 'mobx'
 import { types } from 'mobx-state-tree'
+import compareBy from '@/utilities/compareBy'
 
 export default (TYPE, options = {}) => {
   const TypedArrayWrapper = types.model({
@@ -26,6 +27,7 @@ export default (TYPE, options = {}) => {
     },
     forEach: fn => self.values.forEach(fn),
     includes: (searchElement, fromIndex) => self.values.includes(searchElement, fromIndex),
+    indexOf: element => self.values.indexOf(element),
     insert: (object, index) => self.splice(index, 0, object),
     map: fn => self.values.map(fn),
     pop: () => self.values.pop(),
@@ -34,6 +36,10 @@ export default (TYPE, options = {}) => {
     shift: () => self.values.shift(),
     slice: (start, end) => self.values.slice(start, end),
     some: fn => self.values.some(fn),
+    sortBy: (property) => {
+      self.values.replace(self.values.slice().sort(compareBy(property)))
+      return self
+    },
     splice: (index, deleteCount, value) => self.values.splice(index, deleteCount, value),
     unshift: (...values) => self.values.replace([].concat(values, self.values)),
 
