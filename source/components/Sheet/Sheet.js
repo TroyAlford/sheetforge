@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import { onSnapshot } from 'mobx-state-tree'
 import React from 'react'
 import components from '@/components'
+import Conditions from '@/components/Conditions'
 import ListOf from '@/components/List'
 import models from '@/models'
 import getPathValue from '@/utilities/getPathValue'
@@ -63,12 +64,13 @@ import './Sheet.scss'
   }
 
   render() {
-    const { layout = [] } = this.props
+    const { character, layout = [] } = this.props
     const { size } = this.state
 
     return (
       <div className={`sheetforge sheet ${size}`}>
         {layout.map(this.renderComponent)}
+        <Conditions model={character} />
       </div>
     )
   }

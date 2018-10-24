@@ -40,10 +40,20 @@
 
   .list-item-wrapper {
     display: flex;
+    flex: 1;
     max-width: 100%;
-    min-width: 2.5in;
     position: relative;
-    width: 33%;
+
+    .list { // list inside a list
+      > .title-bar {
+        padding: 0;
+
+        > .button.icon-add { right: 0; }
+      }
+      > .list-item-wrapper > div {
+        padding: 0;
+      }
+    }
 
     &:focus-within, &:hover {
       background: #eee;
