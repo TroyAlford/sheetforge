@@ -11,6 +11,8 @@ import './Resource.scss'
 
   onChangeCurrent = current => this.props.model.set({ current })
 
+  onChangeMaximum = maximum => this.props.model.set({ maximum })
+
   onChangeName = name => this.props.model.set({ name })
 
   render() {
@@ -18,11 +20,12 @@ import './Resource.scss'
 
     return (
       <div className="resource">
-        <Editable
-          className="name"
-          onChange={this.onChangeName}
-          value={name}
-        />
+        <div className="display">
+          <Editable className="name" onChange={this.onChangeName} value={name} />
+          <Editable className="current" onChange={this.onChangeCurrent} value={current} />
+          {'of'}
+          <Editable className="maximum" onChange={this.onChangeMaximum} value={maximum} />
+        </div>
         <Rating
           current={current}
           maximum={maximum}
