@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
 import findParent from '@/utilities/findParent'
-import { sum } from '@/utilities/math'
+import math from '@/utilities/math'
 import calculate from '@/utilities/math/calculate'
 import toSymbols from '@/utilities/math/toSymbols'
 
@@ -20,7 +20,7 @@ export default types.compose(
       return self.character.activeEffects().filter(effect => effect.target === self)
     },
     modifiedValue() { return self.value() + self.modifier() },
-    modifier() { return sum(self.effects().map(effect => effect.modifier)) },
+    modifier() { return math.sum(self.effects().map(effect => effect.modifier)) },
     modifierText() {
       return self.effects().map(effect => `${effect.sourceName}: ${effect.modifier}`).join(', ')
     },
@@ -36,6 +36,8 @@ export default types.compose(
 
         return calculate(self.raw, values)
       } catch (error) {
+        // eslint-disable-next-line no-undef, no-console
+        if (process.env.NODE_ENV !== 'production') console.error(`Error computing: ${self.raw}`)
         return 0
       }
     },

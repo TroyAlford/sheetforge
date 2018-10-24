@@ -1,8 +1,5 @@
-import math from 'mathjs'
+import math from '@/utilities/math'
 import toSymbols from '@/utilities/math/toSymbols'
-// const math = core.create()
-// math.import(require('mathjs/lib/expression'))
-// math.import(require('mathjs/lib/function/statistics/mean'))
 
 export default (expression = '', data = {}, options = { defaultSymbolValue: 0 }) => {
   const safeData = { ...data }

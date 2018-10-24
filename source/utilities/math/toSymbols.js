@@ -1,4 +1,4 @@
-import math from 'mathjs'
+import math from '@/utilities/math'
 
 export default (expression) => {
   const symbols = []
