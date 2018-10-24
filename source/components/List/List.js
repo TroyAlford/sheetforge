@@ -31,7 +31,7 @@ export default (Model, Component, props = {}) => observer(
       const { className, collection, title } = this.props
 
       return (
-        <div className={`list ${className}`.trim()}>
+        <div className={`list ${title ? 'has' : 'no'}-title ${className}`.trim()}>
           <div className="title-bar">
             <div className="text">{title}</div>
             <button className="icon-add" onClick={this.handleAdd} />

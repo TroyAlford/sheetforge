@@ -7,6 +7,18 @@
 
   .section > .list {
     padding: 0;
+
+    &.no-title {
+      > .title-bar {
+        position: static;
+
+        > button.icon-add {
+          position: absolute;
+          right: .5em;
+          top: .5em;
+        }
+      }
+    }
   }
 
   &.small {
