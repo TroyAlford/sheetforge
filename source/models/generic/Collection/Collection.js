@@ -41,6 +41,11 @@ export default (TYPE, options = {}) => {
       return self
     },
     splice: (index, deleteCount, value) => self.values.splice(index, deleteCount, value),
+    toObject: (keyProp, valueProp) => self.values.reduce((object, entry) => {
+      const key = entry[keyProp]
+      const value = valueProp !== undefined ? entry[valueProp] : entry
+      return { ...object, [key]: typeof value === 'function' ? value() : value }
+    }, {}),
     unshift: (...values) => self.values.replace([].concat(values, self.values)),
 
     /* eslint-enable no-param-reassign */

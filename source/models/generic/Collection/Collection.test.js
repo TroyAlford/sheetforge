@@ -158,6 +158,18 @@ describe('models/Collection', () => {
     expect(collection.map(({ value }) => value)).toEqual(['Foo!', 'Inserted!', 'Qux!'])
   })
 
+  it('supports toObject(keyProp, valueProp)', () => {
+    expect(collection.toObject('id', 'value')).toEqual({ 1: 'Foo!', 2: 'Bar!', 3: 'Baz!', 4: 'Qux!' })
+    expect(collection.toObject('value', 'id')).toEqual({ 'Bar!': '2', 'Baz!': '3', 'Foo!': '1', 'Qux!': '4' })
+    expect(collection.toObject('id')).toEqual({
+      1: { id: '1', value: 'Foo!' },
+      2: { id: '2', value: 'Bar!' },
+      3: { id: '3', value: 'Baz!' },
+      4: { id: '4', value: 'Qux!' },
+    })
+    expect(collection.toObject('missing')).toEqual({ undefined: { id: '4', value: 'Qux!' } })
+  })
+
   it('supports unshift()', () => {
     expect(collection).toHaveLength(4)
     collection.unshift({ id: '5', value: 'Yay!' })
