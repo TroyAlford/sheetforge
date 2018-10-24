@@ -65,7 +65,7 @@
     "react-dom": "^16.5.2"
   },
   "scripts": {
-    "deploy-storybook": "yarn storybook ",
+    "develop": "yarn docz dev",
     "build": "rimraf ./build/* && (yarn webpack & cross-env NODE_ENV=production yarn webpack)",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "preversion": "yarn build && git add -A ./build",
