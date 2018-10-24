@@ -102,7 +102,10 @@
       "<rootDir>/node_modules/react-addons-test-utils/",
       "<rootDir>/node_modules/lodash/"
     ],
-    "verbose": true
+    "verbose": true,
+    "watchPathIgnorePatterns": [
+      "<rootDir>/.*\\.json"
+    ]
   },
   "dependencies": {
     "deep-equal": "^1.0.1"
