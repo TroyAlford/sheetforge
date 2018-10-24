@@ -35,6 +35,7 @@ export default types.compose(
         .map(e => e.condition)
         .sort()
         .filter((effect, i, all) => !i || effect !== all[i - 1])
+        .filter(Boolean)
     },
     effects() {
       return flatten([
