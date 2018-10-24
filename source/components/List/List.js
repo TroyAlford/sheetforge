@@ -8,7 +8,7 @@ export default (Model, Component, props = {}) => observer(
       className: '',
       collection: [],
       prepend: false,
-      title: props.title || Model.name || '',
+      title: props.title || '',
       ...props,
     }
 

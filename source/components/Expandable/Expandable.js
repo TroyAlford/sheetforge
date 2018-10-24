@@ -1,12 +1,24 @@
 import React, { Component, Fragment } from 'react'
+import { createPortal } from 'react-dom'
 import './Expandable.scss'
 
 export default class Expandable extends Component {
+  static defaultProps = {
+    expandByDefault: false,
+    omitItemWrapper: false,
+    toggleButtonParent: null,
+    toggleButtonText: '',
+  }
+
   state = {
     expanded: false,
   }
 
   expander = React.createRef()
+
+  componentWillMount() {
+    this.setState({ expanded: this.props.expandByDefault })
+  }
 
   handleToggle = () => {
     const { classList } = this.expander.current.parentElement
@@ -18,8 +30,15 @@ export default class Expandable extends Component {
     })
   }
 
+  renderExpanded = () => {
+    const { children, omitItemWrapper } = this.props
+    return omitItemWrapper
+      ? children
+      : <div className="expandable"> { children }</div>
+  }
+
   render() {
-    const { children } = this.props
+    const { toggleButtonParent, toggleButtonText } = this.props
     const toggleState = this.state.expanded ? 'expanded' : 'collapsed'
     const buttonProps = {
       className: `expandable-toggle icon-${toggleState}`,
@@ -27,10 +46,11 @@ export default class Expandable extends Component {
       ref: this.expander,
     }
 
+    const toggleButton = <div {...buttonProps} text={toggleButtonText} />
     return (
       <Fragment>
-        <div {...buttonProps} />
-        {this.state.expanded && <div className="expandable">{children}</div>}
+        {toggleButtonParent ? createPortal(toggleButton, toggleButtonParent) : toggleButton}
+        {this.state.expanded && this.renderExpanded()}
       </Fragment>
     )
   }
