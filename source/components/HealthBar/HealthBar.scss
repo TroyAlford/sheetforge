@@ -53,11 +53,20 @@
       .name { display: none; }
     }
 
-    > .list-item-wrapper > .icon-remove {
-      left: 0;
-      margin-top: 1px;
-      top: 100%;
-      width: 100%;
+    > .list-item-wrapper {
+      &:hover {
+        border-radius: 5px 5px 0 0;
+      }
+
+      > .icon-remove {
+        border-left: none;
+        border-radius: 0 0 5px 5px;
+        border-top: 2px groove #fff;
+        left: 0;
+        margin-top: 0px;
+        top: 100%;
+        width: 100%;
+      }
     }
   }
   &.vertical > .list {

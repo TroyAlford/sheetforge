@@ -39,6 +39,8 @@
   }
 
   .list-item-wrapper {
+    border-radius: 5px;
+    box-sizing: border-box;
     display: flex;
     flex: 1;
     max-width: 100%;
@@ -57,6 +59,7 @@
 
     &:focus-within, &:hover {
       background: #eee;
+      border-radius: 5px 0 0 5px;
 
       > button.icon-remove { display: flex; }
     }
@@ -65,16 +68,22 @@
       align-items: center;
       background: #eee;
       border: none;
+      border-left: 2px groove #fff;
+      border-radius: 0 5px 5px 0;
       bottom: -1px;
       cursor: pointer;
       display: none;
       height: 30px;
       justify-content: center;
       position: absolute;
-      right: -29px;
+      right: -30px;
       top: 0px;
       width: 30px;
       z-index: 1;
+
+      &:hover {
+        background-color: #ccf8f8;
+      }
     }
 
     > .expandable-wrapper-expanded, > .expandable-wrapper-expanded + button.icon-remove {
