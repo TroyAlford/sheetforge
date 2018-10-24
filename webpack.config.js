@@ -21,6 +21,7 @@ module.exports = {
   mode: ENVIRONMENT,
   module: {
     rules: [
+      /* eslint-disable sort-keys */
       { test: /\.(woff2?|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
       {
@@ -31,6 +32,7 @@ module.exports = {
           { loader: 'sass-loader', options: { fiber, implementation: sass } },
         ],
       },
+      /* eslint-enable sort-keys */
     ],
   },
   optimization: {
