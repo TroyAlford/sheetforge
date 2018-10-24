@@ -108,6 +108,7 @@
     ]
   },
   "dependencies": {
-    "deep-equal": "^1.0.1"
+    "deep-equal": "^1.0.1",
+    "mathjs": "^5.2.2"
   }
 }
