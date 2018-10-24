@@ -57,8 +57,9 @@ module.exports = {
     umdNamedDefine: true,
   },
   plugins: [
+    new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.HashedModuleIdsPlugin(),
-    new MiniCssExtractPlugin({ filename: 'sheetforge.css', chunkFilename: 'sheetforge.[name].css' }),
+    new MiniCssExtractPlugin({ chunkFilename: 'sheetforge.[name].css', filename: 'sheetforge.css' }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(ENVIRONMENT) }),
     new OptimizeCssAssetsPlugin({
