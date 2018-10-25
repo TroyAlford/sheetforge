@@ -1,0 +1,97 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+
+version: 2
+jobs:
+  setup:
+    docker:
+      - image: circleci/node:11.0.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - run: yarn
+
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - node_modules
+
+  test:
+    docker:
+      - image: circleci/node:11.0.0
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: yarn test
+
+  build-docs:
+    docker:
+      - image: circleci/node:11.0.0
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: yarn docz build
+
+  build-development:
+    docker:
+      - image: circleci/node:11.0.0
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: NODE_ENV=development yarn webpack
+
+
+  build-production:
+    docker:
+      - image: circleci/node:11.0.0
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: NODE_ENV=production yarn webpack -p
+
+  check-in-build:
+    docker:
+      - image: circleci/node:11.0.0
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: git add ./build ./docs
+      - run: git commit -m 'CircleCI - update build & docs'
+      - run: git push origin HEAD
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - setup
+      - test:
+        requires: setup
+      - build-development:
+        requires: setup
+      - build-production:
+        requires: setup
+      - build-docs:
+        requires: setup
+      - check-in-build:
+        requires:
+          - test
+          - build-development
+          - build-production
+          - build-docs
