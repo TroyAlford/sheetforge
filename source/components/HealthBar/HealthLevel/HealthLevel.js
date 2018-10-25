@@ -12,8 +12,7 @@ import './HealthLevel.scss'
     const healing = event.ctrlKey
     const healthLevel = this.props.model
 
-    if (healthLevel.damage === 'bane' && event.type === 'tap') {
-      // Allow finger-clicks to heal bane damage
+    if (healthLevel.damage === 'bane') {
       healthLevel.set({ damage: 'none' })
     } else {
       healthLevel.adjust(healing ? -1 : 1)
