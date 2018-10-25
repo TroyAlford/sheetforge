@@ -25,6 +25,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
+    "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "directory-named-webpack-plugin": "^4.0.0",
@@ -65,9 +66,12 @@
     "react-dom": "^16.5.2"
   },
   "scripts": {
-    "develop": "yarn docz dev",
-    "build": "rimraf ./build/* && (yarn webpack & cross-env NODE_ENV=production yarn webpack)",
+    "build-dev": "cross-env NODE_ENV=development yarn webpack ",
+    "build-prod": "cross-env NODE_ENV=production yarn webpack ",
+    "build": "concurrently -n dev,prod,docs -c yellow,red,cyan \"yarn build-dev\" \"yarn build-prod\" \"yarn docz build\"",
+    "develop": "concurrently -n dev,prod,docs -c yellow,red,cyan \"yarn build-dev --watch\" \"yarn build-prod --watch\" yarn docz dev\"",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
+    "prebuild": "rimraf ./build/*",
     "preversion": "yarn build && git add -A ./build",
     "sourcemap": "source-map-explorer ./build/sheetforge.min.js",
     "test": "jest"
