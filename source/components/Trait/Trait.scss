@@ -1,0 +1,25 @@
+@import '~@/components/styles/widget.scss';
+
+.trait {
+  @include widget;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  .trait-list.row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .expandable {
+    width: 100%;
+
+    > .list {
+      width: 100%;
+    }
+
+    .title-bar > .text {
+      font-size: 1em;
+    }
+  }
+}

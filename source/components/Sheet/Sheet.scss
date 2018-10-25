@@ -1,0 +1,42 @@
+.sheetforge.sheet {
+  font-size: 13px;
+  margin: 0 auto;
+  max-width: 8.5in;
+  padding: .25in;
+  position: relative;
+
+  .section > .list {
+    padding: 0;
+
+    &.no-title {
+      > .title-bar {
+        position: static;
+
+        > button.icon-add {
+          position: absolute;
+          right: .5em;
+          top: .5em;
+        }
+      }
+    }
+  }
+
+  &.small {
+    max-width: 100vw;
+    padding: 0;
+
+    .row {
+      flex-direction: column;
+    }
+
+    .list .list-item-wrapper {
+      width: 100%;
+    }
+  }
+
+  > .conditions {
+    left: .25in;
+    position: absolute;
+    top: .25in;
+  }
+}

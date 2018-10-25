@@ -1,0 +1,21 @@
+import { Playground } from 'docz'
+import Editable from '@/components/Editable'
+
+## Editable Component
+
+<style>{`
+  .editable {
+    border: 1px solid #ddd;
+    padding: .25em;
+  }
+`}</style>
+
+### Numeric
+<Playground>
+  <Editable value={4} />
+</Playground>
+
+### String
+<Playground>
+  <Editable value="Single Line String" />
+</Playground>

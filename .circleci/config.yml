@@ -1,0 +1,103 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+
+version: 2
+jobs:
+  setup:
+    docker:
+      - image: circleci/node:10.12.0-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+            - yarn.lock
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repo
+
+  test:
+    docker:
+      - image: circleci/node:10.12.0-stretch
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test
+
+  build_docs:
+    docker:
+      - image: circleci/node:10.12.0-stretch
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn docz build
+
+  build_development:
+    docker:
+      - image: circleci/node:10.12.0-stretch
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: NODE_ENV=development yarn webpack
+
+
+  build_production:
+    docker:
+      - image: circleci/node:10.12.0-stretch
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: NODE_ENV=production yarn webpack -p
+
+  check_in_build:
+    docker:
+      - image: circleci/node:10.12.0-stretch
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: git add ./build ./docs
+      - run: git commit -m 'CircleCI - update build & docs'
+      - run: git push origin HEAD
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
+      - build_development:
+          requires:
+            - setup
+      - build_production:
+          requires:
+            - setup
+      # - build_docs:
+      #     requires:
+      #       - setup
+      - check_in_build:
+          requires:
+            - test
+            - build_development
+            - build_production
+            # - build_docs

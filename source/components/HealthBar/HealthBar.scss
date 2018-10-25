@@ -1,0 +1,79 @@
+@import '~@/components/styles/widget.scss';
+
+.health-bar {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  > .list {
+    margin: auto;
+
+    > .title-bar > .text {
+      align-items: center;
+      display: flex;
+      font-size: 1em;
+      justify-content: center;
+
+      > .wound-level {
+        font-size: .8em;
+        font-weight: normal;
+        margin: 0 1em;
+      }
+    }
+
+    > .list-item-wrapper {
+      min-width: auto;
+      width: auto;
+
+      > .health-level {
+        @include widget;
+
+        user-select: none;
+      }
+    }
+  }
+
+  &.horizontal > .list {
+    display: flex;
+    flex-direction: row-reverse;
+    min-height: 80px;
+    justify-content: center;
+
+    > .title-bar > .text > .wound-level {
+      display: none;
+    }
+
+    .health-level {
+      display: flex;
+      flex-direction: column;
+      min-width: auto;
+      width: auto;
+
+      .damage { min-height: 30px; min-width: 20px; }
+      .name { display: none; }
+    }
+
+    > .list-item-wrapper {
+      &:hover {
+        border-radius: 5px 5px 0 0;
+      }
+
+      > .icon-remove {
+        border-left: none;
+        border-radius: 0 0 5px 5px;
+        border-top: 2px groove #fff;
+        left: 0;
+        margin-top: 0px;
+        top: 100%;
+        width: 100%;
+      }
+    }
+  }
+  &.vertical > .list {
+    display: flex;
+    flex-direction: column;
+
+    .damage { min-width: 30px; }
+    .name { flex: 1; }
+  }
+}

@@ -228,12 +228,12 @@ body {
   display: none;
 }
 @font-face {
-      font-family: 'axis-sheet';
-      src: url('./font/axis-sheet.eot?87228373');
-      src: url('./font/axis-sheet.eot?87228373#iefix') format('embedded-opentype'),
-           url('./font/axis-sheet.woff?87228373') format('woff'),
-           url('./font/axis-sheet.ttf?87228373') format('truetype'),
-           url('./font/axis-sheet.svg?87228373#axis-sheet') format('svg');
+      font-family: 'sheetforge';
+      src: url('./font/sheetforge.eot?85659496');
+      src: url('./font/sheetforge.eot?85659496#iefix') format('embedded-opentype'),
+           url('./font/sheetforge.woff?85659496') format('woff'),
+           url('./font/sheetforge.ttf?85659496') format('truetype'),
+           url('./font/sheetforge.svg?85659496#sheetforge') format('svg');
       font-weight: normal;
       font-style: normal;
     }
@@ -241,7 +241,7 @@ body {
      
     .demo-icon
     {
-      font-family: "axis-sheet";
+      font-family: "sheetforge";
       font-style: normal;
       font-weight: normal;
       speak: none;
@@ -275,7 +275,7 @@ body {
       /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
     }
      </style>
-    <link rel="stylesheet" href="css/animation.css"><!--[if IE 7]><link rel="stylesheet" href="css/axis-sheet-ie7.css"><![endif]-->
+    <link rel="stylesheet" href="css/animation.css"><!--[if IE 7]><link rel="stylesheet" href="css/" + font.fontname + "-ie7.css"><![endif]-->
     <script>
       function toggleCodes(on) {
         var obj = document.getElementById('icons');
@@ -291,35 +291,35 @@ body {
   </head>
   <body>
     <div class="container header">
-      <h1>
-        axis-sheet
-         <small>font demo</small>
-      </h1>
+      <h1>sheetforge <small>font demo</small></h1>
       <label class="switch">
         <input type="checkbox" onclick="toggleCodes(this.checked)">show codes
       </label>
     </div>
-    <div id="icons" class="container">
+    <div class="container" id="icons">
       <div class="row">
-        <div title="Code: 0xe800" class="the-icons span3"><i class="demo-icon icon-axis">&#xe800;</i> <span class="i-name">icon-axis</span><span class="i-code">0xe800</span></div>
-        <div title="Code: 0xe801" class="the-icons span3"><i class="demo-icon icon-d10">&#xe801;</i> <span class="i-name">icon-d10</span><span class="i-code">0xe801</span></div>
-        <div title="Code: 0xe802" class="the-icons span3"><i class="demo-icon icon-sheet">&#xe802;</i> <span class="i-name">icon-sheet</span><span class="i-code">0xe802</span></div>
-        <div title="Code: 0xe803" class="the-icons span3"><i class="demo-icon icon-backpack">&#xe803;</i> <span class="i-name">icon-backpack</span><span class="i-code">0xe803</span></div>
+        <div class="the-icons span3" title="Code: 0xe800"><i class="demo-icon icon-axis">&#xe800;</i> <span class="i-name">icon-axis</span><span class="i-code">0xe800</span></div>
+        <div class="the-icons span3" title="Code: 0xe801"><i class="demo-icon icon-d10">&#xe801;</i> <span class="i-name">icon-d10</span><span class="i-code">0xe801</span></div>
+        <div class="the-icons span3" title="Code: 0xe802"><i class="demo-icon icon-sheet">&#xe802;</i> <span class="i-name">icon-sheet</span><span class="i-code">0xe802</span></div>
+        <div class="the-icons span3" title="Code: 0xe803"><i class="demo-icon icon-backpack">&#xe803;</i> <span class="i-name">icon-backpack</span><span class="i-code">0xe803</span></div>
       </div>
       <div class="row">
-        <div title="Code: 0xe804" class="the-icons span3"><i class="demo-icon icon-weapon">&#xe804;</i> <span class="i-name">icon-weapon</span><span class="i-code">0xe804</span></div>
-        <div title="Code: 0xe805" class="the-icons span3"><i class="demo-icon icon-armor">&#xe805;</i> <span class="i-name">icon-armor</span><span class="i-code">0xe805</span></div>
-        <div title="Code: 0xe806" class="the-icons span3"><i class="demo-icon icon-currency">&#xe806;</i> <span class="i-name">icon-currency</span><span class="i-code">0xe806</span></div>
-        <div title="Code: 0xe807" class="the-icons span3"><i class="demo-icon icon-add">&#xe807;</i> <span class="i-name">icon-add</span><span class="i-code">0xe807</span></div>
+        <div class="the-icons span3" title="Code: 0xe804"><i class="demo-icon icon-weapon">&#xe804;</i> <span class="i-name">icon-weapon</span><span class="i-code">0xe804</span></div>
+        <div class="the-icons span3" title="Code: 0xe805"><i class="demo-icon icon-armor">&#xe805;</i> <span class="i-name">icon-armor</span><span class="i-code">0xe805</span></div>
+        <div class="the-icons span3" title="Code: 0xe806"><i class="demo-icon icon-currency">&#xe806;</i> <span class="i-name">icon-currency</span><span class="i-code">0xe806</span></div>
+        <div class="the-icons span3" title="Code: 0xe807"><i class="demo-icon icon-add">&#xe807;</i> <span class="i-name">icon-add</span><span class="i-code">0xe807</span></div>
       </div>
       <div class="row">
-        <div title="Code: 0xe808" class="the-icons span3"><i class="demo-icon icon-remove">&#xe808;</i> <span class="i-name">icon-remove</span><span class="i-code">0xe808</span></div>
-        <div title="Code: 0xe901" class="the-icons span3"><i class="demo-icon icon-health">&#xe901;</i> <span class="i-name">icon-health</span><span class="i-code">0xe901</span></div>
-        <div title="Code: 0xe902" class="the-icons span3"><i class="demo-icon icon-health-bane">&#xe902;</i> <span class="i-name">icon-health-bane</span><span class="i-code">0xe902</span></div>
-        <div title="Code: 0xe903" class="the-icons span3"><i class="demo-icon icon-collapsed">&#xe903;</i> <span class="i-name">icon-collapsed</span><span class="i-code">0xe903</span></div>
+        <div class="the-icons span3" title="Code: 0xe808"><i class="demo-icon icon-remove">&#xe808;</i> <span class="i-name">icon-remove</span><span class="i-code">0xe808</span></div>
+        <div class="the-icons span3" title="Code: 0xe80a"><i class="demo-icon icon-damage-light">&#xe80a;</i> <span class="i-name">icon-damage-light</span><span class="i-code">0xe80a</span></div>
+        <div class="the-icons span3" title="Code: 0xe80b"><i class="demo-icon icon-damage-heavy">&#xe80b;</i> <span class="i-name">icon-damage-heavy</span><span class="i-code">0xe80b</span></div>
+        <div class="the-icons span3" title="Code: 0xe901"><i class="demo-icon icon-damage-none">&#xe901;</i> <span class="i-name">icon-damage-none</span><span class="i-code">0xe901</span></div>
       </div>
       <div class="row">
-        <div title="Code: 0xe904" class="the-icons span3"><i class="demo-icon icon-expanded">&#xe904;</i> <span class="i-name">icon-expanded</span><span class="i-code">0xe904</span></div>
+        <div class="the-icons span3" title="Code: 0xe902"><i class="demo-icon icon-health-bane">&#xe902;</i> <span class="i-name">icon-health-bane</span><span class="i-code">0xe902</span></div>
+        <div class="the-icons span3" title="Code: 0xe903"><i class="demo-icon icon-collapsed">&#xe903;</i> <span class="i-name">icon-collapsed</span><span class="i-code">0xe903</span></div>
+        <div class="the-icons span3" title="Code: 0xe904"><i class="demo-icon icon-expanded">&#xe904;</i> <span class="i-name">icon-expanded</span><span class="i-code">0xe904</span></div>
+        <div class="the-icons span3" title="Code: 0xf0d0"><i class="demo-icon icon-magic">&#xf0d0;</i> <span class="i-name">icon-magic</span><span class="i-code">0xf0d0</span></div>
       </div>
     </div>
     <div class="container footer">Generated by <a href="http://fontello.com">fontello.com</a></div>

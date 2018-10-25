@@ -1,0 +1,51 @@
+@import '~@/components/styles/widget.scss';
+
+.spell {
+  @include widget;
+
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+
+  > .name {
+    flex: 1;
+  }
+
+  > .cast {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  > .expandable {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .title-bar > .text {
+      font-size: 1em;
+    }
+
+    > .description {
+      margin-left: 30px;
+      min-height: 80px;
+      width: 100%;
+
+      textarea { resize: none; }
+    }
+
+    > .effect-list, > .resource-cost-list {
+      width: 100%;
+    }
+  }
+
+  &.active {
+    order: 0;
+
+    > .name { font-weight: bold; }
+  }
+}
+
+.list.spell-list > .list-item-wrapper {
+  min-width: 100%;
+}

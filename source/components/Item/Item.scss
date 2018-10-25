@@ -1,0 +1,43 @@
+@import '~@/components/styles/widget.scss';
+
+.item {
+  @include widget;
+
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .name {
+    flex: 1;
+  }
+
+  > .expandable {
+    flex-wrap: wrap;
+    width: 100%;
+
+    .title-bar > .text {
+      font-size: 1em;
+    }
+
+    .description {
+      min-height: 80px;
+      width: 100%;
+
+      textarea { resize: none; }
+    }
+
+    > .effect-list {
+      width: 100%;
+    }
+  }
+
+  &.equipped {
+    order: 0;
+
+    .name { font-weight: bold; }
+  }
+}
+
+.list.item-list > .list-item-wrapper {
+  min-width: 100%;
+}

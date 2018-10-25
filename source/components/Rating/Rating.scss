@@ -1,0 +1,31 @@
+.rating {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 200px;
+
+  > span {
+    align-items: center;
+    cursor: pointer;
+    display: inline-flex;
+    height: 20px;
+    justify-content: center;
+    width: 20px;
+
+    > * {
+      pointer-events: none;
+    }
+
+    .dot {
+      border: 1px solid black;
+      border-radius: 5px;
+      display: inline-block;
+      height: 10px; width: 10px;
+
+      &.filled {
+        background-color: black;
+      }
+    }
+  }
+}

@@ -1,21 +1,18 @@
 {
+  "env": {
+    "production": {
+      "plugins": ["transform-react-remove-prop-types"]
+    }
+  },
   "plugins": [
-    [
-      "transform-runtime",
-      {
-        "helpers": false,
-        "polyfill": false,
-        "regenerator": true,
-        "moduleName": "@babel/runtime"
-      }
-    ],
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "transform-object-rest-spread"
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-syntax-object-rest-spread",
+    "@babel/plugin-transform-runtime"
   ],
   "presets": [
-    "react",
-    "env",
-    "jest"
+    "@babel/preset-react",
+    ["@babel/preset-env", { "useBuiltIns": "entry" }]
   ]
 }

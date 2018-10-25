@@ -1,0 +1,35 @@
+import { Playground } from 'docz'
+import Character from '@/models/Character'
+import Trait from '@/components/Trait'
+import TraitModel from '@/models/Trait'
+
+## Trait
+
+<Playground>
+  {() => {
+    const character = Character.create({
+      attributes: [
+        { name: 'Strength', value: 2 },
+        { name: 'Dexterity', value: 4 },
+        { name: 'Perception', value: 3 },
+      ],
+      traits: [
+        { name: 'Magical Aptitude', value: 4 },
+        {
+          effects: [{
+            condition: 'Vision-based',
+            modifier: -5,
+            modifies: 'Perception',
+          }],
+          name: 'Blind',
+          value: -3,
+        },
+      ]
+    })
+
+    return (<>
+      <Trait model={character.traits.at(0)} />
+      <Trait model={character.traits.at(1)} />
+    </>)
+  }}
+</Playground>

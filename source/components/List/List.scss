@@ -1,0 +1,97 @@
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: .5em 0;
+
+  &:focus-within {
+    button.icon-add { display: flex; }
+  }
+
+  .title-bar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: .25em 0;
+    padding: 0 .1in;
+    position: relative;
+    width: 100%;
+
+    .text {
+      flex: 1;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    button.icon-add {
+      background: none;
+      border: none;
+      cursor: pointer;
+      height: 30px;
+      position: absolute;
+      right: .1in;
+      width: 30px;
+    }
+  }
+
+  .list-item-wrapper {
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    max-width: 100%;
+    position: relative;
+
+    .list { // list inside a list
+      > .title-bar {
+        padding: 0;
+
+        > .button.icon-add { right: 0; }
+      }
+      > .expandable > .list-item-wrapper > div {
+        padding: 0;
+      }
+    }
+
+    &:focus-within, &:hover {
+      background: #eee;
+      border-radius: 5px 0 0 5px;
+
+      > button.icon-remove { display: flex; }
+    }
+
+    > button.icon-remove {
+      align-items: center;
+      background: #eee;
+      border: none;
+      border-left: 2px groove #fff;
+      border-radius: 0 5px 5px 0;
+      bottom: -1px;
+      cursor: pointer;
+      display: none;
+      height: 30px;
+      justify-content: center;
+      position: absolute;
+      right: -30px;
+      top: 0px;
+      width: 30px;
+      z-index: 1;
+
+      &:hover {
+        background-color: #ccf8f8;
+      }
+    }
+
+    > .expandable-wrapper-expanded, > .expandable-wrapper-expanded + button.icon-remove {
+      background: #fff;
+      border: 1px solid #666;
+      box-shadow: 3px 3px #666;
+
+      + button.icon-remove {
+        border-left: none;
+      }
+    }
+  }
+}

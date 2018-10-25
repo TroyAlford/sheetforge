@@ -1,0 +1,13 @@
+import { Playground } from 'docz'
+import Resource from '@/components/Resource'
+import ResourceModel from '@/models/Resource'
+
+## Resource Tracker
+
+<Playground>
+  <Resource model={ResourceModel.create({
+    current: 5,
+    maximum: 10,
+    name: 'New Resource',
+  })} />
+</Playground>

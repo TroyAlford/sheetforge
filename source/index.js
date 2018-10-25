@@ -1,7 +1,4 @@
 import Character from '@/models/Character'
-import Sheet from '@/components/Sheet'
+import '@fontello/css/sheetforge-embedded'
 
-export {
-  Character,
-  Sheet,
-}
+export default Character

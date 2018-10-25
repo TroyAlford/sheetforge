@@ -1,0 +1,10 @@
+import Rating from '@/components/Rating'
+import { Playground, PropsTable } from 'docz'
+
+## Rating
+
+<Playground>
+  <Rating onChange={which => window.alert(which)} />
+  <Rating current={3} maximum={5} iconOff='☆' iconOn='★' />
+  <Rating current={3} maximum={10} />
+</Playground>

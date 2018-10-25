@@ -1,0 +1,15 @@
+@import '~@/components/styles/widget.scss';
+
+.effect {
+  @include widget;
+
+  display: flex;
+  flex-wrap: wrap;
+  &:not(.applicable) { background: beige; }
+
+  .condition { flex: 1 }
+
+  .modifier {
+    justify-content: center;
+  }
+}

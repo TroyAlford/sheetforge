@@ -1,5 +1,5 @@
 {
-  "name": "axis-sheet",
+  "name": "sheetforge",
   "css_prefix_text": "icon-",
   "css_use_suffix": false,
   "hinting": true,
@@ -109,10 +109,34 @@
       "src": "fontawesome"
     },
     {
+      "uid": "8ax1xqcbzz1hobyd4i7f0unwib1bztip",
+      "css": "expanded",
+      "code": 59652,
+      "src": "modernpics"
+    },
+    {
+      "uid": "gypcofts1tkouwkxbv8d33eanqpreyy9",
+      "css": "collapsed",
+      "code": 59651,
+      "src": "modernpics"
+    },
+    {
       "uid": "d73eceadda1f594cec0536087539afbf",
-      "css": "health",
+      "css": "damage-none",
       "code": 59649,
       "src": "fontawesome"
+    },
+    {
+      "uid": "3eb93689881ad0804f87052a53edc2b6",
+      "css": "damage-light",
+      "code": 59402,
+      "src": "entypo"
+    },
+    {
+      "uid": "c759418c008e9562944080fee617fc76",
+      "css": "damage-heavy",
+      "code": 59403,
+      "src": "entypo"
     },
     {
       "uid": "af2d299fd44dcded9e22b214a9ab6e59",
@@ -129,16 +153,10 @@
       ]
     },
     {
-      "uid": "gypcofts1tkouwkxbv8d33eanqpreyy9",
-      "css": "collapsed",
-      "code": 59651,
-      "src": "modernpics"
-    },
-    {
-      "uid": "8ax1xqcbzz1hobyd4i7f0unwib1bztip",
-      "css": "expanded",
-      "code": 59652,
-      "src": "modernpics"
+      "uid": "ff70f7b3228702e0d590e60ed3b90bea",
+      "css": "magic",
+      "code": 61648,
+      "src": "fontawesome"
     },
     {
       "uid": "1fd1b4da373238652f7fe3b32ebec8ab",

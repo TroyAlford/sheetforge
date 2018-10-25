@@ -1,0 +1,43 @@
+import { Playground } from 'docz'
+import Attribute from '@/components/Attribute'
+import AttributeModel from '@/models/Attribute'
+import CharacterModel from '@/models/Character'
+
+## Attribute
+The `Attribute` component displays the `name` and `value` of an `Attribute` model. If this `Attribute` model is part of a `Character`, it will also display any applicable `Effect` modifiers.
+
+In the example below, notice how the following are rendered:
+ - **Dexterity** has no modifiers
+ - **Strength** has two positive modifiers, which stack and result in green text
+ - **Stamina** has a single negative modifier, resulting in red text
+ - **Charisma** has two modifiers which cancel each other out, resulting in grey text
+
+You can hover your mouse over any of the modifier displays to see _which effects_ caused that modifier to be applied.
+
+<Playground>
+  {() => {
+    const character = CharacterModel.create({
+      attributes: [
+        { name: 'Strength', value: 4 },
+        { name: 'Dexterity', value: 3 },
+        { name: 'Stamina', value: 4 },
+        { name: 'Charisma', value: 3 },
+      ],
+      spells: [
+        { isActive: true, name: 'Bull Strength', effects: [{ target: 'Strength', modifier: 2 }] },
+        { isActive: true, name: 'Bear Strength', effects: [{ target: 'Strength', modifier: 2 }] },
+        { isActive: true, name: 'Eagle Splendor', effects: [{ target: 'Charisma', modifier: 2 }] },
+        { isActive: true, name: 'Curse: Rotting Flesh', effects: [
+          { target: 'Stamina', modifier: -2 },
+          { target: 'Charisma', modifier: -2 },
+        ] },
+      ],
+    })
+    return (<>
+      <Attribute model={character.attributes.at(0)} />
+      <Attribute model={character.attributes.at(1)} />
+      <Attribute model={character.attributes.at(2)} />
+      <Attribute model={character.attributes.at(3)} />
+    </>)
+  }}
+</Playground>

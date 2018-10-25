@@ -1,5 +1,7 @@
+.docz/
 .vscode/
 coverage/
-node_modules/
 jsconfig.json
-
+node_modules/
+package-lock.json
+yarn-error.log
