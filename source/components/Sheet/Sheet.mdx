@@ -1,3 +1,7 @@
+---
+name: Sheet
+route: /
+---
 import { Playground } from 'docz'
 import { types } from 'mobx-state-tree'
 import Character from '@/models/Character'
@@ -8,21 +12,22 @@ import Sheet from '@/components/Sheet'
 <Sheet
   character={Character.create({
     attributes: [
+      { name: '', value: '' },
       { name: 'Body', value: 'round(mean(agility, fitness, strength))' },
       { name: 'Mind', value: 'round(mean(acuity, focus, intellect))' },
       { name: 'Spirit', value: 'round(mean(confidence, devotion, intuition))' },
+      { name: 'Potency', value: 'round(mean(confidence, intellect, strength))' },
       { name: 'Strength', value: 1 },
       { name: 'Intellect', value: 5 },
       { name: 'Confidence', value: 3 },
+      { name: 'Reflex', value: 'round(mean(acuity, agility, intuition))' },
       { name: 'Agility', value: 2 },
       { name: 'Acuity', value: 3 },
       { name: 'Intuition', value: 3 },
+      { name: 'Resilience', value: 'round(mean(devotion, fitness, focus))' },
       { name: 'Fitness', value: 2 },
       { name: 'Focus', value: 4 },
       { name: 'Devotion', value: 2 },
-      { name: 'Potency', value: 'round(mean(confidence, intellect, strength))' },
-      { name: 'Reflex', value: 'round(mean(acuity, agility, intuition))' },
-      { name: 'Resilience', value: 'round(mean(devotion, fitness, focus))' },
       { name: 'Size', value: 0 },
       { name: 'Speed', value: '6 + size + round(fitness / 2)' },
       { name: 'Natural Armor', value: 0 },

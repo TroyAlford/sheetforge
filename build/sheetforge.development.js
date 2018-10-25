@@ -431,7 +431,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
     effects: function effects() {
       if (!self.character) return [];
       return self.character.activeEffects().filter(function (effect) {
-        return effect.target === self;
+        return effect.targetName === self.name;
       });
     },
     modifiedValue: function modifiedValue() {
