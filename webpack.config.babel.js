@@ -14,7 +14,7 @@ const PRODUCTION = ENVIRONMENT === 'production'
 const CONFIG = {
   devtool: 'source-map',
   entry: {
-    development: `${__dirname}/source/index.js`,
+    [ENVIRONMENT]: `${__dirname}/source/index.js`,
   },
   externals: PRODUCTION
     ? Object.keys(packageJson.peerDependencies).reduce((all, key) => ({ ...all, [key]: key }), {})
@@ -51,7 +51,7 @@ const CONFIG = {
     },
   },
   output: {
-    filename: PRODUCTION ? 'sheetforge.min.js' : 'sheetforge.[name].js',
+    filename: PRODUCTION ? 'sheetforge.[name].min.js' : 'sheetforge.[name].js',
     library: 'sheetforge',
     libraryTarget: 'umd',
     path: `${__dirname}/build`,
@@ -60,7 +60,7 @@ const CONFIG = {
   plugins: [
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.HashedModuleIdsPlugin(),
-    new MiniCssExtractPlugin({ chunkFilename: 'sheetforge.[name].css', filename: 'sheetforge.css' }),
+    new MiniCssExtractPlugin({ chunkFilename: 'sheetforge.[name].css', filename: 'sheetforge.[name].css' }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(ENVIRONMENT) }),
     new OptimizeCssAssetsPlugin({

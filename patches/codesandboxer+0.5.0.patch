@@ -1,0 +1,37 @@
+patch-package
+--- a/node_modules/codesandboxer/dist/parseFile/parseDeps.js
++++ b/node_modules/codesandboxer/dist/parseFile/parseDeps.js
+@@ -35,7 +35,8 @@ var getDeps = function getDeps(pkgJSON, name) {
+   return deps;
+ };
+ 
+-
++const path = require('path')
++const fs = require('fs')
+ var parseDeps = function parseDeps(pkgJSON, imports) {
+   var dependencies = {};
+   var internalImports = [];
+@@ -44,6 +45,23 @@ var parseDeps = function parseDeps(pkgJSON, imports) {
+   var _didIteratorError = false;
+   var _iteratorError = undefined;
+ 
++  var rootDir = path.normalize(__dirname.replace(/^(.*)node_modules.*/, '$1'))
++  var relativePathToRootDir = path.relative(__dirname, rootDir)
++  var webpackConfig = require(`${rootDir}/webpack.config.babel.js`).default
++  var aliases = Object.keys(webpackConfig.resolve.alias)
++
++  imports = imports.map(function(importPath) {
++    return aliases.reduce(function(current, alias) {
++      if (!current.startsWith(alias)) return current
++      return current.replace(new RegExp(`^${alias}`), webpackConfig.resolve.alias[alias])
++    }, importPath)
++  }).map(p => path.normalize(p).replace(rootDir, './').replace(/\\/g, '/'))
++    .map(p => {
++      if (!p.split('/').length > 1) return p
++      if (fs.existsSync(path.join(rootDir, `${p}.js`))) return p
++      return `${p}/${p.split('/').pop()}`
++    })
++
+   try {
+     for (var _iterator = (0, _getIterator3.default)(imports), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+       var mpt = _step.value;

@@ -6,7 +6,16 @@ export default {
   head: {
     meta: [{ content: 'width=device-width, initial-scale=1', name: 'viewport' }],
   },
-  modifyBundlerConfig: config => merge(config, webpackConfig),
+  modifyBundlerConfig: config => merge(config, {
+    ...webpackConfig,
+    output: {
+      filename: 'sheetforge.[name].min.js',
+      library: 'sheetforge',
+      libraryTarget: 'umd',
+      path: `${__dirname}/docs`, // eslint-disable-line no-undef
+      umdNamedDefine: true,
+    }
+  }),
   src: './source',
   themeConfig: {
     styles: {
