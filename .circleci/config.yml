@@ -10,9 +10,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-
       - run: yarn
-
       - save_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -24,74 +22,78 @@ jobs:
     working_directory: ~/repo
     steps:
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-dependencies-
       - run: yarn test
 
-  build-docs:
+  build_docs:
     docker:
       - image: circleci/node:11.0.0
     working_directory: ~/repo
     steps:
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-dependencies-
       - run: yarn docz build
 
-  build-development:
+  build_development:
     docker:
       - image: circleci/node:11.0.0
     working_directory: ~/repo
     steps:
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-dependencies-
       - run: NODE_ENV=development yarn webpack
 
 
-  build-production:
+  build_production:
     docker:
       - image: circleci/node:11.0.0
     working_directory: ~/repo
     steps:
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-dependencies-
       - run: NODE_ENV=production yarn webpack -p
 
-  check-in-build:
+  check_in_build:
     docker:
       - image: circleci/node:11.0.0
     working_directory: ~/repo
     steps:
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }} # {{ checksum "package.json" }}
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-dependencies-
       - run: git add ./build ./docs
       - run: git commit -m 'CircleCI - update build & docs'
       - run: git push origin HEAD
 
 workflows:
   version: 2
-  build-and-test:
+  build_and_test:
     jobs:
       - setup
       - test:
-        requires: setup
-      - build-development:
-        requires: setup
-      - build-production:
-        requires: setup
-      - build-docs:
-        requires: setup
-      - check-in-build:
-        requires:
-          - test
-          - build-development
-          - build-production
-          - build-docs
+          requires:
+            - setup
+      - build_development:
+          requires:
+            - setup
+      - build_production:
+          requires:
+            - setup
+      - build_docs:
+          requires:
+            - setup
+      - check_in_build:
+          requires:
+            - test
+            - build_development
+            - build_production
+            - build_docs
