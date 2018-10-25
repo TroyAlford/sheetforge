@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import HealthLevel from '@/components/HealthBar/Healthlevel'
+import HealthLevel from '@/components/HealthBar/HealthLevel'
 import ListOf from '@/components/List'
 import HealthLevelModel from '@/models/HealthLevel'
 import './HealthBar.scss'
