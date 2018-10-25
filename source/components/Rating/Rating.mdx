@@ -3,8 +3,28 @@ import { Playground, PropsTable } from 'docz'
 
 ## Rating
 
+### onClick reports which pip was clicked
 <Playground>
   <Rating onChange={which => window.alert(which)} />
-  <Rating current={3} maximum={5} iconOff='☆' iconOn='★' />
+</Playground>
+
+### Current less than Maximum
+<Playground>
   <Rating current={3} maximum={10} />
+</Playground>
+
+### Current greater than Maximum, with allowExcess disabled
+<Playground>
+  <Rating current={12} maximum={10} />
+</Playground>
+
+### Current greater than Maximum, with allowExcess enabled
+<Playground>
+  <Rating current={9} maximum={5} allowExcess />
+</Playground>
+
+### Icons are configurable via
+<Playground>
+  <Rating current={3} maximum={5} iconOff='☆' iconOn='★' iconExcess='🌟' allowExcess />
+  <Rating current={7} maximum={5} iconOff='☆' iconOn='★' iconExcess='🌟' allowExcess />
 </Playground>
