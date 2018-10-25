@@ -4,6 +4,8 @@
   @include widget;
 
   border-radius: 5px;
+  min-width: 1.875in;
+  // width: 1.875in;
 
   &.computed {
     background-color: #ccf8f8;
@@ -18,6 +20,30 @@
       position: absolute;
       right: 2px;
     }
+  }
+
+  &.as-rating {
+    > .name {
+      display: flex;
+    }
+    > .value {
+      flex: 2;
+      justify-content: flex-end;
+
+      .rating {
+        max-width: 140px;
+
+        > span {
+          height: 13px;
+          width: 13px;
+
+          &:nth-of-type(5n+1) {
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+    > .modifier.positive:before { content: '+'; }
   }
 
   .modifier {

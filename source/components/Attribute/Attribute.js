@@ -2,11 +2,13 @@ import { observer } from 'mobx-react'
 import { onSnapshot } from 'mobx-state-tree'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
+import Rating from '@/components/Rating'
 import './Attribute.scss'
 
 @observer class Attribute extends Component {
   static defaultProps = {
     model: {},
+    rating: false,
   }
 
   CACHE = {}
@@ -35,28 +37,73 @@ import './Attribute.scss'
 
   onChangeValue = raw => this.props.model.set({ raw })
 
-  render() {
+  renderRating = () => {
+    const { model } = this.props
+
+    return (<>
+      <Editable
+        className="name"
+        onChange={this.onChangeName}
+        readOnlyValue={model.name}
+        value={model.name}
+      />
+      <Editable
+        className="value"
+        onChange={this.onChangeValue}
+        readOnlyValue={(
+          <Rating
+            allowExcess
+            current={model.modifiedValue()}
+            maximum={model.value()}
+          />
+        )}
+        value={model.raw}
+      />
+    </>)
+  }
+
+  renderModifier = () => {
     const { model } = this.props
     const modifier = model.modifier()
-    const modifierClass = [
+
+    if (model.effects().length === 0) return null
+
+    const className = [
       'modifier',
       modifier > 0 && 'positive',
       modifier < 0 && 'negative',
       modifier === 0 && 'zero',
+    ].filter(Boolean).join(' ')
+
+    return <div className={className} title={model.modifierText()}>{model.modifiedValue()}</div>
+  }
+
+  renderNumeric = () => {
+    const { model } = this.props
+
+    return (<>
+      <Editable className="name" onChange={this.onChangeName} value={model.name} />
+      <Editable
+        className="value"
+        onChange={this.onChangeValue}
+        readOnlyValue={model.value()}
+        value={model.raw}
+      />
+      {this.renderModifier()}
+    </>)
+  }
+
+  render() {
+    const { model, rating } = this.props
+    const className = [
+      'attribute',
+      `as-${rating ? 'rating' : 'numeric'}`,
+      `${model.isComputed ? 'is' : 'not'}-computed`,
     ].join(' ')
 
     return (
-      <div className={`attribute ${model.isComputed ? 'computed' : 'numeric'}`}>
-        <Editable className="name" onChange={this.onChangeName} value={model.name} />
-        <Editable
-          className="value"
-          onChange={this.onChangeValue}
-          readOnlyValue={model.value()}
-          value={model.raw}
-        />
-        {modifier !== 0 && (
-          <div className={modifierClass} title={model.modifierText()}>{model.modifiedValue()}</div>
-        )}
+      <div className={className}>
+        {rating ? this.renderRating() : this.renderNumeric()}
       </div>
     )
   }

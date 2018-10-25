@@ -16,7 +16,7 @@
     }
   }
 
-  div, span, input, textarea {
+  > div, > span, > input, > textarea {
     align-items: inherit;
     border: 1px solid transparent;
     border: none;
@@ -36,7 +36,7 @@
     width: 100%; min-width: 40px;
   }
 
-  div.multiline, textarea {
+  > div.multiline, > textarea {
     align-items: flex-start;
     flex-direction: column;
     justify-content: flex-start;
@@ -52,7 +52,7 @@
     color: rgba(200, 200, 200, .8);
     font-style: italic;
   }
-  input, textarea {
+  > input, > textarea {
     @include placeholder(rgba(200, 200, 200, .8)) {
       color: rgba(200, 200, 200, .8);
       font-style: italic;
@@ -63,9 +63,8 @@
 
   input[type="checkbox"] {
     height: 1em;
-    margin: -.5em auto 0;
-    position: absolute;
-    top: 50%;
+    min-width: auto;
     width: 1em;
+    margin: auto;
   }
 }
