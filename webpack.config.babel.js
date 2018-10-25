@@ -1,16 +1,17 @@
 /* eslint-disable no-undef */
-const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
-const fiber = require('fibers')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const sass = require('sass')
-const webpack = require('webpack')
-const packageJson = require('./package.json')
+import path from 'path'
+import DirectoryNamedWebpackPlugin from 'directory-named-webpack-plugin'
+import fiber from 'fibers'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
+import sass from 'sass'
+import webpack from 'webpack'
+import packageJson from './package'
 
 const ENVIRONMENT = process.env.NODE_ENV || 'development'
 const PRODUCTION = ENVIRONMENT === 'production'
 
-module.exports = {
+const CONFIG = {
   devtool: 'source-map',
   entry: {
     development: `${__dirname}/source/index.js`,
@@ -69,8 +70,8 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      '@': `${__dirname}/source/`,
-      '@fontello': `${__dirname}/fontello/`,
+      '@': path.join(__dirname, '/source/'),
+      '@fontello': path.join(__dirname, '/fontello/'),
     },
     extensions: ['.css', '.js', '.scss'],
     modules: ['node_modules'],
@@ -80,3 +81,5 @@ module.exports = {
     children: false,
   },
 }
+
+export default CONFIG
