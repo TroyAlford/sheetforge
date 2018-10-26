@@ -43,7 +43,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn docz build
+      - run: CI=false yarn docz build
 
   build_development:
     docker:
