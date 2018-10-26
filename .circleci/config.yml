@@ -10,10 +10,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - save_cache:
-          key: v1-ssh.rev-{{ .Revision }}
-          paths:
-            - ~./ssh
       - restore_cache:
           keys:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
@@ -27,6 +23,7 @@ jobs:
       - save_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
+            - ~/.ssh
             - ~/repo
 
   test:
@@ -59,7 +56,6 @@ jobs:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: NODE_ENV=development yarn webpack
 
-
   build_production:
     docker:
       - image: circleci/node:10.12.0-stretch
@@ -80,7 +76,6 @@ jobs:
             - "ca:0f:fb:ed:9e:0c:aa:ba:9d:79:76:8c:35:69:57:de"
       - restore_cache:
           keys:
-            - v1-ssh.rev-{{ .Revision }}
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: git add ./build ./docs
       - run: git commit -m 'CircleCI - update build & docs' || echo "No changes to commit"
