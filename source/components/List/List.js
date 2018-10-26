@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react'
 import React from 'react'
 import Sortable from 'sortablejs'
+import math from '@/utilities/math'
 import './List.scss'
 
 export default (Model, Component, props = {}) => observer(
@@ -40,10 +41,29 @@ export default (Model, Component, props = {}) => observer(
           onStart: () => this.container.current.classList.add('dragging'),
         })
       }
+      this.adjustHeight()
     }
+
 
     componentWillReceiveProps() {
       this.sortable.option('disabled', !this.props.sortable)
+    }
+
+    componentDidUpdate() {
+      this.adjustHeight()
+    }
+
+    adjustHeight = () => {
+      const container = this.container.current
+      const containerWidth = container.offsetWidth
+      const titleHeight = container.querySelector('.title-bar').offsetHeight
+      const listItems = [...container.querySelectorAll('.list-item-wrapper')]
+      if (!listItems.length) container.style.maxHeight = undefined
+      const listItemWidth = listItems[0].offsetWidth
+      const listItemHeight = listItems[0].offsetHeight + 2
+      const columns = math.floor(containerWidth / listItemWidth)
+      const rows = math.ceil(listItems.length / columns)
+      container.style.maxHeight = `${(rows * listItemHeight) + titleHeight + 10}px`
     }
 
     handleAdd = () => {
@@ -69,6 +89,7 @@ export default (Model, Component, props = {}) => observer(
     render() {
       const { className, collection, sortable, title } = this.props
       const { sortDirection } = this.state
+      if (this.container.current) this.adjustHeight()
 
       return (
         <div className={`list ${title ? 'has' : 'no'}-title ${className}`.trim()} ref={this.container}>
@@ -84,7 +105,7 @@ export default (Model, Component, props = {}) => observer(
           </div>
           {collection.map((model, index) => (
             <div className="list-item-wrapper" key={index} data-index={index}>
-              <div className="drag-handle" data-index={index} />
+              {sortable && <div className="drag-handle" data-index={index} />}
               <Component model={model} />
               <button className="icon-remove" data-index={index} onClick={this.handleDelete} />
             </div>
