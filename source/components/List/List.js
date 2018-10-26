@@ -46,7 +46,9 @@ export default (Model, Component, props = {}) => observer(
 
 
     componentWillReceiveProps() {
-      this.sortable.option('disabled', !this.props.sortable)
+      if (this.sortable) {
+        this.sortable.option('disabled', !this.props.sortable)
+      }
     }
 
     componentDidUpdate() {
@@ -58,12 +60,21 @@ export default (Model, Component, props = {}) => observer(
       const containerWidth = container.offsetWidth
       const titleHeight = container.querySelector('.title-bar').offsetHeight
       const listItems = [...container.querySelectorAll('.list-item-wrapper')]
-      if (!listItems.length) container.style.maxHeight = undefined
+
+      if (!listItems.length) {
+        container.style.maxHeight = 'initial'
+        return
+      }
+
       const listItemWidth = listItems[0].offsetWidth
       const listItemHeight = listItems[0].offsetHeight + 2
       const columns = math.floor(containerWidth / listItemWidth)
       const rows = math.ceil(listItems.length / columns)
-      container.style.maxHeight = `${(rows * listItemHeight) + titleHeight + 10}px`
+      if (columns > 1) {
+        container.style.maxHeight = `${(rows * listItemHeight) + titleHeight + 10}px`
+      } else {
+        container.style.maxHeight = 'initial'
+      }
     }
 
     handleAdd = () => {

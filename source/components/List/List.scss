@@ -142,3 +142,7 @@
     > .drag-handle, button.icon-remove { display: none!important; }
   }
 }
+
+.sheet.small .list {
+  .list-item-wrapper { max-width: 100%; }
+}
