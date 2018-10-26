@@ -13,6 +13,7 @@ import './Sheet.scss'
   static defaultProps = {
     character: {},
     onChange: noop,
+    onMount: noop,
   }
 
   state = { size: 'large' }
@@ -20,13 +21,14 @@ import './Sheet.scss'
   constructor(props) {
     super(props)
     this.disposeOfSnapshotListener = onSnapshot(this.props.character, (snapshot) => {
-      this.props.onChange(snapshot, this.props.layout)
+      this.props.onChange(snapshot, this.props.layout, this)
     })
     window.addEventListener('resize', this.handleWindowResize)
   }
 
   componentDidMount() {
     this.handleWindowResize()
+    this.props.onMount(this)
   }
 
   componentWillUnmount() { this.disposeOfSnapshotListener() }
@@ -71,8 +73,8 @@ import './Sheet.scss'
 
     return (
       <div className={`sheetforge sheet ${size}`}>
-        {layout.map(this.renderComponent)}
         <Conditions model={character} />
+        {layout.map(this.renderComponent)}
       </div>
     )
   }
