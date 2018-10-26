@@ -19,7 +19,9 @@ import './Sheet.scss'
 
   constructor(props) {
     super(props)
-    this.disposeOfSnapshotListener = onSnapshot(this.props.character, this.props.onChange)
+    this.disposeOfSnapshotListener = onSnapshot(this.props.character, (snapshot) => {
+      this.props.onChange(snapshot, this.props.layout)
+    })
     window.addEventListener('resize', this.handleWindowResize)
   }
 
