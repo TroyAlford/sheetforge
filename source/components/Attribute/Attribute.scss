@@ -3,6 +3,7 @@
 .attribute {
   @include widget;
 
+  border: 1px solid transparent;
   border-radius: 5px;
   min-width: 1.875in;
   // width: 1.875in;
@@ -61,8 +62,6 @@
   }
 
   > .attribute {
-    margin: 1px;
-
     + button.icon-remove {
       height: 100%;
       padding: 1px;
