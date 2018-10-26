@@ -13,7 +13,7 @@ import './HealthLevel.scss'
     const healthLevel = this.props.model
 
     if (healthLevel.damage === 'bane') {
-      healthLevel.set({ damage: 'none' })
+      healthLevel.heal()
     } else {
       healthLevel.adjust(healing ? -1 : 1)
     }
