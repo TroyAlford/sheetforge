@@ -10,6 +10,10 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - save_cache:
+          key: v1-ssh.rev-{{ .Revision }}
+          paths:
+            - ~./ssh
       - restore_cache:
           keys:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
@@ -76,10 +80,8 @@ jobs:
             - "ca:0f:fb:ed:9e:0c:aa:ba:9d:79:76:8c:35:69:57:de"
       - restore_cache:
           keys:
+            - v1-ssh.rev-{{ .Revision }}
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-
-      # Kludgy as all hell, but necessary to push to GitHub
-      - run: echo 'SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8' >> ~/.ssh/known_hosts
       - run: git add ./build ./docs
       - run: git commit -m 'CircleCI - update build & docs' || echo "No changes to commit"
       - run: git push origin HEAD
