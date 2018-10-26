@@ -361,6 +361,7 @@ math.import(__webpack_require__(/*! mathjs/lib/function/statistics/max */ "itDh"
 math.import(__webpack_require__(/*! mathjs/lib/function/statistics/mean */ "FC7u"));
 math.import(__webpack_require__(/*! mathjs/lib/function/statistics/min */ "I5O3"));
 math.import(__webpack_require__(/*! mathjs/lib/function/statistics/sum */ "Z+cb"));
+math.import(__webpack_require__(/*! mathjs/lib/function/utils/isInteger */ "PbhI"));
 math.import(__webpack_require__(/*! mathjs/lib/type/matrix/function/matrix */ "R4H5"));
 math.import(__webpack_require__(/*! mathjs/lib/type/matrix/Matrix */ "ohYX"));
 math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"));
