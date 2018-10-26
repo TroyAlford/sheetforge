@@ -40,7 +40,7 @@ import './Attribute.scss'
     let value = raw
     try {
       if (math.isInteger(raw)) {
-        value = parseInt(raw, 10) || 0
+        value = parseInt(raw, 10) || ''
       }
     } catch { }
     this.props.model.set({ raw: value })
