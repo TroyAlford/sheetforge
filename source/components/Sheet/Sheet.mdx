@@ -10,133 +10,43 @@ import Sheet from '@/components/Sheet'
 ## Character Sheet
 
 <Sheet
-  layout={localStorage.getItem('sf-layout')
-    ? JSON.parse(localStorage.getItem('sf-layout'))
-    : [ { type: 'Section', title: 'Descriptors', children: [
-          { type: 'Descriptor', list: true, path: 'descriptors' },
+  layout={[
+    { type: 'Section', title: 'Descriptors', children: [
+      { type: 'Descriptor', list: true, path: 'descriptors' },
+    ] },
+    { type: 'Section', title: 'Attributes', children: [
+      { type: 'Attribute', list: true, path: 'attributes' },
+      { type: 'HealthBar', path: 'health' },
+    ] },
+    { type: 'Row', children: [
+      { type: 'Column', flex: 1, children: [
+        { type: 'Section', title: 'Traits', children: [
+          { type: 'Trait', list: true, path: 'traits' },
         ] },
-        { type: 'Section', title: 'Attributes', children: [
-          { type: 'Attribute', list: true, path: 'attributes' },
-          { type: 'HealthBar', path: 'health' },
+        { type: 'Section', title: 'Resources', children: [
+          { type: 'Resource', list: true, path: 'resources' },
         ] },
-        { type: 'Row', children: [
-          { type: 'Column', flex: 1, children: [
-            { type: 'Section', title: 'Traits', children: [
-              { type: 'Trait', list: true, path: 'traits' },
-            ] },
-            { type: 'Section', title: 'Resources', children: [
-              { type: 'Resource', list: true, path: 'resources' },
-            ] },
-          ] },
-          { type: 'Column', flex: 2, title: 'Skills', children: [
-            { type: 'Section', title: 'Skills', children: [
-              { type: 'Skill', list: true, path: 'skills' },
-            ] },
-            { type: 'Section', title: 'Inventory', children: [
-              { type: 'Item', list: true, path: 'items' },
-            ] },
-            { type: 'Section', title: 'Spellbook', children: [
-              { type: 'Spell', list: true, path: 'spells' },
-            ] }
-          ] },
-        ] } ]
-  }
-  character={Character.create(
-    localStorage.getItem('sf-character')
-      ? JSON.parse(localStorage.getItem('sf-character'))
-      : {
-        attributes: [
-          { name: '', value: '' },
-          { name: 'Body', value: 'round(mean(agility, fitness, strength))' },
-          { name: 'Mind', value: 'round(mean(acuity, focus, intellect))' },
-          { name: 'Spirit', value: 'round(mean(confidence, devotion, intuition))' },
-          { name: 'Potency', value: 'round(mean(confidence, intellect, strength))' },
-          { name: 'Strength', value: 1 },
-          { name: 'Intellect', value: 5 },
-          { name: 'Confidence', value: 3 },
-          { name: 'Reflex', value: 'round(mean(acuity, agility, intuition))' },
-          { name: 'Agility', value: 2 },
-          { name: 'Acuity', value: 3 },
-          { name: 'Intuition', value: 3 },
-          { name: 'Resilience', value: 'round(mean(devotion, fitness, focus))' },
-          { name: 'Fitness', value: 2 },
-          { name: 'Focus', value: 4 },
-          { name: 'Devotion', value: 2 },
-          { name: 'Size', value: 0 },
-          { name: 'Speed', value: '6 + size + round(fitness / 2)' },
-          { name: 'Natural Armor', value: 0 },
-        ],
-        descriptors: [
-          { name: 'Age', value: '27' },
-          { name: 'Concept', value: 'Merchant Mage' },
-          { name: 'Eyes', value: 'Green' },
-          { name: 'Gender', value: 'Female' },
-          { name: 'Hair', value: 'Blonde' },
-          { name: 'Height', value: '5\'6"' },
-          { name: 'Homeland', value: 'Alloria' },
-          { name: 'Race', value: 'Human' },
-          { name: 'Weight', value: '110lbs' },
-        ],
-        experience: 11,
-        health: [
-          { name: 'Healthy', penalty: 0 },
-          { name: 'Healthy', penalty: 0 },
-          { name: 'Healthy', penalty: 0 },
-          { name: 'Bruised', penalty: -1 },
-          { name: 'Bruised', penalty: -1 },
-          { name: 'Injured', penalty: -2 },
-          { name: 'Crippled', penalty: -3 },
-          { name: 'Incapacitated', penalty: -5 },
-        ],
-        items: [
-          { name: 'Ring of Fire Immunity', equipped: true },
-          { name: 'Ring of Lightning Immunity', equipped: true },
-          { name: 'Sentinel of Shul\'s Spear', equipped: true },
-          { name: 'Artifact: Staff of Pan', equipped: true },
-        ],
-        resources: [
-          { name: 'Mana', current: 40, maximum: 40 },
-          { name: 'Willpower', current: 8, maximum: 8 },
-        ],
-        skills: [
-          { name: 'Academics', mastery: 5 },
-          { name: 'Alchemy', mastery: 3 },
-          { name: 'Arcane: Abjuration', mastery: 6 },
-          { name: 'Arcane: Conjuration', mastery: 8 },
-          { name: 'Arcane: Divination', mastery: 6 },
-          { name: 'Arcane: Evocation', mastery: 1 },
-          { name: 'Arcane: Transmutation', mastery: 2 },
-          { name: 'Combat: Dodge', mastery: 1 },
-          { name: 'Craft: Gem Cutting', mastery: 3 },
-          { name: 'Empathy', mastery: 3 },
-          { name: 'Investigation', mastery: 4 },
-          { name: 'Magic: Quasith to Mana', mastery: 4 },
-          { name: 'Quasith: Body', mastery: 2 },
-          { name: 'Quasith: Evocation', mastery: 2 },
-          { name: 'Quasith: Mind', mastery: 2 },
-          { name: 'Quasith: Recondite', mastery: 3 },
-          { name: 'Quasith: Substance', mastery: 2 },
-          { name: 'Medicine', mastery: 1 },
-          { name: 'Occult', mastery: 3 },
-          { name: 'Persuasion', mastery: 3 },
-          { name: 'Sleight of Hand', mastery: 4 },
-          { name: 'Streetwise', mastery: 3 },
-          { name: 'Subterfuge', mastery: 4 },
-        ],
-        spells: [
-          { name: 'Mage Armor', effects: [{ target: 'Armor', modifier: 8 }] },
-        ],
-        traits: [
-          { name: 'Permanent: Comprehend Languages', value: 5,
-            effects: [{ targetName: 'Acuity', modifier: 3, condition: 'always' }]
-          },
-          { name: 'Permanent: Detect Magic', value: 5 },
-          { name: 'Permanent: Read Magic', value: 5 },
-        ]
-      }
-  )}
+      ] },
+      { type: 'Column', flex: 2, title: 'Skills', children: [
+        { type: 'Section', title: 'Skills', children: [
+          { type: 'Skill', list: true, path: 'skills' },
+        ] },
+        { type: 'Section', title: 'Inventory', children: [
+          { type: 'Item', list: true, path: 'items' },
+        ] },
+        { type: 'Section', title: 'Spellbook', children: [
+          { type: 'Spell', list: true, path: 'spells' },
+        ] }
+      ] },
+    ] }
+  ]}
+  character={Character.create({})}
   onChange={(character, layout) => {
     localStorage.setItem('sf-character', JSON.stringify(character))
     localStorage.setItem('sf-layout', JSON.stringify(layout))
+  }}
+  onMount={(self) => {
+    const character = localStorage.getItem('sf-character')
+    if (character) { self.props.character.set(JSON.parse(character)) }
   }}
 />
