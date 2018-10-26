@@ -75,7 +75,7 @@ jobs:
           keys:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: git add ./build ./docs
-      - run: git commit -m 'CircleCI - update build & docs'
+      - run: git commit -m 'CircleCI - update build & docs' | true
       - run: git push origin HEAD
 
 workflows:
