@@ -37,7 +37,9 @@ export default types.compose(
         return calculate(self.raw, values)
       } catch (error) {
         // eslint-disable-next-line no-undef, no-console
-        if (process.env.NODE_ENV !== 'production') console.error(`Error computing: ${self.raw}`)
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(`Error computing: ${self.raw}`)
+        }
         return 0
       }
     },
