@@ -1,4 +1,10 @@
 .conditions {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+
   &.expandable-wrapper-expanded {
     background: #fff;
     border: 1px solid;
