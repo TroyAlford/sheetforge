@@ -58,7 +58,7 @@
       font-size: 6px;
       height: 100%;
       justify-content: center;
-      left: -15px;
+      left: -25px;
       letter-spacing: 2px;
       line-height: 5px;
       overflow: hidden;
@@ -119,10 +119,6 @@
       > button.icon-remove { display: flex; }
     }
 
-    &.dragging > .list-item-wrapper:not(.sortable-chosen) {
-      > .drag-handle, button.icon-remove { display: none; }
-    }
-
     > .expandable-wrapper-expanded, > .expandable-wrapper-expanded + button.icon-remove {
       background: #fff;
       border: 1px solid #666;
@@ -132,5 +128,9 @@
         border-left: none;
       }
     }
+  }
+
+  &.dragging > .list-item-wrapper {
+    > .drag-handle, button.icon-remove { display: none!important; }
   }
 }
