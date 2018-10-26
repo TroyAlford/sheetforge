@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react'
 import React from 'react'
+import Sortable from 'sortablejs'
 import './List.scss'
 
 export default (Model, Component, props = {}) => observer(
@@ -8,12 +9,41 @@ export default (Model, Component, props = {}) => observer(
       className: '',
       collection: [],
       prepend: false,
+      sortable: true,
       title: props.title || '',
       ...props,
     }
 
     state = {
       sortDirection: 'desc',
+    }
+
+    container = React.createRef()
+
+    sortable = null
+
+    componentDidMount() {
+      const { sortable } = this.props
+      if (sortable) {
+        this.sortable = Sortable.create(this.container.current, {
+          disabled: !sortable,
+          draggable: '.list-item-wrapper',
+          handle: '.drag-handle',
+          onEnd: () => {
+            this.container.current.classList.remove('dragging')
+            this.props.collection.replace(
+              [...this.container.current.querySelectorAll('.list-item-wrapper')]
+                .map(item => parseInt(item.getAttribute('data-index'), 10))
+                .map(this.props.collection.at)
+            )
+          },
+          onStart: () => this.container.current.classList.add('dragging'),
+        })
+      }
+    }
+
+    componentWillReceiveProps() {
+      this.sortable.option('disabled', !this.props.sortable)
     }
 
     handleAdd = () => {
@@ -37,20 +67,24 @@ export default (Model, Component, props = {}) => observer(
     }
 
     render() {
-      const { className, collection, title } = this.props
+      const { className, collection, sortable, title } = this.props
+      const { sortDirection } = this.state
 
       return (
-        <div className={`list ${title ? 'has' : 'no'}-title ${className}`.trim()}>
+        <div className={`list ${title ? 'has' : 'no'}-title ${className}`.trim()} ref={this.container}>
           <div className="title-bar">
-            <button
-              className={`sort icon-sort-name-${this.state.sortDirection === 'asc' ? 'desc' : 'asc'}`}
-              onClick={this.handleSort}
-            />
+            {sortable && (
+              <button
+                className={`sort icon-sort-name-${sortDirection === 'asc' ? 'desc' : 'asc'}`}
+                onClick={this.handleSort}
+              />
+            )}
             <div className="text">{title}</div>
             <button className="add icon-add" onClick={this.handleAdd} />
           </div>
           {collection.map((model, index) => (
-            <div className="list-item-wrapper" key={index}>
+            <div className="list-item-wrapper" key={index} data-index={index}>
+              <div className="drag-handle" data-index={index} />
               <Component model={model} />
               <button className="icon-remove" data-index={index} onClick={this.handleDelete} />
             </div>

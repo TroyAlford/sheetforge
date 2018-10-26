@@ -33,6 +33,7 @@ export default (TYPE, options = {}) => {
     pop: () => self.values.pop(),
     push: (...values) => self.values.replace([].concat(self.values, values)),
     reduce: (fn, initial) => self.values.reduce(fn, initial),
+    replace: values => self.values.replace(values),
     shift: () => self.values.shift(),
     slice: (start, end) => self.values.slice(start, end),
     some: fn => self.values.some(fn),

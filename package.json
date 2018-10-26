@@ -76,7 +76,7 @@
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "prebuild": "rimraf ./build/* ./docs/*",
     "preversion": "yarn build && git add -A ./build",
-    "sourcemap": "source-map-explorer ./build/sheetforge.min.js",
+    "sourcemap": "source-map-explorer ./build/sheetforge.production.min.js",
     "test": "jest"
   },
   "jest": {
@@ -116,6 +116,7 @@
   },
   "dependencies": {
     "deep-equal": "^1.0.1",
-    "mathjs": "^5.2.2"
+    "mathjs": "^5.2.2",
+    "sortablejs": "^1.7.0"
   }
 }

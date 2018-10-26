@@ -46,22 +46,32 @@
     max-width: 100%;
     position: relative;
 
-    .list { // list inside a list
-      > .title-bar {
-        padding: 0;
-
-        > .button.icon-add { right: 0; }
-      }
-      > .expandable > .list-item-wrapper > div {
-        padding: 0;
-      }
-    }
-
-    &:focus-within, &:hover {
-      background: #eee;
+    > .drag-handle {
+      align-items: center;
+      background-color: #eee;
       border-radius: 5px 0 0 5px;
+      border-right: 2px groove #eee;
+      box-sizing: border-box;
+      color: #cccccc;
+      cursor: move;
+      display: none;
+      font-size: 6px;
+      height: 100%;
+      justify-content: center;
+      left: -15px;
+      letter-spacing: 2px;
+      line-height: 5px;
+      overflow: hidden;
+      padding: 0 5px;
+      position: absolute;
+      text-align: center;
+      text-shadow: 1px 0 1px black;
+      vertical-align: middle;
+      width: 25px;
 
-      > button.icon-remove { display: flex; }
+      &:after {
+        content: '•• •• •• ••';
+      }
     }
 
     > button.icon-remove {
@@ -84,6 +94,33 @@
       &:hover {
         background-color: #ccf8f8;
       }
+    }
+
+    &.sortable-chosen {
+      background-color: antiquewhite;
+    }
+
+    .list { // list inside a list
+      > .title-bar {
+        padding: 0;
+
+        > .button.icon-add { right: 0; }
+      }
+      > .expandable > .list-item-wrapper > div {
+        padding: 0;
+      }
+    }
+
+    &:focus-within, &:hover {
+      background: #eee;
+      border-radius: 0;
+
+      > .drag-handle { display: inline-flex; }
+      > button.icon-remove { display: flex; }
+    }
+
+    &.dragging > .list-item-wrapper:not(.sortable-chosen) {
+      > .drag-handle, button.icon-remove { display: none; }
     }
 
     > .expandable-wrapper-expanded, > .expandable-wrapper-expanded + button.icon-remove {

@@ -407,7 +407,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
 
 
 /* harmony default export */ var Attribute = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
-  name: mobx_state_tree["types"].string,
+  name: 'New Attribute...',
   raw: mobx_state_tree["types"].optional(mobx_state_tree["types"].union(mobx_state_tree["types"].number, mobx_state_tree["types"].string), 0)
 }).views(function (self) {
   return {
@@ -591,6 +591,9 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
       },
       reduce: function reduce(fn, initial) {
         return self.values.reduce(fn, initial);
+      },
+      replace: function replace(values) {
+        return self.values.replace(values);
       },
       shift: function shift() {
         return self.values.shift();

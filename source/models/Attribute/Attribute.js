@@ -8,7 +8,7 @@ import toSymbols from '@/utilities/math/toSymbols'
 export default types.compose(
   IEditable,
   types.model({
-    name: types.string,
+    name: 'New Attribute...',
     raw: types.optional(types.union(types.number, types.string), 0),
   }).views(self => ({
     get character() { return findParent(self, p => p.isCharacter) },
