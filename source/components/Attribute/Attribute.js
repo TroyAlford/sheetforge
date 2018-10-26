@@ -3,6 +3,7 @@ import { onSnapshot } from 'mobx-state-tree'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Rating from '@/components/Rating'
+import math from '@/utilities/math'
 import './Attribute.scss'
 
 @observer class Attribute extends Component {
@@ -35,7 +36,15 @@ import './Attribute.scss'
 
   onChangeName = name => this.props.model.set({ name })
 
-  onChangeValue = raw => this.props.model.set({ raw })
+  onChangeValue = (raw) => {
+    let value = raw
+    try {
+      if (math.isInteger(raw)) {
+        value = parseInt(raw, 10) || 0
+      }
+    } catch { }
+    this.props.model.set({ raw: value })
+  }
 
   renderRating = () => {
     const { model } = this.props
@@ -57,6 +66,7 @@ import './Attribute.scss'
             maximum={model.value()}
           />
         )}
+        type="text"
         value={model.raw}
       />
     </>)
@@ -87,6 +97,7 @@ import './Attribute.scss'
         className="value"
         onChange={this.onChangeValue}
         readOnlyValue={model.value()}
+        type="text"
         value={model.raw}
       />
       {this.renderModifier()}
