@@ -26,3 +26,7 @@
 .icon-collapsed { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe903;&nbsp;'); }
 .icon-expanded { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe904;&nbsp;'); }
 .icon-magic { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf0d0;&nbsp;'); }
+.icon-sort-name-asc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf15d;&nbsp;'); }
+.icon-sort-name-desc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf15e;&nbsp;'); }
+.icon-sort-value-asc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf162;&nbsp;'); }
+.icon-sort-value-desc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf163;&nbsp;'); }

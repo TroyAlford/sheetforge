@@ -36,8 +36,12 @@ export default (TYPE, options = {}) => {
     shift: () => self.values.shift(),
     slice: (start, end) => self.values.slice(start, end),
     some: fn => self.values.some(fn),
-    sortBy: (property) => {
-      self.values.replace(self.values.slice().sort(compareBy(property)))
+    sortBy: (property, direction = 'asc') => {
+      if (!['asc', 'desc'].includes(direction)) {
+        throw new TypeError(`direction must be "asc" or "desc", got: "${direction}"`)
+      }
+      const values = self.values.slice().sort(compareBy(property))
+      self.values.replace(direction === 'desc' ? values.reverse() : values)
       return self
     },
     splice: (index, deleteCount, value) => self.values.splice(index, deleteCount, value),

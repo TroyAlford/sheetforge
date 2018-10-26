@@ -12,6 +12,12 @@
       > .title-bar {
         position: static;
 
+        > button.sort {
+          position: absolute;
+          left: .5em;
+          top: .5em;
+        }
+
         > button.icon-add {
           position: absolute;
           right: .5em;

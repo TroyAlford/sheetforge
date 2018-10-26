@@ -602,7 +602,14 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
         return self.values.some(fn);
       },
       sortBy: function sortBy(property) {
-        self.values.replace(self.values.slice().sort(compareBy(property)));
+        var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'asc';
+
+        if (!['asc', 'desc'].includes(direction)) {
+          throw new TypeError("direction must be \"asc\" or \"desc\", got: \"".concat(direction, "\""));
+        }
+
+        var values = self.values.slice().sort(compareBy(property));
+        self.values.replace(direction === 'desc' ? values.reverse() : values);
         return self;
       },
       splice: function splice(index, deleteCount, value) {

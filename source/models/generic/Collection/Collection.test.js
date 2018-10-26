@@ -151,6 +151,8 @@ describe('models/Collection', () => {
 
   it('supports sortBy(property)', () => {
     expect(collection.sortBy('value').map(i => i.value)).toEqual(['Bar!', 'Baz!', 'Foo!', 'Qux!'])
+    expect(collection.sortBy('value', 'desc').map(i => i.value)).toEqual(['Qux!', 'Foo!', 'Baz!', 'Bar!'])
+    expect(() => collection.sortBy('value', 'foo')).toThrow(/direction must be "asc" or "desc"/)
   })
 
   it('supports splice(index, deleteCount, value)', () => {

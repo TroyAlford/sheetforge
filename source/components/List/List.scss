@@ -25,14 +25,16 @@
       text-align: center;
     }
 
-    button.icon-add {
+    > button {
       background: none;
       border: none;
       cursor: pointer;
       height: 30px;
       position: absolute;
-      right: .1in;
       width: 30px;
+
+      &.sort { left: .1in; }
+      &.add { right: .1in; }
     }
   }
 

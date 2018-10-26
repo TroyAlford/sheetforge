@@ -12,6 +12,10 @@ export default (Model, Component, props = {}) => observer(
       ...props,
     }
 
+    state = {
+      sortDirection: 'desc',
+    }
+
     handleAdd = () => {
       if (this.props.prepend) {
         this.props.collection.unshift(Model.create({}))
@@ -27,14 +31,23 @@ export default (Model, Component, props = {}) => observer(
       this.forceUpdate()
     }
 
+    handleSort = () => {
+      this.props.collection.sortBy('name', this.state.sortDirection)
+      this.setState(state => ({ sortDirection: state.sortDirection === 'asc' ? 'desc' : 'asc' }))
+    }
+
     render() {
       const { className, collection, title } = this.props
 
       return (
         <div className={`list ${title ? 'has' : 'no'}-title ${className}`.trim()}>
           <div className="title-bar">
+            <button
+              className={`sort icon-sort-name-${this.state.sortDirection === 'asc' ? 'desc' : 'asc'}`}
+              onClick={this.handleSort}
+            />
             <div className="text">{title}</div>
-            <button className="icon-add" onClick={this.handleAdd} />
+            <button className="add icon-add" onClick={this.handleAdd} />
           </div>
           {collection.map((model, index) => (
             <div className="list-item-wrapper" key={index}>
