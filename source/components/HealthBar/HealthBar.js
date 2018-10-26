@@ -7,6 +7,7 @@ import './HealthBar.scss'
 
 const HealthLevelList = ListOf(HealthLevelModel, HealthLevel, {
   prepend: true,
+  sortable: false,
 })
 
 @observer class HealthBar extends Component {
