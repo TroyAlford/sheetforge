@@ -460,7 +460,10 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
         return calculate(self.raw, values);
       } catch (error) {
         // eslint-disable-next-line no-undef, no-console
-        if (true) console.error("Error computing: ".concat(self.raw));
+        if (true) {
+          console.error("Error computing: ".concat(self.raw));
+        }
+
         return 0;
       }
     }
