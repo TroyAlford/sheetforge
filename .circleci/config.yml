@@ -73,6 +73,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
+            - "SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8"
             - "ca:0f:fb:ed:9e:0c:aa:ba:9d:79:76:8c:35:69:57:de"
       - restore_cache:
           keys:
