@@ -92,12 +92,12 @@ workflows:
       - build_production:
           requires:
             - setup
-      # - build_docs:
-      #     requires:
-      #       - setup
+      - build_docs:
+          requires:
+            - setup
       - check_in_build:
           requires:
             - test
             - build_development
             - build_production
-            # - build_docs
+            - build_docs
