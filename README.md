@@ -1,5 +1,5 @@
 # SheetForge
-![npm](https://img.shields.io/npm/v/sheetforge.svg?style=popout) [![CircleCI branch](https://img.shields.io/circleci/project/github/TroyAlford/sheetforge/master.svg?style=popout)](https://github.com/TroyAlford/sheetforge) ![NpmLicense](https://img.shields.io/npm/l/sheetforge.svg?style=popout) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/sheetforge.svg?style=popout)
+[![npm](https://img.shields.io/npm/v/sheetforge.svg?style=popout)](https://www.npmjs.com/package/sheetforge) [![CircleCI branch](https://img.shields.io/circleci/project/github/TroyAlford/sheetforge/master.svg?style=popout)](https://github.com/TroyAlford/sheetforge) [![NpmLicense](https://img.shields.io/npm/l/sheetforge.svg?style=popout)](https://github.com/TroyAlford/sheetforge/blob/master/LICENSE) [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/sheetforge.svg?style=popout)](#)
 
 
 
