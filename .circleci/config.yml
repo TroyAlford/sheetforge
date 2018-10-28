@@ -39,7 +39,7 @@ jobs:
       - save_cache:
           key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - ~/build
+            - ./build
 
   documentation:
     docker:
@@ -53,7 +53,7 @@ jobs:
       - save_cache:
           key: v1-docs-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - ~/docs
+            - ./docs
 
   test:
     docker:
