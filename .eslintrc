@@ -19,6 +19,7 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/label-has-for": "off",
     "jsx-a11y/no-static-element-interactions": "off",
+    "lines-between-class-members": "off",
     "no-empty": "off",
     "no-template-curly-in-string": "off",
     "object-curly-newline": "off",
