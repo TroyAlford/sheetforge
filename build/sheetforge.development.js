@@ -166,7 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ "05fm":
 /*!**************************************!*\
-  !*** ./source/index.js + 23 modules ***!
+  !*** ./source/index.js + 25 modules ***!
   \**************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/defineProperty.js (<- Module is not an ECMAScript module) */
@@ -313,6 +313,39 @@ var IEditable = mobx_state_tree["types"].model('IEditable', {// Any
   };
 });
 /* harmony default export */ var IEditable_IEditable = (IEditable);
+// CONCATENATED MODULE: ./source/utilities/hash.js
+function hash() {
+  var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var radix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 16;
+  var string = String(value);
+  var h = 0;
+  string.split('').forEach(function (char) {
+    /* eslint-disable no-bitwise */
+    h = (h << 5) - h + char.charCodeAt(0);
+    h &= h; // Convert to 32-bit integer
+
+    /* eslint-enable no-bitwise */
+  });
+  return Math.abs(h).toString(radix);
+}
+var randomHash = function randomHash() {
+  return hash(Math.random().toString());
+};
+// CONCATENATED MODULE: ./source/models/generic/IIdentity/IIdentity.js
+
+
+/* harmony default export */ var IIdentity = (mobx_state_tree["types"].model({// Nothing
+}).volatile(function () {
+  return {
+    hash: ''
+  };
+}).actions(function (self) {
+  return {
+    afterCreate: function afterCreate() {
+      self.hash = randomHash();
+    }
+  };
+}));
 // CONCATENATED MODULE: ./source/utilities/findParent.js
 
 /* harmony default export */ var findParent = (function (child) {
@@ -407,7 +440,8 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
 
 
 
-/* harmony default export */ var Attribute = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Attribute = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   name: 'New Attribute...',
   raw: mobx_state_tree["types"].optional(mobx_state_tree["types"].union(mobx_state_tree["types"].number, mobx_state_tree["types"].string), 0)
 }).views(function (self) {
@@ -486,7 +520,8 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
 // CONCATENATED MODULE: ./source/models/Descriptor/Descriptor.js
 
 
-/* harmony default export */ var Descriptor = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Descriptor = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   name: 'New Descriptor...',
   value: ''
 })).named('Descriptor'));
@@ -686,8 +721,9 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 
 
 
+
 var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
-/* harmony default export */ var HealthLevel = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+/* harmony default export */ var HealthLevel = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   damage: mobx_state_tree["types"].optional(mobx_state_tree["types"].union.apply(mobx_state_tree["types"], toConsumableArray_default()(DAMAGE_LEVELS.map(function (dt) {
     return mobx_state_tree["types"].literal(dt);
   }))), 'none'),
@@ -751,7 +787,8 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Effect = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Effect = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   condition: '',
   modifier: 0,
   targetName: ''
@@ -798,14 +835,13 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
   };
 })).named('Effect'));
 // CONCATENATED MODULE: ./source/models/Item/Item.js
- // import Descriptor from '@/models/Descriptor'
 
 
 
 
-/* harmony default export */ var Item = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Item = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   description: '',
-  // descriptors: CollectionOf(Descriptor),
   effects: Collection(Effect),
   equipped: false,
   name: 'New Item...'
@@ -813,7 +849,8 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 // CONCATENATED MODULE: ./source/models/Resource/Resource.js
 
 
-/* harmony default export */ var Resource = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Resource = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   current: 0,
   maximum: 10,
   name: ''
@@ -821,7 +858,8 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 // CONCATENATED MODULE: ./source/models/Skill/Skill.js
 
 
-/* harmony default export */ var Skill = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Skill = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   mastery: 1,
   name: 'New Skill...',
   theory: 0
@@ -843,7 +881,8 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var ResourceCost = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var ResourceCost = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   amount: 0,
   resourceName: ''
 }).views(function (self) {
@@ -880,7 +919,8 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Spell = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Spell = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   costs: Collection(ResourceCost),
   // Resources
   description: '',
@@ -922,7 +962,8 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Trait = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model('Trait', {
+
+/* harmony default export */ var Trait = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model('Trait', {
   effects: Collection(Effect),
   name: 'New Trait...',
   value: 0
@@ -956,7 +997,8 @@ function flatten(array) {
 
 
 
-/* harmony default export */ var Character = (mobx_state_tree["types"].compose(IEditable_IEditable, mobx_state_tree["types"].model({
+
+/* harmony default export */ var Character = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   attributes: Collection(Attribute),
   conditions: Collection(mobx_state_tree["types"].string),
   // ['vs Goblins', 'Crinos Form']
