@@ -40,10 +40,10 @@ import './Sheet.scss'
     } else if (window.matchMedia('(max-width: 5in)').matches) {
       size = 'small'
     }
-    this.setState({ size })
+    if (size !== this.state.size) this.setState({ size })
   }
 
-  renderComponent = ({ children, list, lookup, path, type, ...props }, key) => {
+  renderComponent = ({ children, list, path, type, ...props }, key) => {
     const Component = components[type]
     const data = getPathValue(this.props.character, path)
     Object.assign(props, { size: this.state.size })
@@ -57,7 +57,6 @@ import './Sheet.scss'
       return <List key={key} collection={data} {...props} />
     }
 
-    if (lookup) return <Component key={key} model={data.findById(lookup)} {...props} />
     if (data) return <Component key={key} model={data} {...props} />
 
     return (
