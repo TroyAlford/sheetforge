@@ -71,7 +71,7 @@
     "build-dev": "cross-env NODE_ENV=development yarn webpack ",
     "build-prod": "cross-env NODE_ENV=production yarn webpack ",
     "build": "concurrently -n dev,prod,docs -c yellow,red,cyan \"yarn build-dev\" \"yarn build-prod\" \"yarn docz build\"",
-    "develop": "concurrently -n dev,prod,docs -c yellow,red,cyan \"yarn build-dev --watch\" \"yarn build-prod --watch\" yarn docz dev\"",
+    "develop": "concurrently -n dev,prod,docs -c yellow,red,cyan \"yarn build-dev --watch\" \"yarn build-prod --watch\" \"yarn docz dev\"",
     "postinstall": "patch-package",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "prebuild": "rimraf ./build/* ./docs/*",
