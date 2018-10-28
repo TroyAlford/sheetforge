@@ -36,17 +36,7 @@ jobs:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test
 
-  build_docs:
-    docker:
-      - image: circleci/node:10.12.0-stretch
-    working_directory: ~/repo
-    steps:
-      - restore_cache:
-          keys:
-            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - run: CI=false yarn docz build
-
-  build_development:
+  build:
     docker:
       - image: circleci/node:10.12.0-stretch
     working_directory: ~/repo
@@ -55,8 +45,13 @@ jobs:
           keys:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: NODE_ENV=development yarn webpack
+      - run: NODE_ENV=production yarn webpack -p
+      - save_cache:
+          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/build
 
-  build_production:
+  documentation:
     docker:
       - image: circleci/node:10.12.0-stretch
     working_directory: ~/repo
@@ -64,7 +59,11 @@ jobs:
       - restore_cache:
           keys:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - run: NODE_ENV=production yarn webpack -p
+      - run: CI=false yarn docz build
+      - save_cache:
+          key: v1-docs-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/docs
 
   check_in_build:
     docker:
@@ -77,6 +76,8 @@ jobs:
       - restore_cache:
           keys:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-build-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-docs-{{ .Environment.CIRCLE_SHA1 }}
       - run: git add ./build ./docs
       - run: git commit -m 'CircleCI - update build & docs' || echo "No changes to commit"
       - run: git push origin HEAD
@@ -89,13 +90,10 @@ workflows:
       - test:
           requires:
             - setup
-      - build_development:
+      - documentation:
           requires:
             - setup
-      - build_production:
-          requires:
-            - setup
-      - build_docs:
+      - build:
           requires:
             - setup
       - check_in_build:
