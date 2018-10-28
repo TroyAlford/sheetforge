@@ -1,11 +1,13 @@
 import { types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
+import IIdentity from '@/models/generic/IIdentity'
 import findParent from '@/utilities/findParent'
 import math from '@/utilities/math'
 import calculate from '@/utilities/math/calculate'
 import toSymbols from '@/utilities/math/toSymbols'
 
 export default types.compose(
+  IIdentity,
   IEditable,
   types.model({
     name: 'New Attribute...',

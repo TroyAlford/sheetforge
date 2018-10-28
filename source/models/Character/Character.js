@@ -3,6 +3,7 @@ import Attribute from '@/models/Attribute'
 import Descriptor from '@/models/Descriptor'
 import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
+import IIdentity from '@/models/generic/IIdentity'
 import HealthLevel from '@/models/HealthLevel'
 import Item from '@/models/Item'
 import Resource from '@/models/Resource'
@@ -12,6 +13,7 @@ import Trait from '@/models/Trait'
 import flatten from '@/utilities/flatten'
 
 export default types.compose(
+  IIdentity,
   IEditable,
   types.model({
     attributes: CollectionOf(Attribute),

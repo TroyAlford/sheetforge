@@ -1,7 +1,10 @@
 import { observer } from 'mobx-react'
+import { onSnapshot } from 'mobx-state-tree'
 import React from 'react'
 import Sortable from 'sortablejs'
+import hash from '@/utilities/hash'
 import math from '@/utilities/math'
+import noop from '@/utilities/noop'
 import './List.scss'
 
 export default (Model, Component, props = {}) => observer(
@@ -15,12 +18,8 @@ export default (Model, Component, props = {}) => observer(
       ...props,
     }
 
-    state = {
-      sortDirection: 'desc',
-    }
-
     container = React.createRef()
-
+    onSnapshotDisposer = noop
     sortable = null
 
     componentDidMount() {
@@ -35,25 +34,23 @@ export default (Model, Component, props = {}) => observer(
             this.props.collection.replace(
               [...this.container.current.querySelectorAll('.list-item-wrapper')]
                 .map(item => parseInt(item.getAttribute('data-index'), 10))
-                .map(this.props.collection.at)
+                .map(targetIndex => this.props.collection.at(targetIndex))
             )
           },
           onStart: () => this.container.current.classList.add('dragging'),
         })
       }
+      this.onSnapshotDisposer = onSnapshot(this.props.collection, () => this.forceUpdate())
       this.adjustHeight()
     }
-
 
     componentWillReceiveProps() {
-      if (this.sortable) {
-        this.sortable.option('disabled', !this.props.sortable)
-      }
+      if (this.sortable) this.sortable.option('disabled', !this.props.sortable)
     }
 
-    componentDidUpdate() {
-      this.adjustHeight()
-    }
+    componentDidUpdate() { this.adjustHeight() }
+
+    componentWillUnmount() { this.onSnapshotDisposer() }
 
     adjustHeight = () => {
       const container = this.container.current
@@ -87,38 +84,33 @@ export default (Model, Component, props = {}) => observer(
     }
 
     handleDelete = ({ target }) => {
-      const index = parseInt(target.getAttribute('data-index'), 10)
+      const index = parseInt(target.parentNode.getAttribute('data-index'), 10)
       this.props.collection.deleteAt(index)
       this.forceUpdate()
     }
 
-    handleSort = () => {
-      this.props.collection.sortBy('name', this.state.sortDirection)
-      this.setState(state => ({ sortDirection: state.sortDirection === 'asc' ? 'desc' : 'asc' }))
-    }
+    handleSort = () => this.props.collection.sortBy('name')
 
     render() {
       const { className, collection, sortable, title } = this.props
-      const { sortDirection } = this.state
       if (this.container.current) this.adjustHeight()
 
       return (
         <div className={`list ${title ? 'has' : 'no'}-title ${className}`.trim()} ref={this.container}>
           <div className="title-bar">
-            {sortable && (
-              <button
-                className={`sort icon-sort-name-${sortDirection === 'asc' ? 'desc' : 'asc'}`}
-                onClick={this.handleSort}
-              />
-            )}
+            {sortable && <button className="sort icon-sort-name-asc" onClick={this.handleSort} />}
             <div className="text">{title}</div>
             <button className="add icon-add" onClick={this.handleAdd} />
           </div>
-          {collection.map((model, index) => (
-            <div className="list-item-wrapper" key={index} data-index={index}>
-              {sortable && <div className="drag-handle" data-index={index} />}
+          {collection.map(model => (
+            <div
+              className="list-item-wrapper"
+              data-index={collection.indexOf(model)}
+              key={model.hash}
+            >
+              {sortable && <div className="drag-handle" />}
               <Component model={model} />
-              <button className="icon-remove" data-index={index} onClick={this.handleDelete} />
+              <button className="icon-remove" onClick={this.handleDelete} />
             </div>
           ))}
         </div>

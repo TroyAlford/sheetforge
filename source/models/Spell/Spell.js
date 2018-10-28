@@ -2,10 +2,12 @@ import { types } from 'mobx-state-tree'
 import Effect from '@/models/Effect'
 import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
+import IIdentity from '@/models/generic/IIdentity'
 import ResourceCost from '@/models/ResourceCost'
 import findParent from '@/utilities/findParent'
 
 export default types.compose(
+  IIdentity,
   IEditable,
   types.model({
     costs: CollectionOf(ResourceCost), // Resources

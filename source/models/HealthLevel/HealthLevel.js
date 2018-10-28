@@ -1,6 +1,7 @@
 import { isObservableArray } from 'mobx'
 import { types } from 'mobx-state-tree'
 import IEditable from '@/models/generic/IEditable'
+import IIdentity from '@/models/generic/IIdentity'
 import bound from '@/utilities/bound'
 import findParent from '@/utilities/findParent'
 
@@ -12,6 +13,7 @@ const DAMAGE_LEVELS = [
 ]
 
 export default types.compose(
+  IIdentity,
   IEditable,
   types.model({
     damage: types.optional(types.union(...DAMAGE_LEVELS.map(dt => types.literal(dt))), 'none'),
