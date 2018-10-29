@@ -18,7 +18,7 @@ import './Effect.scss'
     return (
       <div className={`effect ${isApplicable ? 'applicable' : ''}`.trim()}>
         <select className="target" value={targetName} onChange={this.handleChangeTarget}>
-          {available.map(({ hash, name }) => (
+          {available().map(({ hash, name }) => (
             <option key={hash} value={name}>{name}</option>
           ))}
         </select>
