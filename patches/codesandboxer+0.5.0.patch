@@ -40,3 +40,12 @@ patch-package
    try {
      for (var _iterator = (0, _getIterator3.default)(imports), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
        var mpt = _step.value;
+@@ -55,7 +78,7 @@ var parseDeps = function parseDeps(pkgJSON, imports) {
+       } else {
+         var foundDeps = getDeps(pkgJSON, mpt);
+         if ((0, _keys2.default)(foundDeps).length < 1 && mpt !== pkgJSON.name) {
+-          console.warn('Could not find dependency version for ' + mpt);
++          // console.warn('Could not find dependency version for ' + mpt);
+         } else {
+           dependencies = (0, _extends3.default)({}, dependencies, foundDeps);
+         }

@@ -78,7 +78,8 @@ const CONFIG = {
     plugins: [new DirectoryNamedWebpackPlugin()],
   },
   stats: {
-    children: false,
+    all: false,
+    builtAt: true,
   },
 }
 
