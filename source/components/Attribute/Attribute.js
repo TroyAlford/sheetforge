@@ -58,6 +58,8 @@ import './Attribute.scss'
       />
       <Editable
         className="value"
+        max={999}
+        min={-99}
         onChange={this.onChangeValue}
         readOnlyValue={(
           <Rating
