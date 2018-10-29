@@ -1,17 +1,18 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
+import noop from '@/utilities/noop'
 import './Skill.scss'
 
 @observer class Skill extends Component {
   static defaultProps = {
     model: {},
+    onDelete: noop,
   }
 
   onChangeName = name => this.props.model.set({ name })
-
   onChangeMastery = mastery => this.props.model.set({ mastery })
-
+  handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
   onChangeTheory = theory => this.props.model.set({ theory })
 
   render() {
@@ -22,6 +23,7 @@ import './Skill.scss'
         <Editable
           className="name"
           onChange={this.onChangeName}
+          onEditEnd={this.handleCommitName}
           value={model.name}
         />
         <Editable

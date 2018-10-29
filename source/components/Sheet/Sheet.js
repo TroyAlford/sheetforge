@@ -22,11 +22,9 @@ import './Sheet.scss'
     super(props)
     this.onCharacterSnapshotDisposer = onSnapshot(this.props.character, (snapshot) => {
       this.props.onChange(snapshot, this.props.layout.toJSON(), this)
-      //   this.forceUpdate()
     })
     this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, (snapshot) => {
       this.props.onChange(this.props.character.toJSON(), snapshot, this)
-      //   this.forceUpdate()
     })
     window.addEventListener('resize', this.handleWindowResize)
   }
@@ -35,8 +33,8 @@ import './Sheet.scss'
     this.props.onMount(this)
   }
   componentWillUnmount() {
-    // this.onCharacterSnapshotDisposer()
-    // this.onLayoutSnapshotDisposer()
+    this.onCharacterSnapshotDisposer()
+    this.onLayoutSnapshotDisposer()
   }
 
   handleWindowResize = () => {
@@ -49,7 +47,7 @@ import './Sheet.scss'
     if (size !== this.state.size) this.setState({ size })
   }
 
-  renderComponent = (model, key) => {
+  renderComponent = (parent, model, key) => {
     if (model.type) {
       const { title } = model
       const typename = model.type.toLowerCase()
@@ -59,13 +57,14 @@ import './Sheet.scss'
         { className: `${typename}-list` }
       )
       const collection = this.props.character[`${typename}s`]
-
-      return <List collection={collection} {...{ key, title }} />
+      return (
+        <List {...{ key, title }} collection={collection} columns={model.columns} />
+      )
     }
 
     return (
-      <Layout key={model.hash} model={model}>
-        {model.children.map(this.renderComponent)}
+      <Layout key={model.hash} model={model} parentColumns={parent.columns}>
+        {model.children.map((child, i) => this.renderComponent(model, child, i))}
       </Layout>
     )
   }
@@ -77,7 +76,7 @@ import './Sheet.scss'
     return (
       <div className={`sheetforge sheet ${size}`}>
         <Conditions model={character} />
-        {layout.children.map(this.renderComponent)}
+        {layout.children.map(this.renderComponent.bind(null, layout))}
       </div>
     )
   }

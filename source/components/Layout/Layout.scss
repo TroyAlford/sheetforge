@@ -5,6 +5,9 @@
   flex-direction: row;
   flex-wrap: wrap;
   position: relative;
+  padding: 2px;
+  &:first-of-type { padding-left: 0; }
+  &:last-of-type { padding-right: 0; }
 
   > .title-bar {
     align-items: center;
@@ -16,6 +19,9 @@
     > .title {
       align-items: center;
       flex: 1;
+      font-size: 1.25em;
+      font-weight: bold;
+      text-shadow: 1px 1px 1px #bbb;
       justify-content: center;
       text-align: center;
     }
@@ -29,4 +35,9 @@
     min-width: 100%;
     width: 100%;
   }
+}
+
+.sheetforge.sheet.small .layout > .layout {
+  flex: none!important;
+  width: 100%;
 }

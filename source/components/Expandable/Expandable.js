@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import { createPortal } from 'react-dom'
+import noop from '@/utilities/noop'
 import './Expandable.scss'
 
 export default class Expandable extends Component {
   static defaultProps = {
     expandByDefault: false,
     omitItemWrapper: false,
+    onToggle: noop,
     toggleButtonParent: null,
     toggleButtonText: '',
   }
@@ -19,14 +21,18 @@ export default class Expandable extends Component {
   componentWillMount() {
     this.setState({ expanded: this.props.expandByDefault })
   }
+  componentDidMount() {
+    this.expander.current.parentElement.classList.add('expandable-wrapper')
+  }
 
   handleToggle = () => {
     const { classList } = this.expander.current.parentElement
+    const { expanded } = this.state
 
     // eslint-disable-next-line react/no-access-state-in-setstate
-    this.setState({ expanded: !this.state.expanded }, () => {
-      classList.add(this.state.expanded ? 'expandable-wrapper-expanded' : 'expandable-wrapper-collapsed')
-      classList.remove(this.state.expanded ? 'expandable-wrapper-collapsed' : 'expandable-wrapper-expanded')
+    this.setState({ expanded: !expanded }, () => {
+      this.props.onToggle(!expanded)
+      classList[!expanded ? 'add' : 'remove']('expanded')
     })
   }
 
@@ -34,7 +40,7 @@ export default class Expandable extends Component {
     const { children, omitItemWrapper } = this.props
     return omitItemWrapper
       ? children
-      : <div className="expandable"> { children }</div>
+      : <div className="expandable"> {children}</div>
   }
 
   render() {

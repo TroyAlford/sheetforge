@@ -2,18 +2,19 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Rating from '@/components/Rating'
+import noop from '@/utilities/noop'
 import './Resource.scss'
 
 @observer class Resource extends Component {
   static defaultProps = {
     model: {},
+    onDelete: noop,
   }
 
-  onChangeCurrent = current => this.props.model.set({ current })
-
-  onChangeMaximum = maximum => this.props.model.set({ maximum })
-
-  onChangeName = name => this.props.model.set({ name })
+  handleChangeCurrent = current => this.props.model.set({ current })
+  handleChangeMaximum = maximum => this.props.model.set({ maximum })
+  handleChangeName = name => this.props.model.set({ name })
+  handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
 
   render() {
     const { current, name, maximum } = this.props.model
@@ -21,12 +22,17 @@ import './Resource.scss'
     return (
       <div className="resource">
         <div className="display">
-          <Editable className="name" onChange={this.onChangeName} value={name} />
+          <Editable
+            className="name"
+            onChange={this.handleChangeName}
+            onEditEnd={this.handleCommitName}
+            value={name}
+          />
           <Editable
             className="current"
             max={999}
             min={0}
-            onChange={this.onChangeCurrent}
+            onChange={this.handleChangeCurrent}
             value={current}
           />
           {'of'}
@@ -34,7 +40,7 @@ import './Resource.scss'
             className="maximum"
             max={999}
             min={0}
-            onChange={this.onChangeMaximum}
+            onChange={this.handleChangeMaximum}
             value={maximum}
           />
         </div>
@@ -42,7 +48,7 @@ import './Resource.scss'
           allowExcess
           current={current}
           maximum={maximum}
-          onChange={this.onChangeCurrent}
+          onChange={this.handleChangeCurrent}
         />
       </div>
     )

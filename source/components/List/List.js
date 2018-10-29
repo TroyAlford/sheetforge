@@ -2,7 +2,6 @@ import { onSnapshot } from 'mobx-state-tree'
 import React from 'react'
 import Sortable from 'sortablejs'
 import CollectionOf from '@/models/generic/Collection'
-import math from '@/utilities/math'
 import noop from '@/utilities/noop'
 import './List.scss'
 
@@ -10,14 +9,17 @@ export default (Model, Component, props = {}) => class List extends React.Compon
   static defaultProps = {
     className: '',
     collection: CollectionOf(Model).create([]),
+    columns: 1,
     sortable: true,
     title: props.title || '',
     ...props,
   }
 
   container = React.createRef()
+  expandedItems = {}
   onSnapshotDisposer = noop
   sortable = null
+  state = { expanded: {} }
 
   componentDidMount() {
     const { sortable } = this.props
@@ -38,55 +40,34 @@ export default (Model, Component, props = {}) => class List extends React.Compon
       })
     }
     this.onSnapshotDisposer = onSnapshot(this.props.collection, () => this.forceUpdate())
-    this.adjustHeight()
   }
   componentWillReceiveProps() {
     if (this.sortable) this.sortable.option('disabled', !this.props.sortable)
   }
-  componentDidUpdate() { this.adjustHeight() }
   componentWillUnmount() { this.onSnapshotDisposer() }
-
-  adjustHeight = () => {
-    const container = this.container.current
-    const containerWidth = container.offsetWidth
-    const titleHeight = container.querySelector('.title-bar').offsetHeight
-    const listItems = [...container.querySelectorAll('.list-item-wrapper')]
-
-    if (!listItems.length) {
-      container.style.maxHeight = 'initial'
-      return
-    }
-
-    const listItemWidth = listItems[0].offsetWidth
-    const listItemHeight = listItems[0].offsetHeight + 2
-    const columns = math.floor(containerWidth / listItemWidth)
-    const rows = math.ceil(listItems.length / columns)
-    if (columns > 1) {
-      container.style.maxHeight = `${(rows * listItemHeight) + titleHeight + 10}px`
-    } else {
-      container.style.maxHeight = 'initial'
-    }
-  }
 
   handleAdd = () => {
     this.props.collection.push(Model.create({}))
     this.forceUpdate()
   }
-
   handleDelete = ({ target }) => {
     const index = parseInt(target.parentNode.getAttribute('data-index'), 10)
     this.props.collection.deleteAt(index)
     this.forceUpdate()
   }
-
+  handleToggleExpanded = (hash, expanded) => {
+    this.setState(state => ({
+      expanded: { ...state.expanded, [hash]: expanded },
+    }))
+  }
   handleSort = () => this.props.collection.sortBy('name')
 
   render() {
-    const { className = '', collection, sortable, title } = this.props
-    if (this.container.current) this.adjustHeight()
+    const { className = '', collection, columns, sortable, title } = this.props
+    const { expanded } = this.state
 
     return (
-      <div className={`list ${className}`.trim()} ref={this.container}>
+      <div className={`list ${className}`.trim()} ref={this.container} style={{ columns }}>
         <div className="title-bar">
           {sortable && <button className="sort icon-sort-name-asc" onClick={this.handleSort} />}
           <div className="text">{title}</div>
@@ -94,12 +75,12 @@ export default (Model, Component, props = {}) => class List extends React.Compon
         </div>
         {collection.map(model => (
           <div
-            className="list-item-wrapper"
+            className={`list-item-wrapper ${expanded[model.hash] ? 'expanded' : ''}`.trim()}
             data-index={collection.indexOf(model)}
             key={model.hash}
           >
             {sortable && <div className="drag-handle" />}
-            <Component model={model} />
+            <Component model={model} onDelete={collection.delete} onToggleExpanded={this.handleToggleExpanded} />
             <button className="icon-remove" onClick={this.handleDelete} />
           </div>
         ))}

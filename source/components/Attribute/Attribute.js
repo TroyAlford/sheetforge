@@ -5,11 +5,13 @@ import Editable from '@/components/Editable'
 import Rating from '@/components/Rating'
 import bound from '@/utilities/bound'
 import math from '@/utilities/math'
+import noop from '@/utilities/noop'
 import './Attribute.scss'
 
 @observer class Attribute extends Component {
   static defaultProps = {
     model: {},
+    onDelete: noop,
     rating: false,
   }
 
@@ -18,26 +20,24 @@ import './Attribute.scss'
   componentDidMount() {
     this.onSnapshotDisposer = onSnapshot(this.props.model.character, this.handleSnapshot)
   }
+  componentWillUnmount() { this.onSnapshotDisposer() }
 
-  componentWillUnmount() {
-    this.onSnapshotDisposer()
-  }
-
-  handleSnapshot = () => {
+  handleSnapshot = (snapshot) => {
     const effects = this.props.model.effects().map(e => e.toJSON())
     if (
       JSON.stringify(effects) !== JSON.stringify(this.CACHE.effects) ||
+      JSON.stringify(snapshot.conditions) !== this.CACHE.conditions ||
       this.CACHE.value !== this.props.model.value()
     ) {
+      this.CACHE.conditions = JSON.stringify(snapshot.conditions)
       this.CACHE.effects = effects
       this.CACHE.value = this.props.model.value()
       this.forceUpdate()
     }
   }
-
-  onChangeName = name => this.props.model.set({ name })
-
-  onChangeValue = (raw) => {
+  handleChangeName = name => this.props.model.set({ name })
+  handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
+  handleChangeValue = (raw) => {
     let value = raw
     try {
       if (math.isInteger(raw)) {
@@ -45,64 +45,6 @@ import './Attribute.scss'
       }
     } catch { }
     this.props.model.set({ raw: value })
-  }
-
-  renderRating = () => {
-    const { model } = this.props
-
-    return (<>
-      <Editable
-        className="name"
-        onChange={this.onChangeName}
-        readOnlyValue={model.name}
-        value={model.name}
-      />
-      <Editable
-        className="value"
-        onChange={this.onChangeValue}
-        readOnlyValue={(
-          <Rating
-            allowExcess
-            current={model.modifiedValue()}
-            maximum={model.value()}
-          />
-        )}
-        type="text"
-        value={model.raw}
-      />
-    </>)
-  }
-
-  renderModifier = () => {
-    const { model } = this.props
-    const modifier = model.modifier()
-
-    if (model.effects().length === 0) return null
-
-    const className = [
-      'modifier',
-      modifier > 0 && 'positive',
-      modifier < 0 && 'negative',
-      modifier === 0 && 'zero',
-    ].filter(Boolean).join(' ')
-
-    return <div className={className} title={model.modifierText()}>{model.modifiedValue()}</div>
-  }
-
-  renderNumeric = () => {
-    const { model } = this.props
-
-    return (<>
-      <Editable className="name" onChange={this.onChangeName} value={model.name} />
-      <Editable
-        className="value"
-        onChange={this.onChangeValue}
-        readOnlyValue={model.value()}
-        type="text"
-        value={model.raw}
-      />
-      {this.renderModifier()}
-    </>)
   }
 
   render() {
@@ -113,9 +55,50 @@ import './Attribute.scss'
       `${model.isComputed ? 'is' : 'not'}-computed`,
     ].join(' ')
 
+    const modifier = model.modifier()
+    const modifierClassName = [
+      'modifier',
+      modifier > 0 && 'positive',
+      modifier < 0 && 'negative',
+      modifier === 0 && 'zero',
+    ].filter(Boolean).join(' ')
+
     return (
       <div className={className}>
-        {rating ? this.renderRating() : this.renderNumeric()}
+        <Editable
+          className="name"
+          onChange={this.handleChangeName}
+          onEditEnd={this.handleCommitName}
+          value={model.name}
+        />
+        <Editable
+          className="value rating"
+          onChange={this.handleChangeValue}
+          readOnlyValue={(
+            <Rating
+              allowExcess
+              current={model.modifiedValue()}
+              maximum={model.value()}
+            />
+          )}
+          type="text"
+          value={model.raw}
+        />
+        <Editable
+          className="value numeric"
+          onChange={this.handleChangeValue}
+          readOnlyValue={model.value()}
+          type="text"
+          value={model.raw}
+        />
+        {model.effects().length !== 0 && (
+          <div
+            className={modifierClassName}
+            title={model.modifierText()}
+          >
+            {model.modifiedValue()}
+          </div>
+        )}
       </div>
     )
   }

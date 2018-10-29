@@ -6,11 +6,8 @@
   justify-items: stretch;
   line-height: 1em;
   min-height: 2em;
-  min-width: 2.5in;
-  padding: 0 .1in;
-  width: 2.5in;
 
-  > *, > .editable {
+  > .editable {
     align-items: center;
     display: flex;
     height: auto;

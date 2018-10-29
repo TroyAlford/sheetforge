@@ -5,6 +5,7 @@ import Effect from '@/components/Effect'
 import Expandable from '@/components/Expandable'
 import ListOf from '@/components/List'
 import EffectModel from '@/models/Effect'
+import noop from '@/utilities/noop'
 import './Trait.scss'
 
 const EffectList = ListOf(EffectModel, Effect)
@@ -12,26 +13,33 @@ const EffectList = ListOf(EffectModel, Effect)
 @observer class Trait extends Component {
   static defaultProps = {
     model: {},
+    onDelete: noop,
+    onToggleExpanded: noop,
   }
 
-  onChangeName = name => this.props.model.set({ name })
-
-  onChangeValue = value => this.props.model.set({ value })
+  handleChangeName = name => this.props.model.set({ name })
+  handleChangeValue = value => this.props.model.set({ value })
+  handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
 
   render() {
     const { model } = this.props
 
     return (
       <div className="trait">
-        <Editable className="name" onChange={this.onChangeName} value={model.name} />
+        <Editable
+          className="name"
+          onChange={this.handleChangeName}
+          onEditEnd={this.handleCommitName}
+          value={model.name}
+        />
         <Editable
           className="value"
           max={999}
           min={-99}
-          onChange={this.onChangeValue}
+          onChange={this.handleChangeValue}
           value={model.value}
         />
-        <Expandable>
+        <Expandable onToggle={expanded => this.props.onToggleExpanded(model.hash, expanded)}>
           <EffectList collection={model.effects} title="Effects" />
         </Expandable>
       </div>

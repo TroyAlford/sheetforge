@@ -20,23 +20,23 @@ describe('models/Effect', () => {
     }],
   })
 
-  describe('isApplicable', () => {
+  describe('isApplicable()', () => {
     it('applies or not as a child of Character', () => {
-      expect(character.effects()[0].isApplicable).toEqual(true)
-      expect(character.effects()[1].isApplicable).toEqual(false)
+      expect(character.effects()[0].isApplicable()).toEqual(true)
+      expect(character.effects()[1].isApplicable()).toEqual(false)
     })
 
     it('applies or not as a grandchild of Character', () => {
-      expect(character.effects()[0].isApplicable).toEqual(true)
-      expect(character.effects()[1].isApplicable).toEqual(false)
+      expect(character.effects()[0].isApplicable()).toEqual(true)
+      expect(character.effects()[1].isApplicable()).toEqual(false)
     })
   })
   describe('available', () => {
     it('returns [] if unattached', () => {
-      expect(mageArmor.available.asArray).toEqual([])
+      expect(mageArmor.available().asArray).toEqual([])
     })
     it('returns a list if attached', () => {
-      expect(character.effects()[0].available).toEqual(character.attributes)
+      expect(character.effects()[0].available()).toEqual(character.attributes)
     })
   })
 })

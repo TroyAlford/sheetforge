@@ -1,29 +1,32 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
+import noop from '@/utilities/noop'
 import './Descriptor.scss'
 
 @observer class Descriptor extends Component {
   static defaultProps = {
     model: {},
+    onDelete: noop,
   }
 
-  onChangeName = name => this.props.model.set({ name })
-
-  onChangeValue = value => this.props.model.set({ value })
+  handleChangeName = name => this.props.model.set({ name })
+  handleChangeValue = value => this.props.model.set({ value })
+  handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
 
   render() {
     return (
       <div className="descriptor">
         <Editable
           className="name"
-          onChange={this.onChangeName}
+          onChange={this.handleChangeName}
+          onEditEnd={this.handleCommitName}
           value={this.props.model.name}
         />
         <Editable
           className="value"
           type="text"
-          onChange={this.onChangeValue}
+          onChange={this.handleChangeValue}
           value={this.props.model.value}
         />
       </div>

@@ -12,29 +12,31 @@ export default types.compose(
     condition: '',
     modifier: 0,
     targetName: '',
-  }).views(self => ({
-    get available() {
-      return self.character ? self.character.attributes : CollectionOf(Attribute).create([])
-    },
-    get character() { return findParent(self, p => p.isCharacter) },
-    get isApplicable() {
-      return Boolean(
-        !self.condition ||
-        (self.character && self.character.conditions.includes(self.condition))
-      )
-    },
-    get source() { return findParent(self, p => p.name) || null },
-    get sourceName() { return self.source ? self.source.name : 'Unknown' },
-    get target() {
-      if (!self.character) return null
-      return self.character.attributes.findBy('name', self.targetName)
-    },
-  })).actions(self => ({
+  }).actions(self => ({
     afterAttach() {
       if (!self.targetName && self.available.length) {
         // eslint-disable-next-line no-param-reassign
         self.targetName = self.available.first.name
       }
+    },
+
+    available() {
+      const character = self.character()
+      return character ? character.attributes : CollectionOf(Attribute).create([])
+    },
+    character() { return findParent(self, p => p.isCharacter) },
+    isApplicable() {
+      const character = self.character()
+      return Boolean(
+        !self.condition ||
+        (character && character.conditions.includes(self.condition))
+      )
+    },
+    source() { return findParent(self, p => p.name) || null },
+    sourceName() { return self.source() ? self.source().name : 'Unknown' },
+    target() {
+      const character = self.character()
+      return character ? character.attributes.findBy('name', self.targetName) : null
     },
   }))
 ).named('Effect')

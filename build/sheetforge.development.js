@@ -479,7 +479,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
     },
     modifierText: function modifierText() {
       return self.effects().map(function (effect) {
-        return "".concat(effect.sourceName, ": ").concat(effect.modifier);
+        return "".concat(effect.sourceName(), ": ").concat(effect.modifier);
       }).join(', ');
     },
     value: function value() {
@@ -792,38 +792,6 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
   condition: '',
   modifier: 0,
   targetName: ''
-}).views(function (self) {
-  return {
-    get available() {
-      return self.character ? self.character.attributes : Collection(Attribute).create([]);
-    },
-
-    get character() {
-      return findParent(self, function (p) {
-        return p.isCharacter;
-      });
-    },
-
-    get isApplicable() {
-      return Boolean(!self.condition || self.character && self.character.conditions.includes(self.condition));
-    },
-
-    get source() {
-      return findParent(self, function (p) {
-        return p.name;
-      }) || null;
-    },
-
-    get sourceName() {
-      return self.source ? self.source.name : 'Unknown';
-    },
-
-    get target() {
-      if (!self.character) return null;
-      return self.character.attributes.findBy('name', self.targetName);
-    }
-
-  };
 }).actions(function (self) {
   return {
     afterAttach: function afterAttach() {
@@ -831,6 +799,31 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
         // eslint-disable-next-line no-param-reassign
         self.targetName = self.available.first.name;
       }
+    },
+    available: function available() {
+      var character = self.character();
+      return character ? character.attributes : Collection(Attribute).create([]);
+    },
+    character: function character() {
+      return findParent(self, function (p) {
+        return p.isCharacter;
+      });
+    },
+    isApplicable: function isApplicable() {
+      var character = self.character();
+      return Boolean(!self.condition || character && character.conditions.includes(self.condition));
+    },
+    source: function source() {
+      return findParent(self, function (p) {
+        return p.name;
+      }) || null;
+    },
+    sourceName: function sourceName() {
+      return self.source() ? self.source().name : 'Unknown';
+    },
+    target: function target() {
+      var character = self.character();
+      return character ? character.attributes.findBy('name', self.targetName) : null;
     }
   };
 })).named('Effect'));
@@ -853,7 +846,7 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 /* harmony default export */ var Resource = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   current: 0,
   maximum: 10,
-  name: ''
+  name: 'New Resource...'
 })).named('Resource'));
 // CONCATENATED MODULE: ./source/models/Skill/Skill.js
 
@@ -1020,13 +1013,13 @@ function flatten(array) {
   return {
     activeEffects: function activeEffects() {
       return self.effects().filter(function (effect) {
-        return effect && effect.isApplicable;
+        return effect && effect.isApplicable();
       });
     },
     availableConditions: function availableConditions() {
       return self.effects().map(function (e) {
         return e.condition;
-      }).sort().filter(function (effect, i, all) {
+      }).concat(self.conditions.asArray).sort().filter(function (effect, i, all) {
         return !i || effect !== all[i - 1];
       }).filter(Boolean);
     },
@@ -1054,7 +1047,7 @@ var sheetforge_embedded = __webpack_require__("H3yI");
 // CONCATENATED MODULE: ./source/index.js
 
 
-/* harmony default export */ var source = __webpack_exports__["default"] = (Character);
+/* harmony default export */ var source_0 = __webpack_exports__["default"] = (Character);
 
 /***/ }),
 

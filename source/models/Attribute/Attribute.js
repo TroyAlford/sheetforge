@@ -24,7 +24,7 @@ export default types.compose(
     modifiedValue() { return self.value() + self.modifier() },
     modifier() { return math.sum(self.effects().map(effect => effect.modifier)) },
     modifierText() {
-      return self.effects().map(effect => `${effect.sourceName}: ${effect.modifier}`).join(', ')
+      return self.effects().map(effect => `${effect.sourceName()}: ${effect.modifier}`).join(', ')
     },
     value() {
       if (!self.isComputed) return self.raw

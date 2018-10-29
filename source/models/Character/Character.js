@@ -30,11 +30,11 @@ export default types.compose(
     isCharacter: true,
   })).actions(self => ({
     activeEffects() {
-      return self.effects().filter(effect => effect && effect.isApplicable)
+      return self.effects().filter(effect => effect && effect.isApplicable())
     },
     availableConditions() {
       return self.effects()
-        .map(e => e.condition)
+        .map(e => e.condition).concat(self.conditions.asArray)
         .sort()
         .filter((effect, i, all) => !i || effect !== all[i - 1])
         .filter(Boolean)
