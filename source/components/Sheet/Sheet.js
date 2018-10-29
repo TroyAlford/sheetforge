@@ -3,9 +3,9 @@ import { onSnapshot } from 'mobx-state-tree'
 import React from 'react'
 import components from '@/components'
 import Conditions from '@/components/Conditions'
+import Layout from '@/components/Layout'
 import ListOf from '@/components/List'
 import models from '@/models'
-import getPathValue from '@/utilities/getPathValue'
 import noop from '@/utilities/noop'
 import './Sheet.scss'
 
@@ -20,18 +20,24 @@ import './Sheet.scss'
 
   constructor(props) {
     super(props)
-    this.disposeOfSnapshotListener = onSnapshot(this.props.character, (snapshot) => {
-      this.props.onChange(snapshot, this.props.layout, this)
+    this.onCharacterSnapshotDisposer = onSnapshot(this.props.character, (snapshot) => {
+      this.props.onChange(snapshot, this.props.layout.toJSON(), this)
+      this.forceUpdate()
+    })
+    this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, (snapshot) => {
+      this.props.onChange(this.props.character.toJSON(), snapshot, this)
+      this.forceUpdate()
     })
     window.addEventListener('resize', this.handleWindowResize)
   }
-
   componentDidMount() {
     this.handleWindowResize()
     this.props.onMount(this)
   }
-
-  componentWillUnmount() { this.disposeOfSnapshotListener() }
+  componentWillUnmount() {
+    this.onCharacterSnapshotDisposer()
+    this.onLayoutSnapshotDisposer()
+  }
 
   handleWindowResize = () => {
     let size = 'large'
@@ -43,37 +49,35 @@ import './Sheet.scss'
     if (size !== this.state.size) this.setState({ size })
   }
 
-  renderComponent = ({ children, list, path, type, ...props }, key) => {
-    const Component = components[type]
-    const data = getPathValue(this.props.character, path)
-    Object.assign(props, { size: this.state.size })
+  renderComponent = (model, key) => {
+    if (model.type) {
+      const { title } = model
+      const typename = model.type.toLowerCase()
+      const List = ListOf(
+        models[model.type],
+        components[model.type],
+        { className: `${typename}-list` }
+      )
+      const collection = this.props.character[`${typename}s`]
 
-    if (list) {
-      const ModelType = models[type]
-
-      const List = ListOf(ModelType, Component, {
-        className: `${type.toLowerCase()}-list`,
-      })
-      return <List key={key} collection={data} {...props} />
+      return <List collection={collection} {...{ key, title }} />
     }
 
-    if (data) return <Component key={key} model={data} {...props} />
-
     return (
-      <Component key={key} {...props}>
-        {children.map(this.renderComponent)}
-      </Component>
+      <Layout key={model.hash} model={model}>
+        {model.children.map(this.renderComponent)}
+      </Layout>
     )
   }
 
   render() {
-    const { character, layout = [] } = this.props
+    const { character, layout } = this.props
     const { size } = this.state
 
     return (
       <div className={`sheetforge sheet ${size}`}>
         <Conditions model={character} />
-        {layout.map(this.renderComponent)}
+        {layout.children.map(this.renderComponent)}
       </div>
     )
   }

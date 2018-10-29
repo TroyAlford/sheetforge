@@ -5,38 +5,8 @@
   padding: .25in;
   position: relative;
 
-  .section > .list {
-    padding: 0;
-
-    &.no-title {
-      > .title-bar {
-        position: static;
-
-        > button.sort {
-          position: absolute;
-          left: .5em;
-          top: .5em;
-        }
-
-        > button.icon-add {
-          position: absolute;
-          right: .5em;
-          top: .5em;
-        }
-      }
-    }
-  }
-
   &.small {
     max-width: 100vw;
     padding: 0;
-
-    .row {
-      flex-direction: column;
-    }
-
-    .list .list-item-wrapper {
-      width: 100%;
-    }
   }
 }

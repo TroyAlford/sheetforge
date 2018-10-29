@@ -10791,7 +10791,7 @@ function isPropertyConfigurable$$1(object, prop) {
     return !descriptor || (descriptor.configurable !== false && descriptor.writable !== false);
 }
 function assertPropertyConfigurable$$1(object, prop) {
-    if ("development" !== "production" && !isPropertyConfigurable$$1(object, prop))
+    if ( true && !isPropertyConfigurable$$1(object, prop))
         fail$$1("Cannot make property '" + prop.toString() + "' observable, it is not configurable and writable in the target object");
 }
 function createInstanceofPredicate$$1(name, clazz) {
@@ -10936,7 +10936,7 @@ function createPropDecorator$$1(propertyInitiallyEnumerable, propertyCreator) {
                 propertyCreator(target, prop, descriptor, target, decoratorArguments);
                 return null;
             }
-            if ("development" !== "production" && !quacksLikeADecorator$$1(arguments))
+            if ( true && !quacksLikeADecorator$$1(arguments))
                 fail$$1("This function is a decorator, but it wasn't invoked like a decorator");
             if (!Object.prototype.hasOwnProperty.call(target, mobxPendingDecorators$$1)) {
                 var inheritedDecorators = target[mobxPendingDecorators$$1];
@@ -10992,7 +10992,7 @@ function shallowEnhancer$$1(v, _, name) {
         return observable$$1.object(v, undefined, { name: name, deep: false });
     if (isES6Map$$1(v))
         return observable$$1.map(v, { name: name, deep: false });
-    return fail$$1("development" !== "production" &&
+    return fail$$1( true &&
         "The shallow modifier / decorator can only used in combination with arrays, objects and maps");
 }
 function referenceEnhancer$$1(newValue) {
@@ -11000,7 +11000,7 @@ function referenceEnhancer$$1(newValue) {
     return newValue;
 }
 function refStructEnhancer$$1(v, oldValue, name) {
-    if ("development" !== "production" && isObservable$$1(v))
+    if ( true && isObservable$$1(v))
         throw "observable.struct should not be used with observable values";
     if (deepEqual$$1(v, oldValue))
         return oldValue;
@@ -11095,7 +11095,7 @@ function createObservable(v, arg2, arg3) {
     if (res !== v)
         return res;
     // otherwise, just box it
-    fail$$1("development" !== "production" &&
+    fail$$1( true &&
         "The provided value could not be converted into an observable. If you want just create an observable reference to the object use 'observable.box(value)'");
 }
 var observableFactories = {
@@ -11419,7 +11419,7 @@ var ComputedValue$$1 = /** @class */ (function () {
         this.isRunningSetter = false;
         this.isTracing = TraceMode$$1.NONE;
         this.firstGet = true;
-        if ("development" !== "production" && !options.get)
+        if ( true && !options.get)
             throw "[mobx] missing option for computed: get";
         this.derivation = options.get;
         this.name = options.name || "ComputedValue@" + getNextId$$1();
@@ -11488,7 +11488,7 @@ var ComputedValue$$1 = /** @class */ (function () {
             }
         }
         else
-            invariant$$1(false, "development" !== "production" &&
+            invariant$$1(false,  true &&
                 "[ComputedValue '" + this.name + "'] It is not possible to assign a new value to a computed value.");
     };
     ComputedValue$$1.prototype.trackAndCompute = function () {
@@ -11692,11 +11692,11 @@ function checkIfStateModificationsAreAllowed$$1(atom) {
     var hasObservers$$1 = atom.observers.size > 0;
     // Should never be possible to change an observed observable from inside computed, see #798
     if (globalState$$1.computationDepth > 0 && hasObservers$$1)
-        fail$$1("development" !== "production" &&
+        fail$$1( true &&
             "Computed values are not allowed to cause side effects by changing observables that are already being observed. Tried to modify: " + atom.name);
     // Should not be possible to change observed state outside strict mode, except during initialization, see #563
     if (!globalState$$1.allowStateChanges && (hasObservers$$1 || globalState$$1.enforceActions === "strict"))
-        fail$$1("development" !== "production" &&
+        fail$$1( true &&
             (globalState$$1.enforceActions
                 ? "Since strict-mode is enabled, changing observed observable values outside actions is not allowed. Please wrap the code in an `action` if this change is intended. Tried to modify: "
                 : "Side effects like changing state are not allowed at this point. Are you trying to modify state from, for example, the render function of a React component? Tried to modify: ") +
@@ -12350,7 +12350,7 @@ function setReactionScheduler$$1(fn) {
 }
 
 function isSpyEnabled$$1() {
-    return "development" !== "production" && !!globalState$$1.spyListeners.length;
+    return  true && !!globalState$$1.spyListeners.length;
 }
 function spyReport$$1(event) {
     if (false)
@@ -12387,12 +12387,12 @@ function spy$$1(listener) {
 }
 
 function dontReassignFields() {
-    fail$$1("development" !== "production" && "@action fields are not reassignable");
+    fail$$1( true && "@action fields are not reassignable");
 }
 function namedActionDecorator$$1(name) {
     return function (target, prop, descriptor) {
         if (descriptor) {
-            if ("development" !== "production" && descriptor.get !== undefined) {
+            if ( true && descriptor.get !== undefined) {
                 return fail$$1("@action cannot be used with getters");
             }
             // babel / typescript
@@ -12623,7 +12623,7 @@ function interceptHook(hook, thing, arg2, arg3) {
     var cb = typeof arg2 === "string" ? arg3 : arg2;
     var orig = atom[hook];
     if (typeof orig !== "function")
-        return fail$$1("development" !== "production" && "Not an atom that can be (un)observed");
+        return fail$$1( true && "Not an atom that can be (un)observed");
     atom[hook] = function () {
         orig.call(this);
         cb.call(this);
@@ -12675,7 +12675,7 @@ function configure$$1(options) {
 }
 
 function decorate$$1(thing, decorators) {
-    "development" !== "production" &&
+     true &&
         invariant$$1(isPlainObject$$1(decorators), "Decorators should be a key value map");
     var target = typeof thing === "function" ? thing.prototype : thing;
     var _loop_1 = function (prop) {
@@ -12683,7 +12683,7 @@ function decorate$$1(thing, decorators) {
         if (!Array.isArray(propertyDecorators)) {
             propertyDecorators = [propertyDecorators];
         }
-        "development" !== "production" &&
+         true &&
             invariant$$1(propertyDecorators.every(function (decorator) { return typeof decorator === "function"; }), "Decorate: expected a decorator function or array of decorator functions for '" + prop + "'");
         var descriptor = Object.getOwnPropertyDescriptor(target, prop);
         var newDescriptor = propertyDecorators.reduce(function (accDescriptor, decorator) { return decorator(target, prop, accDescriptor); }, descriptor);
@@ -12736,7 +12736,7 @@ function extendObservableObjectWithProperties$$1(target, properties, decorators,
                 : descriptor.get
                     ? computedDecorator$$1
                     : defaultDecorator;
-            if ("development" !== "production" && typeof decorator !== "function")
+            if ( true && typeof decorator !== "function")
                 fail$$1("Not a valid decorator for '" + key + "', got: " + decorator);
             var resultDescriptor = decorator(target, key, descriptor, true);
             if (resultDescriptor // otherwise, assume already applied, due to `applyToInstance`
@@ -12775,7 +12775,7 @@ function nodeToObserverTree(node) {
 var generatorId = 0;
 function flow$$1(generator) {
     if (arguments.length !== 1)
-        fail$$1("development" && "Flow expects one 1 argument and cannot be used as decorator");
+        fail$$1( true && "Flow expects one 1 argument and cannot be used as decorator");
     var name = generator.name || "<unnamed flow>";
     // Implementation based on https://github.com/tj/co/blob/master/index.js
     return function () {
@@ -12855,16 +12855,16 @@ function interceptReads$$1(thing, propOrHandler, handler) {
     }
     else if (isObservableObject$$1(thing)) {
         if (typeof propOrHandler !== "string")
-            return fail$$1("development" !== "production" &&
+            return fail$$1( true &&
                 "InterceptReads can only be used with a specific property, not with an object in general");
         target = getAdministration$$1(thing, propOrHandler);
     }
     else {
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "Expected observable map, object or array as first array");
     }
     if (target.dehancer !== undefined)
-        return fail$$1("development" !== "production" && "An intercept reader was already established");
+        return fail$$1( true && "An intercept reader was already established");
     target.dehancer = typeof propOrHandler === "function" ? propOrHandler : handler;
     return function () {
         target.dehancer = undefined;
@@ -12899,13 +12899,13 @@ function _isComputed$$1(value, property) {
 }
 function isComputed$$1(value) {
     if (arguments.length > 1)
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "isComputed expects only 1 argument. Use isObservableProp to inspect the observability of a property");
     return _isComputed$$1(value);
 }
 function isComputedProp$$1(value, propName) {
     if (typeof propName !== "string")
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "isComputed expected a property name as second argument");
     return _isComputed$$1(value, propName);
 }
@@ -12914,7 +12914,7 @@ function _isObservable(value, property) {
     if (value === null || value === undefined)
         return false;
     if (property !== undefined) {
-        if ("development" !== "production" &&
+        if ( true &&
             (isObservableMap$$1(value) || isObservableArray$$1(value)))
             return fail$$1("isObservable(object, propertyName) is not supported for arrays and maps. Use map.has or array.length instead.");
         if (isObservableObject$$1(value)) {
@@ -12931,13 +12931,13 @@ function _isObservable(value, property) {
 }
 function isObservable$$1(value) {
     if (arguments.length !== 1)
-        fail$$1("development" !== "production" &&
+        fail$$1( true &&
             "isObservable expects only 1 argument. Use isObservableProp to inspect the observability of a property");
     return _isObservable(value);
 }
 function isObservableProp$$1(value, propName) {
     if (typeof propName !== "string")
-        return fail$$1("development" !== "production" && "expected a property name as second argument");
+        return fail$$1( true && "expected a property name as second argument");
     return _isObservable(value, propName);
 }
 
@@ -12951,7 +12951,7 @@ function keys$$1(obj) {
     if (isObservableArray$$1(obj)) {
         return obj.map(function (_, index) { return index; });
     }
-    return fail$$1("development" !== "production" &&
+    return fail$$1( true &&
         "'keys()' can only be used on observable objects, arrays and maps");
 }
 function values$$1(obj) {
@@ -12964,7 +12964,7 @@ function values$$1(obj) {
     if (isObservableArray$$1(obj)) {
         return obj.slice();
     }
-    return fail$$1("development" !== "production" &&
+    return fail$$1( true &&
         "'values()' can only be used on observable objects, arrays and maps");
 }
 function entries$$1(obj) {
@@ -12977,7 +12977,7 @@ function entries$$1(obj) {
     if (isObservableArray$$1(obj)) {
         return obj.map(function (key, index) { return [index, key]; });
     }
-    return fail$$1("development" !== "production" &&
+    return fail$$1( true &&
         "'entries()' can only be used on observable objects, arrays and maps");
 }
 function set$$1(obj, key, value) {
@@ -13017,7 +13017,7 @@ function set$$1(obj, key, value) {
         endBatch$$1();
     }
     else {
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "'set()' can only be used on observable objects, arrays and maps");
     }
 }
@@ -13036,7 +13036,7 @@ function remove$$1(obj, key) {
         obj.splice(key, 1);
     }
     else {
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "'remove()' can only be used on observable objects, arrays and maps");
     }
 }
@@ -13053,7 +13053,7 @@ function has$$1(obj, key) {
         return key >= 0 && key < obj.length;
     }
     else {
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "'has()' can only be used on observable objects, arrays and maps");
     }
 }
@@ -13070,7 +13070,7 @@ function get$$1(obj, key) {
         return obj[key];
     }
     else {
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "'get()' can only be used on observable objects, arrays and maps");
     }
 }
@@ -13103,15 +13103,17 @@ function toJSHelper(source, options, __alreadySeen) {
         return source;
     if (typeof source !== "object")
         return source;
+    // Directly return null if source is null
+    if (source === null)
+        return null;
     // Directly return the Date object itself if contained in the observable
     if (source instanceof Date)
         return source;
     if (isObservableValue$$1(source))
         return toJSHelper(source.get(), options, __alreadySeen);
     // make sure we track the keys of the object
-    if (isObservable$$1(source)) {
+    if (isObservable$$1(source))
         keys$$1(source);
-    }
     var detectCycles = options.detectCycles === true;
     if (detectCycles && source !== null && __alreadySeen.has(source)) {
         return __alreadySeen.get(source);
@@ -13173,7 +13175,7 @@ function trace$$1() {
         enterBreakPoint = args.pop();
     var derivation = getAtomFromArgs(args);
     if (!derivation) {
-        return fail$$1("development" !== "production" &&
+        return fail$$1( true &&
             "'trace(break?)' can only be used inside a tracked computed value or a Reaction. Consider passing in the computed value or reaction explicitly");
     }
     if (derivation.isTracing === TraceMode$$1.NONE) {
@@ -13242,7 +13244,7 @@ function _when(predicate, effect, opts) {
     return disposer;
 }
 function whenPromise(predicate, opts) {
-    if ("development" !== "production" && opts && opts.onError)
+    if ( true && opts && opts.onError)
         return fail$$1("the options 'onError' and 'promise' cannot be combined");
     var cancel;
     var res = new Promise(function (resolve, reject) {
@@ -14089,7 +14091,7 @@ var ObservableMap$$1 = /** @class */ (function () {
      * for callback details
      */
     ObservableMap$$1.prototype.observe = function (listener, fireImmediately) {
-        "development" !== "production" &&
+         true &&
             invariant$$1(fireImmediately !== true, "`observe` doesn't support fireImmediately=true in combination with maps.");
         return registerListener$$1(this, listener);
     };
@@ -14275,7 +14277,7 @@ var ObservableObjectAdministration$$1 = /** @class */ (function () {
      * for callback details
      */
     ObservableObjectAdministration$$1.prototype.observe = function (callback, fireImmediately) {
-        "development" !== "production" &&
+         true &&
             invariant$$1(fireImmediately !== true, "`observe` doesn't support the fire immediately property for observable objects.");
         return registerListener$$1(this, callback);
     };
@@ -14334,7 +14336,7 @@ function asObservableObject$$1(target, name, defaultEnhancer) {
     if (defaultEnhancer === void 0) { defaultEnhancer = deepEnhancer$$1; }
     if (Object.prototype.hasOwnProperty.call(target, $mobx$$1))
         return target[$mobx$$1];
-    "development" !== "production" &&
+     true &&
         invariant$$1(Object.isExtensible(target), "Cannot make the designated object observable; it is not extensible");
     if (!isPlainObject$$1(target))
         name = (target.constructor.name || "ObservableObject") + "@" + getNextId$$1();
@@ -14396,7 +14398,7 @@ function getAtom$$1(thing, property) {
     if (typeof thing === "object" && thing !== null) {
         if (isObservableArray$$1(thing)) {
             if (property !== undefined)
-                fail$$1("development" !== "production" &&
+                fail$$1( true &&
                     "It is not possible to get index atoms from arrays");
             return thing[$mobx$$1].atom;
         }
@@ -14406,7 +14408,7 @@ function getAtom$$1(thing, property) {
                 return anyThing._keysAtom;
             var observable$$1 = anyThing._data.get(property) || anyThing._hasMap.get(property);
             if (!observable$$1)
-                fail$$1("development" !== "production" &&
+                fail$$1( true &&
                     "the entry '" + property + "' does not exist in the observable map '" + getDebugName$$1(thing) + "'");
             return observable$$1;
         }
@@ -14416,10 +14418,10 @@ function getAtom$$1(thing, property) {
             thing[property]; // See #1072
         if (isObservableObject$$1(thing)) {
             if (!property)
-                return fail$$1("development" !== "production" && "please specify a property");
+                return fail$$1( true && "please specify a property");
             var observable$$1 = thing[$mobx$$1].values.get(property);
             if (!observable$$1)
-                fail$$1("development" !== "production" &&
+                fail$$1( true &&
                     "no observable property '" + property + "' found on the observable object '" + getDebugName$$1(thing) + "'");
             return observable$$1;
         }
@@ -14433,7 +14435,7 @@ function getAtom$$1(thing, property) {
             return thing[$mobx$$1];
         }
     }
-    return fail$$1("development" !== "production" && "Cannot obtain atom from " + thing);
+    return fail$$1( true && "Cannot obtain atom from " + thing);
 }
 function getAdministration$$1(thing, property) {
     if (!thing)
@@ -14448,7 +14450,7 @@ function getAdministration$$1(thing, property) {
     initializeInstance$$1(thing);
     if (thing[$mobx$$1])
         return thing[$mobx$$1];
-    fail$$1("development" !== "production" && "Cannot obtain administration from " + thing);
+    fail$$1( true && "Cannot obtain administration from " + thing);
 }
 function getDebugName$$1(thing, property) {
     var named;
@@ -25789,6 +25791,7 @@ var ObjectNode$$1 = /** @class */ (function () {
         // identifier can not be changed during lifecycle of a node
         // so we safely can read it from initial snapshot
         this.identifier = null;
+        this.unnormalizedIdentifier = null;
         if (this.identifierAttribute && this._initialSnapshot) {
             var id = this._initialSnapshot[this.identifierAttribute];
             if (id === undefined) {
@@ -25803,6 +25806,7 @@ var ObjectNode$$1 = /** @class */ (function () {
             }
             // normalize internal identifier to string
             this.identifier = "" + id;
+            this.unnormalizedIdentifier = id;
         }
         if (!parent) {
             this.identifierCache.addNodeToCache(this);
@@ -26965,16 +26969,31 @@ function typecheck$$1(type, value) {
     }
 }
 
+var identifierCacheId = 0;
 /**
  * @internal
  * @private
  */
 var IdentifierCache$$1 = /** @class */ (function () {
     function IdentifierCache$$1() {
+        this.cacheId = identifierCacheId++;
         // n.b. in cache all identifiers are normalized to strings
         this.cache = mobx.observable.map();
+        // last time the cache (array) for a given time changed
+        // n.b. it is not really the time, but just an integer that gets increased after each modification to the array
+        this.lastCacheModificationPerId = mobx.observable.map();
     }
-    IdentifierCache$$1.prototype.addNodeToCache = function (node) {
+    IdentifierCache$$1.prototype.updateLastCacheModificationPerId = function (identifier$$1) {
+        var lcm = this.lastCacheModificationPerId.get(identifier$$1);
+        // we start at 1 since 0 means no update since cache creation
+        this.lastCacheModificationPerId.set(identifier$$1, lcm === undefined ? 1 : lcm + 1);
+    };
+    IdentifierCache$$1.prototype.getLastCacheModificationPerId = function (identifier$$1) {
+        var modificationId = this.lastCacheModificationPerId.get(identifier$$1) || 0;
+        return this.cacheId + "-" + modificationId;
+    };
+    IdentifierCache$$1.prototype.addNodeToCache = function (node, lastCacheUpdate) {
+        if (lastCacheUpdate === void 0) { lastCacheUpdate = true; }
         if (node.identifierAttribute) {
             var identifier$$1 = node.identifier;
             if (!this.cache.has(identifier$$1)) {
@@ -26984,8 +27003,10 @@ var IdentifierCache$$1 = /** @class */ (function () {
             if (set.indexOf(node) !== -1)
                 fail("Already registered");
             set.push(node);
+            if (lastCacheUpdate) {
+                this.updateLastCacheModificationPerId(identifier$$1);
+            }
         }
-        return this;
     };
     IdentifierCache$$1.prototype.mergeCache = function (node) {
         var _this = this;
@@ -26997,20 +27018,34 @@ var IdentifierCache$$1 = /** @class */ (function () {
     };
     IdentifierCache$$1.prototype.notifyDied = function (node) {
         if (node.identifierAttribute) {
-            var set = this.cache.get(node.identifier);
-            if (set)
+            var id = node.identifier;
+            var set = this.cache.get(id);
+            if (set) {
                 set.remove(node);
+                // remove empty sets from cache
+                if (!set.length) {
+                    this.cache.delete(id);
+                }
+                this.updateLastCacheModificationPerId(node.identifier);
+            }
         }
     };
     IdentifierCache$$1.prototype.splitCache = function (node) {
+        var _this = this;
         var res = new IdentifierCache$$1();
         var basePath = node.path;
-        mobx.values(this.cache).forEach(function (nodes) {
+        mobx.entries(this.cache).forEach(function (_a) {
+            var id = _a[0], nodes = _a[1];
+            var modified = false;
             for (var i = nodes.length - 1; i >= 0; i--) {
                 if (nodes[i].path.indexOf(basePath) === 0) {
-                    res.addNodeToCache(nodes[i]);
+                    res.addNodeToCache(nodes[i], false); // no need to update lastUpdated since it is a whole new cache
                     nodes.splice(i, 1);
+                    modified = true;
                 }
+            }
+            if (modified) {
+                _this.updateLastCacheModificationPerId(id);
             }
         });
         return res;
@@ -28379,11 +28414,11 @@ function toPropertiesObject(declaredProps) {
             return props;
             // its a function, maybe the user wanted a view?
         }
-        else if ("development" !== "production" && typeof value === "function") {
+        else if ( true && typeof value === "function") {
             fail("Invalid type definition for property '" + key + "', it looks like you passed a function. Did you forget to invoke it, or did you intend to declare a view / action?");
             // no other complex values
         }
-        else if ("development" !== "production" && typeof value === "object") {
+        else if ( true && typeof value === "object") {
             fail("Invalid type definition for property '" + key + "', it looks like you passed an object. Try passing another model type or a types.frozen.");
             // WTF did you pass in mate?
         }
@@ -29437,7 +29472,7 @@ var optionalNullType = optional$$1(nullType$$1, null);
  * @returns {(IType<C | undefined, S | undefined, T | undefined>)}
  */
 function maybe$$1(type) {
-    if ("development" !== "production" && !isType$$1(type))
+    if ( true && !isType$$1(type))
         fail("expected a mobx-state-tree type as first argument, got " + type + " instead");
     return union$$1(type, optionalUndefinedType);
 }
@@ -29454,7 +29489,7 @@ function maybe$$1(type) {
  * @returns {(IType<C | null | undefined, S | null, T | null>)}
  */
 function maybeNull$$1(type) {
-    if ("development" !== "production" && !isType$$1(type))
+    if ( true && !isType$$1(type))
         fail("expected a mobx-state-tree type as first argument, got " + type + " instead");
     return union$$1(type, optionalNullType);
 }
@@ -29501,7 +29536,7 @@ var Late$$1 = /** @class */ (function (_super) {
             if (mustSucceed && t === undefined)
                 fail("Late type seems to be used too early, the definition (still) returns undefined");
             if (t) {
-                if ("development" !== "production" && !isType$$1(t))
+                if ( true && !isType$$1(t))
                     fail("Failed to determine subtype, make sure types.late returns a type definition.");
                 this._subType = t;
                 return t;
@@ -29670,33 +29705,50 @@ function isFrozenType$$1(type) {
 }
 
 var StoredReference = /** @class */ (function () {
-    function StoredReference(mode, value, targetType) {
-        this.mode = mode;
-        this.value = value;
+    function StoredReference(value, targetType) {
         this.targetType = targetType;
-        if (mode === "object") {
-            if (!isStateTreeNode$$1(value))
-                return fail("Can only store references to tree nodes, got: '" + value + "'");
+        if (typeof value === "string" || typeof value === "number") {
+            this.identifier = value;
+        }
+        else if (isStateTreeNode$$1(value)) {
             var targetNode = getStateTreeNode$$1(value);
             if (!targetNode.identifierAttribute)
                 return fail("Can only store references with a defined identifier attribute.");
+            var id = targetNode.unnormalizedIdentifier;
+            if (id === null || id === undefined) {
+                return fail("Can only store references to tree nodes with a defined identifier.");
+            }
+            this.identifier = id;
+        }
+        else {
+            return fail("Can only store references to tree nodes or identifiers, got: '" + value + "'");
         }
     }
+    StoredReference.prototype.updateResolvedReference = function () {
+        var normalizedId = "" + this.identifier;
+        var node = this.node;
+        var lastCacheModification = node.root.identifierCache.getLastCacheModificationPerId(normalizedId);
+        if (!this.resolvedReference ||
+            this.resolvedReference.lastCacheModification !== lastCacheModification) {
+            var targetType = this.targetType;
+            // reference was initialized with the identifier of the target
+            var target = node.root.identifierCache.resolve(targetType, normalizedId);
+            if (!target)
+                fail("Failed to resolve reference '" + this.identifier + "' to type '" + this.targetType.name + "' (from node: " + node.path + ")");
+            this.resolvedReference = {
+                node: target,
+                lastCacheModification: lastCacheModification
+            };
+        }
+    };
     Object.defineProperty(StoredReference.prototype, "resolvedValue", {
         get: function () {
-            // reference was initialized with the identifier of the target
-            var _a = this, node = _a.node, targetType = _a.targetType;
-            var target = node.root.identifierCache.resolve(targetType, this.value);
-            if (!target)
-                return fail("Failed to resolve reference '" + this.value + "' to type '" + this.targetType.name + "' (from node: " + node.path + ")");
-            return target.value;
+            this.updateResolvedReference();
+            return this.resolvedReference.node.value;
         },
         enumerable: true,
         configurable: true
     });
-    __decorate([
-        mobx.computed
-    ], StoredReference.prototype, "resolvedValue", null);
     return StoredReference;
 }());
 /**
@@ -29738,32 +29790,25 @@ var IdentifierReferenceType$$1 = /** @class */ (function (_super) {
         if (!node.isAlive)
             return undefined;
         var ref = node.storedValue;
-        // id already resolved, return
-        if (ref.mode === "object")
-            return ref.value;
         return ref.resolvedValue;
     };
     IdentifierReferenceType$$1.prototype.getSnapshot = function (node) {
         var ref = node.storedValue;
-        switch (ref.mode) {
-            case "identifier":
-                return ref.value;
-            case "object":
-                return ref.value[getStateTreeNode$$1(ref.value).identifierAttribute];
-        }
+        return ref.identifier;
     };
     IdentifierReferenceType$$1.prototype.instantiate = function (parent, subpath, environment, snapshot) {
-        var mode = isStateTreeNode$$1(snapshot) ? "object" : "identifier";
         var r;
-        var node = createNode$$1(this, parent, subpath, environment, (r = new StoredReference(mode, snapshot, this.targetType)));
+        var node = createNode$$1(this, parent, subpath, environment, (r = new StoredReference(snapshot, this.targetType)));
         r.node = node;
         return node;
     };
     IdentifierReferenceType$$1.prototype.reconcile = function (current, newValue) {
         if (current.type === this) {
-            var targetMode = isStateTreeNode$$1(newValue) ? "object" : "identifier";
+            var compareByValue = isStateTreeNode$$1(newValue);
             var ref = current.storedValue;
-            if (targetMode === ref.mode && ref.value === newValue)
+            if (!compareByValue && ref.identifier === newValue)
+                return current;
+            else if (compareByValue && ref.resolvedValue === newValue)
                 return current;
         }
         var newNode = this.instantiate(current.parent, current.subpath, current._environment, newValue);

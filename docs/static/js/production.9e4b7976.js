@@ -1,2 +1,2 @@
 !function(e,o){"object"===typeof exports&&"object"===typeof module?module.exports=o():"function"===typeof define&&define.amd?define("sheetforge",[],o):"object"===typeof exports?exports.sheetforge=o():e.sheetforge=o()}(window,function(){return(window.webpackJsonpsheetforge=window.webpackJsonpsheetforge||[]).push([[2],{"05fm":function(e,o,t){"use strict";t.r(o);var f=t("ITKj");t("H3yI");o.default=f.a},H3yI:function(e,o,t){}},[["05fm",16,0]]])});
-//# sourceMappingURL=production.3e7a611797042c6081e3.js.map
+//# sourceMappingURL=production.b5ce641d0b7b67ce51ca.js.map

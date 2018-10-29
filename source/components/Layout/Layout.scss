@@ -1,0 +1,32 @@
+.layout {
+  align-items: flex-start;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+
+  > .title-bar {
+    align-items: center;
+    border-bottom: 1px solid;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    > .title {
+      align-items: center;
+      flex: 1;
+      justify-content: center;
+      text-align: center;
+    }
+
+    > .expandable-toggle {
+      height: 30px;
+    }
+  }
+
+  > .list {
+    min-width: 100%;
+    width: 100%;
+  }
+}

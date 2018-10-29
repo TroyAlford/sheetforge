@@ -4,19 +4,23 @@
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin-top: 30px;
   padding: .5px 0;
+  position: relative;
 
   &:focus-within {
     button.icon-add { display: flex; }
   }
 
-  .title-bar {
+  > .title-bar {
     align-items: center;
     display: flex;
+    height: 30px;
     justify-content: space-between;
-    margin: .25em 0;
-    padding: 0 .1in;
-    position: relative;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: -30px;
     width: 100%;
 
     .text {
@@ -31,18 +35,8 @@
       border: none;
       cursor: pointer;
       height: 30px;
-      position: absolute;
       width: 30px;
-
-      &.sort { left: .1in; }
-      &.add { right: .1in; }
     }
-  }
-  &.no-title > .title-bar {
-    height: 0;
-    padding: 0;
-    margin: 0;
-    width: 0;
   }
 
   .list-item-wrapper {
@@ -51,7 +45,6 @@
     display: flex;
     flex: 1;
     margin: 1px;
-    max-width: 250px;
     position: relative;
 
     > .drag-handle {
@@ -141,8 +134,4 @@
   &.dragging > .list-item-wrapper {
     > .drag-handle, button.icon-remove { display: none!important; }
   }
-}
-
-.sheet.small .list {
-  .list-item-wrapper { max-width: 100%; }
 }
