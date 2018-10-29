@@ -111,7 +111,9 @@
     ],
     "verbose": true,
     "watchPathIgnorePatterns": [
-      "<rootDir>/.*\\.json"
+      "<rootDir>/.*\\.json",
+      "<rootDir>/build",
+      "<rootDir>/docs"
     ]
   },
   "dependencies": {
