@@ -1,0 +1,23 @@
+.multi-toggle {
+  display: inline-flex;
+
+  > .toggle {
+    align-items: center;
+    border: 1px outset;
+    box-shadow: 0 0 2px;
+    cursor: pointer;
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    min-width: 30px;
+    padding: .25rem;
+
+    &.selected {
+      background: #eee;
+      border: 1px inset;
+      box-shadow: 0 0 2px inset #ccc, 0 0 2px;
+    }
+    &:first-of-type { border-radius: 5px 0 0 5px; }
+    &:last-of-type { border-radius: 0 5px 5px 0; }
+  }
+}

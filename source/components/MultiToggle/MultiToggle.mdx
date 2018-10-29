@@ -1,0 +1,21 @@
+---
+name: MultiToggle
+route: /multi-toggle
+---
+import { Playground } from 'docz'
+import { types } from 'mobx-state-tree'
+import MultiToggle from '@/components/MultiToggle'
+
+## MultiToggle Component
+
+<Playground>
+  <MultiToggle
+    options={[
+      { display: 'A-Z', value: ['alpha', 'asc'] },
+      { display: 'Z-A', value: ['alpha', 'desc'] },
+      { display: '0-9', value: ['numeric', 'asc'] },
+      { display: '9-0', value: ['numeric', 'dec'] },
+      { display: '🚫', value: 'disabled' },
+    ]}
+  />
+</Playground>
