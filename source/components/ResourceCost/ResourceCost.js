@@ -22,7 +22,13 @@ import './ResourceCost.scss'
             <option key={name} value={name}>{name}</option>
           ))}
         </select>
-        <Editable className="amount" onChange={this.handleChangeAmount} value={amount} />
+        <Editable
+          className="amount"
+          max={999}
+          min={-99}
+          onChange={this.handleChangeAmount}
+          value={amount}
+        />
       </div>
     )
   }

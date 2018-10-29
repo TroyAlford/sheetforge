@@ -26,11 +26,15 @@ import './Skill.scss'
         />
         <Editable
           className={`theory ${(!model.theory && 'is-zero') || ''}`}
+          max={999}
+          min={-99}
           onChange={this.onChangeTheory}
           value={model.theory}
         />
         <Editable
           className="mastery"
+          max={999}
+          min={-99}
           onChange={this.onChangeMastery}
           value={model.mastery}
         />

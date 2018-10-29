@@ -24,8 +24,19 @@ import './Effect.scss'
             <option key={name} value={name}>{name}</option>
           ))}
         </select>
-        <Editable className="modifier" onChange={this.handleChangeModifier} value={modifier} />
-        <Editable className="condition" onChange={this.handleChangeCondition} value={condition} placeholder="Any" />
+        <Editable
+          className="modifier"
+          max={999}
+          min={-99}
+          onChange={this.handleChangeModifier}
+          value={modifier}
+        />
+        <Editable
+          className="condition"
+          onChange={this.handleChangeCondition}
+          placeholder="Any"
+          value={condition}
+        />
       </div>
     )
   }

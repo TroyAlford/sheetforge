@@ -3,6 +3,7 @@ import { onSnapshot } from 'mobx-state-tree'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Rating from '@/components/Rating'
+import bound from '@/utilities/bound'
 import math from '@/utilities/math'
 import './Attribute.scss'
 
@@ -40,7 +41,7 @@ import './Attribute.scss'
     let value = raw
     try {
       if (math.isInteger(raw)) {
-        value = parseInt(raw, 10) || ''
+        value = bound(parseInt(raw, 10) || '', { max: 999, min: -99 })
       }
     } catch { }
     this.props.model.set({ raw: value })
@@ -58,8 +59,6 @@ import './Attribute.scss'
       />
       <Editable
         className="value"
-        max={999}
-        min={-99}
         onChange={this.onChangeValue}
         readOnlyValue={(
           <Rating

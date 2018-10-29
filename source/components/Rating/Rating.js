@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import bound from '@/utilities/bound'
 import math from '@/utilities/math'
 import noop from '@/utilities/noop'
 import range from '@/utilities/range'
@@ -26,13 +27,16 @@ export default class Rating extends Component {
 
     return (
       <div className="rating">
-        {range(1, total).map(number => (
-          <span data-number={number} key={number} onClick={this.handleIconClick} title={number}>
-            {(number <= current && number <= maximum) && iconOn}
-            {(number > current && number <= maximum) && iconOff}
-            {(number > maximum) && iconExcess}
-          </span>
-        ))}
+        {(total > 0 || (allowExcess && current > 0))
+          ? range(1, bound(total, { min: 1 })).map(number => (
+            <span data-number={number} key={number} onClick={this.handleIconClick} title={number}>
+              {(number <= current && number <= maximum) && iconOn}
+              {(number > current && number <= maximum) && iconOff}
+              {(number > maximum) && iconExcess}
+            </span>
+          ))
+          : null
+        }
       </div>
     )
   }

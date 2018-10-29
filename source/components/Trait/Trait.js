@@ -24,7 +24,13 @@ const EffectList = ListOf(EffectModel, Effect)
     return (
       <div className="trait">
         <Editable className="name" onChange={this.onChangeName} value={model.name} />
-        <Editable className="value" onChange={this.onChangeValue} value={model.value} />
+        <Editable
+          className="value"
+          max={999}
+          min={-99}
+          onChange={this.onChangeValue}
+          value={model.value}
+        />
         <Expandable>
           <EffectList collection={model.effects} title="Effects" />
         </Expandable>

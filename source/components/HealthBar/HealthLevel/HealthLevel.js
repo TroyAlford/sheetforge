@@ -27,7 +27,13 @@ import './HealthLevel.scss'
       <div className={`health-level ${damage}`}>
         <div className="damage" onClick={this.handleClick} title={title} />
         <Editable className="name" onChange={this.handleChangeName} value={name} />
-        <Editable className="penalty" onChange={this.handleChangePenalty} value={penalty} />
+        <Editable
+          className="penalty"
+          max={999}
+          min={-99}
+          onChange={this.handleChangePenalty}
+          value={penalty}
+        />
       </div>
     )
   }
