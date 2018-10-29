@@ -27,6 +27,7 @@ import './Resource.scss'
           <Editable className="maximum" onChange={this.onChangeMaximum} value={maximum} />
         </div>
         <Rating
+          allowExcess
           current={current}
           maximum={maximum}
           onChange={this.onChangeCurrent}
