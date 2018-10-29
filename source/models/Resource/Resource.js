@@ -8,6 +8,6 @@ export default types.compose(
   types.model({
     current: 0,
     maximum: 10,
-    name: '',
+    name: 'New Resource...',
   })
 ).named('Resource')
