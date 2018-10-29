@@ -22,11 +22,11 @@ import './Sheet.scss'
     super(props)
     this.onCharacterSnapshotDisposer = onSnapshot(this.props.character, (snapshot) => {
       this.props.onChange(snapshot, this.props.layout.toJSON(), this)
-      this.forceUpdate()
+      //   this.forceUpdate()
     })
     this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, (snapshot) => {
       this.props.onChange(this.props.character.toJSON(), snapshot, this)
-      this.forceUpdate()
+      //   this.forceUpdate()
     })
     window.addEventListener('resize', this.handleWindowResize)
   }
@@ -35,8 +35,8 @@ import './Sheet.scss'
     this.props.onMount(this)
   }
   componentWillUnmount() {
-    this.onCharacterSnapshotDisposer()
-    this.onLayoutSnapshotDisposer()
+    // this.onCharacterSnapshotDisposer()
+    // this.onLayoutSnapshotDisposer()
   }
 
   handleWindowResize = () => {

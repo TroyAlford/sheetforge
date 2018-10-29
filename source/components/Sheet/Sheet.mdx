@@ -23,11 +23,14 @@ import Sheet from '@/components/Sheet'
   })}
   character={Character.create({})}
   onChange={(character, layout) => {
-    localStorage.setItem('sf-character', JSON.stringify(character))
-    localStorage.setItem('sf-layout', JSON.stringify(layout))
+    localStorage.setItem('sf-example', JSON.stringify({ character, layout }))
   }}
   onMount={(self) => {
-    const character = localStorage.getItem('sf-character')
-    if (character) { self.props.character.set(JSON.parse(character)) }
+    const saved = localStorage.getItem('sf-example')
+    if (saved) {
+      const example = JSON.parse(saved)
+      self.props.character.set(example.character)
+      self.props.layout.set(example.layout)
+    }
   }}
 />
