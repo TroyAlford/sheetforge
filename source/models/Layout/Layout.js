@@ -3,7 +3,6 @@ import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
 import IIdentity from '@/models/generic/IIdentity'
 import between from '@/models/types/between'
-import math from '@/utilities/math'
 
 const Layout = types.compose(
   IIdentity,
@@ -11,17 +10,10 @@ const Layout = types.compose(
   types.model({
     children: CollectionOf(types.late(() => Layout)),
     colSpan: between(1, 4, 1),
-    title: types.maybe(types.string),
+    columns: between(1, 4, 1),
+    title: types.union(types.maybe(types.string), types.literal(false)),
     type: types.maybe(types.string),
-  }).actions(self => ({
-    /* eslint-disable no-param-reassign */
-
-    columns() {
-      return math.sum(...self.children.map(c => c.colSpan))
-    },
-
-    /* eslint-enable no-param-reassign */
-  }))
+  })
 ).named('Layout')
 
 export default Layout
