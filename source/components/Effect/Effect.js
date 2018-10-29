@@ -9,9 +9,7 @@ import './Effect.scss'
   }
 
   handleChangeCondition = condition => this.props.model.set({ condition })
-
   handleChangeModifier = modifier => this.props.model.set({ modifier })
-
   handleChangeTarget = ({ target: { value } }) => this.props.model.set({ targetName: value })
 
   render() {
@@ -20,8 +18,8 @@ import './Effect.scss'
     return (
       <div className={`effect ${isApplicable ? 'applicable' : ''}`.trim()}>
         <select className="target" value={targetName} onChange={this.handleChangeTarget}>
-          {available.map(({ name }) => (
-            <option key={name} value={name}>{name}</option>
+          {available.map(({ hash, name }) => (
+            <option key={hash} value={name}>{name}</option>
           ))}
         </select>
         <Editable
