@@ -65,6 +65,11 @@ export default (Model, Component, props = {}) => {
     }
 
     componentDidMount() {
+      const { sortOption: sortOptionIndex } = this.props.layout
+      if (sortOptions.length && sortOptionIndex !== undefined) {
+        this.setState({ sortOption: sortOptions[sortOptionIndex] || null })
+      }
+
       const { sortable } = this.props
       if (sortable) {
         this.sortable = Sortable.create(this.container.current, {
@@ -107,7 +112,9 @@ export default (Model, Component, props = {}) => {
     handleSort = () => this.props.collection.sortBy('name')
     handleSortChange = (clicked) => {
       const { sortOption: current } = this.state
-      this.setState({ sortOption: current === clicked ? null : clicked })
+      this.setState({ sortOption: current === clicked ? null : clicked }, () => {
+        this.props.layout.set({ sortOption: current === clicked ? undefined : sortOptions.indexOf(clicked) })
+      })
     }
 
     renderSortWidget = () => {

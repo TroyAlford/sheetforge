@@ -58,7 +58,7 @@ import './Sheet.scss'
       )
       const collection = this.props.character[`${typename}s`]
       return (
-        <List {...{ key, title }} collection={collection} columns={model.columns} />
+        <List {...{ key, layout: model, title }} collection={collection} columns={model.columns} />
       )
     }
 
