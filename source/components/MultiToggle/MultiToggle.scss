@@ -12,6 +12,8 @@
     min-width: 30px;
     padding: .25rem;
 
+    > * { pointer-events: none; }
+
     &.selected {
       background: #eee;
       border: 1px inset;

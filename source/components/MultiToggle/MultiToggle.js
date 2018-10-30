@@ -7,6 +7,7 @@ export default class MultiToggle extends Component {
     className: '',
     onChange: noop,
     options: [],
+    selected: undefined,
   }
 
   state = { selected: null }
@@ -14,18 +15,26 @@ export default class MultiToggle extends Component {
   handleOptionClick = ({ target }) => {
     const index = [...target.parentElement.children].indexOf(target)
     const selected = this.props.options[index]
-    this.setState({ selected }, () => this.props.onChange(selected))
+
+    if (this.props.selected !== undefined) {
+      this.props.onChange(selected)
+    } else {
+      this.setState({ selected })
+    }
   }
 
   render() {
     const { className, options } = this.props
-    const { selected } = this.state
+    const selected = this.props.selected !== undefined
+      ? this.props.selected
+      : this.state.selected
 
     return (
       <div className={`multi-toggle ${className}`.trim()}>
-        {options.map(option => (
+        {options.map((option, key) => (
           <div
             className={`toggle ${option === selected ? 'selected' : ''}`.trim()}
+            key={key}
             onClick={this.handleOptionClick}
           >
             {option.display}

@@ -21,6 +21,27 @@
     top: -30px;
     width: 100%;
 
+    > .multi-toggle.sorter {
+      > .toggle {
+        border: 2px groove #fff;
+        border-width: 2px 1px;
+        box-shadow: none;
+        font-size: .7rem;
+        height: 20px;
+        min-height: 20px;
+        min-width: 25px;
+        padding: .1rem;
+        width: 25px;
+
+        &.selected {
+          border-style: inset;
+        }
+
+        &:first-of-type { border-left-width: 2px; }
+        &:last-of-type { border-right-width: 2px; }
+      }
+    }
+
     .text {
       flex: 1;
       font-size: 1.5em;
