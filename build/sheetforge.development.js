@@ -470,7 +470,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
       });
     },
     modifiedValue: function modifiedValue() {
-      return self.value() + self.modifier();
+      return (self.value() || 0) + self.modifier();
     },
     modifier: function modifier() {
       return math_math.sum(self.effects().map(function (effect) {
