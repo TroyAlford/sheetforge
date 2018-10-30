@@ -11,6 +11,7 @@ const Layout = types.compose(
     children: CollectionOf(types.late(() => Layout)),
     colSpan: between(1, 4, 1),
     columns: between(1, 4, 1),
+    sortOption: types.maybe(types.number),
     title: types.union(types.maybe(types.string), types.literal(false)),
     type: types.maybe(types.string),
   })

@@ -7,24 +7,40 @@ import noop from '@/utilities/noop'
 import './List.scss'
 
 const buildSorter = (getter, reversed = false) => (A, B) => {
-  const a = String(getter(A))
-  const b = String(getter(B))
+  const a = getter(A)
+  const b = getter(B)
 
-  if (reversed) return b.localeCompare(a)
-  return a.localeCompare(b)
+  if (Array.isArray(a) && Array.isArray(b)) {
+    for (let i = 0; i < a.length; i += 1) {
+      if (a[i] !== b[i]) {
+        if (reversed) return b[i] < a[i] ? -1 : 1
+        return a[i] < b[i] ? -1 : 1
+      }
+      return 0
+    }
+  }
+
+  if (typeof a === 'number' && typeof b === 'number') {
+    if (a === b) return 0
+    if (reversed) return b < a ? -1 : 1
+    return a < b ? -1 : 1
+  }
+
+  const aString = String(a)
+  const bString = String(b)
+
+  if (reversed) return bString.localeCompare(aString)
+  return aString.localeCompare(bString)
 }
 
 export default (Model, Component, props = {}) => {
-  const sortOptions = [
-    Component.getSortableName && {
-      display: <span className="icon-sort-name-asc" />,
-      sorter: buildSorter(Component.getSortableName),
-    },
-    Component.getSortableValue && {
-      display: <span className="icon-sort-value-asc" />,
-      sorter: buildSorter(Component.getSortableValue),
-    },
-  ].filter(Boolean)
+  const sortOptions = (Component.sortOptions || []).map(sorter => ({
+    ...sorter,
+    comparitor: buildSorter(sorter.getter),
+    display: typeof sorter.display === 'string'
+      ? <span className={sorter.display} />
+      : sorter.display,
+  }))
 
   return class List extends React.Component {
     static defaultProps = {
@@ -114,7 +130,7 @@ export default (Model, Component, props = {}) => {
       const { expanded, sortOption } = this.state
       let sorted = this.props.collection.asArray
       if (sortOption !== null) {
-        sorted = sorted.sort(sortOption.sorter)
+        sorted = sorted.sort(sortOption.comparitor)
       }
 
       return (

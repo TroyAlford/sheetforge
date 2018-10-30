@@ -10,6 +10,17 @@ import './Skill.scss'
     onDelete: noop,
   }
 
+  static sortOptions = [{
+    display: 'icon-sort-name-asc',
+    getter: model => model.name,
+  }, {
+    display: 'icon-sort-value-desc',
+    getter: model => [-model.theory, -model.mastery, model.name],
+  }, {
+    display: 'icon-sort-size-desc',
+    getter: model => [-model.mastery, -model.theory, model.name],
+  }]
+
   onChangeName = name => this.props.model.set({ name })
   onChangeMastery = mastery => this.props.model.set({ mastery })
   handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))

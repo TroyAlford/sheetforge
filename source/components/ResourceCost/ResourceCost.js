@@ -8,8 +8,15 @@ import './ResourceCost.scss'
     model: {},
   }
 
-  handleChangeAmount = amount => this.props.model.set({ amount })
+  static sortOptions = [{
+    display: 'icon-sort-name-asc',
+    getter: model => model.resourceName,
+  }, {
+    display: 'icon-sort-value-asc',
+    getter: model => model.amount,
+  }]
 
+  handleChangeAmount = amount => this.props.model.set({ amount })
   handleChangeResource = ({ target: { value } }) => this.props.model.set({ resourceName: value })
 
   render() {

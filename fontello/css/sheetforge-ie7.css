@@ -28,5 +28,7 @@
 .icon-magic { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf0d0;&nbsp;'); }
 .icon-sort-name-asc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf15d;&nbsp;'); }
 .icon-sort-name-desc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf15e;&nbsp;'); }
+.icon-sort-size-asc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf160;&nbsp;'); }
+.icon-sort-size-desc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf161;&nbsp;'); }
 .icon-sort-value-asc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf162;&nbsp;'); }
 .icon-sort-value-desc { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf163;&nbsp;'); }

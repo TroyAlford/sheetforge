@@ -8,6 +8,14 @@ import './Effect.scss'
     model: {},
   }
 
+  static sortOptions = [{
+    display: 'icon-sort-name-asc',
+    getter: model => [!model.targetName, model.targetName],
+  }, {
+    display: 'icon-sort-value-asc',
+    getter: model => [!model.condition, model.modifier],
+  }]
+
   handleChangeCondition = condition => this.props.model.set({ condition })
   handleChangeModifier = modifier => this.props.model.set({ modifier })
   handleChangeTarget = ({ target: { value } }) => this.props.model.set({ targetName: value })

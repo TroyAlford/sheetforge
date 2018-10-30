@@ -183,6 +183,18 @@
       "src": "fontawesome"
     },
     {
+      "uid": "0cd2582b8c93719d066ee0affd02ac78",
+      "css": "sort-size-asc",
+      "code": 61792,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "27b13eff5eb0ca15e01a6e65ffe6eeec",
+      "css": "sort-size-desc",
+      "code": 61793,
+      "src": "fontawesome"
+    },
+    {
       "uid": "1fd1b4da373238652f7fe3b32ebec8ab",
       "css": "armor-1",
       "code": 59410,

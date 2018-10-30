@@ -10,6 +10,14 @@ import './Descriptor.scss'
     onDelete: noop,
   }
 
+  static sortOptions = [{
+    display: 'icon-sort-name-asc',
+    getter: model => model.name,
+  }, {
+    display: 'icon-sort-value-asc',
+    getter: model => model.value,
+  }]
+
   handleChangeName = name => this.props.model.set({ name })
   handleChangeValue = value => this.props.model.set({ value })
   handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))

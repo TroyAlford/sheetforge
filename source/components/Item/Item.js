@@ -17,6 +17,14 @@ const EffectList = ListOf(EffectModel, Effect, { className: 'effect-list' })
     onToggleExpanded: noop,
   }
 
+  static sortOptions = [{
+    display: 'icon-sort-name-asc',
+    getter: model => model.name,
+  }, {
+    display: 'icon-backpack',
+    getter: model => [!model.equipped, model.name],
+  }]
+
   handleChangeDescription = description => this.props.model.set({ description })
   handleChangeName = name => this.props.model.set({ name })
   handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))

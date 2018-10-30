@@ -15,6 +15,14 @@ import './Attribute.scss'
     rating: false,
   }
 
+  static sortOptions = [{
+    display: 'icon-sort-name-asc',
+    getter: model => model.name,
+  }, {
+    display: 'icon-sort-value-asc',
+    getter: model => model.modifiedValue(),
+  }]
+
   CACHE = {}
 
   componentDidMount() {

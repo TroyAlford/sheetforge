@@ -17,5 +17,7 @@
 .icon-magic:before { content: '\f0d0'; } /* '' */
 .icon-sort-name-asc:before { content: '\f15d'; } /* '' */
 .icon-sort-name-desc:before { content: '\f15e'; } /* '' */
+.icon-sort-size-asc:before { content: '\f160'; } /* '' */
+.icon-sort-size-desc:before { content: '\f161'; } /* '' */
 .icon-sort-value-asc:before { content: '\f162'; } /* '' */
 .icon-sort-value-desc:before { content: '\f163'; } /* '' */

@@ -23,6 +23,14 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
     onToggleExpanded: noop,
   }
 
+  static sortOptions = [{
+    display: 'icon-sort-name-asc',
+    getter: model => [model.name],
+  }, {
+    display: 'icon-magic',
+    getter: model => [!model.isActive, model.name],
+  }]
+
   handleCast = () => {
     this.props.model.cast()
     this.forceUpdate()
