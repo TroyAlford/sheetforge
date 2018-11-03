@@ -10,7 +10,7 @@ import './Effect.scss'
 
   static sortOptions = [{
     display: 'icon-sort-name-asc',
-    getter: model => [!model.targetName, model.targetName],
+    getter: model => [!model.targetId, model.targetId],
   }, {
     display: 'icon-sort-value-asc',
     getter: model => [!model.condition, model.modifier],
@@ -18,16 +18,16 @@ import './Effect.scss'
 
   handleChangeCondition = condition => this.props.model.set({ condition })
   handleChangeModifier = modifier => this.props.model.set({ modifier })
-  handleChangeTarget = ({ target: { value } }) => this.props.model.set({ targetName: value })
+  handleChangeTarget = ({ target: { value } }) => this.props.model.set({ targetId: value })
 
   render() {
-    const { available, condition = '', isApplicable, modifier, targetName } = this.props.model
+    const { available, condition = '', isApplicable, modifier, targetId } = this.props.model
 
     return (
       <div className={`effect ${isApplicable ? 'applicable' : ''}`.trim()}>
-        <select className="target" value={targetName} onChange={this.handleChangeTarget}>
-          {available().map(({ hash, name }) => (
-            <option key={hash} value={name}>{name}</option>
+        <select className="target" value={targetId} onChange={this.handleChangeTarget}>
+          {available().map(({ hash, id, name }) => (
+            <option key={hash} value={id}>{name}</option>
           ))}
         </select>
         <Editable

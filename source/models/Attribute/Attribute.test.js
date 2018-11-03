@@ -14,9 +14,9 @@ describe('models/Attribute', () => {
       traits: [
         {
           effects: [
-            { modifier: 1, targetName: 'Agility' },
-            { modifier: 4, targetName: 'Strength' },
-            { modifier: 1, targetName: 'Strength' },
+            { modifier: 1, targetId: 'agility' },
+            { modifier: 4, targetId: 'strength' },
+            { modifier: 1, targetId: 'strength' },
           ],
           name: 'Foo',
         },
@@ -75,8 +75,14 @@ describe('models/Attribute', () => {
       const attribute = Attribute.create({ name: 'Foo - Bar!! Baz!?' })
       expect(attribute.id).toEqual('foobarbaz')
 
-      attribute.set('name', '!!!! :D D: EEEEEE!!')
-      expect(attribute.id).toEqual('ddeeeeee')
+      attribute.set({ name: '!!!! :D D: EEEEEE!!' })
+      expect(attribute.id).toEqual('eeeeee')
+
+      attribute.set({ name: 'Foo: Bar' })
+      expect(attribute.id).toEqual('bar')
+
+      attribute.set({ name: ': Bar' })
+      expect(attribute.id).toEqual('bar')
     })
 
     it('converts snapshot.value to model.raw', () => {

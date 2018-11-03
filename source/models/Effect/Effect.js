@@ -11,12 +11,12 @@ export default types.compose(
   types.model({
     condition: '',
     modifier: 0,
-    targetName: '',
+    targetId: '',
   }).actions(self => ({
     afterAttach() {
-      if (!self.targetName && self.available().length) {
+      if (!self.targetId && self.available().length) {
         // eslint-disable-next-line no-param-reassign
-        self.targetName = self.available().first.name
+        self.targetId = self.available().first.name
       }
     },
 
@@ -36,7 +36,7 @@ export default types.compose(
     sourceName() { return self.source() ? self.source().name : 'Unknown' },
     target() {
       const character = self.character()
-      return character ? character.attributes.findBy('name', self.targetName) : null
+      return character ? character.attributes.findBy('name', self.targetId) : null
     },
   }))
 ).named('Effect')

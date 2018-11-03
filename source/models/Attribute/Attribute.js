@@ -25,7 +25,7 @@ export default types.compose(
   })).actions(self => ({
     effects() {
       if (!self.character) return []
-      return self.character.activeEffects().filter(effect => effect.targetName === self.name)
+      return self.character.activeEffects().filter(effect => effect.targetId === self.id)
     },
     modifiedValue() { return (self.value() || 0) + self.modifier() },
     modifier() { return math.sum(self.effects().map(effect => effect.modifier)) },

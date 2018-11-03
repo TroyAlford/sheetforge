@@ -43,7 +43,16 @@ import './Attribute.scss'
       this.forceUpdate()
     }
   }
-  handleChangeName = name => this.props.model.set({ name })
+  handleChangeName = (name) => {
+    const { id } = this.props.model
+    this.props.model.set({ name })
+    this.props.model.character.effects()
+      .filter(effect => effect.targetId === id)
+      .forEach((effect) => {
+        effect.set({ targetId: '' })
+        effect.set({ targetId: this.props.model.id })
+      })
+  }
   handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
   handleChangeValue = (raw) => {
     let value = raw

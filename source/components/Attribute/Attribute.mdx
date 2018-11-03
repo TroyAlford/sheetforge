@@ -22,16 +22,16 @@ __Note__: You can hover your mouse over any of the modifier displays to see _whi
         { name: 'Charisma', value: 3 },
       ],
       items: [
-        { equipped: true, name: 'Belt of Dwarven Strength', effects: [{ targetName: 'Strength', modifier: 2 }] },
-        { equipped: true, name: 'Potion: Eagle\'s Splendor', effects: [{ targetName: 'Charisma', modifier: 2 }] },
+        { equipped: true, name: 'Belt of Dwarven Strength', effects: [{ targetId: 'Strength', modifier: 2 }] },
+        { equipped: true, name: 'Potion: Eagle\'s Splendor', effects: [{ targetId: 'Charisma', modifier: 2 }] },
       ],
       traits: [
-        { name: 'Half Giant', effects: [{ targetName: 'Strength', modifier: 4 }] },
+        { name: 'Half Giant', effects: [{ targetId: 'Strength', modifier: 4 }] },
       ],
       spells: [
         { isActive: true, name: 'Curse: Rotting Flesh', effects: [
-          { targetName: 'Stamina', modifier: -2 },
-          { targetName: 'Charisma', modifier: -2 },
+          { targetId: 'Stamina', modifier: -2 },
+          { targetId: 'Charisma', modifier: -2 },
         ] },
       ],
     })
