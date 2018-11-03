@@ -119,15 +119,9 @@
       }
     }
 
-    &.expanded {
-      > .drag-handle {
-        position: absolute;
-        left: -15px;
-      }
-      > button.icon-remove {
-        position: absolute;
-        right: -29px;
-      }
+    &.expanded .drag-handle {
+      position: absolute;
+      left: -15px;
     }
 
     &.sortable-chosen {
@@ -156,6 +150,20 @@
 
         > .button.icon-add { right: 0; }
       }
+
+      > .list-item-wrapper > .icon-remove {
+        background: #fff;
+        border: 1px solid #666;
+        border-left: none;
+        box-shadow: 3px 3px #666;
+        display: flex;
+        position: absolute;
+        right: -29px;
+        z-index: 1;
+
+        &:hover { background: #ccf8f8; }
+      }
+
       > .expandable > .list-item-wrapper > div {
         padding: 0;
       }
@@ -166,7 +174,7 @@
       border-radius: 0;
 
       > .drag-handle { display: flex; }
-      > * > .editable { 
+      > * > .editable {
         background-color: #f3f3f3;
         border: 1px solid #ddd;
       }

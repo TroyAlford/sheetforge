@@ -6,7 +6,6 @@ import CollectionOf from '@/models/generic/Collection'
 import flatten from '@/utilities/flatten'
 import noop from '@/utilities/noop'
 import unique from '@/utilities/unique'
-import Layout from '@/models/Layout'
 import './List.scss'
 
 const buildSorter = (getter, reversed = false) => (A, B) => {
