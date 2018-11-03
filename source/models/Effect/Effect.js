@@ -14,9 +14,9 @@ export default types.compose(
     targetName: '',
   }).actions(self => ({
     afterAttach() {
-      if (!self.targetName && self.available.length) {
+      if (!self.targetName && self.available().length) {
         // eslint-disable-next-line no-param-reassign
-        self.targetName = self.available.first.name
+        self.targetName = self.available().first.name
       }
     },
 
