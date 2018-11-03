@@ -104,11 +104,6 @@
       }
     }
 
-    &:hover {
-      > .drag-handle { //, > button.icon-remove {
-        display: flex;
-      }
-    }
     &.expanded {
       > .drag-handle {
         position: absolute;
@@ -154,6 +149,12 @@
     &:focus-within, &:hover {
       background: #eee;
       border-radius: 0;
+
+      > .drag-handle { display: flex; }
+      > * > .editable { 
+        background-color: #f3f3f3;
+        border: 1px solid #ddd;
+      }
     }
   }
 

@@ -4,6 +4,6 @@
   @include widget;
 
   .theory.is-zero > span {
-    display: none;
+    opacity: 0;
   }
 }
