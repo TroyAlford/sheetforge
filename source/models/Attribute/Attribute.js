@@ -16,7 +16,11 @@ export default types.compose(
     raw: types.optional(types.union(types.number, types.string), 0),
   }).views(self => ({
     get character() { return findParent(self, p => p.isCharacter) },
-    get id() { return self.name.toLowerCase().replace(/[^a-z0-9]/ig, '') },
+    get id() {
+      return self.name.split(':').pop()
+        .trim().toLowerCase()
+        .replace(/[^a-z0-9]/ig, '')
+    },
     get isComputed() { return typeof self.raw === 'string' },
   })).actions(self => ({
     effects() {
