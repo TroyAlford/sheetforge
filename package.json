@@ -1,7 +1,7 @@
 {
   "name": "sheetforge",
   "description": "SheetForge - a React-based RPG Character Sheets",
-  "version": "2.0.0",
+  "version": "0.2.1",
   "license": "ISC",
   "author": "Troy Alford",
   "main": "build/sheetforge.min.js",
@@ -75,7 +75,7 @@
     "postinstall": "patch-package",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "prebuild": "rimraf ./build/* ./docs/*",
-    "preversion": "yarn build && git add -A ./build",
+    "preversion": "yarn build && git add -A ./build ./docs",
     "sourcemap": "source-map-explorer ./build/sheetforge.production.min.js",
     "test": "jest"
   },
