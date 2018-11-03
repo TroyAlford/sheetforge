@@ -49,6 +49,7 @@ export default (Model, Component, props = {}) => {
       className: '',
       collection: CollectionOf(Model).create([]),
       columns: 1,
+      layout: {},
       sortable: true,
       title: props.title || '',
       ...props,
