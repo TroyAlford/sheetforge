@@ -6,6 +6,7 @@ import CollectionOf from '@/models/generic/Collection'
 import flatten from '@/utilities/flatten'
 import noop from '@/utilities/noop'
 import unique from '@/utilities/unique'
+import Layout from '@/models/Layout'
 import './List.scss'
 
 const buildSorter = (getter, reversed = false) => (A, B) => {
@@ -49,7 +50,7 @@ export default (Model, Component, props = {}) => {
       className: '',
       collection: CollectionOf(Model).create([]),
       columns: 1,
-      layout: {},
+      layout: undefined,
       sortable: true,
       title: props.title || '',
       ...props,
@@ -69,9 +70,12 @@ export default (Model, Component, props = {}) => {
     }
 
     componentDidMount() {
-      const { sortOption: sortOptionIndex } = this.props.layout
-      if (sortOptions.length && sortOptionIndex !== undefined) {
-        this.setState({ sortOption: sortOptions[sortOptionIndex] || null })
+      if (this.props.layout) {
+        const { sortOption: sortOptionIndex } = this.props.layout
+        if (sortOptions.length && sortOptionIndex !== undefined) {
+          this.setState({ sortOption: sortOptions[sortOptionIndex] || null })
+        }
+        this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, () => this.forceUpdate())
       }
 
       const { sortable } = this.props
@@ -92,7 +96,6 @@ export default (Model, Component, props = {}) => {
         })
       }
       this.onDataSnapshotDisposer = onSnapshot(this.props.collection, () => this.forceUpdate())
-      this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, () => this.forceUpdate())
     }
     componentWillReceiveProps() {
       if (this.sortable) this.sortable.option('disabled', !this.props.sortable)
