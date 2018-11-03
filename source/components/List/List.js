@@ -3,7 +3,9 @@ import React from 'react'
 import Sortable from 'sortablejs'
 import MultiToggle from '@/components/MultiToggle'
 import CollectionOf from '@/models/generic/Collection'
+import flatten from '@/utilities/flatten'
 import noop from '@/utilities/noop'
+import unique from '@/utilities/unique'
 import './List.scss'
 
 const buildSorter = (getter, reversed = false) => (A, B) => {
@@ -57,7 +59,8 @@ export default (Model, Component, props = {}) => {
 
     container = React.createRef()
     expandedItems = {}
-    onSnapshotDisposer = noop
+    onDataSnapshotDisposer = noop
+    onLayoutSnapshotDisposer = noop
     sortable = null
     state = {
       expanded: {},
@@ -87,12 +90,25 @@ export default (Model, Component, props = {}) => {
           onStart: () => this.container.current.classList.add('dragging'),
         })
       }
-      this.onSnapshotDisposer = onSnapshot(this.props.collection, () => this.forceUpdate())
+      this.onDataSnapshotDisposer = onSnapshot(this.props.collection, () => this.forceUpdate())
+      this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, () => this.forceUpdate())
     }
     componentWillReceiveProps() {
       if (this.sortable) this.sortable.option('disabled', !this.props.sortable)
     }
-    componentWillUnmount() { this.onSnapshotDisposer() }
+    componentWillUnmount() {
+      this.onDataSnapshotDisposer()
+      this.onLayoutSnapshotDisposer()
+    }
+
+    get categories() {
+      return [
+        all => all.map(next => (next.categories || [])),
+        flatten,
+        unique,
+        all => all.sort(),
+      ].reduce((values, fn) => fn(values), this.props.collection.asArray)
+    }
 
     handleAdd = () => {
       this.props.collection.push(Model.create({}))
@@ -103,20 +119,39 @@ export default (Model, Component, props = {}) => {
       this.props.collection.deleteAt(index)
       this.forceUpdate()
     }
+    handleFilterChange = ({ target }) => this.props.layout.set({ filter: target.value })
+    handleSort = () => this.props.collection.sortBy('name')
+    handleSortChange = (clicked) => {
+      const { sortOption: current } = this.state
+      this.setState({ sortOption: current === clicked ? null : clicked }, () => {
+        this.props.layout.set({
+          sortOption: current === clicked ? undefined : sortOptions.indexOf(clicked),
+        })
+      })
+    }
     handleToggleExpanded = (hash, expanded) => {
       this.setState(state => ({
         ...state,
         expanded: { ...state.expanded, [hash]: expanded },
       }))
     }
-    handleSort = () => this.props.collection.sortBy('name')
-    handleSortChange = (clicked) => {
-      const { sortOption: current } = this.state
-      this.setState({ sortOption: current === clicked ? null : clicked }, () => {
-        this.props.layout.set({ sortOption: current === clicked ? undefined : sortOptions.indexOf(clicked) })
-      })
-    }
 
+    renderFilterWidget = () => {
+      const { layout } = this.props
+      const { categories } = this
+      if (!categories.length) return null
+      return (
+        <select
+          className="filter"
+          onChange={this.handleFilterChange}
+          tabIndex={-1}
+          value={layout.filter}
+        >
+          <option value="">All</option>
+          {categories.map(name => <option key={name} value={name}>{name}</option>)}
+        </select>
+      )
+    }
     renderSortWidget = () => {
       if (!this.props.sortable) return null
       if (!sortOptions.length) return null
@@ -131,23 +166,24 @@ export default (Model, Component, props = {}) => {
       )
     }
 
-
     render() {
-      const { className = '', collection, columns, sortable, title } = this.props
+      const { className = '', collection, columns, layout, sortable, title } = this.props
       const { expanded, sortOption } = this.state
-      let sorted = this.props.collection.asArray
-      if (sortOption !== null) {
-        sorted = sorted.sort(sortOption.comparitor)
+      let data = this.props.collection.asArray
+      if (sortOption !== null) data = data.sort(sortOption.comparitor)
+      if (this.categories.length && layout.filter) {
+        data = data.filter(item => (item.categories || []).includes(layout.filter))
       }
 
       return (
         <div className={`list ${className}`.trim()} ref={this.container} style={{ columns }}>
           <div className="title-bar">
             {this.renderSortWidget()}
+            {this.renderFilterWidget()}
             <div className="text">{title}</div>
             <button className="add icon-add" onClick={this.handleAdd} />
           </div>
-          {sorted.map(model => (
+          {data.map(model => (
             <div
               className={`list-item-wrapper ${expanded[model.hash] ? 'expanded' : ''}`.trim()}
               data-index={collection.indexOf(model)}
