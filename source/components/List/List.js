@@ -3,6 +3,7 @@ import React from 'react'
 import Sortable from 'sortablejs'
 import MultiToggle from '@/components/MultiToggle'
 import CollectionOf from '@/models/generic/Collection'
+import debounce from '@/utilities/debounce'
 import flatten from '@/utilities/flatten'
 import noop from '@/utilities/noop'
 import unique from '@/utilities/unique'
@@ -74,7 +75,9 @@ export default (Model, Component, props = {}) => {
         if (sortOptions.length && sortOptionIndex !== undefined) {
           this.setState({ sortOption: sortOptions[sortOptionIndex] || null })
         }
-        this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, () => this.forceUpdate())
+        this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout,
+          debounce(() => this.forceUpdate(), 100, true)
+        )
       }
 
       const { sortable } = this.props
