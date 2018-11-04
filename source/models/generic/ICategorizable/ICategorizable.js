@@ -1,7 +1,8 @@
 import { types } from 'mobx-state-tree'
+import noop from '@/utilities/noop'
 import unique from '@/utilities/unique'
 
-export default types.model({
+export default (getValue = noop) => types.model({
 }).volatile(() => ({
   isICategorizable: true,
 })).views((self) => {
@@ -25,5 +26,6 @@ export default types.model({
 
       return categories
     },
+    get categoryValue() { return getValue(self) },
   }
 })

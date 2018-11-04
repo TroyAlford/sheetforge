@@ -7,7 +7,7 @@ import IIdentity from '@/models/generic/IIdentity'
 
 export default types.compose(
   IIdentity,
-  ICategorizable,
+  ICategorizable(self => self.value),
   IEditable,
   types.model('Trait', {
     effects: CollectionOf(Effect),

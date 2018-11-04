@@ -94,11 +94,11 @@
       padding: .25em;
 
       > .title { flex: 1; }
-      > .count {
+      > .range {
         align-items: center;
         display: flex;
         justify-content: center;
-        width: 40px;
+        width: 50px;
       }
     }
   }

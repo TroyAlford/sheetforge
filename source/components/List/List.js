@@ -188,12 +188,17 @@ export default (Model, Component, props = {}) => {
     renderCategory = (category, data) => {
       const { columns } = this.props
       const categoryItems = this.getCategoryItems(data, category)
+      if (!categoryItems.length) return null
+
+      const values = categoryItems.map(item => item.categoryValue)
+      const min = Math.min(...values)
+      const max = Math.max(...values)
 
       return (
         <div key={category} className="category">
           <div className="details">
             <div className="title">Category: {category || 'Other'} ({categoryItems.length})</div>
-            <div className="count">{categoryItems.length}</div>
+            <div className="range">{min}-{max}</div>
           </div>
           <div className="category-items" style={{ columns }}>
             {categoryItems.map(this.renderItem)}
@@ -204,6 +209,8 @@ export default (Model, Component, props = {}) => {
     renderItem = (model) => {
       const { collection, layout, sortable } = this.props
       const { expanded, sortOption } = this.state
+      const sorted = sortable && sortOption !== null
+      const categorized = layout && layout.categorize
 
       return (
         <div
@@ -211,9 +218,7 @@ export default (Model, Component, props = {}) => {
           data-index={collection.indexOf(model)}
           key={model.hash}
         >
-          {(sortable && sortOption === null && !layout.categorize) && (
-            <div className="drag-handle" />
-          )}
+          {(!sorted && !categorized) && <div className="drag-handle" />}
           <Component
             model={model}
             onDelete={collection.delete}
@@ -237,7 +242,7 @@ export default (Model, Component, props = {}) => {
         categories = [].concat(categories, null)
       }
       const listStyle = {
-        columns: layout.categorize ? 1 : columns,
+        columns: (layout && layout.categorize) ? 1 : columns,
       }
 
       return (
@@ -248,7 +253,7 @@ export default (Model, Component, props = {}) => {
             <div className="text">{title}</div>
             <button className="add icon-add" onClick={this.handleAdd} />
           </div>
-          {(layout.categorize && categories.length)
+          {(layout && layout.categorize && categories.length)
             ? categories.map(category => this.renderCategory(category, data))
             : data.map(this.renderItem)
           }

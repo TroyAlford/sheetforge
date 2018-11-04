@@ -9,7 +9,7 @@ import toSymbols from '@/utilities/math/toSymbols'
 
 export default types.compose(
   IIdentity,
-  ICategorizable,
+  ICategorizable(self => self.modifiedValue()),
   IEditable,
   types.model({
     name: 'New Attribute...',

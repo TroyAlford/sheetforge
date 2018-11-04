@@ -5,7 +5,7 @@ import IIdentity from '@/models/generic/IIdentity'
 
 export default types.compose(
   IIdentity,
-  ICategorizable,
+  ICategorizable(self => self.mastery),
   IEditable,
   types.model({
     mastery: 1,

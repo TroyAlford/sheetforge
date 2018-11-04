@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree'
 import ICategorizable from '@/models/generic/ICategorizable'
 
 const Categorizable = types.compose(
-  ICategorizable,
+  ICategorizable(),
   types.model({ name: '' })
 )
 

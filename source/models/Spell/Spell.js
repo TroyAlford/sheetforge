@@ -9,7 +9,7 @@ import findParent from '@/utilities/findParent'
 
 export default types.compose(
   IIdentity,
-  ICategorizable,
+  ICategorizable(self => self.level),
   IEditable,
   types.model({
     costs: CollectionOf(ResourceCost), // Resources
