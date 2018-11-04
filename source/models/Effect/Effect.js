@@ -16,7 +16,7 @@ export default types.compose(
     afterAttach() {
       if (!self.targetId && self.available().length) {
         // eslint-disable-next-line no-param-reassign
-        self.targetId = self.available().first.name
+        self.targetId = self.available().first.id
       }
     },
 
