@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react'
+import { onSnapshot } from 'mobx-state-tree'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Effect from '@/components/Effect'
@@ -37,6 +38,14 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
     getter: model => [!model.isActive, model.name],
   }]
 
+  onResourceSnapshotDisposer = noop
+
+  componentDidMount() {
+    const { resources } = this.props.model.character
+    this.onResourceSnapshotDisposer = onSnapshot(resources, () => this.forceUpdate())
+  }
+  componentWillUnmount() { this.onResourceSnapshotDisposer() }
+
   handleCast = () => {
     this.props.model.cast()
     this.forceUpdate()
@@ -49,7 +58,9 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
   handleToggleActive = () => this.props.model.set({ isActive: !this.props.model.isActive })
 
   render() {
-    const { costs, description, name, effects, hash, isActive, isAffordable, level } = this.props.model
+    const {
+      costs, description, name, effects, hash, isActive, isAffordable, level,
+    } = this.props.model
 
     return (
       <div className={`spell ${isActive ? '' : 'in'}active`}>
