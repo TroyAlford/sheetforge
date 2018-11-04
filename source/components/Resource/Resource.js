@@ -14,12 +14,6 @@ import './Resource.scss'
   static sortOptions = [{
     display: 'icon-sort-name-asc',
     getter: model => model.name,
-  }, {
-    display: 'icon-sort-size-asc',
-    getter: model => [model.maximum, model.current],
-  }, {
-    display: 'icon-sort-size-desc',
-    getter: model => [-model.maximum, -model.current],
   }]
 
   handleChangeCurrent = current => this.props.model.set({ current })
