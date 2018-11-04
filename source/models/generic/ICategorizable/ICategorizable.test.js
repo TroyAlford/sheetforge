@@ -15,7 +15,7 @@ describe('models/generic/ICategorizable', () => {
   it('returns categories if specified', () => {
     expect(Categorizable.create({ name: 'Foo: Bar' }).categories).toEqual(['Foo'])
     expect(Categorizable.create({ name: 'Foo Bar: Baz' }).categories).toEqual(['Foo Bar'])
-    expect(Categorizable.create({ name: 'Foo: Bar: Baz' }).categories).toEqual(['Foo', 'Bar'])
+    expect(Categorizable.create({ name: 'Foo: Bar: Baz' }).categories).toEqual(['Bar', 'Foo'])
   })
 
   it('handles odd characters and emojis', () => {

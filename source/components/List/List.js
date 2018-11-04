@@ -108,12 +108,10 @@ export default (Model, Component, props = {}) => {
     }
 
     get categories() {
-      return [
-        all => all.map(next => (next.categories || [])),
-        flatten,
-        unique,
-        all => all.sort(),
-      ].reduce((values, fn) => fn(values), this.props.collection.asArray)
+      const list = this.props.collection.asArray.reduce((all, next) => (
+        all.concat(next.categories || [])
+      ), [])
+      return unique(list).sort()
     }
 
     handleAdd = () => {

@@ -1,22 +1,17 @@
 import { types } from 'mobx-state-tree'
-
-const REGEX = /([^:]*){1,}:/g
+import unique from '@/utilities/unique'
 
 export default types.model({
 }).volatile(() => ({
   isICategorizable: true,
 })).views((self) => {
   function getCategories() {
-    let categories = []
-    if (!self.name) return categories
+    if (!self.name) return []
 
-    let match = REGEX.exec(self.name)
-    while (match) {
-      categories = categories.concat(Array.from(match).slice(1))
-      match = REGEX.exec(self.name)
-    }
+    const categories = self.name.split(':')
+    categories.pop() // remove the name
 
-    return categories.map(category => category.trim()).filter(Boolean)
+    return unique(categories.map(category => category.trim()).filter(Boolean)).sort()
   }
   let lastUsedName = self.name
   let categories = getCategories()
