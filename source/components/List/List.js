@@ -20,8 +20,9 @@ const buildSorter = (getter, reversed = false) => (A, B) => {
         if (reversed) return b[i] < a[i] ? -1 : 1
         return a[i] < b[i] ? -1 : 1
       }
-      return 0
     }
+
+    return 0
   }
 
   if (typeof a === 'number' && typeof b === 'number') {
