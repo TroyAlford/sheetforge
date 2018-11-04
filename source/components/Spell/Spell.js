@@ -33,9 +33,6 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
   }, {
     display: 'icon-sort-value-desc',
     getter: model => [-model.level, model.name],
-  }, {
-    display: 'icon-magic',
-    getter: model => [!model.isActive, model.name],
   }]
 
   onResourceSnapshotDisposer = noop
