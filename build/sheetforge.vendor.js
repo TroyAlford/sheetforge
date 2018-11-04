@@ -3254,8 +3254,8 @@ function factory(type, config, load, typed) {
    *
    *    multiply, sqrt, cbrt, nthRoot
    *
-   * @param  {number | BigNumber | Complex | Array | Matrix} x  The base
-   * @param  {number | BigNumber | Complex} y                   The exponent
+   * @param  {number | BigNumber | Complex | Unit | Array | Matrix} x  The base
+   * @param  {number | BigNumber | Complex} y                          The exponent
    * @return {number | BigNumber | Complex | Array | Matrix} The value of `x` to the power `y`
    */
 
@@ -3290,7 +3290,7 @@ function factory(type, config, load, typed) {
     'Matrix, BigNumber': function MatrixBigNumber(x, y) {
       return _powMatrix(x, y.toNumber());
     },
-    'Unit, number': function UnitNumber(x, y) {
+    'Unit, number | BigNumber': function UnitNumberBigNumber(x, y) {
       return x.pow(y);
     }
   });
@@ -9905,8 +9905,8 @@ var defaultEscapes = {
   "~": "\\textasciitilde{}"
 };
 var formatEscapes = {
-  "–": "\\--",
-  "—": "\\---",
+  "\u2013": "\\--",
+  "\u2014": "\\---",
   " ": "~",
   "\t": "\\qquad{}",
   "\r\n": "\\newline{}",
@@ -18690,7 +18690,7 @@ exports.operators = {
   // TODO find ideal solution
   'unaryPlus': '+',
   'unaryMinus': '-',
-  'bitNot': '~',
+  'bitNot': '\\~',
   // TODO find ideal solution
   'not': '\\neg',
   'multiply': '\\cdot',

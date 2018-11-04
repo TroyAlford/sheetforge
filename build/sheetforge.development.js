@@ -480,7 +480,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
     },
 
     get id() {
-      return self.name.toLowerCase().replace(/[^a-z0-9]/ig, '');
+      return self.name.split(':').pop().trim().toLowerCase().replace(/[^a-z0-9]/ig, '');
     },
 
     get isComputed() {
@@ -493,7 +493,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
     effects: function effects() {
       if (!self.character) return [];
       return self.character.activeEffects().filter(function (effect) {
-        return effect.targetName === self.name;
+        return effect.targetId === self.id;
       });
     },
     modifiedValue: function modifiedValue() {
@@ -819,13 +819,13 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 /* harmony default export */ var Effect = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   condition: '',
   modifier: 0,
-  targetName: ''
+  targetId: ''
 }).actions(function (self) {
   return {
     afterAttach: function afterAttach() {
-      if (!self.targetName && self.available.length) {
+      if (!self.targetId && self.available().length) {
         // eslint-disable-next-line no-param-reassign
-        self.targetName = self.available.first.name;
+        self.targetId = self.available().first.name;
       }
     },
     available: function available() {
@@ -851,7 +851,7 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
     },
     target: function target() {
       var character = self.character();
-      return character ? character.attributes.findBy('name', self.targetName) : null;
+      return character ? character.attributes.findBy('name', self.targetId) : null;
     }
   };
 })).named('Effect'));
