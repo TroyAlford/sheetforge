@@ -33,7 +33,7 @@ export default class MultiToggle extends Component {
       <div className={`multi-toggle ${className}`.trim()}>
         {options.map((option, key) => (
           <div
-            className={`toggle ${option === selected ? 'selected' : ''}`.trim()}
+            className={`toggle ${option === selected ? 'on' : 'off'}`.trim()}
             key={key}
             onClick={this.handleOptionClick}
           >
