@@ -8,6 +8,7 @@ const Layout = types.compose(
   IIdentity,
   IEditable,
   types.model({
+    categorize: false,
     children: CollectionOf(types.late(() => Layout)),
     colSpan: between(1, 4, 1),
     columns: between(1, 4, 1),

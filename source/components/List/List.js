@@ -114,6 +114,12 @@ export default (Model, Component, props = {}) => {
       return unique(list).sort()
     }
 
+    getCategoryItems = (items, category) => (
+      category !== null
+        ? items.filter(item => (item.categories || []).includes(category))
+        : items.filter(item => (item.categories || []).length === 0)
+    )
+
     handleAdd = () => {
       this.props.collection.push(Model.create({}))
       this.forceUpdate()
@@ -133,6 +139,9 @@ export default (Model, Component, props = {}) => {
         })
       })
     }
+    handleToggleCategorized = () => {
+      this.props.layout.set({ categorize: !this.props.layout.categorize })
+    }
     handleToggleExpanded = (hash, expanded) => {
       this.setState(state => ({
         ...state,
@@ -140,11 +149,18 @@ export default (Model, Component, props = {}) => {
       }))
     }
 
-    renderFilterWidget = () => {
+    renderCategoryWidget = () => {
       const { layout } = this.props
       const { categories } = this
       if (!categories.length) return null
-      return (
+
+      const className = [
+        'categorize icon-categorize',
+        layout.categorize ? 'on' : 'off',
+      ].join(' ')
+
+      return <>
+        <div {...{ className }} onClick={this.handleToggleCategorized} />
         <select
           className="filter"
           onChange={this.handleFilterChange}
@@ -154,7 +170,7 @@ export default (Model, Component, props = {}) => {
           <option value="">All</option>
           {categories.map(name => <option key={name} value={name}>{name}</option>)}
         </select>
-      )
+      </>
     }
     renderSortWidget = () => {
       if (!this.props.sortable) return null
@@ -169,39 +185,73 @@ export default (Model, Component, props = {}) => {
         />
       )
     }
+    renderCategory = (category, data) => {
+      const { columns } = this.props
+      const categoryItems = this.getCategoryItems(data, category)
+
+      return (
+        <div key={category} className="category">
+          <div className="details">
+            <div className="title">Category: {category || 'Other'} ({categoryItems.length})</div>
+            <div className="count">{categoryItems.length}</div>
+          </div>
+          <div className="category-items" style={{ columns }}>
+            {categoryItems.map(this.renderItem)}
+          </div>
+        </div>
+      )
+    }
+    renderItem = (model) => {
+      const { collection, layout, sortable } = this.props
+      const { expanded, sortOption } = this.state
+
+      return (
+        <div
+          className={`list-item-wrapper ${expanded[model.hash] ? 'expanded' : ''}`.trim()}
+          data-index={collection.indexOf(model)}
+          key={model.hash}
+        >
+          {(sortable && sortOption === null && !layout.categorize) && (
+            <div className="drag-handle" />
+          )}
+          <Component
+            model={model}
+            onDelete={collection.delete}
+            onToggleExpanded={this.handleToggleExpanded}
+          />
+          <button className="icon-remove" onClick={this.handleDelete} />
+        </div>
+      )
+    }
 
     render() {
-      const { className = '', collection, columns, layout, sortable, title } = this.props
-      const { expanded, sortOption } = this.state
+      const { className = '', columns, layout, title } = this.props
+      const { sortOption } = this.state
+      let { categories } = this
       let data = this.props.collection.asArray
       if (sortOption !== null) data = data.sort(sortOption.comparitor)
-      if (this.categories.length && layout.filter) {
-        data = data.filter(item => (item.categories || []).includes(layout.filter))
+      if (categories.length && layout.filter) {
+        data = this.getCategoryItems(data, layout.filter)
+        categories = [layout.filter]
+      } else {
+        categories = [].concat(categories, null)
+      }
+      const listStyle = {
+        columns: layout.categorize ? 1 : columns,
       }
 
       return (
-        <div className={`list ${className}`.trim()} ref={this.container} style={{ columns }}>
+        <div className={`list ${className}`.trim()} ref={this.container} style={listStyle}>
           <div className="title-bar">
             {this.renderSortWidget()}
-            {this.renderFilterWidget()}
+            {this.renderCategoryWidget()}
             <div className="text">{title}</div>
             <button className="add icon-add" onClick={this.handleAdd} />
           </div>
-          {data.map(model => (
-            <div
-              className={`list-item-wrapper ${expanded[model.hash] ? 'expanded' : ''}`.trim()}
-              data-index={collection.indexOf(model)}
-              key={model.hash}
-            >
-              {(sortable && sortOption === null) && <div className="drag-handle" />}
-              <Component
-                model={model}
-                onDelete={collection.delete}
-                onToggleExpanded={this.handleToggleExpanded}
-              />
-              <button className="icon-remove" onClick={this.handleDelete} />
-            </div>
-          ))}
+          {(layout.categorize && categories.length)
+            ? categories.map(category => this.renderCategory(category, data))
+            : data.map(this.renderItem)
+          }
         </div>
       )
     }

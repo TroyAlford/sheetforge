@@ -9,10 +9,31 @@
     button.icon-add { display: flex; }
   }
 
+  @mixin toolbar-button {
+    align-items: center;
+    border-radius: 5px;
+    border: 1px outset #ccc;
+    box-shadow: none;
+    cursor: pointer;
+    display: inline-flex;
+    height: 20px;
+    justify-content: center;
+    min-height: 20px;
+    min-width: 25px;
+    padding: .1rem;
+    min-width: 25px;
+
+    &.on {
+      border-style: inset;
+      background-color: #eee;
+    }
+  }
+
   > .title-bar {
     align-items: center;
     border-bottom: 1px solid;
     display: flex;
+    font-size: .7rem;
     height: 30px;
     justify-content: space-between;
     left: 0;
@@ -23,38 +44,24 @@
 
     > .multi-toggle.sorter {
       > .toggle {
-        border: 2px groove #fff;
-        border-width: 2px 1px;
-        box-shadow: none;
-        font-size: .7rem;
-        height: 20px;
-        min-height: 20px;
-        min-width: 25px;
-        padding: .1rem;
-        width: 25px;
+        @include toolbar-button();
+        border-radius: 0;
 
-        &.selected {
-          border-style: inset;
-        }
-
-        &:first-of-type { border-left-width: 2px; }
-        &:last-of-type { border-right-width: 2px; }
+        &:first-of-type { border-radius: 5px 0 0 5px; }
+        &:last-of-type { border-radius: 0 5px 5px 0; }
       }
     }
 
-    > .filter {
-      background: inherit;
-      border-radius: 5px;
-      border-width: 2px 1px;
-      border: 2px groove #fff;
-      box-shadow: none;
-      cursor: pointer;
-      font-size: .7rem;
-      height: 20px;
+    > .categorize {
+      @include toolbar-button();
       margin-left: 5px;
-      min-height: 20px;
-      min-width: 25px;
-      padding: .1rem;
+    }
+
+    > .filter {
+      @include toolbar-button();
+      background: inherit;
+      box-shadow: none;
+      margin-left: 5px;
     }
 
     .text {
@@ -70,6 +77,29 @@
       cursor: pointer;
       height: 30px;
       width: 30px;
+    }
+  }
+
+  .category {
+    display: flex;
+    flex-direction: column;
+
+    > .details {
+      border-bottom: 1px solid;
+      display: flex;
+      flex-direction: row;
+      font-weight: bold;
+      height: 30px;
+      justify-content: space-between;
+      padding: .25em;
+
+      > .title { flex: 1; }
+      > .count {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        width: 40px;
+      }
     }
   }
 
