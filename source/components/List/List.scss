@@ -12,7 +12,7 @@
   @mixin toolbar-button {
     align-items: center;
     border-radius: 5px;
-    border: 1px outset #ccc;
+    border: 1px solid transparent;
     box-shadow: none;
     cursor: pointer;
     display: inline-flex;
@@ -23,8 +23,11 @@
     padding: .1rem;
     min-width: 25px;
 
+    &:hover {
+      border: 1px outset #ccc;
+    }
     &.on {
-      border-style: inset;
+      border: 1px inset #ccc;
       background-color: #eee;
     }
   }
@@ -49,6 +52,7 @@
 
         &:first-of-type { border-radius: 5px 0 0 5px; }
         &:last-of-type { border-radius: 0 5px 5px 0; }
+        &:only-child { border-radius: 5px; }
       }
     }
 
