@@ -8,6 +8,8 @@ import noop from '@/utilities/noop'
 import unique from '@/utilities/unique'
 import './List.scss'
 
+const NO_CATEGORY = 'Uncategorized'
+
 const buildSorter = (getter, reversed = false) => (A, B) => {
   const a = getter(A)
   const b = getter(B)
@@ -55,11 +57,12 @@ export default (Model, Component, props = {}) => {
       ...props,
     }
 
-    Model = Model
     Component = Component
+    Model = Model
 
     container = React.createRef()
     expandedItems = {}
+    filterEl = React.createRef()
     onDataSnapshotDisposer = noop
     onLayoutSnapshotDisposer = noop
     sortable = null
@@ -110,11 +113,14 @@ export default (Model, Component, props = {}) => {
       const list = this.props.collection.asArray.reduce((all, next) => (
         all.concat(next.categories || [])
       ), [])
-      return unique(list).sort()
+
+
+      if (!list.length) return []
+      return unique(list.filter(item => item !== NO_CATEGORY)).sort().concat(NO_CATEGORY)
     }
 
     getCategoryItems = (items, category) => (
-      category !== null
+      (category && category !== NO_CATEGORY)
         ? items.filter(item => (item.categories || []).includes(category))
         : items.filter(item => (item.categories || []).length === 0)
     )
@@ -163,6 +169,7 @@ export default (Model, Component, props = {}) => {
         <select
           className="filter"
           onChange={this.handleFilterChange}
+          ref={this.filterEl}
           tabIndex={-1}
           value={layout.filter}
         >
@@ -196,8 +203,10 @@ export default (Model, Component, props = {}) => {
       return (
         <div key={category} className="category">
           <div className="details">
-            <div className="title">Category: {category || 'Other'} ({categoryItems.length})</div>
-            <div className="range">{min}-{max}</div>
+            <div className="title">Category: {category} ({categoryItems.length})</div>
+            {(!Number.isNaN(min) && !Number.isNaN(max)) && (
+              <div className="range">{min}-{max}</div>
+            )}
           </div>
           <div className="category-items" style={{ columns }}>
             {categoryItems.map(this.renderItem)}
@@ -229,19 +238,19 @@ export default (Model, Component, props = {}) => {
     }
 
     render() {
-      const { className = '', columns, layout, title } = this.props
+      const { className = '', columns, layout = {}, title } = this.props
       const { sortOption } = this.state
       let { categories } = this
       let data = this.props.collection.asArray
       if (sortOption !== null) data = data.sort(sortOption.comparitor)
-      if (categories.length && layout.filter) {
+
+      const hasCategories = Boolean(categories.length)
+      if (hasCategories && layout.filter) {
         data = this.getCategoryItems(data, layout.filter)
         categories = [layout.filter]
-      } else {
-        categories = [].concat(categories, null)
       }
       const listStyle = {
-        columns: (layout && layout.categorize) ? 1 : columns,
+        columns: layout.categorize ? 1 : columns,
       }
 
       return (
@@ -252,7 +261,7 @@ export default (Model, Component, props = {}) => {
             <div className="text">{title}</div>
             <button className="add icon-add" onClick={this.handleAdd} />
           </div>
-          {(layout && layout.categorize && categories.length)
+          {(hasCategories && layout.categorize)
             ? categories.map(category => this.renderCategory(category, data))
             : data.map(this.renderItem)
           }
