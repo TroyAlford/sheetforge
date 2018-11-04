@@ -166,7 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ "05fm":
 /*!**************************************!*\
-  !*** ./source/index.js + 26 modules ***!
+  !*** ./source/index.js + 27 modules ***!
   \**************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/defineProperty.js (<- Module is not an ECMAScript module) */
@@ -197,27 +197,29 @@ var objectWithoutProperties_default = /*#__PURE__*/__webpack_require__.n(objectW
 var defineProperty = __webpack_require__("lSNA");
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
+// CONCATENATED MODULE: ./source/utilities/unique.js
+/* harmony default export */ var unique = (function () {
+  var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  return array.filter(function (item, index, all) {
+    return all.indexOf(item) === index;
+  });
+});
 // CONCATENATED MODULE: ./source/models/generic/ICategorizable/ICategorizable.js
 
-var REGEX = /([^:]*){1,}:/g;
+
 /* harmony default export */ var ICategorizable = (mobx_state_tree["types"].model({}).volatile(function () {
   return {
     isICategorizable: true
   };
 }).views(function (self) {
   function getCategories() {
-    var categories = [];
-    if (!self.name) return categories;
-    var match = REGEX.exec(self.name);
+    if (!self.name) return [];
+    var categories = self.name.split(':');
+    categories.pop(); // remove the name
 
-    while (match) {
-      categories = categories.concat(Array.from(match).slice(1));
-      match = REGEX.exec(self.name);
-    }
-
-    return categories.map(function (category) {
+    return unique(categories.map(function (category) {
       return category.trim();
-    }).filter(Boolean);
+    }).filter(Boolean)).sort();
   }
 
   var lastUsedName = self.name;
