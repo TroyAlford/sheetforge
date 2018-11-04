@@ -25,7 +25,13 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
 
   static sortOptions = [{
     display: 'icon-sort-name-asc',
-    getter: model => [model.name],
+    getter: model => [model.name, model.level],
+  }, {
+    display: 'icon-sort-value-asc',
+    getter: model => [model.level, model.name],
+  }, {
+    display: 'icon-sort-value-desc',
+    getter: model => [-model.level, model.name],
   }, {
     display: 'icon-magic',
     getter: model => [!model.isActive, model.name],
@@ -37,12 +43,13 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
   }
 
   handleChangeDescription = description => this.props.model.set({ description })
+  handleChangeLevel = level => this.props.model.set({ level })
   handleChangeName = name => this.props.model.set({ name })
   handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
   handleToggleActive = () => this.props.model.set({ isActive: !this.props.model.isActive })
 
   render() {
-    const { costs, description, name, effects, hash, isActive, isAffordable } = this.props.model
+    const { costs, description, name, effects, hash, isActive, isAffordable, level } = this.props.model
 
     return (
       <div className={`spell ${isActive ? '' : 'in'}active`}>
@@ -52,6 +59,11 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
           onChange={this.handleChangeName}
           onEditEnd={this.handleCommitName}
           value={name}
+        />
+        <Editable
+          className="level"
+          onChange={this.handleChangeLevel}
+          value={level}
         />
         <button className="cast icon-magic" onClick={this.handleCast} disabled={!isAffordable()} />
         <Expandable onToggle={expanded => this.props.onToggleExpanded(hash, expanded)}>
