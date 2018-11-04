@@ -3,6 +3,7 @@ import webpackConfig from './webpack.config.babel'
 
 export default {
   base: '/sheetforge/',
+  codeSandbox: false,
   dest: './docs',
   head: {
     meta: [{ content: 'width=device-width, initial-scale=1', name: 'viewport' }],
