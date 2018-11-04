@@ -166,7 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ "05fm":
 /*!**************************************!*\
-  !*** ./source/index.js + 27 modules ***!
+  !*** ./source/index.js + 28 modules ***!
   \**************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/defineProperty.js (<- Module is not an ECMAScript module) */
@@ -197,6 +197,8 @@ var objectWithoutProperties_default = /*#__PURE__*/__webpack_require__.n(objectW
 var defineProperty = __webpack_require__("lSNA");
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
+// CONCATENATED MODULE: ./source/utilities/noop.js
+/* harmony default export */ var noop = (function () {});
 // CONCATENATED MODULE: ./source/utilities/unique.js
 /* harmony default export */ var unique = (function () {
   var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -207,33 +209,41 @@ var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 // CONCATENATED MODULE: ./source/models/generic/ICategorizable/ICategorizable.js
 
 
-/* harmony default export */ var ICategorizable = (mobx_state_tree["types"].model({}).volatile(function () {
-  return {
-    isICategorizable: true
-  };
-}).views(function (self) {
-  function getCategories() {
-    if (!self.name) return [];
-    var categories = self.name.split(':');
-    categories.pop(); // remove the name
 
-    return unique(categories.map(function (category) {
-      return category.trim();
-    }).filter(Boolean)).sort();
-  }
+/* harmony default export */ var ICategorizable = (function () {
+  var getValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noop;
+  return mobx_state_tree["types"].model({}).volatile(function () {
+    return {
+      isICategorizable: true
+    };
+  }).views(function (self) {
+    function getCategories() {
+      if (!self.name) return [];
+      var categories = self.name.split(':');
+      categories.pop(); // remove the name
 
-  var lastUsedName = self.name;
-  var categories = getCategories();
-  return {
-    get categories() {
-      if (!self.name || self.name === lastUsedName) return categories;
-      lastUsedName = self.name;
-      categories = getCategories();
-      return categories;
+      return unique(categories.map(function (category) {
+        return category.trim();
+      }).filter(Boolean)).sort();
     }
 
-  };
-}));
+    var lastUsedName = self.name;
+    var categories = getCategories();
+    return {
+      get categories() {
+        if (!self.name || self.name === lastUsedName) return categories;
+        lastUsedName = self.name;
+        categories = getCategories();
+        return categories;
+      },
+
+      get categoryValue() {
+        return getValue(self);
+      }
+
+    };
+  });
+});
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/typeof.js
 var helpers_typeof = __webpack_require__("cDf5");
 var typeof_default = /*#__PURE__*/__webpack_require__.n(helpers_typeof);
@@ -479,7 +489,9 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
 
 
 
-/* harmony default export */ var Attribute = (mobx_state_tree["types"].compose(IIdentity, ICategorizable, IEditable_IEditable, mobx_state_tree["types"].model({
+/* harmony default export */ var Attribute = (mobx_state_tree["types"].compose(IIdentity, ICategorizable(function (self) {
+  return self.modifiedValue();
+}), IEditable_IEditable, mobx_state_tree["types"].model({
   name: 'New Attribute...',
   raw: mobx_state_tree["types"].optional(mobx_state_tree["types"].union(mobx_state_tree["types"].number, mobx_state_tree["types"].string), 0)
 }).views(function (self) {
@@ -560,7 +572,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
 
 
 
-/* harmony default export */ var Descriptor = (mobx_state_tree["types"].compose(IIdentity, ICategorizable, IEditable_IEditable, mobx_state_tree["types"].model({
+/* harmony default export */ var Descriptor = (mobx_state_tree["types"].compose(IIdentity, ICategorizable(), IEditable_IEditable, mobx_state_tree["types"].model({
   name: 'New Descriptor...',
   value: ''
 })).named('Descriptor'));
@@ -873,7 +885,7 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Item = (mobx_state_tree["types"].compose(IIdentity, ICategorizable, IEditable_IEditable, mobx_state_tree["types"].model({
+/* harmony default export */ var Item = (mobx_state_tree["types"].compose(IIdentity, ICategorizable(), IEditable_IEditable, mobx_state_tree["types"].model({
   description: '',
   effects: Collection(Effect),
   equipped: false,
@@ -884,7 +896,7 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Resource = (mobx_state_tree["types"].compose(IIdentity, ICategorizable, IEditable_IEditable, mobx_state_tree["types"].model({
+/* harmony default export */ var Resource = (mobx_state_tree["types"].compose(IIdentity, ICategorizable(), IEditable_IEditable, mobx_state_tree["types"].model({
   current: 0,
   maximum: 10,
   name: 'New Resource...'
@@ -894,7 +906,9 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Skill = (mobx_state_tree["types"].compose(IIdentity, ICategorizable, IEditable_IEditable, mobx_state_tree["types"].model({
+/* harmony default export */ var Skill = (mobx_state_tree["types"].compose(IIdentity, ICategorizable(function (self) {
+  return self.mastery;
+}), IEditable_IEditable, mobx_state_tree["types"].model({
   mastery: 1,
   name: 'New Skill...',
   theory: 0
@@ -956,7 +970,9 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Spell = (mobx_state_tree["types"].compose(IIdentity, ICategorizable, IEditable_IEditable, mobx_state_tree["types"].model({
+/* harmony default export */ var Spell = (mobx_state_tree["types"].compose(IIdentity, ICategorizable(function (self) {
+  return self.level;
+}), IEditable_IEditable, mobx_state_tree["types"].model({
   costs: Collection(ResourceCost),
   // Resources
   description: '',
@@ -1000,7 +1016,9 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
 
 
 
-/* harmony default export */ var Trait = (mobx_state_tree["types"].compose(IIdentity, ICategorizable, IEditable_IEditable, mobx_state_tree["types"].model('Trait', {
+/* harmony default export */ var Trait = (mobx_state_tree["types"].compose(IIdentity, ICategorizable(function (self) {
+  return self.value;
+}), IEditable_IEditable, mobx_state_tree["types"].model('Trait', {
   effects: Collection(Effect),
   name: 'New Trait...',
   value: 0
