@@ -205,20 +205,29 @@ var REGEX = /([^:]*){1,}:/g;
     isICategorizable: true
   };
 }).views(function (self) {
+  function getCategories() {
+    var categories = [];
+    if (!self.name) return categories;
+    var match = REGEX.exec(self.name);
+
+    while (match) {
+      categories = categories.concat(Array.from(match).slice(1));
+      match = REGEX.exec(self.name);
+    }
+
+    return categories.map(function (category) {
+      return category.trim();
+    }).filter(Boolean);
+  }
+
+  var lastUsedName = self.name;
+  var categories = getCategories();
   return {
     get categories() {
-      var categories = [];
-      if (!self.name) return categories;
-      var match = REGEX.exec(self.name);
-
-      while (match) {
-        categories = categories.concat(Array.from(match).slice(1));
-        match = REGEX.exec(self.name);
-      }
-
-      return categories.map(function (category) {
-        return category.trim();
-      }).filter(Boolean);
+      if (!self.name || self.name === lastUsedName) return categories;
+      lastUsedName = self.name;
+      categories = getCategories();
+      return categories;
     }
 
   };
@@ -825,7 +834,7 @@ var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
     afterAttach: function afterAttach() {
       if (!self.targetId && self.available().length) {
         // eslint-disable-next-line no-param-reassign
-        self.targetId = self.available().first.name;
+        self.targetId = self.available().first.id;
       }
     },
     available: function available() {
