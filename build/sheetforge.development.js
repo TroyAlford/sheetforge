@@ -166,13 +166,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ "05fm":
 /*!**************************************!*\
-  !*** ./source/index.js + 28 modules ***!
+  !*** ./source/index.js + 26 modules ***!
   \**************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/defineProperty.js (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/objectSpread.js (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/objectWithoutProperties.js (<- Module is not an ECMAScript module) */
-/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/toConsumableArray.js (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@babel/runtime/helpers/typeof.js (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/deep-equal/index.js (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/mathjs/core.js (<- Module is not an ECMAScript module) */
@@ -760,85 +759,6 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
     name: options.name || 'Collection'
   }));
 });
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
-var toConsumableArray = __webpack_require__("RIqP");
-var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
-
-// CONCATENATED MODULE: ./source/utilities/bound.js
-/* harmony default export */ var bound = (function (value, _ref) {
-  var min = _ref.min,
-      max = _ref.max;
-  if (min !== undefined && value < min) return min;
-  if (max !== undefined && value > max) return max;
-  return value;
-});
-// CONCATENATED MODULE: ./source/models/HealthLevel/HealthLevel.js
-
-
-
-
-
-
-
-var DAMAGE_LEVELS = ['none', 'light', 'heavy', 'bane'];
-/* harmony default export */ var HealthLevel = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
-  damage: mobx_state_tree["types"].optional(mobx_state_tree["types"].union.apply(mobx_state_tree["types"], toConsumableArray_default()(DAMAGE_LEVELS.map(function (dt) {
-    return mobx_state_tree["types"].literal(dt);
-  }))), 'none'),
-  name: 'New Health Level...',
-  penalty: 0
-}).views(function (self) {
-  return {
-    get healthBar() {
-      var parent = findParent(self);
-      return Object(mobx["isObservableArray"])(parent) ? parent : null;
-    },
-
-    get index() {
-      return self.healthBar ? self.healthBar.indexOf(self) : null;
-    },
-
-    get severity() {
-      return DAMAGE_LEVELS.indexOf(self.damage);
-    }
-
-  };
-}).actions(function (self) {
-  return {
-    adjust: function adjust(byAmount) {
-      var index = bound(self.severity + byAmount, {
-        max: 3,
-        min: 0
-      });
-      self.apply(DAMAGE_LEVELS[index]);
-    },
-    apply: function apply(damage) {
-      if (!DAMAGE_LEVELS.includes(damage)) return;
-      var newSeverity = DAMAGE_LEVELS.indexOf(damage);
-      if (newSeverity === self.severity) return;
-      var ownIndex = self.index;
-      var direction = newSeverity < self.severity ? '↑' : '↓';
-
-      if (!self.healthBar) {
-        self.set({
-          damage: damage
-        });
-        return;
-      }
-
-      self.healthBar.forEach(function (healthLevel, index) {
-        if (direction === '↑' && index >= ownIndex && healthLevel.severity > newSeverity || direction === '↓' && index <= ownIndex && healthLevel.severity < newSeverity) {
-          healthLevel.set({
-            damage: damage
-          });
-        }
-      });
-    },
-    heal: function heal() {
-      self.apply('none');
-    }
-  };
-})).named('HealthLevel'));
 // CONCATENATED MODULE: ./source/models/Effect/Effect.js
 
 
@@ -1059,14 +979,12 @@ function flatten(array) {
 
 
 
-
 /* harmony default export */ var Character = (mobx_state_tree["types"].compose(IIdentity, IEditable_IEditable, mobx_state_tree["types"].model({
   attributes: Collection(Attribute),
   conditions: Collection(mobx_state_tree["types"].string),
   // ['vs Goblins', 'Crinos Form']
   descriptors: Collection(Descriptor),
   experience: 0,
-  health: Collection(HealthLevel),
   items: Collection(Item),
   // equipped / unequipped, have Effects
   resources: Collection(Resource),
