@@ -64,6 +64,18 @@ import './Attribute.scss'
   handleCommitValue = () => {
     if (String(this.props.model.raw) === '') this.props.model.set({ raw: 0 })
   }
+  handleValueKeyDown = ({ key }) => {
+    const { model } = this.props
+    if (model.isComputed) return
+
+    switch (key) {
+      case 'ArrowUp':
+        model.set({ raw: model.value() + 1 }); break
+      case 'ArrowDown':
+        model.set({ raw: model.value() - 1 }); break
+      default:
+    }
+  }
 
   render() {
     const { model, rating } = this.props
@@ -96,6 +108,7 @@ import './Attribute.scss'
           className="value rating"
           onChange={this.handleChangeValue}
           onEditEnd={this.handleCommitValue}
+          onKeyDown={this.handleValueKeyDown}
           readOnlyValue={(
             <Rating
               allowExcess
@@ -110,6 +123,7 @@ import './Attribute.scss'
           className="value numeric"
           onChange={this.handleChangeValue}
           onEditEnd={this.handleCommitValue}
+          onKeyDown={this.handleValueKeyDown}
           readOnlyValue={value}
           type="text"
           value={model.raw}

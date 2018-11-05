@@ -23,6 +23,9 @@ export default class Editable extends React.Component {
     onChange: noop,
     onEditEnd: noop,
     onEditStart: noop,
+    onKeyDown: noop,
+    onKeyPress: noop,
+    onKeyUp: noop,
     placeholder: '',
     readOnly: false,
     readOnlyValue: undefined,
@@ -90,6 +93,11 @@ export default class Editable extends React.Component {
   handleKeys = (event) => {
     const { target, key, ctrlKey, metaKey } = event
 
+    if (this.props.onKeyDown !== noop) {
+      this.props.onKeyDown(event)
+      if (event.isDefaultPrevented()) return
+    }
+
     if (key === 'Escape') { this.resetChanges() }
     if (key === 'Enter') {
       if (target.nodeName !== 'TEXTAREA' || ctrlKey || metaKey) {
@@ -151,6 +159,8 @@ export default class Editable extends React.Component {
         onChange={this.handleChange}
         onFocus={this.selectOnFocus}
         onKeyDown={this.handleKeys}
+        onKeyPress={this.props.onKeyPress}
+        onKeyUp={this.props.onKeyUp}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
         rows={this.props.value.split('\n').length}
@@ -172,6 +182,8 @@ export default class Editable extends React.Component {
         onChange={this.handleChange}
         onFocus={this.selectOnFocus}
         onKeyDown={this.handleKeys}
+        onKeyPress={this.props.onKeyPress}
+        onKeyUp={this.props.onKeyUp}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
         step={this.props.step}
@@ -188,6 +200,9 @@ export default class Editable extends React.Component {
       min={this.props.min}
       onBlur={this.handleToggleEditing}
       onChange={this.handleChange}
+      onKeyDown={this.props.onKeyDown}
+      onKeyPress={this.props.onKeyPress}
+      onKeyUp={this.props.onKeyUp}
       ref={this.createRefWithAutoFocus}
       step={this.props.step}
       value={this.props.value}
@@ -205,6 +220,8 @@ export default class Editable extends React.Component {
         onChange={this.handleChange}
         onFocus={this.selectOnFocus}
         onKeyDown={this.handleKeys}
+        onKeyPress={this.props.onKeyPress}
+        onKeyUp={this.props.onKeyUp}
         placeholder={this.props.placeholder}
         ref={this.createRefWithAutoFocus}
         value={this.props.value}
