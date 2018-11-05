@@ -56,8 +56,8 @@ import './Attribute.scss'
   handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
   handleChangeValue = (raw) => {
     let value = String(raw).replace(/[^a-z0-9+*()\-/, ]/gi, '')
-    if (math.isNumeric(raw)) {
-      value = bound(parseInt(raw, 10) || '', { max: 999, min: -99 })
+    if (!Number.isNaN(Number(raw))) {
+      value = bound(Number(raw) || '', { max: 999, min: -99 })
     }
     this.props.model.set({ raw: value })
   }
