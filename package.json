@@ -76,7 +76,7 @@
     "postinstall": "patch-package",
     "postversion": "git push origin HEAD && git push origin HEAD --tags",
     "prebuild": "yarn clean",
-    "preversion": "yarn build && git add -A ./build ./docs",
+    "preversion": "yarn test && yarn build && git add -A ./build ./docs",
     "sourcemap": "source-map-explorer ./build/sheetforge.production.min.js",
     "test": "jest"
   },
