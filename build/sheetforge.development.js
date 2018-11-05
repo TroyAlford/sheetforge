@@ -441,7 +441,6 @@ math.import(__webpack_require__(/*! mathjs/lib/function/statistics/max */ "itDh"
 math.import(__webpack_require__(/*! mathjs/lib/function/statistics/mean */ "FC7u"));
 math.import(__webpack_require__(/*! mathjs/lib/function/statistics/min */ "I5O3"));
 math.import(__webpack_require__(/*! mathjs/lib/function/statistics/sum */ "Z+cb"));
-math.import(__webpack_require__(/*! mathjs/lib/function/utils/isInteger */ "PbhI"));
 math.import(__webpack_require__(/*! mathjs/lib/type/matrix/function/matrix */ "R4H5"));
 math.import(__webpack_require__(/*! mathjs/lib/type/matrix/Matrix */ "ohYX"));
 math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"));
@@ -512,6 +511,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
 
   };
 }).actions(function (self) {
+  var computing = false;
   return {
     effects: function effects() {
       if (!self.character) return [];
@@ -535,21 +535,28 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
     value: function value() {
       if (!self.isComputed) return self.raw;
       if (self.character === null) return 0;
+      if (computing) return 0;
+      computing = true;
+      var computed = 0;
 
       try {
         var values = toSymbols(self.raw).reduce(function (all, symbol) {
           var attribute = self.character.attributes.findBy('id', symbol);
           return Object.assign(all, defineProperty_default()({}, symbol, attribute ? attribute.modifiedValue() : 0));
         }, {});
-        return calculate(self.raw, values);
+        computed = calculate(self.raw, values);
       } catch (error) {
-        // eslint-disable-next-line no-undef, no-console
+        // eslint-disable-next-line no-undef
         if (true) {
+          // eslint-disable-next-line no-console
           console.error("Error computing: ".concat(self.raw));
         }
 
-        return 0;
+        computed = 0;
       }
+
+      computing = false;
+      return computed;
     }
   };
 }).preProcessSnapshot(function (_ref) {
