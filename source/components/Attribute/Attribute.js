@@ -55,17 +55,21 @@ import './Attribute.scss'
   }
   handleCommitName = () => (this.props.model.name === '' && this.props.onDelete(this.props.model))
   handleChangeValue = (raw) => {
-    let value = raw
-    try {
-      if (math.isInteger(raw)) {
-        value = bound(parseInt(raw, 10) || '', { max: 999, min: -99 })
-      }
-    } catch { }
+    let value = String(raw).replace(/[^a-z0-9+*()\-/, ]/gi, '')
+    if (math.isNumeric(raw)) {
+      value = bound(parseInt(raw, 10) || '', { max: 999, min: -99 })
+    }
     this.props.model.set({ raw: value })
+  }
+  handleCommitValue = () => {
+    if (String(this.props.model.raw) === '') this.props.model.set({ raw: 0 })
   }
 
   render() {
     const { model, rating } = this.props
+    const modifiedValue = model.modifiedValue()
+    const value = model.value()
+
     const className = [
       'attribute',
       `as-${rating ? 'rating' : 'numeric'}`,
@@ -91,11 +95,12 @@ import './Attribute.scss'
         <Editable
           className="value rating"
           onChange={this.handleChangeValue}
+          onEditEnd={this.handleCommitValue}
           readOnlyValue={(
             <Rating
               allowExcess
-              current={model.modifiedValue()}
-              maximum={model.value()}
+              current={modifiedValue}
+              maximum={value}
             />
           )}
           type="text"
@@ -104,7 +109,8 @@ import './Attribute.scss'
         <Editable
           className="value numeric"
           onChange={this.handleChangeValue}
-          readOnlyValue={model.value()}
+          onEditEnd={this.handleCommitValue}
+          readOnlyValue={value}
           type="text"
           value={model.raw}
         />
@@ -113,7 +119,7 @@ import './Attribute.scss'
             className={modifierClassName}
             title={model.modifierText()}
           >
-            {model.modifiedValue()}
+            {modifiedValue}
           </div>
         )}
       </div>
