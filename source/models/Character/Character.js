@@ -4,7 +4,6 @@ import Descriptor from '@/models/Descriptor'
 import CollectionOf from '@/models/generic/Collection'
 import IEditable from '@/models/generic/IEditable'
 import IIdentity from '@/models/generic/IIdentity'
-import HealthLevel from '@/models/HealthLevel'
 import Item from '@/models/Item'
 import Resource from '@/models/Resource'
 import Skill from '@/models/Skill'
@@ -20,7 +19,6 @@ export default types.compose(
     conditions: CollectionOf(types.string), // ['vs Goblins', 'Crinos Form']
     descriptors: CollectionOf(Descriptor),
     experience: 0,
-    health: CollectionOf(HealthLevel),
     items: CollectionOf(Item), // equipped / unequipped, have Effects
     resources: CollectionOf(Resource),
     skills: CollectionOf(Skill),
