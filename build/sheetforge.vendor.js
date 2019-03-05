@@ -524,7 +524,7 @@ exports.format = function (value, options) {
 
     if (exports.isNumber(options)) {
       precision = options;
-    } else if (options.precision) {
+    } else if (exports.isNumber(options.precision)) {
       precision = options.precision;
     }
   } // handle the various notations
@@ -3650,7 +3650,7 @@ function factory(type, config, load, typed) {
     var precedence = operators.getPrecedence(this, parenthesis);
     var paramStrings = this.params.map(function (p, index) {
       var paramPrecedence = operators.getPrecedence(p, parenthesis);
-      return parenthesis === 'all' || paramPrecedence !== null && paramPrecedence <= precedence ? '\\left(' + p.toString(options) + '\right)' : p.toString(options);
+      return parenthesis === 'all' || paramPrecedence !== null && paramPrecedence <= precedence ? '\\left(' + p.toTex(options) + '\right)' : p.toTex(options);
     });
     var ret = paramStrings[0];
 
@@ -3817,9 +3817,9 @@ exports.format = function (value, options) {
       if (value.isZero()) return '0'; // determine whether or not to output exponential notation
 
       var str;
-      var exp = value.logarithm();
+      var exp = value.e;
 
-      if (exp.gte(lowerExp) && exp.lt(upperExp)) {
+      if (exp >= lowerExp && exp < upperExp) {
         // normal number notation
         str = value.toSignificantDigits(precision).toFixed();
       } else {
@@ -4534,9 +4534,9 @@ function factory(type, config, load, typed) {
   var smaller = load(__webpack_require__(/*! ../relational/smaller */ "m4e2"));
   var improveErrorMessage = load(__webpack_require__(/*! ./utils/improveErrorMessage */ "D2JG"));
   /**
-   * Compute the maximum value of a matrix or a  list of values.
-   * In case of a multi dimensional array, the maximum of the flattened array
-   * will be calculated. When `dim` is provided, the maximum over the selected
+   * Compute the minimum value of a matrix or a  list of values.
+   * In case of a multi dimensional array, the minimum of the flattened array
+   * will be calculated. When `dim` is provided, the minimum over the selected
    * dimension will be calculated. Parameter `dim` is zero-based.
    *
    * Syntax:
@@ -4550,7 +4550,7 @@ function factory(type, config, load, typed) {
    *     math.min(2, 1, 4, 3)                  // returns 1
    *     math.min([2, 1, 4, 3])                // returns 1
    *
-   *     // maximum over a specified dimension (zero-based)
+   *     // minimum over a specified dimension (zero-based)
    *     math.min([[2, 5], [4, 3], [1, 7]], 0) // returns [1, 3]
    *     math.min([[2, 5], [4, 3], [1, 7]], 1) // returns [2, 3, 1]
    *
@@ -6035,11 +6035,11 @@ function factory(type, config, load, typed) {
    * Test whether two given 16 bit characters form a surrogate pair of a
    * unicode math symbol.
    *
-   * http://unicode-table.com/en/
-   * http://www.wikiwand.com/en/Mathematical_operators_and_symbols_in_Unicode
+   * https://unicode-table.com/en/
+   * https://www.wikiwand.com/en/Mathematical_operators_and_symbols_in_Unicode
    *
    * Note: In ES6 will be unicode aware:
-   * http://stackoverflow.com/questions/280712/javascript-unicode-regexes
+   * https://stackoverflow.com/questions/280712/javascript-unicode-regexes
    * https://mathiasbynens.be/notes/es6-unicode-regex
    *
    * @param {string} high
@@ -7129,6 +7129,7 @@ function factory(type, config, load, typed) {
 
   function parseObject(state) {
     if (state.token === '{') {
+      openParams(state);
       var key;
       var properties = {};
 
@@ -7164,6 +7165,7 @@ function factory(type, config, load, typed) {
         throw createSyntaxError(state, 'Comma , or bracket } expected after object value');
       }
 
+      closeParams(state);
       getToken(state);
       var node = new ObjectNode(properties); // parse index parameters
 
@@ -7602,7 +7604,9 @@ function factory(type, config, load, typed) {
    */
 
   var round = typed('round', {
-    'number': Math.round,
+    'number': function number(x) {
+      return _round(x, 0);
+    },
     'number, number': function numberNumber(x, n) {
       if (!isInteger(n)) {
         throw new TypeError(NO_INT);
@@ -9500,7 +9504,7 @@ function factory(type, config, load, typed) {
     } else {
       // this is a matrix of 3 x 3 or larger
       // calculate inverse using gauss-jordan elimination
-      //      http://en.wikipedia.org/wiki/Gaussian_elimination
+      //      https://en.wikipedia.org/wiki/Gaussian_elimination
       //      http://mathworld.wolfram.com/MatrixInverse.html
       //      http://math.uww.edu/~mcfarlat/inverse.htm
       // make a copy of the matrix (only the arrays, not of the elements)
@@ -10668,6 +10672,9 @@ function isArrayLike$$1(x) {
 function isES6Map$$1(thing) {
     return thing instanceof Map;
 }
+function isES6Set$$1(thing) {
+    return thing instanceof Set;
+}
 function getMapLikeKeys$$1(map) {
     if (isPlainObject$$1(map))
         return Object.keys(map);
@@ -10700,11 +10707,15 @@ var Atom$$1 = /** @class */ (function () {
         this.lastAccessedBy = 0;
         this.lowestObserverState = exports.IDerivationState.NOT_TRACKING;
     }
-    Atom$$1.prototype.onBecomeUnobserved = function () {
-        // noop
-    };
     Atom$$1.prototype.onBecomeObserved = function () {
-        /* noop */
+        if (this.onBecomeObservedListeners) {
+            this.onBecomeObservedListeners.forEach(function (listener) { return listener(); });
+        }
+    };
+    Atom$$1.prototype.onBecomeUnobserved = function () {
+        if (this.onBecomeUnobservedListeners) {
+            this.onBecomeUnobservedListeners.forEach(function (listener) { return listener(); });
+        }
     };
     /**
      * Invoke this method to notify mobx that your atom has been used somehow.
@@ -10731,8 +10742,13 @@ function createAtom$$1(name, onBecomeObservedHandler, onBecomeUnobservedHandler)
     if (onBecomeObservedHandler === void 0) { onBecomeObservedHandler = noop$$1; }
     if (onBecomeUnobservedHandler === void 0) { onBecomeUnobservedHandler = noop$$1; }
     var atom = new Atom$$1(name);
-    onBecomeObserved$$1(atom, onBecomeObservedHandler);
-    onBecomeUnobserved$$1(atom, onBecomeUnobservedHandler);
+    // default `noop` listener will not initialize the hook Set
+    if (onBecomeObservedHandler !== noop$$1) {
+        onBecomeObserved$$1(atom, onBecomeObservedHandler);
+    }
+    if (onBecomeUnobservedHandler !== noop$$1) {
+        onBecomeUnobserved$$1(atom, onBecomeUnobservedHandler);
+    }
     return atom;
 }
 
@@ -10837,12 +10853,14 @@ function deepEnhancer$$1(v, _, name) {
         return observable$$1.object(v, undefined, { name: name });
     if (isES6Map$$1(v))
         return observable$$1.map(v, { name: name });
+    if (isES6Set$$1(v))
+        return observable$$1.set(v, { name: name });
     return v;
 }
 function shallowEnhancer$$1(v, _, name) {
     if (v === undefined || v === null)
         return v;
-    if (isObservableObject$$1(v) || isObservableArray$$1(v) || isObservableMap$$1(v))
+    if (isObservableObject$$1(v) || isObservableArray$$1(v) || isObservableMap$$1(v) || isObservableSet$$1(v))
         return v;
     if (Array.isArray(v))
         return observable$$1.array(v, { name: name, deep: false });
@@ -10850,8 +10868,10 @@ function shallowEnhancer$$1(v, _, name) {
         return observable$$1.object(v, undefined, { name: name, deep: false });
     if (isES6Map$$1(v))
         return observable$$1.map(v, { name: name, deep: false });
+    if (isES6Set$$1(v))
+        return observable$$1.set(v, { name: name, deep: false });
     return fail$$1( true &&
-        "The shallow modifier / decorator can only used in combination with arrays, objects and maps");
+        "The shallow modifier / decorator can only used in combination with arrays, objects, maps and sets");
 }
 function referenceEnhancer$$1(newValue) {
     // never turn into an observable
@@ -10903,7 +10923,7 @@ var defaultCreateObservableOptions$$1 = {
 };
 Object.freeze(defaultCreateObservableOptions$$1);
 function assertValidOption(key) {
-    if (!/^(deep|name|defaultDecorator|proxy)$/.test(key))
+    if (!/^(deep|name|equals|defaultDecorator|proxy)$/.test(key))
         fail$$1("invalid option for (extend)observable: " + key);
 }
 function asCreateObservableOptions$$1(thing) {
@@ -10948,7 +10968,9 @@ function createObservable(v, arg2, arg3) {
             ? observable$$1.array(v, arg2)
             : isES6Map$$1(v)
                 ? observable$$1.map(v, arg2)
-                : v;
+                : isES6Set$$1(v)
+                    ? observable$$1.set(v, arg2)
+                    : v;
     // this value could be converted to a new observable data structure, return it
     if (res !== v)
         return res;
@@ -10961,7 +10983,7 @@ var observableFactories = {
         if (arguments.length > 2)
             incorrectlyUsedAsDecorator("box");
         var o = asCreateObservableOptions$$1(options);
-        return new ObservableValue$$1(value, getEnhancerFromOptions(o), o.name);
+        return new ObservableValue$$1(value, getEnhancerFromOptions(o), o.name, true, o.equals);
     },
     array: function (initialValues, options) {
         if (arguments.length > 2)
@@ -10974,6 +10996,12 @@ var observableFactories = {
             incorrectlyUsedAsDecorator("map");
         var o = asCreateObservableOptions$$1(options);
         return new ObservableMap$$1(initialValues, getEnhancerFromOptions(o), o.name);
+    },
+    set: function (initialValues, options) {
+        if (arguments.length > 2)
+            incorrectlyUsedAsDecorator("set");
+        var o = asCreateObservableOptions$$1(options);
+        return new ObservableSet$$1(initialValues, getEnhancerFromOptions(o), o.name);
     },
     object: function (props, decorators, options) {
         if (typeof arguments[1] === "string")
@@ -11008,8 +11036,9 @@ var computedDecorator$$1 = createPropDecorator$$1(false, function (instance, pro
     var get$$1 = descriptor.get, set$$1 = descriptor.set; // initialValue is the descriptor for get / set props
     // Optimization: faster on decorator target or instance? Assuming target
     // Optimization: find out if declaring on instance isn't just faster. (also makes the property descriptor simpler). But, more memory usage..
+    // Forcing instance now, fixes hot reloadig issues on React Native:
     var options = decoratorArgs[0] || {};
-    asObservableObject$$1(instance).addComputedProp(decoratorTarget, propertyName, __assign({ get: get$$1,
+    asObservableObject$$1(instance).addComputedProp(instance, propertyName, __assign({ get: get$$1,
         set: set$$1, context: instance }, options));
 });
 var computedStructDecorator = computedDecorator$$1({ equals: comparer$$1.structural });
@@ -11053,11 +11082,21 @@ function createAction$$1(actionName, fn) {
 }
 function executeAction$$1(actionName, fn, scope, args) {
     var runInfo = startAction(actionName, fn, scope, args);
+    var shouldSupressReactionError = true;
     try {
-        return fn.apply(scope, args);
+        var res = fn.apply(scope, args);
+        shouldSupressReactionError = false;
+        return res;
     }
     finally {
-        endAction(runInfo);
+        if (shouldSupressReactionError) {
+            globalState$$1.suppressReactionErrors = shouldSupressReactionError;
+            endAction(runInfo);
+            globalState$$1.suppressReactionErrors = false;
+        }
+        else {
+            endAction(runInfo);
+        }
     }
 }
 function startAction(actionName, fn, scope, args) {
@@ -11126,14 +11165,16 @@ function allowStateChangesInsideComputed$$1(func) {
     return res;
 }
 
-var UNCHANGED$$1 = {};
 var ObservableValue$$1 = /** @class */ (function (_super) {
     __extends(ObservableValue$$1, _super);
-    function ObservableValue$$1(value, enhancer, name, notifySpy) {
+    function ObservableValue$$1(value, enhancer, name, notifySpy, equals) {
         if (name === void 0) { name = "ObservableValue@" + getNextId$$1(); }
         if (notifySpy === void 0) { notifySpy = true; }
+        if (equals === void 0) { equals = comparer$$1.default; }
         var _this = _super.call(this, name) || this;
         _this.enhancer = enhancer;
+        _this.name = name;
+        _this.equals = equals;
         _this.hasUnreportedChange = false;
         _this.value = enhancer(value, undefined, name);
         if (notifySpy && isSpyEnabled$$1() && "development" !== "production") {
@@ -11150,7 +11191,7 @@ var ObservableValue$$1 = /** @class */ (function (_super) {
     ObservableValue$$1.prototype.set = function (newValue) {
         var oldValue = this.value;
         newValue = this.prepareNewValue(newValue);
-        if (newValue !== UNCHANGED$$1) {
+        if (newValue !== globalState$$1.UNCHANGED) {
             var notifySpy = isSpyEnabled$$1();
             if (notifySpy && "development" !== "production") {
                 spyReportStart$$1({
@@ -11174,12 +11215,12 @@ var ObservableValue$$1 = /** @class */ (function (_super) {
                 newValue: newValue
             });
             if (!change)
-                return UNCHANGED$$1;
+                return globalState$$1.UNCHANGED;
             newValue = change.newValue;
         }
         // apply modifier
         newValue = this.enhancer(newValue, this.value, this.name);
-        return this.value !== newValue ? newValue : UNCHANGED$$1;
+        return this.equals(this.value, newValue) ? globalState$$1.UNCHANGED : newValue;
     };
     ObservableValue$$1.prototype.setNewValue = function (newValue) {
         var oldValue = this.value;
@@ -11276,7 +11317,6 @@ var ComputedValue$$1 = /** @class */ (function () {
         this.isComputing = false; // to check for cycles
         this.isRunningSetter = false;
         this.isTracing = TraceMode$$1.NONE;
-        this.firstGet = true;
         if ( true && !options.get)
             throw "[mobx] missing option for computed: get";
         this.derivation = options.get;
@@ -11295,21 +11335,24 @@ var ComputedValue$$1 = /** @class */ (function () {
     ComputedValue$$1.prototype.onBecomeStale = function () {
         propagateMaybeChanged$$1(this);
     };
-    ComputedValue$$1.prototype.onBecomeUnobserved = function () { };
-    ComputedValue$$1.prototype.onBecomeObserved = function () { };
+    ComputedValue$$1.prototype.onBecomeObserved = function () {
+        if (this.onBecomeObservedListeners) {
+            this.onBecomeObservedListeners.forEach(function (listener) { return listener(); });
+        }
+    };
+    ComputedValue$$1.prototype.onBecomeUnobserved = function () {
+        if (this.onBecomeUnobservedListeners) {
+            this.onBecomeUnobservedListeners.forEach(function (listener) { return listener(); });
+        }
+    };
     /**
      * Returns the current value of this computed value.
      * Will evaluate its computation first if needed.
      */
     ComputedValue$$1.prototype.get = function () {
-        var _this = this;
-        if (this.keepAlive && this.firstGet) {
-            this.firstGet = false;
-            autorun$$1(function () { return _this.get(); });
-        }
         if (this.isComputing)
             fail$$1("Cycle detected in computation " + this.name + ": " + this.derivation);
-        if (globalState$$1.inBatch === 0 && this.observers.size === 0) {
+        if (globalState$$1.inBatch === 0 && this.observers.size === 0 && !this.keepAlive) {
             if (shouldCompute$$1(this)) {
                 this.warnAboutUntrackedRead();
                 startBatch$$1(); // See perf test 'computed memoization'
@@ -11395,8 +11438,10 @@ var ComputedValue$$1 = /** @class */ (function () {
         return res;
     };
     ComputedValue$$1.prototype.suspend = function () {
-        clearObserving$$1(this);
-        this.value = undefined; // don't hold on to computed value!
+        if (!this.keepAlive) {
+            clearObserving$$1(this);
+            this.value = undefined; // don't hold on to computed value!
+        }
     };
     ComputedValue$$1.prototype.observe = function (listener, fireImmediately) {
         var _this = this;
@@ -11697,7 +11742,8 @@ var persistentKeys = [
     "enforceActions",
     "computedRequiresReaction",
     "disableErrorBoundaries",
-    "runId"
+    "runId",
+    "UNCHANGED"
 ];
 var MobXGlobals$$1 = /** @class */ (function () {
     function MobXGlobals$$1() {
@@ -11710,6 +11756,10 @@ var MobXGlobals$$1 = /** @class */ (function () {
          * internal state storage of MobX, and can be the same across many different package versions
          */
         this.version = 5;
+        /**
+         * globally unique token to signal unchanged
+         */
+        this.UNCHANGED = {};
         /**
          * Currently running derivation
          */
@@ -11772,6 +11822,11 @@ var MobXGlobals$$1 = /** @class */ (function () {
          * the stack when an exception occurs while debugging.
          */
         this.disableErrorBoundaries = false;
+        /*
+         * If true, we are already handling an exception in an action. Any errors in reactions should be supressed, as
+         * they are not the cause, see: https://github.com/mobxjs/mobx/issues/1836
+         */
+        this.suppressReactionErrors = false;
     }
     return MobXGlobals$$1;
 }());
@@ -11793,6 +11848,8 @@ var globalState$$1 = (function () {
     }
     else if (global.__mobxGlobals) {
         global.__mobxInstanceCount += 1;
+        if (!global.__mobxGlobals.UNCHANGED)
+            global.__mobxGlobals.UNCHANGED = {}; // make merge backward compatible
         return global.__mobxGlobals;
     }
     else {
@@ -12014,7 +12071,7 @@ function logTraceInfo(derivation, observable$$1) {
         var lines = [];
         printDepTree(getDependencyTree$$1(derivation), lines, 1);
         // prettier-ignore
-        new Function("debugger;\n/*\nTracing '" + derivation.name + "'\n\nYou are entering this break point because derivation '" + derivation.name + "' is being traced and '" + observable$$1.name + "' is now forcing it to update.\nJust follow the stacktrace you should now see in the devtools to see precisely what piece of your code is causing this update\nThe stackframe you are looking for is at least ~6-8 stack-frames up.\n\n" + (derivation instanceof ComputedValue$$1 ? derivation.derivation.toString() : "") + "\n\nThe dependencies for this derivation are:\n\n" + lines.join("\n") + "\n*/\n    ")();
+        new Function("debugger;\n/*\nTracing '" + derivation.name + "'\n\nYou are entering this break point because derivation '" + derivation.name + "' is being traced and '" + observable$$1.name + "' is now forcing it to update.\nJust follow the stacktrace you should now see in the devtools to see precisely what piece of your code is causing this update\nThe stackframe you are looking for is at least ~6-8 stack-frames up.\n\n" + (derivation instanceof ComputedValue$$1 ? derivation.derivation.toString().replace(/[*]\//g, "/") : "") + "\n\nThe dependencies for this derivation are:\n\n" + lines.join("\n") + "\n*/\n    ")();
     }
 }
 function printDepTree(tree, lines, depth) {
@@ -12123,9 +12180,14 @@ var Reaction$$1 = /** @class */ (function () {
         }
         if (globalState$$1.disableErrorBoundaries)
             throw error;
-        var message = "[mobx] Encountered an uncaught exception that was thrown by a reaction or observer component, in: '" + this;
-        console.error(message, error);
-        /** If debugging brought you here, please, read the above message :-). Tnx! */
+        var message = "[mobx] Encountered an uncaught exception that was thrown by a reaction or observer component, in: '" + this + "'";
+        if (globalState$$1.suppressReactionErrors) {
+            console.warn("[mobx] (error in reaction '" + this.name + "' suppressed, fix error of causing action below)"); // prettier-ignore
+        }
+        else {
+            console.error(message, error);
+            /** If debugging brought you here, please, read the above message :-). Tnx! */
+        }
         if (isSpyEnabled$$1()) {
             spyReport$$1({
                 type: "error",
@@ -12479,20 +12541,32 @@ function onBecomeUnobserved$$1(thing, arg2, arg3) {
 function interceptHook(hook, thing, arg2, arg3) {
     var atom = typeof arg2 === "string" ? getAtom$$1(thing, arg2) : getAtom$$1(thing);
     var cb = typeof arg2 === "string" ? arg3 : arg2;
+    var listenersKey = hook + "Listeners";
+    if (atom[listenersKey]) {
+        atom[listenersKey].add(cb);
+    }
+    else {
+        atom[listenersKey] = new Set([cb]);
+    }
     var orig = atom[hook];
     if (typeof orig !== "function")
         return fail$$1( true && "Not an atom that can be (un)observed");
-    atom[hook] = function () {
-        orig.call(this);
-        cb.call(this);
-    };
     return function () {
-        atom[hook] = orig;
+        var hookListeners = atom[listenersKey];
+        if (hookListeners) {
+            hookListeners.delete(cb);
+            if (hookListeners.size === 0) {
+                delete atom[listenersKey];
+            }
+        }
     };
 }
 
 function configure$$1(options) {
     var enforceActions = options.enforceActions, computedRequiresReaction = options.computedRequiresReaction, disableErrorBoundaries = options.disableErrorBoundaries, reactionScheduler = options.reactionScheduler;
+    if (options.isolateGlobalState === true) {
+        isolateGlobalState$$1();
+    }
     if (enforceActions !== undefined) {
         if (typeof enforceActions === "boolean" || enforceActions === "strict")
             deprecated$$1("Deprecated value for 'enforceActions', use 'false' => '\"never\"', 'true' => '\"observed\"', '\"strict\"' => \"'always'\" instead");
@@ -12518,9 +12592,6 @@ function configure$$1(options) {
     }
     if (computedRequiresReaction !== undefined) {
         globalState$$1.computedRequiresReaction = !!computedRequiresReaction;
-    }
-    if (options.isolateGlobalState === true) {
-        isolateGlobalState$$1();
     }
     if (disableErrorBoundaries !== undefined) {
         if (disableErrorBoundaries === true)
@@ -12643,7 +12714,7 @@ function flow$$1(generator) {
         var gen = action$$1(name + " - runid: " + runId + " - init", generator).apply(ctx, args);
         var rejector;
         var pendingPromise = undefined;
-        var res = new Promise(function (resolve, reject) {
+        var promise = new Promise(function (resolve, reject) {
             var stepId = 0;
             rejector = reject;
             function onFulfilled(res) {
@@ -12681,14 +12752,14 @@ function flow$$1(generator) {
             }
             onFulfilled(undefined); // kick off the process
         });
-        res.cancel = action$$1(name + " - runid: " + runId + " - cancel", function () {
+        promise.cancel = action$$1(name + " - runid: " + runId + " - cancel", function () {
             try {
                 if (pendingPromise)
                     cancelPromise(pendingPromise);
                 // Finally block can return (or yield) stuff..
-                var res_1 = gen.return();
+                var res = gen.return();
                 // eat anything that promise would do, it's cancelled!
-                var yieldedPromise = Promise.resolve(res_1.value);
+                var yieldedPromise = Promise.resolve(res.value);
                 yieldedPromise.then(noop$$1, noop$$1);
                 cancelPromise(yieldedPromise); // maybe it can be cancelled :)
                 // reject our original promise
@@ -12698,7 +12769,7 @@ function flow$$1(generator) {
                 rejector(e); // there could be a throwing finally block
             }
         });
-        return res;
+        return promise;
     };
 }
 function cancelPromise(promise) {
@@ -12806,11 +12877,14 @@ function keys$$1(obj) {
     if (isObservableMap$$1(obj)) {
         return Array.from(obj.keys());
     }
+    if (isObservableSet$$1(obj)) {
+        return Array.from(obj.keys());
+    }
     if (isObservableArray$$1(obj)) {
         return obj.map(function (_, index) { return index; });
     }
     return fail$$1( true &&
-        "'keys()' can only be used on observable objects, arrays and maps");
+        "'keys()' can only be used on observable objects, arrays, sets and maps");
 }
 function values$$1(obj) {
     if (isObservableObject$$1(obj)) {
@@ -12819,11 +12893,14 @@ function values$$1(obj) {
     if (isObservableMap$$1(obj)) {
         return keys$$1(obj).map(function (key) { return obj.get(key); });
     }
+    if (isObservableSet$$1(obj)) {
+        return Array.from(obj.values());
+    }
     if (isObservableArray$$1(obj)) {
         return obj.slice();
     }
     return fail$$1( true &&
-        "'values()' can only be used on observable objects, arrays and maps");
+        "'values()' can only be used on observable objects, arrays, sets and maps");
 }
 function entries$$1(obj) {
     if (isObservableObject$$1(obj)) {
@@ -12831,6 +12908,9 @@ function entries$$1(obj) {
     }
     if (isObservableMap$$1(obj)) {
         return keys$$1(obj).map(function (key) { return [key, obj.get(key)]; });
+    }
+    if (isObservableSet$$1(obj)) {
+        return Array.from(obj.entries());
     }
     if (isObservableArray$$1(obj)) {
         return obj.map(function (key, index) { return [index, key]; });
@@ -12887,6 +12967,9 @@ function remove$$1(obj, key) {
     else if (isObservableMap$$1(obj)) {
         obj.delete(key);
     }
+    else if (isObservableSet$$1(obj)) {
+        obj.delete(key);
+    }
     else if (isObservableArray$$1(obj)) {
         if (typeof key !== "number")
             key = parseInt(key, 10);
@@ -12905,6 +12988,9 @@ function has$$1(obj, key) {
         return adm.has(key);
     }
     else if (isObservableMap$$1(obj)) {
+        return obj.has(key);
+    }
+    else if (isObservableSet$$1(obj)) {
         return obj.has(key);
     }
     else if (isObservableArray$$1(obj)) {
@@ -12984,20 +13070,36 @@ function toJSHelper(source, options, __alreadySeen) {
             res_1[i] = toAdd[i];
         return res_1;
     }
-    if (isObservableMap$$1(source) || Object.getPrototypeOf(source) === Map.prototype) {
+    if (isObservableSet$$1(source) || Object.getPrototypeOf(source) === Set.prototype) {
         if (options.exportMapsAsObjects === false) {
-            var res_2 = cache(__alreadySeen, source, new Map(), options);
-            source.forEach(function (value, key) {
-                res_2.set(key, toJSHelper(value, options, __alreadySeen));
+            var res_2 = cache(__alreadySeen, source, new Set(), options);
+            source.forEach(function (value) {
+                res_2.add(toJSHelper(value, options, __alreadySeen));
             });
             return res_2;
         }
         else {
-            var res_3 = cache(__alreadySeen, source, {}, options);
-            source.forEach(function (value, key) {
-                res_3[key] = toJSHelper(value, options, __alreadySeen);
+            var res_3 = cache(__alreadySeen, source, [], options);
+            source.forEach(function (value) {
+                res_3.push(toJSHelper(value, options, __alreadySeen));
             });
             return res_3;
+        }
+    }
+    if (isObservableMap$$1(source) || Object.getPrototypeOf(source) === Map.prototype) {
+        if (options.exportMapsAsObjects === false) {
+            var res_4 = cache(__alreadySeen, source, new Map(), options);
+            source.forEach(function (value, key) {
+                res_4.set(key, toJSHelper(value, options, __alreadySeen));
+            });
+            return res_4;
+        }
+        else {
+            var res_5 = cache(__alreadySeen, source, {}, options);
+            source.forEach(function (value, key) {
+                res_5[key] = toJSHelper(value, options, __alreadySeen);
+            });
+            return res_5;
         }
     }
     // Fallback to the situation that source is an ObservableObject or a plain object
@@ -13138,8 +13240,16 @@ var objectProxyTraps = {
             return target[name];
         var adm = getAdm(target);
         var observable$$1 = adm.values.get(name);
-        if (observable$$1 instanceof Atom$$1)
-            return observable$$1.get();
+        if (observable$$1 instanceof Atom$$1) {
+            var result = observable$$1.get();
+            if (result === undefined) {
+                // This fixes #1796, because deleting a prop that has an
+                // undefined value won't retrigger a observer (no visible effect),
+                // the autorun wouldn't subscribe to future key changes (see also next comment)
+                adm.has(name);
+            }
+            return result;
+        }
         // make sure we start listening to future keys
         // note that we only do this here for optimization
         if (typeof name === "string")
@@ -13296,7 +13406,7 @@ var ObservableArrayAdministration = /** @class */ (function () {
         return value;
     };
     ObservableArrayAdministration.prototype.dehanceValues = function (values$$1) {
-        if (this.dehancer !== undefined && this.values.length > 0)
+        if (this.dehancer !== undefined && values$$1.length > 0)
             return values$$1.map(this.dehancer);
         return values$$1;
     };
@@ -13725,7 +13835,7 @@ var ObservableMap$$1 = /** @class */ (function () {
     ObservableMap$$1.prototype._updateValue = function (key, newValue) {
         var observable$$1 = this._data.get(key);
         newValue = observable$$1.prepareNewValue(newValue);
-        if (newValue !== UNCHANGED$$1) {
+        if (newValue !== globalState$$1.UNCHANGED) {
             var notifySpy = isSpyEnabled$$1();
             var notify = hasListeners$$1(this);
             var change = notify || notifySpy
@@ -13850,8 +13960,11 @@ var ObservableMap$$1 = /** @class */ (function () {
                     var _b = __read(_a, 2), key = _b[0], value = _b[1];
                     return _this.set(key, value);
                 });
-            else if (isES6Map$$1(other))
+            else if (isES6Map$$1(other)) {
+                if (other.constructor !== Map)
+                    return fail$$1("Cannot initialize from classes that inherit from Map: " + other.constructor.name); // prettier-ignore
                 other.forEach(function (value, key) { return _this.set(key, value); });
+            }
             else if (other !== null && other !== undefined)
                 fail$$1("Cannot initialize map from " + other);
         });
@@ -13961,6 +14074,224 @@ var ObservableMap$$1 = /** @class */ (function () {
 /* 'var' fixes small-build issue */
 var isObservableMap$$1 = createInstanceofPredicate$$1("ObservableMap", ObservableMap$$1);
 
+var _a$1;
+var ObservableSetMarker = {};
+var ObservableSet$$1 = /** @class */ (function () {
+    function ObservableSet$$1(initialData, enhancer, name) {
+        if (enhancer === void 0) { enhancer = deepEnhancer$$1; }
+        if (name === void 0) { name = "ObservableSet@" + getNextId$$1(); }
+        this.name = name;
+        this[_a$1] = ObservableSetMarker;
+        this._data = new Set();
+        this._atom = createAtom$$1(this.name);
+        this[Symbol.toStringTag] = "Set";
+        if (typeof Set !== "function") {
+            throw new Error("mobx.set requires Set polyfill for the current browser. Check babel-polyfill or core-js/es6/set.js");
+        }
+        this.enhancer = function (newV, oldV) { return enhancer(newV, oldV, name); };
+        if (initialData) {
+            this.replace(initialData);
+        }
+    }
+    ObservableSet$$1.prototype.dehanceValue = function (value) {
+        if (this.dehancer !== undefined) {
+            return this.dehancer(value);
+        }
+        return value;
+    };
+    ObservableSet$$1.prototype.clear = function () {
+        var _this = this;
+        transaction$$1(function () {
+            untracked$$1(function () {
+                var e_1, _a;
+                try {
+                    for (var _b = __values(_this._data.values()), _c = _b.next(); !_c.done; _c = _b.next()) {
+                        var value = _c.value;
+                        _this.delete(value);
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+            });
+        });
+    };
+    ObservableSet$$1.prototype.forEach = function (callbackFn, thisArg) {
+        var e_2, _a;
+        try {
+            for (var _b = __values(this), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var value = _c.value;
+                callbackFn.call(thisArg, value, value, this);
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
+    };
+    Object.defineProperty(ObservableSet$$1.prototype, "size", {
+        get: function () {
+            this._atom.reportObserved();
+            return this._data.size;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ObservableSet$$1.prototype.add = function (value) {
+        var _this = this;
+        checkIfStateModificationsAreAllowed$$1(this._atom);
+        if (hasInterceptors$$1(this)) {
+            var change = interceptChange$$1(this, {
+                type: "add",
+                object: this,
+                newValue: value
+            });
+            if (!change)
+                return this;
+            // TODO: ideally, value = change.value would be done here, so that values can be
+            // changed by interceptor. Same applies for other Set and Map api's.
+        }
+        if (!this.has(value)) {
+            transaction$$1(function () {
+                _this._data.add(_this.enhancer(value, undefined));
+                _this._atom.reportChanged();
+            });
+            var notifySpy = isSpyEnabled$$1();
+            var notify = hasListeners$$1(this);
+            var change = notify || notifySpy
+                ? {
+                    type: "add",
+                    object: this,
+                    newValue: value
+                }
+                : null;
+            if (notifySpy && "development" !== "production")
+                spyReportStart$$1(change);
+            if (notify)
+                notifyListeners$$1(this, change);
+            if (notifySpy && "development" !== "production")
+                spyReportEnd$$1();
+        }
+        return this;
+    };
+    ObservableSet$$1.prototype.delete = function (value) {
+        var _this = this;
+        if (hasInterceptors$$1(this)) {
+            var change = interceptChange$$1(this, {
+                type: "delete",
+                object: this,
+                oldValue: value
+            });
+            if (!change)
+                return false;
+        }
+        if (this.has(value)) {
+            var notifySpy = isSpyEnabled$$1();
+            var notify = hasListeners$$1(this);
+            var change = notify || notifySpy
+                ? {
+                    type: "delete",
+                    object: this,
+                    oldValue: value
+                }
+                : null;
+            if (notifySpy && "development" !== "production")
+                spyReportStart$$1(__assign({}, change, { name: this.name }));
+            transaction$$1(function () {
+                _this._atom.reportChanged();
+                _this._data.delete(value);
+            });
+            if (notify)
+                notifyListeners$$1(this, change);
+            if (notifySpy && "development" !== "production")
+                spyReportEnd$$1();
+            return true;
+        }
+        return false;
+    };
+    ObservableSet$$1.prototype.has = function (value) {
+        this._atom.reportObserved();
+        return this._data.has(this.dehanceValue(value));
+    };
+    ObservableSet$$1.prototype.entries = function () {
+        var nextIndex = 0;
+        var keys$$1 = Array.from(this.keys());
+        var values$$1 = Array.from(this.values());
+        return makeIterable({
+            next: function () {
+                var index = nextIndex;
+                nextIndex += 1;
+                return index < values$$1.length
+                    ? { value: [keys$$1[index], values$$1[index]], done: false }
+                    : { done: true };
+            }
+        });
+    };
+    ObservableSet$$1.prototype.keys = function () {
+        return this.values();
+    };
+    ObservableSet$$1.prototype.values = function () {
+        this._atom.reportObserved();
+        var self = this;
+        var nextIndex = 0;
+        var observableValues = Array.from(this._data.values());
+        return makeIterable({
+            next: function () {
+                return nextIndex < observableValues.length
+                    ? { value: self.dehanceValue(observableValues[nextIndex++]), done: false }
+                    : { done: true };
+            }
+        });
+    };
+    ObservableSet$$1.prototype.replace = function (other) {
+        var _this = this;
+        if (isObservableSet$$1(other)) {
+            other = other.toJS();
+        }
+        transaction$$1(function () {
+            if (Array.isArray(other)) {
+                _this.clear();
+                other.forEach(function (value) { return _this.add(value); });
+            }
+            else if (isES6Set$$1(other)) {
+                _this.clear();
+                other.forEach(function (value) { return _this.add(value); });
+            }
+            else if (other !== null && other !== undefined) {
+                fail$$1("Cannot initialize set from " + other);
+            }
+        });
+        return this;
+    };
+    ObservableSet$$1.prototype.observe = function (listener, fireImmediately) {
+        // TODO 'fireImmediately' can be true?
+         true &&
+            invariant$$1(fireImmediately !== true, "`observe` doesn't support fireImmediately=true in combination with sets.");
+        return registerListener$$1(this, listener);
+    };
+    ObservableSet$$1.prototype.intercept = function (handler) {
+        return registerInterceptor$$1(this, handler);
+    };
+    ObservableSet$$1.prototype.toJS = function () {
+        return new Set(this);
+    };
+    ObservableSet$$1.prototype.toString = function () {
+        return this.name + "[ " + Array.from(this).join(", ") + " ]";
+    };
+    ObservableSet$$1.prototype[(_a$1 = $mobx$$1, Symbol.iterator)] = function () {
+        return this.values();
+    };
+    return ObservableSet$$1;
+}());
+var isObservableSet$$1 = createInstanceofPredicate$$1("ObservableSet", ObservableSet$$1);
+
 var ObservableObjectAdministration$$1 = /** @class */ (function () {
     function ObservableObjectAdministration$$1(target, values$$1, name, defaultEnhancer) {
         if (values$$1 === void 0) { values$$1 = new Map(); }
@@ -13994,7 +14325,7 @@ var ObservableObjectAdministration$$1 = /** @class */ (function () {
         }
         newValue = observable$$1.prepareNewValue(newValue);
         // notify spy & observers
-        if (newValue !== UNCHANGED$$1) {
+        if (newValue !== globalState$$1.UNCHANGED) {
             var notify = hasListeners$$1(this);
             var notifySpy = isSpyEnabled$$1();
             var change = notify || notifySpy
@@ -14232,7 +14563,7 @@ function getAdministrationForComputedPropOwner(owner) {
 function generateComputedPropConfig$$1(propName) {
     return (computedPropertyConfigs[propName] ||
         (computedPropertyConfigs[propName] = {
-            configurable: true,
+            configurable: false,
             enumerable: false,
             get: function () {
                 return getAdministrationForComputedPropOwner(this).read(propName);
@@ -14259,6 +14590,9 @@ function getAtom$$1(thing, property) {
                 fail$$1( true &&
                     "It is not possible to get index atoms from arrays");
             return thing[$mobx$$1].atom;
+        }
+        if (isObservableSet$$1(thing)) {
+            return thing[$mobx$$1];
         }
         if (isObservableMap$$1(thing)) {
             var anyThing = thing;
@@ -14302,7 +14636,7 @@ function getAdministration$$1(thing, property) {
         return getAdministration$$1(getAtom$$1(thing, property));
     if (isAtom$$1(thing) || isComputedValue$$1(thing) || isReaction$$1(thing))
         return thing;
-    if (isObservableMap$$1(thing))
+    if (isObservableMap$$1(thing) || isObservableSet$$1(thing))
         return thing;
     // Initializers run lazily when transpiling to babel, so make sure they are run...
     initializeInstance$$1(thing);
@@ -14314,7 +14648,7 @@ function getDebugName$$1(thing, property) {
     var named;
     if (property !== undefined)
         named = getAtom$$1(thing, property);
-    else if (isObservableObject$$1(thing) || isObservableMap$$1(thing))
+    else if (isObservableObject$$1(thing) || isObservableMap$$1(thing) || isObservableSet$$1(thing))
         named = getAdministration$$1(thing);
     else
         named = getAtom$$1(thing); // valid for arrays as well
@@ -14445,6 +14779,8 @@ function unwrap(a) {
         return a.slice();
     if (isES6Map$$1(a) || isObservableMap$$1(a))
         return Array.from(a.entries());
+    if (isES6Set$$1(a) || isObservableSet$$1(a))
+        return Array.from(a.entries());
     return a;
 }
 function has$1(a, key) {
@@ -14503,7 +14839,8 @@ catch (e) {
 (function () {
     function testCodeMinification() { }
     if (testCodeMinification.name !== "testCodeMinification" &&
-        "development" !== "production") {
+        "development" !== "production" &&
+        process.env.IGNORE_MOBX_MINIFY_WARNING !== "true") {
         console.warn(
         // Template literal(backtick) is used for fix issue with rollup-plugin-commonjs https://github.com/rollup/rollup-plugin-commonjs/issues/344
         "[mobx] you are running a minified build, but 'process.env.NODE_ENV' was not set to 'production' in your bundler. This results in an unnecessarily large and slow bundle");
@@ -14531,6 +14868,8 @@ exports.isBoxedObservable = isObservableValue$$1;
 exports.isObservableArray = isObservableArray$$1;
 exports.ObservableMap = ObservableMap$$1;
 exports.isObservableMap = isObservableMap$$1;
+exports.ObservableSet = ObservableSet$$1;
+exports.isObservableSet = isObservableSet$$1;
 exports.transaction = transaction$$1;
 exports.observable = observable$$1;
 exports.computed = computed$$1;
@@ -15656,7 +15995,7 @@ function factory(type, config, load, typed) {
    * Evaluate an expression.
    *
    * Note the evaluating arbitrary expressions may involve security risks,
-   * see [http://mathjs.org/docs/expressions/security.html](http://mathjs.org/docs/expressions/security.html) for more information.
+   * see [https://mathjs.org/docs/expressions/security.html](https://mathjs.org/docs/expressions/security.html) for more information.
    *
    * Syntax:
    *
@@ -16412,6 +16751,8 @@ function factory(type, config, load, typed, math) {
 
 
   FunctionNode.prototype.forEach = function (callback) {
+    callback(this.fn, 'fn', this);
+
     for (var i = 0; i < this.args.length; i++) {
       callback(this.args[i], 'args[' + i + ']', this);
     }
@@ -16425,7 +16766,8 @@ function factory(type, config, load, typed, math) {
 
 
   FunctionNode.prototype.map = function (callback) {
-    var fn = this.fn.map(callback);
+    var fn = this._ifNode(callback(this.fn, 'fn', this));
+
     var args = [];
 
     for (var i = 0; i < this.args.length; i++) {
@@ -16728,6 +17070,10 @@ exports.factory = factory;
 
 var deepForEach = __webpack_require__(/*! ../../utils/collection/deepForEach */ "3LJV");
 
+var reduce = __webpack_require__(/*! ../../utils/collection/reduce */ "rq6S");
+
+var containsCollections = __webpack_require__(/*! ../../utils/collection/containsCollections */ "G23K");
+
 function factory(type, config, load, typed) {
   var add = load(__webpack_require__(/*! ../arithmetic/addScalar */ "XXst"));
   var improveErrorMessage = load(__webpack_require__(/*! ./utils/improveErrorMessage */ "D2JG"));
@@ -16756,17 +17102,16 @@ function factory(type, config, load, typed) {
    */
 
   var sum = typed('sum', {
-    'Array | Matrix': function ArrayMatrix(args) {
-      // sum([a, b, c, d, ...])
-      return _sum(args);
-    },
-    'Array | Matrix, number | BigNumber': function ArrayMatrixNumberBigNumber() {
-      // sum([a, b, c, d, ...], dim)
-      // TODO: implement sum(A, dim)
-      throw new Error('sum(A, dim) is not yet supported');
-    },
+    // sum([a, b, c, d, ...])
+    'Array | Matrix': _sum,
+    // sum([a, b, c, d, ...], dim)
+    'Array | Matrix, number | BigNumber': _nsumDim,
+    // sum(a, b, c, d, ...)
     '...': function _(args) {
-      // sum(a, b, c, d, ...)
+      if (containsCollections(args)) {
+        throw new TypeError('Scalar values expected in function sum');
+      }
+
       return _sum(args);
     }
   });
@@ -16807,6 +17152,16 @@ function factory(type, config, load, typed) {
     }
 
     return sum;
+  }
+
+  function _nsumDim(array, dim) {
+    try {
+      var _sum2 = reduce(array, dim, add);
+
+      return _sum2;
+    } catch (err) {
+      throw improveErrorMessage(err, 'sum');
+    }
   }
 }
 
@@ -20454,7 +20809,7 @@ function factory(type, config, load, typed) {
    *
    *     x - y * floor(x / y)
    *
-   * See http://en.wikipedia.org/wiki/Modulo_operation.
+   * See https://en.wikipedia.org/wiki/Modulo_operation.
    *
    * Syntax:
    *
@@ -20550,7 +20905,7 @@ function factory(type, config, load, typed) {
     if (y > 0) {
       // We don't use JavaScript's % operator here as this doesn't work
       // correctly for x < 0 and x === 0
-      // see http://en.wikipedia.org/wiki/Modulo_operation
+      // see https://en.wikipedia.org/wiki/Modulo_operation
       return x - y * Math.floor(x / y);
     } else if (y === 0) {
       return x;
@@ -22176,7 +22531,7 @@ function factory(type, config, load, typed) {
    * invoking node.eval().
    *
    * Note the evaluating arbitrary expressions may involve security risks,
-   * see [http://mathjs.org/docs/expressions/security.html](http://mathjs.org/docs/expressions/security.html) for more information.
+   * see [https://mathjs.org/docs/expressions/security.html](https://mathjs.org/docs/expressions/security.html) for more information.
    *
    * Syntax:
    *
@@ -23509,9 +23864,9 @@ function factory(type, config, load, typed) {
     // we extend the signatures of divideScalar with signatures dealing with matrices
     'Array | Matrix, Array | Matrix': function ArrayMatrixArrayMatrix(x, y) {
       // TODO: implement matrix right division using pseudo inverse
-      // http://www.mathworks.nl/help/matlab/ref/mrdivide.html
-      // http://www.gnu.org/software/octave/doc/interpreter/Arithmetic-Ops.html
-      // http://stackoverflow.com/questions/12263932/how-does-gnu-octave-matrix-division-work-getting-unexpected-behaviour
+      // https://www.mathworks.nl/help/matlab/ref/mrdivide.html
+      // https://www.gnu.org/software/octave/doc/interpreter/Arithmetic-Ops.html
+      // https://stackoverflow.com/questions/12263932/how-does-gnu-octave-matrix-division-work-getting-unexpected-behaviour
       return multiply(x, inv(y));
     },
     'DenseMatrix, any': function DenseMatrixAny(x, y) {
@@ -24660,6 +25015,52 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var mobx = __webpack_require__(/*! mobx */ "Ta9u");
 
+var livelinessChecking = "warn";
+/**
+ * Defines what MST should do when running into reads / writes to objects that have died.
+ * By default it will print a warning.
+ * Use the `"error"` option to easy debugging to see where the error was thrown and when the offending read / write took place
+ *
+ * @param mode `"warn"`, `"error"` or `"ignore"`
+ */
+function setLivelinessChecking(mode) {
+    livelinessChecking = mode;
+}
+/**
+ * Returns the current liveliness checking mode.
+ *
+ * @returns `"warn"`, `"error"` or `"ignore"`
+ */
+function getLivelinessChecking() {
+    return livelinessChecking;
+}
+/**
+ * @deprecated use setLivelinessChecking instead
+ * @hidden
+ *
+ * Defines what MST should do when running into reads / writes to objects that have died.
+ * By default it will print a warning.
+ * Use the `"error"` option to easy debugging to see where the error was thrown and when the offending read / write took place
+ *
+ * @param mode `"warn"`, `"error"` or `"ignore"`
+ */
+function setLivelynessChecking(mode) {
+    setLivelinessChecking(mode);
+}
+
+/**
+ * @internal
+ * @hidden
+ */
+var Hook;
+(function (Hook) {
+    Hook["afterCreate"] = "afterCreate";
+    Hook["afterAttach"] = "afterAttach";
+    Hook["afterCreationFinalization"] = "afterCreationFinalization";
+    Hook["beforeDetach"] = "beforeDetach";
+    Hook["beforeDestroy"] = "beforeDestroy";
+})(Hook || (Hook = {}));
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -24720,9 +25121,8 @@ function __decorate(decorators, target, key, desc) {
 /**
  * Returns the _actual_ type of the given tree node. (Or throws)
  *
- * @export
- * @param {IStateTreeNode} object
- * @returns {IAnyType}
+ * @param object
+ * @returns
  */
 function getType$$1(object) {
     return getStateTreeNode$$1(object).type;
@@ -24730,16 +25130,17 @@ function getType$$1(object) {
 /**
  * Returns the _declared_ type of the given sub property of an object, array or map.
  *
- * @example
+ * Example:
+ * ```ts
  * const Box = types.model({ x: 0, y: 0 })
  * const box = Box.create()
  *
  * console.log(getChildType(box, "x").name) // 'number'
+ * ```
  *
- * @export
- * @param {IStateTreeNode} object
- * @param {string} child
- * @returns {IAnyType}
+ * @param object
+ * @param child
+ * @returns
  */
 function getChildType$$1(object, child) {
     return getStateTreeNode$$1(object).getChildType(child);
@@ -24749,10 +25150,9 @@ function getChildType$$1(object, child) {
  * See [patches](https://github.com/mobxjs/mobx-state-tree#patches) for more details. onPatch events are emitted immediately and will not await the end of a transaction.
  * Patches can be used to deep observe a model tree.
  *
- * @export
- * @param {Object} target the model instance from which to receive patches
- * @param {(patch: IJsonPatch, reversePatch) => void} callback the callback that is invoked for each patch. The reversePatch is a patch that would actually undo the emitted patch
- * @returns {IDisposer} function to remove the listener
+ * @param target the model instance from which to receive patches
+ * @param callback the callback that is invoked for each patch. The reversePatch is a patch that would actually undo the emitted patch
+ * @returns function to remove the listener
  */
 function onPatch$$1(target, callback) {
     // check all arguments
@@ -24769,10 +25169,9 @@ function onPatch$$1(target, callback) {
  * The listener will only be fire at the and of the current MobX (trans)action.
  * See [snapshots](https://github.com/mobxjs/mobx-state-tree#snapshots) for more details.
  *
- * @export
- * @param {Object} target
- * @param {(snapshot: any) => void} callback
- * @returns {IDisposer}
+ * @param target
+ * @param callback
+ * @returns
  */
 function onSnapshot$$1(target, callback) {
     // check all arguments
@@ -24790,9 +25189,8 @@ function onSnapshot$$1(target, callback) {
  *
  * Can apply a single past, or an array of patches.
  *
- * @export
- * @param {Object} target
- * @param {IJsonPatch} patch
+ * @param target
+ * @param patch
  * @returns
  */
 function applyPatch$$1(target, patch) {
@@ -24809,7 +25207,8 @@ function applyPatch$$1(target, patch) {
  * Small abstraction around `onPatch` and `applyPatch`, attaches a patch listener to a tree and records all the patches.
  * Returns an recorder object with the following signature:
  *
- * @example
+ * Example:
+ * ```ts
  * export interface IPatchRecorder {
  *      // the recorded patches
  *      patches: IJsonPatch[]
@@ -24825,10 +25224,10 @@ function applyPatch$$1(target, patch) {
  *      // stops the recorder if not already stopped
  *      undo(): void
  * }
+ * ```
  *
- * @export
- * @param {IStateTreeNode} subject
- * @returns {IPatchRecorder}
+ * @param subject
+ * @returns
  */
 function recordPatches$$1(subject) {
     // check all arguments
@@ -24875,11 +25274,9 @@ function recordPatches$$1(subject) {
     return recorder;
 }
 /**
- * The inverse of `unprotect`
+ * The inverse of `unprotect`.
  *
- * @export
  * @param {IStateTreeNode} target
- *
  */
 function protect$$1(target) {
     // check all arguments
@@ -24899,7 +25296,8 @@ function protect$$1(target) {
  *
  * In that case you can disable this protection by calling `unprotect` on the root of your tree.
  *
- * @example
+ * Example:
+ * ```ts
  * const Todo = types.model({
  *     done: false
  * }).actions(self => ({
@@ -24913,6 +25311,7 @@ function protect$$1(target) {
  * todo.toggle() // OK
  * unprotect(todo)
  * todo.done = false // OK
+ * ```
  */
 function unprotect$$1(target) {
     // check all arguments
@@ -24934,9 +25333,8 @@ function isProtected$$1(target) {
 /**
  * Applies a snapshot to a given model instances. Patch and snapshot listeners will be invoked as usual.
  *
- * @export
- * @param {Object} target
- * @param {Object} snapshot
+ * @param target
+ * @param snapshot
  * @returns
  */
 function applySnapshot$$1(target, snapshot) {
@@ -24951,10 +25349,9 @@ function applySnapshot$$1(target, snapshot) {
  * Calculates a snapshot from the given model instance. The snapshot will always reflect the latest state but use
  * structural sharing where possible. Doesn't require MobX transactions to be completed.
  *
- * @export
- * @param {Object} target
- * @param {boolean} applyPostProcess = true, by default the postProcessSnapshot gets applied
- * @returns {*}
+ * @param target
+ * @param applyPostProcess If true (the default) then postProcessSnapshot gets applied.
+ * @returns
  */
 function getSnapshot$$1(target, applyPostProcess) {
     if (applyPostProcess === void 0) { applyPostProcess = true; }
@@ -24969,12 +25366,11 @@ function getSnapshot$$1(target, applyPostProcess) {
     return freeze(node.type.getSnapshot(node, false));
 }
 /**
- * Given a model instance, returns `true` if the object has a parent, that is, is part of another object, map or array
+ * Given a model instance, returns `true` if the object has a parent, that is, is part of another object, map or array.
  *
- * @export
- * @param {Object} target
- * @param {number} depth = 1, how far should we look upward?
- * @returns {boolean}
+ * @param target
+ * @param depth How far should we look upward? 1 by default.
+ * @returns
  */
 function hasParent$$1(target, depth) {
     if (depth === void 0) { depth = 1; }
@@ -24999,16 +25395,14 @@ function hasParent$$1(target, depth) {
  * Returns the immediate parent of this object, or throws.
  *
  * Note that the immediate parent can be either an object, map or array, and
- * doesn't necessarily refer to the parent model
+ * doesn't necessarily refer to the parent model.
  *
  * Please note that in child nodes access to the root is only possible
- * once the `afterAttach` hook has fired
+ * once the `afterAttach` hook has fired.
  *
- *
- * @export
- * @param {Object} target
- * @param {number} depth = 1, how far should we look upward?
- * @returns {*}
+ * @param target
+ * @param depth How far should we look upward? 1 by default.
+ * @returns
  */
 function getParent$$1(target, depth) {
     if (depth === void 0) { depth = 1; }
@@ -25033,10 +25427,9 @@ function getParent$$1(target, depth) {
 /**
  * Given a model instance, returns `true` if the object has a parent of given type, that is, is part of another object, map or array
  *
- * @export
- * @param {Object} target
- * @param {IAnyType} type
- * @returns {boolean}
+ * @param target
+ * @param type
+ * @returns
  */
 function hasParentOfType$$1(target, type) {
     // check all arguments
@@ -25057,11 +25450,9 @@ function hasParentOfType$$1(target, type) {
 /**
  * Returns the target's parent of a given type, or throws.
  *
- *
- * @export
- * @param {IStateTreeNode} target
- * @param {IType<any, any, T>} type
- * @returns {T}
+ * @param target
+ * @param type
+ * @returns
  */
 function getParentOfType$$1(target, type) {
     // check all arguments
@@ -25080,14 +25471,13 @@ function getParentOfType$$1(target, type) {
     return fail("Failed to find the parent of " + getStateTreeNode$$1(target) + " of a given type");
 }
 /**
- * Given an object in a model tree, returns the root object of that tree
+ * Given an object in a model tree, returns the root object of that tree.
  *
  * Please note that in child nodes access to the root is only possible
- * once the `afterAttach` hook has fired
+ * once the `afterAttach` hook has fired.
  *
- * @export
- * @param {Object} target
- * @returns {*}
+ * @param target
+ * @returns
  */
 function getRoot$$1(target) {
     // check all arguments
@@ -25100,9 +25490,8 @@ function getRoot$$1(target) {
 /**
  * Returns the path of the given object in the model tree
  *
- * @export
- * @param {Object} target
- * @returns {string}
+ * @param target
+ * @returns
  */
 function getPath$$1(target) {
     // check all arguments
@@ -25113,11 +25502,10 @@ function getPath$$1(target) {
     return getStateTreeNode$$1(target).path;
 }
 /**
- * Returns the path of the given object as unescaped string array
+ * Returns the path of the given object as unescaped string array.
  *
- * @export
- * @param {Object} target
- * @returns {string[]}
+ * @param target
+ * @returns
  */
 function getPathParts$$1(target) {
     // check all arguments
@@ -25128,11 +25516,10 @@ function getPathParts$$1(target) {
     return splitJsonPath$$1(getStateTreeNode$$1(target).path);
 }
 /**
- * Returns true if the given object is the root of a model tree
+ * Returns true if the given object is the root of a model tree.
  *
- * @export
- * @param {Object} target
- * @returns {boolean}
+ * @param target
+ * @returns
  */
 function isRoot$$1(target) {
     // check all arguments
@@ -25146,10 +25533,9 @@ function isRoot$$1(target) {
  * Resolves a path relatively to a given object.
  * Returns undefined if no value can be found.
  *
- * @export
- * @param {Object} target
- * @param {string} path - escaped json path
- * @returns {*}
+ * @param target
+ * @param path escaped json path
+ * @returns
  */
 function resolvePath$$1(target, path) {
     // check all arguments
@@ -25166,11 +25552,10 @@ function resolvePath$$1(target, path) {
  * Resolves a model instance given a root target, the type and the identifier you are searching for.
  * Returns undefined if no value can be found.
  *
- * @export
- * @param {IAnyType} type
- * @param {IStateTreeNode} target
- * @param {(string | number)} identifier
- * @returns {*}
+ * @param type
+ * @param target
+ * @param identifier
+ * @returns
  */
 function resolveIdentifier$$1(type, target, identifier$$1) {
     // check all arguments
@@ -25182,16 +25567,15 @@ function resolveIdentifier$$1(type, target, identifier$$1) {
         if (!(typeof identifier$$1 === "string" || typeof identifier$$1 === "number"))
             fail("expected third argument to be a string or number, got " + identifier$$1 + " instead");
     }
-    var node = getStateTreeNode$$1(target).root.identifierCache.resolve(type, "" + identifier$$1);
+    var node = getStateTreeNode$$1(target).root.identifierCache.resolve(type, normalizeIdentifier$$1(identifier$$1));
     return node ? node.value : undefined;
 }
 /**
  * Returns the identifier of the target node.
  * This is the *string normalized* identifier, which might not match the type of the identifier attribute
  *
- * @export
- * @param {IStateTreeNode} target
- * @returns {(string | null)}
+ * @param target
+ * @returns
  */
 function getIdentifier$$1(target) {
     // check all arguments
@@ -25202,12 +25586,73 @@ function getIdentifier$$1(target) {
     return getStateTreeNode$$1(target).identifier;
 }
 /**
+ * Tests if a reference is valid (pointing to an existing node and optionally if alive) and returns such reference if it the check passes,
+ * else it returns undefined.
  *
+ * @param getter Function to access the reference.
+ * @param checkIfAlive true to also make sure the referenced node is alive (default), false to skip this check.
+ * @returns
+ */
+function tryReference$$1(getter, checkIfAlive) {
+    if (checkIfAlive === void 0) { checkIfAlive = true; }
+    try {
+        var node = getter();
+        if (node === undefined || node === null) {
+            return undefined;
+        }
+        else if (isStateTreeNode$$1(node)) {
+            if (!checkIfAlive) {
+                return node;
+            }
+            else {
+                return isAlive$$1(node) ? node : undefined;
+            }
+        }
+        else {
+            return fail("The reference to be checked is not one of node, null or undefined");
+        }
+    }
+    catch (e) {
+        if (e instanceof InvalidReferenceError$$1) {
+            return undefined;
+        }
+        throw e;
+    }
+}
+/**
+ * Tests if a reference is valid (pointing to an existing node and optionally if alive) and returns if the check passes or not.
  *
- * @export
- * @param {Object} target
- * @param {string} path
- * @returns {*}
+ * @param getter Function to access the reference.
+ * @param checkIfAlive true to also make sure the referenced node is alive (default), false to skip this check.
+ * @returns
+ */
+function isValidReference$$1(getter, checkIfAlive) {
+    if (checkIfAlive === void 0) { checkIfAlive = true; }
+    try {
+        var node = getter();
+        if (node === undefined || node === null) {
+            return false;
+        }
+        else if (isStateTreeNode$$1(node)) {
+            return checkIfAlive ? isAlive$$1(node) : true;
+        }
+        else {
+            return fail("The reference to be checked is not one of node, null or undefined");
+        }
+    }
+    catch (e) {
+        if (e instanceof InvalidReferenceError$$1) {
+            return false;
+        }
+        throw e;
+    }
+}
+/**
+ * Try to resolve a given path relative to a given node.
+ *
+ * @param target
+ * @param path
+ * @returns
  */
 function tryResolve$$1(target, path) {
     // check all arguments
@@ -25233,10 +25678,9 @@ function tryResolve$$1(target, path) {
  * Given two state tree nodes that are part of the same tree,
  * returns the shortest jsonpath needed to navigate from the one to the other
  *
- * @export
- * @param {IStateTreeNode} base
- * @param {IStateTreeNode} target
- * @returns {string}
+ * @param base
+ * @param target
+ * @returns
  */
 function getRelativePath$$1(base, target) {
     // check all arguments
@@ -25254,11 +25698,9 @@ function getRelativePath$$1(base, target) {
  *
  * _Tip: clone will create a literal copy, including the same identifiers. To modify identifiers etc during cloning, don't use clone but take a snapshot of the tree, modify it, and create new instance_
  *
- * @export
- * @template T
- * @param {T} source
- * @param {boolean | any} keepEnvironment indicates whether the clone should inherit the same environment (`true`, the default), or not have an environment (`false`). If an object is passed in as second argument, that will act as the environment for the cloned tree.
- * @returns {T}
+ * @param source
+ * @param keepEnvironment indicates whether the clone should inherit the same environment (`true`, the default), or not have an environment (`false`). If an object is passed in as second argument, that will act as the environment for the cloned tree.
+ * @returns
  */
 function clone$$1(source, keepEnvironment) {
     if (keepEnvironment === void 0) { keepEnvironment = true; }
@@ -25269,7 +25711,7 @@ function clone$$1(source, keepEnvironment) {
     }
     var node = getStateTreeNode$$1(source);
     return node.type.create(node.snapshot, keepEnvironment === true
-        ? node.root._environment
+        ? node.root.environment
         : keepEnvironment === false
             ? undefined
             : keepEnvironment); // it's an object or something else
@@ -25307,9 +25749,8 @@ function destroy$$1(target) {
  * has not been called. If a node is not alive anymore, the only thing one can do with it
  * is requesting it's last path and snapshot
  *
- * @export
- * @param {IStateTreeNode} target
- * @returns {boolean}
+ * @param target
+ * @returns
  */
 function isAlive$$1(target) {
     // check all arguments
@@ -25317,14 +25758,17 @@ function isAlive$$1(target) {
         if (!isStateTreeNode$$1(target))
             fail("expected first argument to be a mobx-state-tree node, got " + target + " instead");
     }
-    return getStateTreeNode$$1(target).isAlive;
+    return getStateTreeNode$$1(target).observableIsAlive;
 }
 /**
  * Use this utility to register a function that should be called whenever the
  * targeted state tree node is destroyed. This is a useful alternative to managing
  * cleanup methods yourself using the `beforeDestroy` hook.
  *
- * @example
+ * This methods returns the same disposer that was passed as argument.
+ *
+ * Example:
+ * ```ts
  * const Todo = types.model({
  *   title: types.string
  * }).actions(self => ({
@@ -25338,10 +25782,11 @@ function isAlive$$1(target) {
  *     addDisposer(self, autoSaveDisposer)
  *   }
  * }))
+ * ```
  *
- * @export
- * @param {IStateTreeNode} target
- * @param {() => void} disposer
+ * @param target
+ * @param disposer
+ * @returns The same disposer that was passed as argument
  */
 function addDisposer$$1(target, disposer) {
     // check all arguments
@@ -25351,7 +25796,9 @@ function addDisposer$$1(target, disposer) {
         if (typeof disposer !== "function")
             fail("expected second argument to be a function, got " + disposer + " instead");
     }
-    getStateTreeNode$$1(target).addDisposer(disposer);
+    var node = getStateTreeNode$$1(target);
+    node.addDisposer(disposer);
+    return disposer;
 }
 /**
  * Returns the environment of the current state tree. For more info on environments,
@@ -25362,9 +25809,8 @@ function addDisposer$$1(target, disposer) {
  *
  * Returns an empty environment if the tree wasn't initialized with an environment
  *
- * @export
- * @param {IStateTreeNode} target
- * @returns {*}
+ * @param target
+ * @returns
  */
 function getEnv$$1(target) {
     // check all arguments
@@ -25373,13 +25819,13 @@ function getEnv$$1(target) {
             fail("expected first argument to be a mobx-state-tree node, got " + target + " instead");
     }
     var node = getStateTreeNode$$1(target);
-    var env = node.root._environment;
+    var env = node.root.environment;
     if (!!!env)
         return EMPTY_OBJECT;
     return env;
 }
 /**
- * Performs a depth first walk through a tree
+ * Performs a depth first walk through a tree.
  */
 function walk$$1(target, processor) {
     // check all arguments
@@ -25400,9 +25846,8 @@ function walk$$1(target, processor) {
 /**
  * Returns a reflection of the model type properties and name for either a model type or model node.
  *
- * @export
- * @param {IAnyModelType | IStateTreeNode} typeOrNode
- * @returns {IModelReflectionPropertiesData}
+ * @param typeOrNode
+ * @returns
  */
 function getPropertyMembers$$1(typeOrNode) {
     var type;
@@ -25424,9 +25869,8 @@ function getPropertyMembers$$1(typeOrNode) {
 /**
  * Returns a reflection of the model node, including name, properties, views, volatile and actions.
  *
- * @export
- * @param {IAnyStateTreeNode} target
- * @returns {IModelReflectionData}
+ * @param target
+ * @returns
  */
 function getMembers$$1(target) {
     var type = getStateTreeNode$$1(target).type;
@@ -25454,12 +25898,12 @@ function getMembers$$1(target) {
 }
 /**
  * Casts a node snapshot or instance type to an instance type so it can be assigned to a type instance.
- * Alternatively also casts a node snapshot or instance to an snapshot type so it can be assigned to a type snapshot.
- * Note that this is just a cast for the type system, this is, it won't actually convert a snapshot to an instance
- * (or vice-versa), but just fool typescript into thinking so.
- * Either way, casting when outside an assignation operation will only yield an unusable type (never).
+ * Note that this is just a cast for the type system, this is, it won't actually convert a snapshot to an instance,
+ * but just fool typescript into thinking so.
+ * Either way, casting when outside an assignation operation won't compile.
  *
- * @example
+ * Example:
+ * ```ts
  * const ModelA = types.model({
  *   n: types.number
  * }).actions(self => ({
@@ -25472,65 +25916,233 @@ function getMembers$$1(target) {
  *   innerModel: ModelA
  * }).actions(self => ({
  *   someAction() {
- *     // this will allow the compiler to assign an snapshot to the property
+ *     // this will allow the compiler to assign a snapshot to the property
  *     self.innerModel = cast({ a: 5 })
  *   }
  * }))
+ * ```
  *
- * @export
- * @param {CastedType<T>} snapshotOrInstance
- * @returns {T}
+ * @param snapshotOrInstance Snapshot or instance
+ * @returns The same object casted as an instance
  */
 function cast$$1(snapshotOrInstance) {
     return snapshotOrInstance;
 }
+/**
+ * Casts a node instance type to an snapshot type so it can be assigned to a type snapshot (e.g. to be used inside a create call).
+ * Note that this is just a cast for the type system, this is, it won't actually convert an instance to a snapshot,
+ * but just fool typescript into thinking so.
+ *
+ * Example:
+ * ```ts
+ * const ModelA = types.model({
+ *   n: types.number
+ * }).actions(self => ({
+ *   setN(aNumber: number) {
+ *     self.n = aNumber
+ *   }
+ * }))
+ *
+ * const ModelB = types.model({
+ *   innerModel: ModelA
+ * })
+ *
+ * const a = ModelA.create({ n: 5 });
+ * // this will allow the compiler to use a model as if it were a snapshot
+ * const b = ModelB.create({ innerModel: castToSnapshot(a)})
+ * ```
+ *
+ * @param snapshotOrInstance Snapshot or instance
+ * @returns The same object casted as an input (creation) snapshot
+ */
+function castToSnapshot$$1(snapshotOrInstance) {
+    return snapshotOrInstance;
+}
+/**
+ * Casts a node instance type to a reference snapshot type so it can be assigned to a refernence snapshot (e.g. to be used inside a create call).
+ * Note that this is just a cast for the type system, this is, it won't actually convert an instance to a refererence snapshot,
+ * but just fool typescript into thinking so.
+ *
+ * Example:
+ * ```ts
+ * const ModelA = types.model({
+ *   id: types.identifier,
+ *   n: types.number
+ * }).actions(self => ({
+ *   setN(aNumber: number) {
+ *     self.n = aNumber
+ *   }
+ * }))
+ *
+ * const ModelB = types.model({
+ *   refA: types.reference(ModelA)
+ * })
+ *
+ * const a = ModelA.create({ id: 'someId', n: 5 });
+ * // this will allow the compiler to use a model as if it were a reference snapshot
+ * const b = ModelB.create({ refA: castToReference(a)})
+ * ```
+ *
+ * @param instance Instance
+ * @returns The same object casted as an reference snapshot (string or number)
+ */
+function castToReferenceSnapshot$$1(instance) {
+    return instance;
+}
 
 /**
  * @internal
- * @private
+ * @hidden
  */
-var ScalarNode$$1 = /** @class */ (function () {
-    function ScalarNode$$1(type, parent, subpath, environment, initialSnapshot) {
-        this.parent = null;
-        this.subpath = "";
-        this.state = NodeLifeCycle$$1.INITIALIZING;
-        this._environment = undefined;
-        this._initialSnapshot = initialSnapshot;
+var BaseNode$$1 = /** @class */ (function () {
+    function BaseNode$$1(type, parent, subpath, environment) {
+        this._state = NodeLifeCycle$$1.INITIALIZING;
+        this.hookSubscribers = new EventHandlers();
+        this.environment = undefined;
+        this.environment = environment;
         this.type = type;
-        this.parent = parent;
-        this.subpath = subpath;
-        var sawException = true;
-        try {
-            this.storedValue = type.createNewInstance(this, {}, initialSnapshot);
-            this.state = NodeLifeCycle$$1.CREATED;
-            sawException = false;
-        }
-        finally {
-            if (sawException) {
-                // short-cut to die the instance, to avoid the snapshot computed starting to throw...
-                this.state = NodeLifeCycle$$1.DEAD;
-            }
-        }
+        this.baseSetParent(parent, subpath);
     }
-    Object.defineProperty(ScalarNode$$1.prototype, "path", {
-        /*
-         * Returnes (escaped) path representation as string
-         */
+    Object.defineProperty(BaseNode$$1.prototype, "subpath", {
         get: function () {
-            if (!this.parent)
-                return "";
-            return this.parent.path + "/" + escapeJsonPath$$1(this.subpath);
+            return this._subpath;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(ScalarNode$$1.prototype, "isRoot", {
+    Object.defineProperty(BaseNode$$1.prototype, "state", {
+        get: function () {
+            return this._state;
+        },
+        set: function (val) {
+            var wasAlive = this.isAlive;
+            this._state = val;
+            var isAlive = this.isAlive;
+            if (this.aliveAtom && wasAlive !== isAlive) {
+                this.aliveAtom.reportChanged();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BaseNode$$1.prototype, "parent", {
+        get: function () {
+            return this._parent;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BaseNode$$1.prototype.baseSetParent = function (parent, subpath) {
+        this._parent = parent;
+        this._subpath = subpath;
+        this._escapedSubpath = undefined; // regenerate when needed
+        if (this.pathAtom) {
+            this.pathAtom.reportChanged();
+        }
+    };
+    Object.defineProperty(BaseNode$$1.prototype, "path", {
+        /*
+         * Returns (escaped) path representation as string
+         */
+        get: function () {
+            if (!this.pathAtom) {
+                this.pathAtom = mobx.createAtom("path");
+            }
+            this.pathAtom.reportObserved();
+            if (!this.parent)
+                return "";
+            // regenerate escaped subpath if needed
+            if (this._escapedSubpath === undefined) {
+                this._escapedSubpath = !this._subpath ? "" : escapeJsonPath$$1(this._subpath);
+            }
+            return this.parent.path + "/" + this._escapedSubpath;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BaseNode$$1.prototype, "isRoot", {
         get: function () {
             return this.parent === null;
         },
         enumerable: true,
         configurable: true
     });
+    BaseNode$$1.prototype.fireInternalHook = function (name) {
+        this.hookSubscribers.emit(name, this, name);
+    };
+    Object.defineProperty(BaseNode$$1.prototype, "isAlive", {
+        get: function () {
+            return this.state !== NodeLifeCycle$$1.DEAD;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BaseNode$$1.prototype, "observableIsAlive", {
+        get: function () {
+            if (!this.aliveAtom) {
+                this.aliveAtom = mobx.createAtom("alive");
+            }
+            this.aliveAtom.reportObserved();
+            return this.isAlive;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BaseNode$$1.prototype.baseFinalizeCreation = function (whenFinalized) {
+        // goal: afterCreate hooks runs depth-first. After attach runs parent first, so on afterAttach the parent has completed already
+        if (this.state === NodeLifeCycle$$1.CREATED) {
+            if (this.parent) {
+                if (this.parent.state !== NodeLifeCycle$$1.FINALIZED) {
+                    // parent not ready yet, postpone
+                    return;
+                }
+                this.fireHook(Hook.afterAttach);
+            }
+            this.state = NodeLifeCycle$$1.FINALIZED;
+            if (whenFinalized) {
+                whenFinalized();
+            }
+        }
+    };
+    BaseNode$$1.prototype.baseFinalizeDeath = function () {
+        this.hookSubscribers.clearAll();
+        this.baseSetParent(null, "");
+        this.state = NodeLifeCycle$$1.DEAD;
+    };
+    BaseNode$$1.prototype.baseAboutToDie = function () {
+        this.fireHook(Hook.beforeDestroy);
+    };
+    return BaseNode$$1;
+}());
+
+/**
+ * @internal
+ * @hidden
+ */
+var ScalarNode$$1 = /** @class */ (function (_super) {
+    __extends(ScalarNode$$1, _super);
+    // note about hooks:
+    // - afterCreate is not emmited in scalar nodes, since it would be emitted in the
+    //   constructor, before it can be subscribed by anybody
+    // - afterCreationFinalization could be emitted, but there's no need for it right now
+    // - beforeDetach is never emitted for scalar nodes, since they cannot be detached
+    function ScalarNode$$1(type, parent, subpath, environment, initialSnapshot) {
+        var _this = _super.call(this, type, parent, subpath, environment) || this;
+        try {
+            _this.storedValue = type.createNewInstance(_this, {}, initialSnapshot);
+        }
+        catch (e) {
+            // short-cut to die the instance, to avoid the snapshot computed starting to throw...
+            _this.state = NodeLifeCycle$$1.DEAD;
+            throw e;
+        }
+        _this.state = NodeLifeCycle$$1.CREATED;
+        // for scalar nodes there's no point in firing this event since it would fire on the constructor, before
+        // anybody can actually register for/listen to it
+        // this.fireHook(Hook.AfterCreate)
+        _this.finalizeCreation();
+        return _this;
+    }
     Object.defineProperty(ScalarNode$$1.prototype, "root", {
         get: function () {
             // future optimization: store root ref in the node and maintain it
@@ -25550,16 +26162,21 @@ var ScalarNode$$1 = /** @class */ (function () {
         }
         else {
             var newPath = subpath === null ? "" : subpath;
-            if (this.subpath !== newPath) {
-                this.subpath = newPath;
-            }
             if (newParent && newParent !== this.parent) {
-                this.parent = newParent;
+                fail("assertion failed: scalar nodes cannot change their parent");
+            }
+            else if (this.subpath !== newPath) {
+                this.baseSetParent(this.parent, newPath);
             }
         }
     };
     Object.defineProperty(ScalarNode$$1.prototype, "value", {
         get: function () {
+            // if we ever find a case where scalar nodes can be accessed without iterating through its parent
+            // uncomment this to make sure the parent chain is created when this is accessed
+            // if (this.parent) {
+            //     this.parent.createObservableInstanceIfNeeded()
+            // }
             return this.type.getValue(this);
         },
         enumerable: true,
@@ -25567,9 +26184,7 @@ var ScalarNode$$1 = /** @class */ (function () {
     });
     Object.defineProperty(ScalarNode$$1.prototype, "snapshot", {
         get: function () {
-            var snapshot = this.getSnapshot();
-            // avoid any external modification in dev mode
-            return freeze(snapshot);
+            return freeze(this.getSnapshot());
         },
         enumerable: true,
         configurable: true
@@ -25577,37 +26192,34 @@ var ScalarNode$$1 = /** @class */ (function () {
     ScalarNode$$1.prototype.getSnapshot = function () {
         return this.type.getSnapshot(this);
     };
-    Object.defineProperty(ScalarNode$$1.prototype, "isAlive", {
-        get: function () {
-            return this.state !== NodeLifeCycle$$1.DEAD;
-        },
-        enumerable: true,
-        configurable: true
-    });
     ScalarNode$$1.prototype.toString = function () {
         return this.type.name + "@" + (this.path || "<root>") + (this.isAlive ? "" : "[dead]");
     };
     ScalarNode$$1.prototype.die = function () {
-        this.state = NodeLifeCycle$$1.DEAD;
+        if (this.state === NodeLifeCycle$$1.DETACHING)
+            return;
+        this.aboutToDie();
+        this.finalizeDeath();
     };
+    ScalarNode$$1.prototype.finalizeCreation = function () {
+        this.baseFinalizeCreation();
+    };
+    ScalarNode$$1.prototype.aboutToDie = function () {
+        this.baseAboutToDie();
+    };
+    ScalarNode$$1.prototype.finalizeDeath = function () {
+        this.baseFinalizeDeath();
+    };
+    ScalarNode$$1.prototype.fireHook = function (name) {
+        this.fireInternalHook(name);
+    };
+    __decorate([
+        mobx.action
+    ], ScalarNode$$1.prototype, "die", null);
     return ScalarNode$$1;
-}());
+}(BaseNode$$1));
 
 var nextNodeId = 1;
-var livelynessChecking = "warn";
-/**
- *  Defines what MST should do when running into reads / writes to objects that have died.
- * By default it will print a warning.
- * Use te `"error"` option to easy debugging to see where the error was thrown and when the offending read / write took place
- *
- * Possible values: `"warn"`, `"error"` and `"ignore"`
- *
- * @export
- * @param {LivelynessMode} mode
- */
-function setLivelynessChecking$$1(mode) {
-    livelynessChecking = mode;
-}
 var snapshotReactionOptions = {
     onError: function (e) {
         throw e;
@@ -25615,126 +26227,124 @@ var snapshotReactionOptions = {
 };
 /**
  * @internal
- * @private
+ * @hidden
  */
-var ObjectNode$$1 = /** @class */ (function () {
+var ObjectNode$$1 = /** @class */ (function (_super) {
+    __extends(ObjectNode$$1, _super);
     function ObjectNode$$1(type, parent, subpath, environment, initialSnapshot) {
-        this.nodeId = ++nextNodeId;
-        this.subpathAtom = mobx.createAtom("path");
-        this.subpath = "";
-        this.parent = null;
-        this.state = NodeLifeCycle$$1.INITIALIZING;
-        this.isProtectionEnabled = true;
-        this.middlewares = null;
-        this._autoUnbox = true; // unboxing is disabled when reading child nodes
-        this._environment = undefined;
-        this._isRunningAction = false; // only relevant for root
-        this._hasSnapshotReaction = false;
-        this._disposers = null;
-        this._patchSubscribers = null;
-        this._snapshotSubscribers = null;
-        this._observableInstanceCreated = false;
-        this._cachedInitialSnapshot = null;
-        this._environment = environment;
-        this._initialSnapshot = freeze(initialSnapshot);
-        this.type = type;
-        this.parent = parent;
-        this.subpath = subpath;
-        this.escapedSubpath = escapeJsonPath$$1(this.subpath);
-        this.identifierAttribute = type.identifierAttribute;
+        var _this = _super.call(this, type, parent, subpath, environment) || this;
+        _this.nodeId = ++nextNodeId;
+        _this.isProtectionEnabled = true;
+        _this.middlewares = null;
+        _this._autoUnbox = true; // unboxing is disabled when reading child nodes
+        _this._isRunningAction = false; // only relevant for root
+        _this._hasSnapshotReaction = false;
+        _this._internalEvents = new EventHandlers();
+        _this._observableInstanceState = 0 /* UNINITIALIZED */;
+        _this._cachedInitialSnapshot = null;
+        // this method must be bound
+        _this.unbox = function (childNode) {
+            if (childNode)
+                _this.assertAlive();
+            if (childNode && _this._autoUnbox)
+                return childNode.value;
+            return childNode;
+        };
+        _this._initialSnapshot = freeze(initialSnapshot);
+        _this.identifierAttribute = type.identifierAttribute;
         if (!parent) {
-            this.identifierCache = new IdentifierCache$$1();
+            _this.identifierCache = new IdentifierCache$$1();
         }
-        this._childNodes = type.initializeChildNodes(this, this._initialSnapshot);
+        _this._childNodes = type.initializeChildNodes(_this, _this._initialSnapshot);
         // identifier can not be changed during lifecycle of a node
         // so we safely can read it from initial snapshot
-        this.identifier = null;
-        this.unnormalizedIdentifier = null;
-        if (this.identifierAttribute && this._initialSnapshot) {
-            var id = this._initialSnapshot[this.identifierAttribute];
+        _this.identifier = null;
+        _this.unnormalizedIdentifier = null;
+        if (_this.identifierAttribute && _this._initialSnapshot) {
+            var id = _this._initialSnapshot[_this.identifierAttribute];
             if (id === undefined) {
                 // try with the actual node if not (for optional identifiers)
-                var childNode = this._childNodes[this.identifierAttribute];
+                var childNode = _this._childNodes[_this.identifierAttribute];
                 if (childNode) {
                     id = childNode.value;
                 }
             }
             if (typeof id !== "string" && typeof id !== "number") {
-                fail("Instance identifier '" + this.identifierAttribute + "' for type '" + this.type.name + "' must be a string or a number");
+                fail("Instance identifier '" + _this.identifierAttribute + "' for type '" + _this.type.name + "' must be a string or a number");
             }
             // normalize internal identifier to string
-            this.identifier = "" + id;
-            this.unnormalizedIdentifier = id;
+            _this.identifier = normalizeIdentifier$$1(id);
+            _this.unnormalizedIdentifier = id;
         }
         if (!parent) {
-            this.identifierCache.addNodeToCache(this);
+            _this.identifierCache.addNodeToCache(_this);
         }
         else {
-            parent.root.identifierCache.addNodeToCache(this);
+            parent.root.identifierCache.addNodeToCache(_this);
         }
+        return _this;
     }
     ObjectNode$$1.prototype.applyPatches = function (patches) {
-        if (!this._observableInstanceCreated)
-            this._createObservableInstance();
-        this.applyPatches(patches);
+        this.createObservableInstanceIfNeeded();
+        this._applyPatches(patches);
     };
     ObjectNode$$1.prototype.applySnapshot = function (snapshot) {
-        if (!this._observableInstanceCreated)
-            this._createObservableInstance();
-        this.applySnapshot(snapshot);
+        this.createObservableInstanceIfNeeded();
+        this._applySnapshot(snapshot);
     };
-    ObjectNode$$1.prototype._createObservableInstance = function () {
+    ObjectNode$$1.prototype.createObservableInstanceIfNeeded = function () {
+        if (this._observableInstanceState !== 0 /* UNINITIALIZED */) {
+            return;
+        }
+        this._observableInstanceState = 1 /* CREATING */;
+        // make sure the parent chain is created as well
+        // array with parent chain from parent to child
+        var parentChain = [];
+        var parent = this.parent;
+        // for performance reasons we never go back further than the most direct
+        // uninitialized parent
+        // this is done to avoid traversing the whole tree to the root when using
+        // the same reference again
+        while (parent &&
+            parent._observableInstanceState === 0 /* UNINITIALIZED */) {
+            parentChain.unshift(parent);
+            parent = parent.parent;
+        }
+        // initialize the uninitialized parent chain from parent to child
+        for (var _i = 0, parentChain_1 = parentChain; _i < parentChain_1.length; _i++) {
+            var p = parentChain_1[_i];
+            p.createObservableInstanceIfNeeded();
+        }
         var type = this.type;
-        this.storedValue = type.createNewInstance(this, this._childNodes, this._initialSnapshot);
-        this.preboot();
-        var sawException = true;
-        this._observableInstanceCreated = true;
         try {
+            this.storedValue = type.createNewInstance(this, this._childNodes, this._initialSnapshot);
+            this.preboot();
             this._isRunningAction = true;
             type.finalizeNewInstance(this, this.storedValue);
-            this._isRunningAction = false;
-            this.fireHook("afterCreate");
-            this.state = NodeLifeCycle$$1.CREATED;
-            sawException = false;
+        }
+        catch (e) {
+            // short-cut to die the instance, to avoid the snapshot computed starting to throw...
+            this.state = NodeLifeCycle$$1.DEAD;
+            throw e;
         }
         finally {
-            if (sawException) {
-                // short-cut to die the instance, to avoid the snapshot computed starting to throw...
-                this.state = NodeLifeCycle$$1.DEAD;
-            }
+            this._isRunningAction = false;
         }
+        this._observableInstanceState = 2 /* CREATED */;
         // NOTE: we need to touch snapshot, because non-observable
-        // "observableInstanceCreated" field was touched
+        // "_observableInstanceState" field was touched
         invalidateComputed(this, "snapshot");
         if (this.isRoot)
             this._addSnapshotReaction();
-        this.finalizeCreation();
         this._childNodes = EMPTY_OBJECT;
+        this.state = NodeLifeCycle$$1.CREATED;
+        this.fireHook(Hook.afterCreate);
+        this.finalizeCreation();
     };
-    Object.defineProperty(ObjectNode$$1.prototype, "path", {
-        /*
-         * Returnes (escaped) path representation as string
-         */
-        get: function () {
-            this.subpathAtom.reportObserved();
-            if (!this.parent)
-                return "";
-            return this.parent.path + "/" + this.escapedSubpath;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(ObjectNode$$1.prototype, "root", {
         get: function () {
             var parent = this.parent;
             return parent ? parent.root : this;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ObjectNode$$1.prototype, "isRoot", {
-        get: function () {
-            return this.parent === null;
         },
         enumerable: true,
         configurable: true
@@ -25751,8 +26361,8 @@ var ObjectNode$$1 = /** @class */ (function () {
                 fail("A state tree is not allowed to contain itself. Cannot assign " + this + " to path '" + newParent.path + "/" + subpath + "'");
             }
             if (!this.parent &&
-                !!this.root._environment &&
-                this.root._environment !== newParent.root._environment) {
+                !!this.root.environment &&
+                this.root.environment !== newParent.root.environment) {
                 fail("A state tree cannot be made part of another state tree as long as their environments are different.");
             }
         }
@@ -25761,21 +26371,19 @@ var ObjectNode$$1 = /** @class */ (function () {
         }
         else {
             var newPath = subpath === null ? "" : subpath;
-            if (this.subpath !== newPath) {
-                this.subpath = newPath;
-                this.escapedSubpath = escapeJsonPath$$1(this.subpath);
-                this.subpathAtom.reportChanged();
-            }
             if (newParent && newParent !== this.parent) {
                 newParent.root.identifierCache.mergeCache(this);
-                this.parent = newParent;
-                this.subpathAtom.reportChanged();
-                this.fireHook("afterAttach");
+                this.baseSetParent(newParent, newPath);
+                this.fireHook(Hook.afterAttach);
+            }
+            else if (this.subpath !== newPath) {
+                this.baseSetParent(this.parent, newPath);
             }
         }
     };
     ObjectNode$$1.prototype.fireHook = function (name) {
         var _this = this;
+        this.fireInternalHook(name);
         var fn = this.storedValue && typeof this.storedValue === "object" && this.storedValue[name];
         if (typeof fn === "function") {
             // we check for it to allow old mobx peer dependencies that don't have the method to work (even when still bugged)
@@ -25789,17 +26397,6 @@ var ObjectNode$$1 = /** @class */ (function () {
             }
         }
     };
-    ObjectNode$$1.prototype.createObservableInstanceIfNeeded = function () {
-        if (!this._observableInstanceCreated)
-            this._createObservableInstance();
-    };
-    Object.defineProperty(ObjectNode$$1.prototype, "isObservableInstanceCreated", {
-        get: function () {
-            return this._observableInstanceCreated;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(ObjectNode$$1.prototype, "value", {
         get: function () {
             this.createObservableInstanceIfNeeded();
@@ -25813,8 +26410,6 @@ var ObjectNode$$1 = /** @class */ (function () {
     Object.defineProperty(ObjectNode$$1.prototype, "snapshot", {
         // advantage of using computed for a snapshot is that nicely respects transactions etc.
         get: function () {
-            if (!this.isAlive)
-                return undefined;
             return freeze(this.getSnapshot());
         },
         enumerable: true,
@@ -25823,8 +26418,8 @@ var ObjectNode$$1 = /** @class */ (function () {
     // NOTE: we use this method to get snapshot without creating @computed overhead
     ObjectNode$$1.prototype.getSnapshot = function () {
         if (!this.isAlive)
-            return undefined;
-        return this._observableInstanceCreated
+            return this._snapshotUponDeath;
+        return this._observableInstanceState === 2 /* CREATED */
             ? this._getActualSnapshot()
             : this._getInitialSnapshot();
     };
@@ -25832,8 +26427,6 @@ var ObjectNode$$1 = /** @class */ (function () {
         return this.type.getSnapshot(this);
     };
     ObjectNode$$1.prototype._getInitialSnapshot = function () {
-        if (!this.isAlive)
-            return undefined;
         if (!this._initialSnapshot)
             return this._initialSnapshot;
         if (this._cachedInitialSnapshot)
@@ -25851,22 +26444,14 @@ var ObjectNode$$1 = /** @class */ (function () {
             return false;
         return this.parent.isRunningAction();
     };
-    Object.defineProperty(ObjectNode$$1.prototype, "isAlive", {
-        get: function () {
-            return this.state !== NodeLifeCycle$$1.DEAD;
-        },
-        enumerable: true,
-        configurable: true
-    });
     ObjectNode$$1.prototype.assertAlive = function () {
         if (!this.isAlive) {
-            var baseMsg = "[mobx-state-tree][error] You are trying to read or write to an object that is no longer part of a state tree. (Object type was '" + this.type.name + "'). Either detach nodes first, or don't use objects after removing / replacing them in the tree.";
-            switch (livelynessChecking) {
+            var error = "You are trying to read or write to an object that is no longer part of a state tree. (Object type was '" + this.type.name + "'). Either detach nodes first, or don't use objects after removing / replacing them in the tree.";
+            switch (getLivelinessChecking()) {
                 case "error":
-                    throw new Error(baseMsg);
+                    return fail(error);
                 case "warn":
-                    console.warn(baseMsg +
-                        ' Use setLivelynessChecking("error") to simplify debugging this error.');
+                    warnError(error);
             }
         }
     };
@@ -25874,7 +26459,7 @@ var ObjectNode$$1 = /** @class */ (function () {
         this.assertAlive();
         this._autoUnbox = false;
         try {
-            return this._observableInstanceCreated
+            return this._observableInstanceState === 2 /* CREATED */
                 ? this.type.getChildNode(this, subpath)
                 : this._childNodes[subpath];
         }
@@ -25886,7 +26471,7 @@ var ObjectNode$$1 = /** @class */ (function () {
         this.assertAlive();
         this._autoUnbox = false;
         try {
-            return this._observableInstanceCreated
+            return this._observableInstanceState === 2 /* CREATED */
                 ? this.type.getChildren(this)
                 : convertChildNodesToArray$$1(this._childNodes);
         }
@@ -25913,62 +26498,43 @@ var ObjectNode$$1 = /** @class */ (function () {
     ObjectNode$$1.prototype.removeChild = function (subpath) {
         this.type.removeChild(this, subpath);
     };
-    ObjectNode$$1.prototype.unbox = function (childNode) {
-        if (childNode && childNode.parent)
-            childNode.parent.assertAlive();
-        if (childNode && childNode.parent && childNode.parent._autoUnbox)
-            return childNode.value;
-        return childNode;
-    };
     ObjectNode$$1.prototype.toString = function () {
         var identifier$$1 = this.identifier ? "(id: " + this.identifier + ")" : "";
         return this.type.name + "@" + (this.path || "<root>") + identifier$$1 + (this.isAlive ? "" : "[dead]");
     };
     ObjectNode$$1.prototype.finalizeCreation = function () {
-        // goal: afterCreate hooks runs depth-first. After attach runs parent first, so on afterAttach the parent has completed already
-        if (this.state === NodeLifeCycle$$1.CREATED) {
-            if (this.parent) {
-                if (this.parent.state !== NodeLifeCycle$$1.FINALIZED) {
-                    // parent not ready yet, postpone
-                    return;
-                }
-                this.fireHook("afterAttach");
-            }
-            this.state = NodeLifeCycle$$1.FINALIZED;
-            for (var _i = 0, _a = this.getChildren(); _i < _a.length; _i++) {
+        var _this = this;
+        this.baseFinalizeCreation(function () {
+            for (var _i = 0, _a = _this.getChildren(); _i < _a.length; _i++) {
                 var child = _a[_i];
-                if (child instanceof ObjectNode$$1)
-                    child.finalizeCreation();
+                child.finalizeCreation();
             }
-        }
+            _this.fireInternalHook(Hook.afterCreationFinalization);
+        });
     };
     ObjectNode$$1.prototype.detach = function () {
         if (!this.isAlive)
             fail("Error while detaching, node is not alive.");
         if (this.isRoot)
             return;
-        else {
-            this.fireHook("beforeDetach");
-            this._environment = this.root._environment; // make backup of environment
-            this.state = NodeLifeCycle$$1.DETACHING;
-            this.identifierCache = this.root.identifierCache.splitCache(this);
-            this.parent.removeChild(this.subpath);
-            this.parent = null;
-            this.subpath = this.escapedSubpath = "";
-            this.subpathAtom.reportChanged();
-            this.state = NodeLifeCycle$$1.FINALIZED;
-        }
+        this.fireHook(Hook.beforeDetach);
+        this.state = NodeLifeCycle$$1.DETACHING;
+        this.environment = this.root.environment; // make backup of environment
+        this.identifierCache = this.root.identifierCache.splitCache(this);
+        this.parent.removeChild(this.subpath);
+        this.baseSetParent(null, "");
+        this.state = NodeLifeCycle$$1.FINALIZED;
     };
     ObjectNode$$1.prototype.preboot = function () {
         var self = this;
-        this.applyPatches = createActionInvoker$$1(this.storedValue, "@APPLY_PATCHES", function (patches) {
+        this._applyPatches = createActionInvoker$$1(this.storedValue, "@APPLY_PATCHES", function (patches) {
             patches.forEach(function (patch) {
                 var parts = splitJsonPath$$1(patch.path);
                 var node = resolveNodeByPathParts$$1(self, parts.slice(0, -1));
                 node.applyPatchLocally(parts[parts.length - 1], patch);
             });
         });
-        this.applySnapshot = createActionInvoker$$1(this.storedValue, "@APPLY_SNAPSHOT", function (snapshot) {
+        this._applySnapshot = createActionInvoker$$1(this.storedValue, "@APPLY_SNAPSHOT", function (snapshot) {
             // if the snapshot is the same as the current one, avoid performing a reconcile
             if (snapshot === self.snapshot)
                 return;
@@ -25981,72 +26547,84 @@ var ObjectNode$$1 = /** @class */ (function () {
     ObjectNode$$1.prototype.die = function () {
         if (this.state === NodeLifeCycle$$1.DETACHING)
             return;
-        if (isStateTreeNode$$1(this.storedValue)) {
-            // optimization: don't use walk, but getChildNodes for more efficiency
-            walk$$1(this.storedValue, function (child) {
-                var node = getStateTreeNode$$1(child);
-                if (node instanceof ObjectNode$$1)
-                    node.aboutToDie();
-            });
-            walk$$1(this.storedValue, function (child) {
-                var node = getStateTreeNode$$1(child);
-                if (node instanceof ObjectNode$$1)
-                    node.finalizeDeath();
-            });
+        if (this._observableInstanceState === 2 /* CREATED */) {
+            this.aboutToDie();
+            this.finalizeDeath();
+        }
+        else {
+            // get rid of own and child ids at least
+            this.unregisterIdentifiers();
         }
     };
     ObjectNode$$1.prototype.aboutToDie = function () {
-        if (this._disposers) {
-            this._disposers.forEach(function (f) { return f(); });
-            this._disposers = null;
-        }
-        this.fireHook("beforeDestroy");
+        this.getChildren().forEach(function (node) {
+            node.aboutToDie();
+        });
+        // beforeDestroy should run before the disposers since else we could end up in a situation where
+        // a disposer added with addDisposer at this stage (beforeDestroy) is actually never released
+        this.baseAboutToDie();
+        this._internalEvents.emit("dispose" /* Dispose */);
+        this._internalEvents.clear("dispose" /* Dispose */);
+    };
+    ObjectNode$$1.prototype.unregisterIdentifiers = function () {
+        var _this = this;
+        Object.keys(this._childNodes).forEach(function (k) {
+            var childNode = _this._childNodes[k];
+            if (childNode instanceof ObjectNode$$1) {
+                childNode.unregisterIdentifiers();
+            }
+        });
+        this.root.identifierCache.notifyDied(this);
     };
     ObjectNode$$1.prototype.finalizeDeath = function () {
         // invariant: not called directly but from "die"
+        this.getChildren().forEach(function (node) {
+            node.finalizeDeath();
+        });
         this.root.identifierCache.notifyDied(this);
-        addReadOnlyProp(this, "snapshot", this.snapshot); // kill the computed prop and just store the last snapshot
-        if (this._patchSubscribers)
-            this._patchSubscribers = null;
-        if (this._snapshotSubscribers)
-            this._snapshotSubscribers = null;
-        this.state = NodeLifeCycle$$1.DEAD;
-        this.subpath = this.escapedSubpath = "";
-        this.parent = null;
-        this.subpathAtom.reportChanged();
+        // "kill" the computed prop and just store the last snapshot
+        var snapshot = this.snapshot;
+        this._snapshotUponDeath = snapshot;
+        this._internalEvents.clearAll();
+        this.baseFinalizeDeath();
     };
     ObjectNode$$1.prototype.onSnapshot = function (onChange) {
         this._addSnapshotReaction();
-        if (!this._snapshotSubscribers)
-            this._snapshotSubscribers = [];
-        return registerEventHandler(this._snapshotSubscribers, onChange);
+        return this._internalEvents.register("snapshot" /* Snapshot */, onChange);
     };
     ObjectNode$$1.prototype.emitSnapshot = function (snapshot) {
-        if (this._snapshotSubscribers)
-            this._snapshotSubscribers.forEach(function (f) { return f(snapshot); });
+        this._internalEvents.emit("snapshot" /* Snapshot */, snapshot);
     };
     ObjectNode$$1.prototype.onPatch = function (handler) {
-        if (!this._patchSubscribers)
-            this._patchSubscribers = [];
-        return registerEventHandler(this._patchSubscribers, handler);
+        return this._internalEvents.register("patch" /* Patch */, handler);
     };
     ObjectNode$$1.prototype.emitPatch = function (basePatch, source) {
-        var patchSubscribers = this._patchSubscribers;
-        if (patchSubscribers && patchSubscribers.length) {
+        var intEvs = this._internalEvents;
+        if (intEvs.hasSubscribers("patch" /* Patch */)) {
             var localizedPatch = extend({}, basePatch, {
                 path: source.path.substr(this.path.length) + "/" + basePatch.path // calculate the relative path of the patch
             });
-            var _a = splitPatch$$1(localizedPatch), patch_1 = _a[0], reversePatch_1 = _a[1];
-            patchSubscribers.forEach(function (f) { return f(patch_1, reversePatch_1); });
+            var _a = splitPatch$$1(localizedPatch), patch = _a[0], reversePatch = _a[1];
+            intEvs.emit("patch" /* Patch */, patch, reversePatch);
         }
         if (this.parent)
             this.parent.emitPatch(basePatch, source);
     };
+    ObjectNode$$1.prototype.hasDisposer = function (disposer) {
+        return this._internalEvents.has("dispose" /* Dispose */, disposer);
+    };
     ObjectNode$$1.prototype.addDisposer = function (disposer) {
-        if (!this._disposers)
-            this._disposers = [disposer];
-        else
-            this._disposers.unshift(disposer);
+        if (!this.hasDisposer(disposer)) {
+            this._internalEvents.register("dispose" /* Dispose */, disposer, true);
+            return;
+        }
+        fail("cannot add a disposer when it is already registered for execution");
+    };
+    ObjectNode$$1.prototype.removeDisposer = function (disposer) {
+        if (!this._internalEvents.has("dispose" /* Dispose */, disposer)) {
+            return fail("cannot remove a disposer which was never registered for execution");
+        }
+        this._internalEvents.unregister("dispose" /* Dispose */, disposer);
     };
     ObjectNode$$1.prototype.removeMiddleware = function (handler) {
         if (this.middlewares)
@@ -26065,8 +26643,7 @@ var ObjectNode$$1 = /** @class */ (function () {
     };
     ObjectNode$$1.prototype.applyPatchLocally = function (subpath, patch) {
         this.assertWritable();
-        if (!this._observableInstanceCreated)
-            this._createObservableInstance();
+        this.createObservableInstanceIfNeeded();
         this.type.applyPatchLocally(this, subpath, patch);
     };
     ObjectNode$$1.prototype._addSnapshotReaction = function () {
@@ -26079,7 +26656,7 @@ var ObjectNode$$1 = /** @class */ (function () {
     };
     __decorate([
         mobx.action
-    ], ObjectNode$$1.prototype, "_createObservableInstance", null);
+    ], ObjectNode$$1.prototype, "createObservableInstanceIfNeeded", null);
     __decorate([
         mobx.computed
     ], ObjectNode$$1.prototype, "snapshot", null);
@@ -26090,11 +26667,11 @@ var ObjectNode$$1 = /** @class */ (function () {
         mobx.action
     ], ObjectNode$$1.prototype, "die", null);
     return ObjectNode$$1;
-}());
+}(BaseNode$$1));
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var TypeFlags$$1;
 (function (TypeFlags$$1) {
@@ -26121,11 +26698,10 @@ var TypeFlags$$1;
  * A complex type produces a MST node (Node in the state tree)
  *
  * @internal
- * @private
+ * @hidden
  */
 var ComplexType$$1 = /** @class */ (function () {
     function ComplexType$$1(name) {
-        this["!!complexType"] = undefined;
         this.isType = true;
         this.name = name;
     }
@@ -26170,7 +26746,7 @@ var ComplexType$$1 = /** @class */ (function () {
             isMutable(newValue) &&
             !isStateTreeNode$$1(newValue) &&
             (!current.identifierAttribute ||
-                current.identifier === "" + newValue[current.identifierAttribute])) {
+                current.identifier === normalizeIdentifier$$1(newValue[current.identifierAttribute]))) {
             // the newValue has no node, so can be treated like a snapshot
             // we can reconcile
             current.applySnapshot(newValue);
@@ -26187,7 +26763,7 @@ var ComplexType$$1 = /** @class */ (function () {
             return newNode;
         }
         // nothing to do, we have to create a new node
-        return this.instantiate(parent, subpath, current._environment, newValue);
+        return this.instantiate(parent, subpath, current.environment, newValue);
     };
     Object.defineProperty(ComplexType$$1.prototype, "Type", {
         get: function () {
@@ -26217,7 +26793,7 @@ var ComplexType$$1 = /** @class */ (function () {
 }());
 /**
  * @internal
- * @private
+ * @hidden
  */
 var Type$$1 = /** @class */ (function (_super) {
     __extends(Type$$1, _super);
@@ -26252,7 +26828,7 @@ var Type$$1 = /** @class */ (function (_super) {
         // reconcile only if type and value are still the same
         if (current.type === this && current.storedValue === newValue)
             return current;
-        var res = this.instantiate(current.parent, current.subpath, current._environment, newValue);
+        var res = this.instantiate(current.parent, current.subpath, current.environment, newValue);
         current.die();
         return res;
     };
@@ -26264,9 +26840,8 @@ var Type$$1 = /** @class */ (function (_super) {
 /**
  * Returns if a given value represents a type.
  *
- * @export
- * @param {*} value
- * @returns {value is IAnyType}
+ * @param value Value to check.
+ * @returns `true` if the value is a type.
  */
 function isType$$1(value) {
     return typeof value === "object" && value && value.isType === true;
@@ -26282,18 +26857,8 @@ var runningActions = new Map();
  *
  * See the `atomic` middleware for an example
  *
- * @export
- * @template T
- * @template any
- * @param {{
- *     filter?: (call: IMiddlewareEvent) => boolean
- *     onStart: (call: IMiddlewareEvent) => T
- *     onResume: (call: IMiddlewareEvent, context: T) => void
- *     onSuspend: (call: IMiddlewareEvent, context: T) => void
- *     onSuccess: (call: IMiddlewareEvent, context: T, result: any) => void
- *     onFail: (call: IMiddlewareEvent, context: T, error: any) => void
- * }} hooks
- * @returns {IMiddlewareHandler}
+ * @param hooks
+ * @returns
  */
 function createActionTrackingMiddleware(hooks) {
     return function actionTrackingMiddleware(call, next, abort) {
@@ -26344,13 +26909,13 @@ function createActionTrackingMiddleware(hooks) {
             }
             case "flow_throw": {
                 var root = runningActions.get(call.rootId);
-                runningActions.delete(call.id);
+                runningActions.delete(call.rootId);
                 hooks.onFail(call, root.context, call.args[0]);
                 return next(call);
             }
             case "flow_return": {
                 var root = runningActions.get(call.rootId);
-                runningActions.delete(call.id);
+                runningActions.delete(call.rootId);
                 hooks.onSuccess(call, root.context, call.args[0]);
                 return next(call);
             }
@@ -26370,7 +26935,8 @@ function serializeArgument(node, actionName, index, arg) {
     if (typeof arg === "function")
         return serializeTheUnserializable("[function]");
     if (typeof arg === "object" && !isPlainObject(arg) && !isArray(arg))
-        return serializeTheUnserializable("[object " + ((arg && arg.constructor && arg.constructor.name) || "Complex Object") + "]");
+        return serializeTheUnserializable("[object " + ((arg && arg.constructor && arg.constructor.name) ||
+            "Complex Object") + "]");
     try {
         // Check if serializable, cycle free etc...
         // MWE: there must be a better way....
@@ -26397,9 +26963,8 @@ function serializeTheUnserializable(baseType) {
  * Does not return any value
  * Takes an action description as produced by the `onAction` middleware.
  *
- * @export
- * @param {Object} target
- * @param {IActionCall[]} actions
+ * @param target
+ * @param actions
  */
 function applyAction$$1(target, actions) {
     // check all arguments
@@ -26433,7 +26998,8 @@ function baseApplyAction(target, action) {
  * Small abstraction around `onAction` and `applyAction`, attaches an action listener to a tree and records all the actions emitted.
  * Returns an recorder object with the following signature:
  *
- * @example
+ * Example:
+ * ```ts
  * export interface IActionRecorder {
  *      // the recorded actions
  *      actions: ISerializedActionCall[]
@@ -26442,10 +27008,10 @@ function baseApplyAction(target, action) {
  *      // apply all the recorded actions on the given object
  *      replay(target: IStateTreeNode): any
  * }
+ * ```
  *
- * @export
- * @param {IStateTreeNode} subject
- * @returns {IPatchRecorder}
+ * @param subject
+ * @returns
  */
 function recordActions$$1(subject) {
     // check all arguments
@@ -26472,7 +27038,8 @@ function recordActions$$1(subject) {
  * MST Nodes are considered non-serializable as well (they could be serialized as there snapshot, but it is uncertain whether an replaying party will be able to handle such a non-instantiated snapshot).
  * Rather, when using `onAction` middleware, one should consider in passing arguments which are 1: an id, 2: a (relative) path, or 3: a snapshot. Instead of a real MST node.
  *
- * @example
+ * Example:
+ * ```ts
  * const Todo = types.model({
  *   task: types.string
  * })
@@ -26493,12 +27060,12 @@ function recordActions$$1(subject) {
  *
  * s.add({ task: "Grab a coffee" })
  * // Logs: { name: "add", path: "", args: [{ task: "Grab a coffee" }] }
+ * ```
  *
- * @export
- * @param {IStateTreeNode} target
- * @param {(call: ISerializedActionCall) => void} listener
- * @param attachAfter {boolean} (default false) fires the listener *after* the action has executed instead of before.
- * @returns {IDisposer}
+ * @param target
+ * @param listener
+ * @param attachAfter (default false) fires the listener *after* the action has executed instead of before.
+ * @returns
  */
 function onAction$$1(target, listener, attachAfter) {
     if (attachAfter === void 0) { attachAfter = false; }
@@ -26507,9 +27074,9 @@ function onAction$$1(target, listener, attachAfter) {
         if (!isStateTreeNode$$1(target))
             fail("expected first argument to be a mobx-state-tree node, got " + target + " instead");
         if (!isRoot$$1(target))
-            console.warn("[mobx-state-tree] Warning: Attaching onAction listeners to non root nodes is dangerous: No events will be emitted for actions initiated higher up in the tree.");
+            warnError("Warning: Attaching onAction listeners to non root nodes is dangerous: No events will be emitted for actions initiated higher up in the tree.");
         if (!isProtected$$1(target))
-            console.warn("[mobx-state-tree] Warning: Attaching onAction listeners to non protected nodes is dangerous: No events will be emitted for direct modifications without action.");
+            warnError("Warning: Attaching onAction listeners to non protected nodes is dangerous: No events will be emitted for direct modifications without action.");
     }
     return addMiddleware$$1(target, function handler(rawCall, next) {
         if (rawCall.type === "action" && rawCall.id === rawCall.rootId) {
@@ -26541,7 +27108,7 @@ var nextActionId = 1;
 var currentActionContext = null;
 /**
  * @internal
- * @private
+ * @hidden
  */
 function getNextActionId$$1() {
     return nextActionId++;
@@ -26549,7 +27116,7 @@ function getNextActionId$$1() {
 // TODO: optimize away entire action context if there is no middleware in tree?
 /**
  * @internal
- * @private
+ * @hidden
  */
 function runWithActionContext$$1(context, fn) {
     var node = getStateTreeNode$$1(context.context);
@@ -26570,7 +27137,7 @@ function runWithActionContext$$1(context, fn) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function getActionContext$$1() {
     if (!currentActionContext)
@@ -26579,7 +27146,7 @@ function getActionContext$$1() {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function createActionInvoker$$1(target, name, fn) {
     var res = function () {
@@ -26606,24 +27173,25 @@ function createActionInvoker$$1(target, name, fn) {
  *
  * For more details, see the [middleware docs](docs/middleware.md)
  *
- * @export
- * @param {IStateTreeNode} target
- * @param {(action: IRawActionCall, next: (call: IRawActionCall) => any) => any} middleware
- * @returns {IDisposer}
+ * @param target Node to apply the middleware to.
+ * @param middleware Middleware to apply.
+ * @returns A callable function to dispose the middleware.
  */
 function addMiddleware$$1(target, handler, includeHooks) {
     if (includeHooks === void 0) { includeHooks = true; }
     var node = getStateTreeNode$$1(target);
     if (true) {
-        if (!node.isProtectionEnabled)
-            console.warn("It is recommended to protect the state tree before attaching action middleware, as otherwise it cannot be guaranteed that all changes are passed through middleware. See `protect`");
+        if (!node.isProtectionEnabled) {
+            warnError("It is recommended to protect the state tree before attaching action middleware, as otherwise it cannot be guaranteed that all changes are passed through middleware. See `protect`");
+        }
     }
     return node.addMiddleWare(handler, includeHooks);
 }
 /**
- * Binds middleware to a specific action
+ * Binds middleware to a specific action.
  *
- * @example
+ * Example:
+ * ```ts
  * type.actions(self => {
  *   function takeA____() {
  *       self.toilet.donate()
@@ -26635,12 +27203,11 @@ function addMiddleware$$1(target, handler, includeHooks) {
  *     takeA____: decorate(atomic, takeA____)
  *   }
  * })
+ * ```
  *
- * @export
- * @template T
- * @param {IMiddlewareHandler} handler
- * @param Function} fn
- * @returns the original function
+ * @param handler
+ * @param fn
+ * @returns The original function
  */
 function decorate$$1(handler, fn) {
     var middleware = { handler: handler, includeHooks: true };
@@ -26709,7 +27276,7 @@ function runMiddleWares(node, baseCall, originalFn) {
             return invokeHandler();
         }
         else if (handler && !middleware.includeHooks) {
-            if (HookNames$$1[call.name])
+            if (Hook[call.name])
                 return runNextMiddleware(call);
             return invokeHandler();
         }
@@ -26730,7 +27297,7 @@ function safeStringify(value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function prettyPrintValue$$1(value) {
     return typeof value === "function"
@@ -26774,28 +27341,28 @@ function toErrorString(error) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function getContextForPath$$1(context, path, type) {
     return context.concat([{ path: path, type: type }]);
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function typeCheckSuccess$$1() {
     return EMPTY_ARRAY;
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function typeCheckFailure$$1(context, value, message) {
     return [{ context: context, value: value, message: message }];
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function flattenTypeErrors$$1(errors) {
     return errors.reduce(function (a, i) { return a.concat(i); }, []);
@@ -26803,7 +27370,7 @@ function flattenTypeErrors$$1(errors) {
 // TODO; doublecheck: typecheck should only needed to be invoked from: type.create and array / map / value.property will change
 /**
  * @internal
- * @private
+ * @hidden
  */
 function typecheckInternal$$1(type, value) {
     // if not in dev-mode, do not even try to run typecheck. Everything is developer fault!
@@ -26816,9 +27383,8 @@ function typecheckInternal$$1(type, value) {
  * Throws if the given value is not according the provided type specification.
  * Use this if you need typechecks even in a production build (by default all automatic runtime type checks will be skipped in production builds)
  *
- * @export
- * @param {IAnyType} type
- * @param {*} value
+ * @param type Type to check against.
+ * @param value Value to be checked.
  */
 function typecheck$$1(type, value) {
     var errors = type.validate(value, [{ path: "", type: type }]);
@@ -26830,7 +27396,7 @@ function typecheck$$1(type, value) {
 var identifierCacheId = 0;
 /**
  * @internal
- * @private
+ * @hidden
  */
 var IdentifierCache$$1 = /** @class */ (function () {
     function IdentifierCache$$1() {
@@ -26908,8 +27474,14 @@ var IdentifierCache$$1 = /** @class */ (function () {
         });
         return res;
     };
+    IdentifierCache$$1.prototype.has = function (type, identifier$$1) {
+        var set = this.cache.get(identifier$$1);
+        if (!set)
+            return false;
+        return set.some(function (candidate) { return type.isAssignableFrom(candidate.type); });
+    };
     IdentifierCache$$1.prototype.resolve = function (type, identifier$$1) {
-        var set = this.cache.get("" + identifier$$1);
+        var set = this.cache.get(identifier$$1);
         if (!set)
             return null;
         var matches = set.filter(function (candidate) { return type.isAssignableFrom(candidate.type); });
@@ -26917,28 +27489,7 @@ var IdentifierCache$$1 = /** @class */ (function () {
             case 0:
                 return null;
             case 1:
-                // make sure we instantiate all nodes up to the root (if available and if not done before)
-                // fixes #993
-                var matched = matches[0];
-                if (matched) {
-                    // array with parent chain from parent to child
-                    var parentChain = [];
-                    var parent = matched.parent;
-                    // for performance reasons we never go back further than the most direct
-                    // uninitialized parent
-                    // this is done to avoid traversing the whole tree to the root when using
-                    // the same reference again
-                    while (parent && !parent.isObservableInstanceCreated) {
-                        parentChain.unshift(parent);
-                        parent = parent.parent;
-                    }
-                    // initialize the uninitialized parent chain from parent to child
-                    for (var _i = 0, parentChain_1 = parentChain; _i < parentChain_1.length; _i++) {
-                        var p = parentChain_1[_i];
-                        p.createObservableInstanceIfNeeded();
-                    }
-                }
-                return matched;
+                return matches[0];
             default:
                 return fail("Cannot resolve a reference to type '" + type.name + "' with id: '" + identifier$$1 + "' unambigously, there are multiple candidates: " + matches
                     .map(function (n) { return n.path; })
@@ -26950,7 +27501,7 @@ var IdentifierCache$$1 = /** @class */ (function () {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 function createNode$$1(type, parent, subpath, environment, initialValue) {
     var existingNode = getStateTreeNodeSafe$$1(initialValue);
@@ -26966,7 +27517,7 @@ function createNode$$1(type, parent, subpath, environment, initialValue) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function isNode$$1(value) {
     return value instanceof ScalarNode$$1 || value instanceof ObjectNode$$1;
@@ -26974,7 +27525,7 @@ function isNode$$1(value) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var NodeLifeCycle$$1;
 (function (NodeLifeCycle$$1) {
@@ -26989,16 +27540,15 @@ var NodeLifeCycle$$1;
  * More precisely, that is, if the value is an instance of a
  * `types.model`, `types.array` or `types.map`.
  *
- * @export
- * @param {*} value
- * @returns {value is IStateTreeNode}
+ * @param value
+ * @returns true if the value is a state tree node.
  */
 function isStateTreeNode$$1(value) {
     return !!(value && value.$treenode);
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function getStateTreeNode$$1(value) {
     if (isStateTreeNode$$1(value))
@@ -27008,14 +27558,14 @@ function getStateTreeNode$$1(value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function getStateTreeNodeSafe$$1(value) {
     return (value && value.$treenode) || null;
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function toJSON$$1() {
     return getStateTreeNode$$1(this).snapshot;
@@ -27023,12 +27573,13 @@ function toJSON$$1() {
 var doubleDot = function (_) { return ".."; };
 /**
  * @internal
- * @private
+ * @hidden
  */
 function getRelativePathBetweenNodes$$1(base, target) {
     // PRE condition target is (a child of) base!
-    if (base.root !== target.root)
-        fail("Cannot calculate relative path: objects '" + base + "' and '" + target + "' are not part of the same object tree");
+    if (base.root !== target.root) {
+        return fail("Cannot calculate relative path: objects '" + base + "' and '" + target + "' are not part of the same object tree");
+    }
     var baseParts = splitJsonPath$$1(base.path);
     var targetParts = splitJsonPath$$1(target.path);
     var common = 0;
@@ -27044,7 +27595,7 @@ function getRelativePathBetweenNodes$$1(base, target) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function resolveNodeByPath$$1(base, path, failIfResolveFails) {
     if (failIfResolveFails === void 0) { failIfResolveFails = true; }
@@ -27052,28 +27603,19 @@ function resolveNodeByPath$$1(base, path, failIfResolveFails) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function resolveNodeByPathParts$$1(base, pathParts, failIfResolveFails) {
     if (failIfResolveFails === void 0) { failIfResolveFails = true; }
-    // counter part of getRelativePath
-    // note that `../` is not part of the JSON pointer spec, which is actually a prefix format
-    // in json pointer: "" = current, "/a", attribute a, "/" is attribute "" etc...
-    // so we treat leading ../ apart...
     var current = base;
     for (var i = 0; i < pathParts.length; i++) {
         var part = pathParts[i];
-        if (part === "") {
-            current = current.root;
-            continue;
-        }
-        else if (part === "..") {
+        if (part === "..") {
             current = current.parent;
             if (current)
                 continue; // not everything has a parent
         }
-        else if (part === "." || part === "") {
-            // '/bla' or 'a//b' splits to empty strings
+        else if (part === ".") {
             continue;
         }
         else if (current) {
@@ -27113,7 +27655,7 @@ function resolveNodeByPathParts$$1(base, pathParts, failIfResolveFails) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function convertChildNodesToArray$$1(childNodes) {
     if (!childNodes)
@@ -27140,12 +27682,12 @@ function convertChildNodesToArray$$1(childNodes) {
 var DEPRECATION_MESSAGE = "See https://github.com/mobxjs/mobx-state-tree/issues/399 for more information. " +
     "Note that the middleware event types starting with `process` now start with `flow`.";
 /**
+ * @hidden
+ *
  * @deprecated has been renamed to `flow()`.
  * See https://github.com/mobxjs/mobx-state-tree/issues/399 for more information.
  * Note that the middleware event types starting with `process` now start with `flow`.
  *
- * @export
- * @alias process
  * @returns {Promise}
  */
 function process$$1(asyncAction) {
@@ -27155,23 +27697,23 @@ function process$$1(asyncAction) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var EMPTY_ARRAY = Object.freeze([]);
 /**
  * @internal
- * @private
+ * @hidden
  */
 var EMPTY_OBJECT = Object.freeze({});
 /**
  * @internal
- * @private
+ * @hidden
  */
 var mobxShallow = typeof mobx.$mobx === "string" ? { deep: false } : { deep: false, proxy: false };
 Object.freeze(mobxShallow);
 /**
  * @internal
- * @private
+ * @hidden
  */
 function fail(message) {
     if (message === void 0) { message = "Illegal state"; }
@@ -27179,16 +27721,16 @@ function fail(message) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function identity(_) {
     return _;
 }
-// pollyfill (for IE) suggested in MDN:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
 /**
+ * pollyfill (for IE) suggested in MDN:
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
  * @internal
- * @private
+ * @hidden
  */
 var isInteger = Number.isInteger ||
     function (value) {
@@ -27196,14 +27738,14 @@ var isInteger = Number.isInteger ||
     };
 /**
  * @internal
- * @private
+ * @hidden
  */
 function isArray(val) {
     return !!(Array.isArray(val) || mobx.isObservableArray(val));
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function asArray(val) {
     if (!val)
@@ -27214,7 +27756,7 @@ function asArray(val) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function extend(a) {
     var b = [];
@@ -27230,7 +27772,7 @@ function extend(a) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function isPlainObject(value) {
     if (value === null || typeof value !== "object")
@@ -27240,7 +27782,7 @@ function isPlainObject(value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function isMutable(value) {
     return (value !== null &&
@@ -27250,7 +27792,7 @@ function isMutable(value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function isPrimitive(value) {
     if (value === null || value === undefined)
@@ -27264,7 +27806,7 @@ function isPrimitive(value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  * Freeze a value and return it (if not in production)
  */
 function freeze(value) {
@@ -27274,7 +27816,7 @@ function freeze(value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  * Recursively freeze a value (if not in production)
  */
 function deepFreeze(value) {
@@ -27293,14 +27835,14 @@ function deepFreeze(value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function isSerializable(value) {
     return typeof value !== "function";
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function addHiddenFinalProp(object, propName, value) {
     Object.defineProperty(object, propName, {
@@ -27312,7 +27854,7 @@ function addHiddenFinalProp(object, propName, value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function addHiddenWritableProp(object, propName, value) {
     Object.defineProperty(object, propName, {
@@ -27324,38 +27866,111 @@ function addHiddenWritableProp(object, propName, value) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
-function addReadOnlyProp(object, propName, value) {
-    Object.defineProperty(object, propName, {
+var EventHandler = /** @class */ (function () {
+    function EventHandler() {
+        this.handlers = [];
+    }
+    Object.defineProperty(EventHandler.prototype, "hasSubscribers", {
+        get: function () {
+            return this.handlers.length > 0;
+        },
         enumerable: true,
-        writable: false,
-        configurable: true,
-        value: value
+        configurable: true
     });
-}
-/**
- * @internal
- * @private
- */
-function remove(collection, item) {
-    var idx = collection.indexOf(item);
-    if (idx !== -1)
-        collection.splice(idx, 1);
-}
-/**
- * @internal
- * @private
- */
-function registerEventHandler(handlers, handler) {
-    handlers.push(handler);
-    return function () {
-        remove(handlers, handler);
+    EventHandler.prototype.register = function (fn, atTheBeginning) {
+        var _this = this;
+        if (atTheBeginning === void 0) { atTheBeginning = false; }
+        if (atTheBeginning) {
+            this.handlers.unshift(fn);
+        }
+        else {
+            this.handlers.push(fn);
+        }
+        return function () {
+            _this.unregister(fn);
+        };
     };
-}
+    EventHandler.prototype.has = function (fn) {
+        return this.handlers.indexOf(fn) >= 0;
+    };
+    EventHandler.prototype.unregister = function (fn) {
+        var index = this.handlers.indexOf(fn);
+        if (index >= 0) {
+            this.handlers.splice(index, 1);
+        }
+    };
+    EventHandler.prototype.clear = function () {
+        this.handlers.length = 0;
+    };
+    EventHandler.prototype.emit = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        // make a copy just in case it changes
+        var handlers = this.handlers.slice();
+        handlers.forEach(function (f) { return f.apply(void 0, args); });
+    };
+    return EventHandler;
+}());
 /**
  * @internal
- * @private
+ * @hidden
+ */
+var EventHandlers = /** @class */ (function () {
+    function EventHandlers() {
+    }
+    EventHandlers.prototype.hasSubscribers = function (event) {
+        var handler = this.eventHandlers && this.eventHandlers[event];
+        return !!handler && handler.hasSubscribers;
+    };
+    EventHandlers.prototype.register = function (event, fn, atTheBeginning) {
+        if (atTheBeginning === void 0) { atTheBeginning = false; }
+        if (!this.eventHandlers) {
+            this.eventHandlers = {};
+        }
+        var handler = this.eventHandlers[event];
+        if (!handler) {
+            handler = this.eventHandlers[event] = new EventHandler();
+        }
+        return handler.register(fn, atTheBeginning);
+    };
+    EventHandlers.prototype.has = function (event, fn) {
+        var handler = this.eventHandlers && this.eventHandlers[event];
+        return !!handler && handler.has(fn);
+    };
+    EventHandlers.prototype.unregister = function (event, fn) {
+        var handler = this.eventHandlers && this.eventHandlers[event];
+        if (handler) {
+            handler.unregister(fn);
+        }
+    };
+    EventHandlers.prototype.clear = function (event) {
+        if (this.eventHandlers) {
+            delete this.eventHandlers[event];
+        }
+    };
+    EventHandlers.prototype.clearAll = function () {
+        this.eventHandlers = undefined;
+    };
+    EventHandlers.prototype.emit = function (event) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        var _a;
+        var handler = this.eventHandlers && this.eventHandlers[event];
+        if (handler) {
+            (_a = handler).emit.apply(_a, args);
+        }
+    };
+    return EventHandlers;
+}());
+/**
+ * @internal
+ * @hidden
  */
 function argsToArray(args) {
     var res = new Array(args.length);
@@ -27365,7 +27980,7 @@ function argsToArray(args) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function invalidateComputed(target, propName) {
     var atom = mobx.getAtom(target, propName);
@@ -27373,7 +27988,14 @@ function invalidateComputed(target, propName) {
 }
 /**
  * @internal
- * @private
+ * @hidden
+ */
+function stringStartsWith(str, beginning) {
+    return str.indexOf(beginning) === 0;
+}
+/**
+ * @internal
+ * @hidden
  */
 var deprecated = function (id, message) {
     // skip if running production
@@ -27381,28 +28003,41 @@ var deprecated = function (id, message) {
         {}
     // warn if hasn't been warned before
     if (deprecated.ids && !deprecated.ids.hasOwnProperty(id)) {
-        console.warn("[mobx-state-tree] Deprecation warning: " + message);
+        warnError("Deprecation warning: " + message);
     }
     // mark as warned to avoid duplicate warn message
     if (deprecated.ids)
         deprecated.ids[id] = true;
 };
 deprecated.ids = {};
+/**
+ * @internal
+ * @hidden
+ */
+function warnError(msg) {
+    console.warn(new Error("[mobx-state-tree] " + msg));
+}
 
-// based on: https://github.com/mobxjs/mobx-utils/blob/master/src/async-action.ts
 /**
  * See [asynchronous actions](https://github.com/mobxjs/mobx-state-tree/blob/master/docs/async-actions.md).
  *
- * @export
- * @alias flow
- * @returns {Promise}
+ * @returns The flow as a promise.
  */
-function flow(asyncAction) {
-    return createFlowSpawner(asyncAction.name, asyncAction);
+function flow(generator) {
+    return createFlowSpawner(generator.name, generator);
+}
+/**
+ *  Used for TypeScript to make flows that return a promise return the actual promise result.
+ *
+ * @param val
+ * @returns
+ */
+function castFlowReturn(val) {
+    return val;
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function createFlowSpawner(name, generator) {
     var spawner = function flowSpawner() {
@@ -27493,7 +28128,7 @@ function createFlowSpawner(name, generator) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 function splitPatch$$1(patch) {
     if (!("oldValue" in patch))
@@ -27502,7 +28137,7 @@ function splitPatch$$1(patch) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 function stripPatch$$1(patch) {
     // strips `oldvalue` information from the patch, so that it becomes a patch conform the json-patch spec
@@ -27537,52 +28172,79 @@ function invertPatch(patch) {
             };
     }
 }
-// simple simple simple check
+/**
+ * Simple simple check to check it is a number.
+ */
 function isNumber(x) {
     return typeof x === "number";
 }
 /**
- * escape slashes and backslashes
+ * Escape slashes and backslashes.
+ *
  * http://tools.ietf.org/html/rfc6901
  */
-function escapeJsonPath$$1(str) {
-    if (isNumber(str) === true) {
-        return "" + str;
+function escapeJsonPath$$1(path) {
+    if (isNumber(path) === true) {
+        return "" + path;
     }
-    return str.replace(/~/g, "~1").replace(/\//g, "~0");
+    if (path.indexOf("/") === -1 && path.indexOf("~") === -1)
+        return path;
+    return path.replace(/~/g, "~0").replace(/\//g, "~1");
 }
 /**
- * unescape slashes and backslashes
+ * Unescape slashes and backslashes.
  */
-function unescapeJsonPath$$1(str) {
-    return str.replace(/~0/g, "/").replace(/~1/g, "~");
+function unescapeJsonPath$$1(path) {
+    return path.replace(/~1/g, "/").replace(/~0/g, "~");
 }
 /**
- * Generates a json-path compliant json path from path parts
+ * Generates a json-path compliant json path from path parts.
  *
- * @export
- * @param {string[]} path
- * @returns {string}
+ * @param path
+ * @returns
  */
 function joinJsonPath$$1(path) {
     // `/` refers to property with an empty name, while `` refers to root itself!
     if (path.length === 0)
         return "";
-    return "/" + path.map(escapeJsonPath$$1).join("/");
+    var getPathStr = function (p) { return p.map(escapeJsonPath$$1).join("/"); };
+    if (path[0] === "." || path[0] === "..") {
+        // relative
+        return getPathStr(path);
+    }
+    else {
+        // absolute
+        return "/" + getPathStr(path);
+    }
 }
 /**
- * Splits and decodes a json path into several parts
+ * Splits and decodes a json path into several parts.
  *
- * @export
- * @param {string} path
- * @returns {string[]}
+ * @param path
+ * @returns
  */
 function splitJsonPath$$1(path) {
     // `/` refers to property with an empty name, while `` refers to root itself!
     var parts = path.split("/").map(unescapeJsonPath$$1);
-    // path '/a/b/c' -> a b c
-    // path '../../b/c -> .. .. b c
-    return parts[0] === "" ? parts.slice(1) : parts;
+    var valid = path === "" ||
+        path === "." ||
+        path === ".." ||
+        stringStartsWith(path, "/") ||
+        stringStartsWith(path, "./") ||
+        stringStartsWith(path, "../");
+    if (!valid) {
+        return fail("a json path must be either rooted, empty or relative, but got '" + path + "'");
+    }
+    // '/a/b/c' -> ["a", "b", "c"]
+    // '../../b/c' -> ["..", "..", "b", "c"]
+    // '' -> []
+    // '/' -> ['']
+    // './a' -> [".", "a"]
+    // /./a' -> [".", "a"] equivalent to './a'
+    if (parts[0] === "") {
+        parts.shift();
+    }
+    return parts;
 }
 
 var needsIdentifierError = "Map.put can only be used to store complex values that have an identifier type attribute";
@@ -27611,7 +28273,7 @@ function tryCollectModelTypes(type, modelTypes) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 var MapIdentifierMode$$1;
 (function (MapIdentifierMode$$1) {
@@ -27659,7 +28321,7 @@ var MSTMap = /** @class */ (function (_super) {
             if (mapType.identifierMode === MapIdentifierMode$$1.NO)
                 return fail(needsIdentifierError);
             if (mapType.identifierMode === MapIdentifierMode$$1.YES) {
-                key = "" + value[mapType.mapIdentifierAttribute];
+                key = normalizeIdentifier$$1(value[mapType.mapIdentifierAttribute]);
                 this.set(key, value);
                 return this.get(key);
             }
@@ -27670,7 +28332,7 @@ var MSTMap = /** @class */ (function (_super) {
 }(mobx.ObservableMap));
 /**
  * @internal
- * @private
+ * @hidden
  */
 var MapType$$1 = /** @class */ (function (_super) {
     __extends(MapType$$1, _super);
@@ -27714,7 +28376,7 @@ var MapType$$1 = /** @class */ (function (_super) {
     MapType$$1.prototype.initializeChildNodes = function (objNode, initialSnapshot) {
         if (initialSnapshot === void 0) { initialSnapshot = {}; }
         var subType = objNode.type.subType;
-        var environment = objNode._environment;
+        var environment = objNode.environment;
         var result = {};
         Object.keys(initialSnapshot).forEach(function (name) {
             result[name] = subType.instantiate(objNode, name, environment, initialSnapshot[name]);
@@ -27872,12 +28534,13 @@ var MapType$$1 = /** @class */ (function (_super) {
     return MapType$$1;
 }(ComplexType$$1));
 /**
- * Creates a key based collection type who's children are all of a uniform declared type.
+ * `types.map` - Creates a key based collection type who's children are all of a uniform declared type.
  * If the type stored in a map has an identifier, it is mandatory to store the child under that identifier in the map.
  *
  * This type will always produce [observable maps](https://mobx.js.org/refguide/map.html)
  *
- * @example
+ * Example:
+ * ```ts
  * const Todo = types.model({
  *   id: types.identifier,
  *   task: types.string
@@ -27892,11 +28555,10 @@ var MapType$$1 = /** @class */ (function (_super) {
  * s.todos.set(17, { task: "Grab coffee", id: 17 })
  * s.todos.put({ task: "Grab cookie", id: 18 }) // put will infer key from the identifier
  * console.log(s.todos.get(17).task) // prints: "Grab coffee"
+ * ```
  *
- * @export
- * @alias types.map
- * @param {IType<S, T>} subtype
- * @returns {IComplexType<S[], IObservableArray<T>>}
+ * @param subtype
+ * @returns
  */
 function map$$1(subtype) {
     var ret = new MapType$$1("map<string, " + subtype.name + ">", subtype);
@@ -27905,10 +28567,8 @@ function map$$1(subtype) {
 /**
  * Returns if a given value represents a map type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns `true` if it is a map type.
  */
 function isMapType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Map) > 0;
@@ -27916,7 +28576,7 @@ function isMapType$$1(type) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var ArrayType$$1 = /** @class */ (function (_super) {
     __extends(ArrayType$$1, _super);
@@ -27933,7 +28593,7 @@ var ArrayType$$1 = /** @class */ (function (_super) {
     ArrayType$$1.prototype.initializeChildNodes = function (objNode, snapshot) {
         if (snapshot === void 0) { snapshot = []; }
         var subType = objNode.type.subType;
-        var environment = objNode._environment;
+        var environment = objNode.environment;
         var result = {};
         snapshot.forEach(function (item, index) {
             var subpath = "" + index;
@@ -28076,11 +28736,12 @@ var ArrayType$$1 = /** @class */ (function (_super) {
     return ArrayType$$1;
 }(ComplexType$$1));
 /**
- * Creates an index based collection type who's children are all of a uniform declared type.
+ * `types.array` - Creates an index based collection type who's children are all of a uniform declared type.
  *
  * This type will always produce [observable arrays](https://mobx.js.org/refguide/array.html)
  *
- * @example
+ * Example:
+ * ```ts
  * const Todo = types.model({
  *   task: types.string
  * })
@@ -28093,11 +28754,10 @@ var ArrayType$$1 = /** @class */ (function (_super) {
  * unprotect(s) // needed to allow modifying outside of an action
  * s.todos.push({ task: "Grab coffee" })
  * console.log(s.todos[0]) // prints: "Grab coffee"
+ * ```
  *
- * @export
- * @alias types.array
- * @param {IType<S, T>} subtype
- * @returns {IComplexType<S[], IObservableArray<T>>}
+ * @param subtype
+ * @returns
  */
 function array$$1(subtype) {
     if (true) {
@@ -28158,7 +28818,9 @@ function reconcileArrayChildren(parent, childType, oldNodes, newValues, newPaths
     }
     return nothingChanged ? null : oldNodes;
 }
-// convert a value to a node at given parent and subpath. attempts to reuse old node if possible and given
+/**
+ * Convert a value to a node at given parent and subpath. Attempts to reuse old node if possible and given.
+ */
 function valueAsNode(childType, parent, subpath, newValue, oldNode) {
     // ensure the value is valid-ish
     typecheckInternal$$1(childType, newValue);
@@ -28181,9 +28843,11 @@ function valueAsNode(childType, parent, subpath, newValue, oldNode) {
         return childNode;
     }
     // nothing to do, create from scratch
-    return childType.instantiate(parent, subpath, parent._environment, newValue);
+    return childType.instantiate(parent, subpath, parent.environment, newValue);
 }
-// given a value
+/**
+ * Check if a node holds a value.
+ */
 function areSame(oldNode, newValue) {
     // the new value has the same node
     if (isStateTreeNode$$1(newValue)) {
@@ -28197,7 +28861,7 @@ function areSame(oldNode, newValue) {
         oldNode.identifier !== null &&
         oldNode.identifierAttribute &&
         isPlainObject(newValue) &&
-        oldNode.identifier === "" + newValue[oldNode.identifierAttribute] &&
+        oldNode.identifier === normalizeIdentifier$$1(newValue[oldNode.identifierAttribute]) &&
         oldNode.type.is(newValue))
         return true;
     return false;
@@ -28205,10 +28869,8 @@ function areSame(oldNode, newValue) {
 /**
  * Returns if a given value represents an array type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns `true` if the type is an array type.
  */
 function isArrayType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Array) > 0;
@@ -28216,17 +28878,6 @@ function isArrayType$$1(type) {
 
 var PRE_PROCESS_SNAPSHOT = "preProcessSnapshot";
 var POST_PROCESS_SNAPSHOT = "postProcessSnapshot";
-/**
- * @internal
- * @private
- */
-var HookNames$$1;
-(function (HookNames$$1) {
-    HookNames$$1["afterCreate"] = "afterCreate";
-    HookNames$$1["afterAttach"] = "afterAttach";
-    HookNames$$1["beforeDetach"] = "beforeDetach";
-    HookNames$$1["beforeDestroy"] = "beforeDestroy";
-})(HookNames$$1 || (HookNames$$1 = {}));
 function objectTypeToString() {
     return getStateTreeNode$$1(this).toString();
 }
@@ -28240,7 +28891,7 @@ function toPropertiesObject(declaredProps) {
     return Object.keys(declaredProps).reduce(function (props, key) {
         var _a, _b, _c;
         // warn if user intended a HOOK
-        if (key in HookNames$$1)
+        if (key in Hook)
             return fail("Hook '" + key + "' was defined as property. Hooks should be defined as part of the actions");
         // the user intended to use a view
         var descriptor = Object.getOwnPropertyDescriptor(props, key);
@@ -28287,7 +28938,7 @@ function toPropertiesObject(declaredProps) {
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 var ModelType$$1 = /** @class */ (function (_super) {
     __extends(ModelType$$1, _super);
@@ -28350,7 +29001,7 @@ var ModelType$$1 = /** @class */ (function (_super) {
             var action2 = actions[name];
             // apply hook composition
             var baseAction = self[name];
-            if (name in HookNames$$1 && baseAction) {
+            if (name in Hook && baseAction) {
                 var specializedAction_1 = action2;
                 action2 = function () {
                     baseAction.apply(null, arguments);
@@ -28474,7 +29125,7 @@ var ModelType$$1 = /** @class */ (function (_super) {
         var type = objNode.type;
         var result = {};
         type.forAllProps(function (name, childType) {
-            result[name] = childType.instantiate(objNode, name, objNode._environment, initialSnapshot[name]);
+            result[name] = childType.instantiate(objNode, name, objNode.environment, initialSnapshot[name]);
         });
         return result;
     };
@@ -28627,12 +29278,9 @@ var ModelType$$1 = /** @class */ (function (_super) {
     return ModelType$$1;
 }(ComplexType$$1));
 /**
- * Creates a new model type by providing a name, properties, volatile state and actions.
+ * `types.model` - Creates a new model type by providing a name, properties, volatile state and actions.
  *
  * See the [model type](https://github.com/mobxjs/mobx-state-tree#creating-models) description or the [getting started](https://github.com/mobxjs/mobx-state-tree/blob/master/docs/getting-started.md#getting-started-1) tutorial.
- *
- * @export
- * @alias types.model
  */
 function model$$1() {
     var args = [];
@@ -28644,14 +29292,11 @@ function model$$1() {
     return new ModelType$$1({ name: name, properties: properties });
 }
 /**
- * Composes a new model from one or more existing model types.
+ * `types.compose` - Composes a new model from one or more existing model types.
  * This method can be invoked in two forms:
  * Given 2 or more model types, the types are composed into a new Type.
  * Given first parameter as a string and 2 or more model types,
  * the types are composed into a new Type with the given name
- *
- * @export
- * @alias types.compose
  */
 function compose$$1() {
     var args = [];
@@ -28686,10 +29331,8 @@ function compose$$1() {
 /**
  * Returns if a given value represents a model type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isModelType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Object) > 0;
@@ -28710,7 +29353,7 @@ function tryGetOptional(type) {
 // TODO: implement CoreType using types.custom ?
 /**
  * @internal
- * @private
+ * @hidden
  */
 var CoreType$$1 = /** @class */ (function (_super) {
     __extends(CoreType$$1, _super);
@@ -28742,86 +29385,80 @@ var CoreType$$1 = /** @class */ (function (_super) {
     return CoreType$$1;
 }(Type$$1));
 /**
- * Creates a type that can only contain a string value.
+ * `types.string` - Creates a type that can only contain a string value.
  * This type is used for string values by default
  *
- * @export
- * @alias types.string
- * @example
+ * Example:
+ * ```ts
  * const Person = types.model({
  *   firstName: types.string,
  *   lastName: "Doe"
  * })
+ * ```
  */
 // tslint:disable-next-line:variable-name
 var string$$1 = new CoreType$$1("string", TypeFlags$$1.String, function (v) { return typeof v === "string"; });
 /**
- * Creates a type that can only contain a numeric value.
+ * `types.number` - Creates a type that can only contain a numeric value.
  * This type is used for numeric values by default
  *
- * @export
- * @alias types.number
- * @example
+ * Example:
+ * ```ts
  * const Vector = types.model({
  *   x: types.number,
  *   y: 1.5
  * })
+ * ```
  */
 // tslint:disable-next-line:variable-name
 var number$$1 = new CoreType$$1("number", TypeFlags$$1.Number, function (v) { return typeof v === "number"; });
 /**
- * Creates a type that can only contain an integer value.
+ * `types.integer` - Creates a type that can only contain an integer value.
  * This type is used for integer values by default
  *
- * @export
- * @alias types.integer
- * @example
+ * Example:
+ * ```ts
  * const Size = types.model({
  *   width: types.integer,
  *   height: 10
  * })
+ * ```
  */
 // tslint:disable-next-line:variable-name
 var integer$$1 = new CoreType$$1("integer", TypeFlags$$1.Integer, function (v) { return isInteger(v); });
 /**
- * Creates a type that can only contain a boolean value.
+ * `types.boolean` - Creates a type that can only contain a boolean value.
  * This type is used for boolean values by default
  *
- * @export
- * @alias types.boolean
- * @example
+ * Example:
+ * ```ts
  * const Thing = types.model({
  *   isCool: types.boolean,
  *   isAwesome: false
  * })
+ * ```
  */
 // tslint:disable-next-line:variable-name
 var boolean$$1 = new CoreType$$1("boolean", TypeFlags$$1.Boolean, function (v) { return typeof v === "boolean"; });
 /**
- * The type of the value `null`
- *
- * @export
- * @alias types.null
+ * `types.null` - The type of the value `null`
  */
 var nullType$$1 = new CoreType$$1("null", TypeFlags$$1.Null, function (v) { return v === null; });
 /**
- * The type of the value `undefined`
- *
- * @export
- * @alias types.undefined
+ * `types.undefined` - The type of the value `undefined`
  */
 var undefinedType$$1 = new CoreType$$1("undefined", TypeFlags$$1.Undefined, function (v) { return v === undefined; });
 /**
- * Creates a type that can only contain a javascript Date value.
+ * `types.Date` - Creates a type that can only contain a javascript Date value.
  *
- * @export
- * @alias types.Date
- * @example
+ * Example:
+ * ```ts
  * const LogLine = types.model({
  *   timestamp: types.Date,
  * })
  *
  * LogLine.create({ timestamp: new Date() })
+ * ```
  */
 // tslint:disable-next-line:variable-name
 var DatePrimitive$$1 = new CoreType$$1("Date", TypeFlags$$1.Date, function (v) { return typeof v === "number" || v instanceof Date; }, function (v) { return (v instanceof Date ? v : new Date(v)); });
@@ -28830,7 +29467,7 @@ DatePrimitive$$1.getSnapshot = function (node) {
 };
 /**
  * @internal
- * @private
+ * @hidden
  */
 function getPrimitiveFactoryFromValue$$1(value) {
     switch (typeof value) {
@@ -28849,10 +29486,8 @@ function getPrimitiveFactoryFromValue$$1(value) {
 /**
  * Returns if a given value represents a primitive type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isPrimitiveType$$1(type) {
     return (isType$$1(type) &&
@@ -28867,7 +29502,7 @@ function isPrimitiveType$$1(type) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var Literal$$1 = /** @class */ (function (_super) {
     __extends(Literal$$1, _super);
@@ -28893,21 +29528,20 @@ var Literal$$1 = /** @class */ (function (_super) {
     return Literal$$1;
 }(Type$$1));
 /**
- * The literal type will return a type that will match only the exact given type.
+ * `types.literal` - The literal type will return a type that will match only the exact given type.
  * The given value must be a primitive, in order to be serialized to a snapshot correctly.
  * You can use literal to match exact strings for example the exact male or female string.
  *
- * @example
+ * Example:
+ * ```ts
  * const Person = types.model({
  *     name: types.string,
  *     gender: types.union(types.literal('male'), types.literal('female'))
  * })
+ * ```
  *
- * @export
- * @alias types.literal
- * @template S
- * @param {S} value The value to use in the strict equal check
- * @returns {ISimpleType<S>}
+ * @param value The value to use in the strict equal check
+ * @returns
  */
 function literal$$1(value) {
     // check that the given value is a primitive
@@ -28920,10 +29554,8 @@ function literal$$1(value) {
 /**
  * Returns if a given value represents a literal type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isLiteralType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Literal) > 0;
@@ -28931,7 +29563,7 @@ function isLiteralType$$1(type) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var Refinement$$1 = /** @class */ (function (_super) {
     __extends(Refinement$$1, _super);
@@ -28980,15 +29612,12 @@ var Refinement$$1 = /** @class */ (function (_super) {
     return Refinement$$1;
 }(Type$$1));
 /**
- * `types.refinement(baseType, (snapshot) => boolean)` creates a type that is more specific than the base type, e.g. `types.refinement(types.string, value => value.length > 5)` to create a type of strings that can only be longer then 5.
+ * `types.refinement` - Creates a type that is more specific than the base type, e.g. `types.refinement(types.string, value => value.length > 5)` to create a type of strings that can only be longer then 5.
  *
- * @export
- * @alias types.refinement
- * @template T
- * @param {string} name
- * @param {IType<T, T>} type
- * @param {(snapshot: T) => boolean} predicate
- * @returns {IType<T, T>}
+ * @param name
+ * @param type
+ * @param predicate
+ * @returns
  */
 function refinement$$1() {
     var args = [];
@@ -29019,29 +29648,27 @@ function refinement$$1() {
 /**
  * Returns if a given value is a refinement type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isRefinementType$$1(type) {
     return (type.flags & TypeFlags$$1.Refinement) > 0;
 }
 
 /**
- * Can be used to create an string based enumeration.
+ * `types.enumeration` - Can be used to create an string based enumeration.
  * (note: this methods is just sugar for a union of string literals)
  *
- * @example
+ * Example:
+ * ```ts
  * const TrafficLight = types.model({
  *   color: types.enumeration("Color", ["Red", "Orange", "Green"])
  * })
+ * ```
  *
- * @export
- * @alias types.enumeration
- * @param {string} name descriptive name of the enumeration (optional)
- * @param {string[]} options possible values this enumeration can have
- * @returns {ISimpleType<string>}
+ * @param name descriptive name of the enumeration (optional)
+ * @param options possible values this enumeration can have
+ * @returns
  */
 function enumeration$$1(name, options) {
     var realOptions = typeof name === "string" ? options : name;
@@ -29060,18 +29687,18 @@ function enumeration$$1(name, options) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var Union$$1 = /** @class */ (function (_super) {
     __extends(Union$$1, _super);
-    function Union$$1(name, types, options) {
+    function Union$$1(name, types$$1, options) {
         var _this = _super.call(this, name) || this;
         _this.eager = true;
         options = __assign({ eager: true, dispatcher: undefined }, options);
         _this.dispatcher = options.dispatcher;
         if (!options.eager)
             _this.eager = false;
-        _this.types = types;
+        _this.types = types$$1;
         return _this;
     }
     Object.defineProperty(Union$$1.prototype, "flags", {
@@ -29153,13 +29780,11 @@ var Union$$1 = /** @class */ (function (_super) {
     return Union$$1;
 }(Type$$1));
 /**
- * types.union(dispatcher?, types...) create a union of multiple types. If the correct type cannot be inferred unambiguously from a snapshot, provide a dispatcher function of the form (snapshot) => Type.
+ * `types.union` - Create a union of multiple types. If the correct type cannot be inferred unambiguously from a snapshot, provide a dispatcher function of the form `(snapshot) => Type`.
  *
- * @export
- * @alias types.union
- * @param {(ITypeDispatcher | IAnyType)} optionsOrType
- * @param {...IAnyType[]} otherTypes
- * @returns {IAnyType}
+ * @param optionsOrType
+ * @param otherTypes
+ * @returns
  */
 function union$$1(optionsOrType) {
     var otherTypes = [];
@@ -29167,28 +29792,26 @@ function union$$1(optionsOrType) {
         otherTypes[_i - 1] = arguments[_i];
     }
     var options = isType$$1(optionsOrType) ? undefined : optionsOrType;
-    var types = isType$$1(optionsOrType) ? [optionsOrType].concat(otherTypes) : otherTypes;
-    var name = "(" + types.map(function (type) { return type.name; }).join(" | ") + ")";
+    var types$$1 = isType$$1(optionsOrType) ? [optionsOrType].concat(otherTypes) : otherTypes;
+    var name = "(" + types$$1.map(function (type) { return type.name; }).join(" | ") + ")";
     // check all options
     if (true) {
         if (!isType$$1(optionsOrType) && !isPlainObject(optionsOrType))
             fail("First argument to types.union should either be a type, or an objects object of the form: { eager?: boolean, dispatcher?: Function }");
-        types.forEach(function (type) {
+        types$$1.forEach(function (type) {
             if (!isType$$1(type))
                 fail("expected all possible types to be a mobx-state-tree type, got " +
                     type +
                     " instead");
         });
     }
-    return new Union$$1(name, types, options);
+    return new Union$$1(name, types$$1, options);
 }
 /**
  * Returns if a given value represents a union type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isUnionType$$1(type) {
     return (type.flags & TypeFlags$$1.Union) > 0;
@@ -29196,7 +29819,7 @@ function isUnionType$$1(type) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var OptionalValue$$1 = /** @class */ (function (_super) {
     __extends(OptionalValue$$1, _super);
@@ -29266,12 +29889,13 @@ var OptionalValue$$1 = /** @class */ (function (_super) {
     return OptionalValue$$1;
 }(Type$$1));
 /**
- * `types.optional` can be used to create a property with a default value.
+ * `types.optional` - Can be used to create a property with a default value.
  * If the given value is not provided in the snapshot, it will default to the provided `defaultValue`.
  * If `defaultValue` is a function, the function will be invoked for every new instance.
  * Applying a snapshot in which the optional value is _not_ present, causes the value to be reset
  *
- * @example
+ * Example:
+ * ```ts
  * const Todo = types.model({
  *   title: types.optional(types.string, "Test"),
  *   done: types.optional(types.boolean, false),
@@ -29280,9 +29904,11 @@ var OptionalValue$$1 = /** @class */ (function (_super) {
  *
  * // it is now okay to omit 'created' and 'done'. created will get a freshly generated timestamp
  * const todo = Todo.create({ title: "Get coffee "})
+ * ```
  *
- * @export
- * @alias types.optional
+ * @param type
+ * @param defaultValueOrFunction
+ * @returns
  */
 function optional$$1(type, defaultValueOrFunction) {
     // make sure we never pass direct instances
@@ -29306,10 +29932,9 @@ function optional$$1(type, defaultValueOrFunction) {
 /**
  * Returns if a value represents an optional type.
  *
- * @export
  * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isOptionalType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Optional) > 0;
@@ -29318,16 +29943,11 @@ function isOptionalType$$1(type) {
 var optionalUndefinedType = optional$$1(undefinedType$$1, undefined);
 var optionalNullType = optional$$1(nullType$$1, null);
 /**
- * Maybe will make a type nullable, and also optional.
+ * `types.maybe` - Maybe will make a type nullable, and also optional.
  * The value `undefined` will be used to represent nullability.
  *
- * @export
- * @alias types.maybe
- * @template C
- * @template S
- * @template T
- * @param {IType<C, S, M>} type The type to make nullable
- * @returns {(IType<C | undefined, S | undefined, T | undefined>)}
+ * @param type
+ * @returns
  */
 function maybe$$1(type) {
     if ( true && !isType$$1(type))
@@ -29335,16 +29955,11 @@ function maybe$$1(type) {
     return union$$1(type, optionalUndefinedType);
 }
 /**
- * Maybe will make a type nullable, and also optional.
+ * `types.maybeNull` - Maybe will make a type nullable, and also optional.
  * The value `null` will be used to represent no value.
  *
- * @export
- * @alias types.maybeNull
- * @template C
- * @template S
- * @template T
- * @param {IType<C, S, M>} type The type to make nullable
- * @returns {(IType<C | null | undefined, S | null, T | null>)}
+ * @param type
+ * @returns
  */
 function maybeNull$$1(type) {
     if ( true && !isType$$1(type))
@@ -29354,7 +29969,7 @@ function maybeNull$$1(type) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var Late$$1 = /** @class */ (function (_super) {
     __extends(Late$$1, _super);
@@ -29427,11 +30042,12 @@ var Late$$1 = /** @class */ (function (_super) {
     return Late$$1;
 }(Type$$1));
 /**
- * Defines a type that gets implemented later. This is useful when you have to deal with circular dependencies.
+ * `types.late` - Defines a type that gets implemented later. This is useful when you have to deal with circular dependencies.
  * Please notice that when defining circular dependencies TypeScript isn't smart enough to inference them.
  * You need to declare an interface to explicit the return type of the late parameter function.
  *
- * @example
+ * Example:
+ * ```ts
  *  interface INode {
  *       childs: INode[]
  *  }
@@ -29440,14 +30056,11 @@ var Late$$1 = /** @class */ (function (_super) {
  *  const Node = types.model({
  *       childs: types.optional(types.array(types.late<any, INode>(() => Node)), [])
  *  })
+ * ```
  *
- * @export
- * @alias types.late
- * @template S
- * @template T
- * @param {string} [name] The name to use for the type that will be returned.
- * @param {ILateType<S, T>} type A function that returns the type that will be defined.
- * @returns {IType<S, T>}
+ * @param name The name to use for the type that will be returned.
+ * @param type A function that returns the type that will be defined.
+ * @returns
  */
 function late$$1(nameOrType, maybeType) {
     var name = typeof nameOrType === "string" ? nameOrType : "late(" + nameOrType.toString() + ")";
@@ -29463,10 +30076,8 @@ function late$$1(nameOrType, maybeType) {
 /**
  * Returns if a given value represents a late type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isLateType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Late) > 0;
@@ -29474,7 +30085,7 @@ function isLateType$$1(type) {
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var Frozen$$1 = /** @class */ (function (_super) {
     __extends(Frozen$$1, _super);
@@ -29504,7 +30115,7 @@ var Frozen$$1 = /** @class */ (function (_super) {
 }(Type$$1));
 var untypedFrozenInstance = new Frozen$$1();
 /**
- * Frozen can be used to store any value that is serializable in itself (that is valid JSON).
+ * `types.frozen` - Frozen can be used to store any value that is serializable in itself (that is valid JSON).
  * Frozen values need to be immutable or treated as if immutable. They need be serializable as well.
  * Values stored in frozen will snapshotted as-is by MST, and internal changes will not be tracked.
  *
@@ -29517,7 +30128,8 @@ var untypedFrozenInstance = new Frozen$$1();
  * 2. `types.frozen({ someDefaultValue: true})` - provide a primitive value, object or array, and MST will infer the type from that object, and also make it the default value for the field
  * 3. `types.frozen<TypeScriptType>()` - provide a typescript type, to help in strongly typing the field (design time only)
  *
- * @example
+ * Example:
+ * ```ts
  * const GameCharacter = types.model({
  *   name: string,
  *   location: types.frozen({ x: 0, y: 0})
@@ -29530,16 +30142,17 @@ var untypedFrozenInstance = new Frozen$$1();
  *
  * hero.location = { x: 10, y: 2 } // OK
  * hero.location.x = 7 // Not ok!
+ * ```
  *
- * @example
+ * ```ts
  * type Point = { x: number, y: number }
  *    const Mouse = types.model({
  *         loc: types.frozen<Point>()
  *    })
+ * ```
  *
- * @alias types.frozen
- * @param {Type|value} defaultValueOrType
- * @returns {Type}
+ * @param defaultValueOrType
+ * @returns
  */
 function frozen$$1(arg) {
     if (arguments.length === 0)
@@ -29552,16 +30165,23 @@ function frozen$$1(arg) {
 /**
  * Returns if a given value represents a frozen type.
  *
- * @export
- * @template IT
- * @template T
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isFrozenType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Frozen) > 0;
 }
 
+function getInvalidationCause(hook) {
+    switch (hook) {
+        case Hook.beforeDestroy:
+            return "destroy";
+        case Hook.beforeDetach:
+            return "detach";
+        default:
+            return undefined;
+    }
+}
 var StoredReference = /** @class */ (function () {
     function StoredReference(value, targetType) {
         this.targetType = targetType;
@@ -29582,17 +30202,17 @@ var StoredReference = /** @class */ (function () {
             return fail("Can only store references to tree nodes or identifiers, got: '" + value + "'");
         }
     }
-    StoredReference.prototype.updateResolvedReference = function () {
-        var normalizedId = "" + this.identifier;
-        var node = this.node;
+    StoredReference.prototype.updateResolvedReference = function (node) {
+        var normalizedId = normalizeIdentifier$$1(this.identifier);
         var lastCacheModification = node.root.identifierCache.getLastCacheModificationPerId(normalizedId);
         if (!this.resolvedReference ||
             this.resolvedReference.lastCacheModification !== lastCacheModification) {
             var targetType = this.targetType;
             // reference was initialized with the identifier of the target
             var target = node.root.identifierCache.resolve(targetType, normalizedId);
-            if (!target)
-                fail("Failed to resolve reference '" + this.identifier + "' to type '" + this.targetType.name + "' (from node: " + node.path + ")");
+            if (!target) {
+                throw new InvalidReferenceError$$1("[mobx-state-tree] Failed to resolve reference '" + this.identifier + "' to type '" + this.targetType.name + "' (from node: " + node.path + ")");
+            }
             this.resolvedReference = {
                 node: target,
                 lastCacheModification: lastCacheModification
@@ -29601,7 +30221,7 @@ var StoredReference = /** @class */ (function () {
     };
     Object.defineProperty(StoredReference.prototype, "resolvedValue", {
         get: function () {
-            this.updateResolvedReference();
+            this.updateResolvedReference(this.node);
             return this.resolvedReference.node.value;
         },
         enumerable: true,
@@ -29611,13 +30231,27 @@ var StoredReference = /** @class */ (function () {
 }());
 /**
  * @internal
- * @private
+ * @hidden
+ */
+var InvalidReferenceError$$1 = /** @class */ (function (_super) {
+    __extends(InvalidReferenceError$$1, _super);
+    function InvalidReferenceError$$1(m) {
+        var _this = _super.call(this, m) || this;
+        Object.setPrototypeOf(_this, InvalidReferenceError$$1.prototype);
+        return _this;
+    }
+    return InvalidReferenceError$$1;
+}(Error));
+/**
+ * @internal
+ * @hidden
  */
 var BaseReferenceType$$1 = /** @class */ (function (_super) {
     __extends(BaseReferenceType$$1, _super);
-    function BaseReferenceType$$1(targetType) {
+    function BaseReferenceType$$1(targetType, onInvalidated) {
         var _this = _super.call(this, "reference(" + targetType.name + ")") || this;
         _this.targetType = targetType;
+        _this.onInvalidated = onInvalidated;
         _this.shouldAttachNode = false;
         _this.flags = TypeFlags$$1.Reference;
         return _this;
@@ -29633,32 +30267,157 @@ var BaseReferenceType$$1 = /** @class */ (function (_super) {
             ? typeCheckSuccess$$1()
             : typeCheckFailure$$1(context, value, "Value is not a valid identifier, which is a string or a number");
     };
+    BaseReferenceType$$1.prototype.fireInvalidated = function (cause, storedRefNode, referenceId, refTargetNode) {
+        // to actually invalidate a reference we need an alive parent,
+        // since it is a scalar value (immutable-ish) and we need to change it
+        // from the parent
+        var storedRefParentNode = storedRefNode.parent;
+        if (!storedRefParentNode || !storedRefParentNode.isAlive) {
+            return;
+        }
+        var storedRefParentValue = storedRefParentNode.storedValue;
+        if (!storedRefParentValue) {
+            return;
+        }
+        this.onInvalidated({
+            cause: cause,
+            parent: storedRefParentValue,
+            invalidTarget: refTargetNode ? refTargetNode.storedValue : undefined,
+            invalidId: referenceId,
+            replaceRef: function (newRef) {
+                applyPatch$$1(storedRefNode.root.storedValue, {
+                    op: "replace",
+                    value: newRef,
+                    path: storedRefNode.path
+                });
+            },
+            removeRef: function () {
+                if (isModelType$$1(storedRefParentNode.type)) {
+                    this.replaceRef(undefined);
+                }
+                else {
+                    applyPatch$$1(storedRefNode.root.storedValue, {
+                        op: "remove",
+                        path: storedRefNode.path
+                    });
+                }
+            }
+        });
+    };
+    BaseReferenceType$$1.prototype.addTargetNodeWatcher = function (storedRefNode, referenceId) {
+        var _this = this;
+        // this will make sure the target node becomes created
+        var refTargetValue = this.getValue(storedRefNode);
+        if (!refTargetValue) {
+            return undefined;
+        }
+        var refTargetNode = getStateTreeNode$$1(refTargetValue);
+        var hookHandler = function (_, refTargetNodeHook) {
+            var cause = getInvalidationCause(refTargetNodeHook);
+            if (!cause) {
+                return;
+            }
+            _this.fireInvalidated(cause, storedRefNode, referenceId, refTargetNode);
+        };
+        var refTargetDetachHookDisposer = refTargetNode.hookSubscribers.register(Hook.beforeDetach, hookHandler);
+        var refTargetDestroyHookDisposer = refTargetNode.hookSubscribers.register(Hook.beforeDestroy, hookHandler);
+        return function () {
+            refTargetDetachHookDisposer();
+            refTargetDestroyHookDisposer();
+        };
+    };
+    BaseReferenceType$$1.prototype.watchTargetNodeForInvalidations = function (storedRefNode, identifier$$1, customGetSet) {
+        var _this = this;
+        if (!this.onInvalidated) {
+            return;
+        }
+        var onRefTargetDestroyedHookDisposer;
+        // get rid of the watcher hook when the stored ref node is destroyed
+        // detached is ignored since scalar nodes (where the reference resides) cannot be detached
+        storedRefNode.hookSubscribers.register(Hook.beforeDestroy, function () {
+            if (onRefTargetDestroyedHookDisposer) {
+                onRefTargetDestroyedHookDisposer();
+            }
+        });
+        var startWatching = function (sync) {
+            // re-create hook in case the stored ref gets reattached
+            if (onRefTargetDestroyedHookDisposer) {
+                onRefTargetDestroyedHookDisposer();
+            }
+            // make sure the target node is actually there and initialized
+            var storedRefParentNode = storedRefNode.parent;
+            var storedRefParentValue = storedRefParentNode && storedRefParentNode.storedValue;
+            if (storedRefParentNode && storedRefParentNode.isAlive && storedRefParentValue) {
+                var refTargetNodeExists = void 0;
+                if (customGetSet) {
+                    refTargetNodeExists = !!customGetSet.get(identifier$$1, storedRefParentValue);
+                }
+                else {
+                    refTargetNodeExists = storedRefNode.root.identifierCache.has(_this.targetType, normalizeIdentifier$$1(identifier$$1));
+                }
+                if (!refTargetNodeExists) {
+                    // we cannot change the reference in sync mode
+                    // since we are in the middle of a reconciliation/instantiation and the change would be overwritten
+                    // for those cases just let the wrong reference be assigned and fail upon usage
+                    // (like current references do)
+                    // this means that effectively this code will only run when it is created from a snapshot
+                    if (!sync) {
+                        _this.fireInvalidated("invalidSnapshotReference", storedRefNode, identifier$$1, null);
+                    }
+                }
+                else {
+                    onRefTargetDestroyedHookDisposer = _this.addTargetNodeWatcher(storedRefNode, identifier$$1);
+                }
+            }
+        };
+        if (storedRefNode.state === NodeLifeCycle$$1.FINALIZED) {
+            // already attached, so the whole tree is ready
+            startWatching(true);
+        }
+        else {
+            if (!storedRefNode.isRoot) {
+                // start watching once the whole tree is ready
+                storedRefNode.root.hookSubscribers.register(Hook.afterCreationFinalization, function () {
+                    // make sure to attach it so it can start listening
+                    if (storedRefNode.parent) {
+                        storedRefNode.parent.createObservableInstanceIfNeeded();
+                    }
+                });
+            }
+            // start watching once the node is attached somewhere / parent changes
+            storedRefNode.hookSubscribers.register(Hook.afterAttach, function () {
+                startWatching(false);
+            });
+        }
+    };
     return BaseReferenceType$$1;
 }(Type$$1));
 /**
  * @internal
- * @private
+ * @hidden
  */
 var IdentifierReferenceType$$1 = /** @class */ (function (_super) {
     __extends(IdentifierReferenceType$$1, _super);
-    function IdentifierReferenceType$$1(targetType) {
-        return _super.call(this, targetType) || this;
+    function IdentifierReferenceType$$1(targetType, onInvalidated) {
+        return _super.call(this, targetType, onInvalidated) || this;
     }
-    IdentifierReferenceType$$1.prototype.getValue = function (node) {
-        if (!node.isAlive)
+    IdentifierReferenceType$$1.prototype.getValue = function (storedRefNode) {
+        if (!storedRefNode.isAlive)
             return undefined;
-        var ref = node.storedValue;
-        return ref.resolvedValue;
+        var storedRef = storedRefNode.storedValue;
+        return storedRef.resolvedValue;
     };
-    IdentifierReferenceType$$1.prototype.getSnapshot = function (node) {
-        var ref = node.storedValue;
+    IdentifierReferenceType$$1.prototype.getSnapshot = function (storedRefNode) {
+        var ref = storedRefNode.storedValue;
         return ref.identifier;
     };
-    IdentifierReferenceType$$1.prototype.instantiate = function (parent, subpath, environment, snapshot) {
-        var r;
-        var node = createNode$$1(this, parent, subpath, environment, (r = new StoredReference(snapshot, this.targetType)));
-        r.node = node;
-        return node;
+    IdentifierReferenceType$$1.prototype.instantiate = function (parent, subpath, environment, newValue) {
+        var identifier$$1 = isStateTreeNode$$1(newValue) ? getIdentifier$$1(newValue) : newValue;
+        var storedRef = new StoredReference(newValue, this.targetType);
+        var storedRefNode = createNode$$1(this, parent, subpath, environment, storedRef);
+        storedRef.node = storedRefNode;
+        this.watchTargetNodeForInvalidations(storedRefNode, identifier$$1, undefined);
+        return storedRefNode;
     };
     IdentifierReferenceType$$1.prototype.reconcile = function (current, newValue) {
         if (current.type === this) {
@@ -29669,7 +30428,7 @@ var IdentifierReferenceType$$1 = /** @class */ (function (_super) {
             else if (compareByValue && ref.resolvedValue === newValue)
                 return current;
         }
-        var newNode = this.instantiate(current.parent, current.subpath, current._environment, newValue);
+        var newNode = this.instantiate(current.parent, current.subpath, current.environment, newValue);
         current.die();
         return newNode;
     };
@@ -29677,49 +30436,48 @@ var IdentifierReferenceType$$1 = /** @class */ (function (_super) {
 }(BaseReferenceType$$1));
 /**
  * @internal
- * @private
+ * @hidden
  */
 var CustomReferenceType$$1 = /** @class */ (function (_super) {
     __extends(CustomReferenceType$$1, _super);
-    function CustomReferenceType$$1(targetType, options) {
-        var _this = _super.call(this, targetType) || this;
+    function CustomReferenceType$$1(targetType, options, onInvalidated) {
+        var _this = _super.call(this, targetType, onInvalidated) || this;
         _this.options = options;
         return _this;
     }
-    CustomReferenceType$$1.prototype.getValue = function (node) {
-        if (!node.isAlive)
+    CustomReferenceType$$1.prototype.getValue = function (storedRefNode) {
+        if (!storedRefNode.isAlive)
             return undefined;
-        return this.options.get(node.storedValue, node.parent ? node.parent.storedValue : null);
+        var referencedNode = this.options.get(storedRefNode.storedValue, storedRefNode.parent ? storedRefNode.parent.storedValue : null);
+        return referencedNode;
     };
-    CustomReferenceType$$1.prototype.getSnapshot = function (node) {
-        return node.storedValue;
+    CustomReferenceType$$1.prototype.getSnapshot = function (storedRefNode) {
+        return storedRefNode.storedValue;
     };
-    CustomReferenceType$$1.prototype.instantiate = function (parent, subpath, environment, snapshot) {
-        var identifier$$1 = isStateTreeNode$$1(snapshot)
-            ? this.options.set(snapshot, parent ? parent.storedValue : null)
-            : snapshot;
-        return createNode$$1(this, parent, subpath, environment, identifier$$1);
+    CustomReferenceType$$1.prototype.instantiate = function (parent, subpath, environment, newValue) {
+        var identifier$$1 = isStateTreeNode$$1(newValue)
+            ? this.options.set(newValue, parent ? parent.storedValue : null)
+            : newValue;
+        var storedRefNode = createNode$$1(this, parent, subpath, environment, identifier$$1);
+        this.watchTargetNodeForInvalidations(storedRefNode, identifier$$1, this.options);
+        return storedRefNode;
     };
-    CustomReferenceType$$1.prototype.reconcile = function (current, snapshot) {
-        var newIdentifier = isStateTreeNode$$1(snapshot)
-            ? this.options.set(snapshot, current ? current.storedValue : null)
-            : snapshot;
-        if (current.type === this) {
-            if (current.storedValue === newIdentifier)
-                return current;
+    CustomReferenceType$$1.prototype.reconcile = function (current, newValue) {
+        var newIdentifier = isStateTreeNode$$1(newValue)
+            ? this.options.set(newValue, current ? current.storedValue : null)
+            : newValue;
+        if (current.type === this && current.storedValue === newIdentifier) {
+            return current;
         }
-        var newNode = this.instantiate(current.parent, current.subpath, current._environment, newIdentifier);
+        var newNode = this.instantiate(current.parent, current.subpath, current.environment, newIdentifier);
         current.die();
         return newNode;
     };
     return CustomReferenceType$$1;
 }(BaseReferenceType$$1));
 /**
- * Creates a reference to another type, which should have defined an identifier.
+ * `types.reference` - Creates a reference to another type, which should have defined an identifier.
  * See also the [reference and identifiers](https://github.com/mobxjs/mobx-state-tree#references-and-identifiers) section.
- *
- * @export
- * @alias types.reference
  */
 function reference$$1(subType, options) {
     // check that a type is given
@@ -29729,27 +30487,54 @@ function reference$$1(subType, options) {
         if (arguments.length === 2 && typeof arguments[1] === "string")
             fail("References with base path are no longer supported. Please remove the base path.");
     }
-    // as any because getValue might actually return undefined if the node is not alive
-    if (options)
-        return new CustomReferenceType$$1(subType, options);
-    else
-        return new IdentifierReferenceType$$1(subType);
+    var getSetOptions = options ? options : undefined;
+    var onInvalidated = options
+        ? options.onInvalidated
+        : undefined;
+    if (getSetOptions && (getSetOptions.get || getSetOptions.set)) {
+        if (true) {
+            if (!getSetOptions.get || !getSetOptions.set) {
+                fail("reference options must either contain both a 'get' and a 'set' method or none of them");
+            }
+        }
+        return new CustomReferenceType$$1(subType, {
+            get: getSetOptions.get,
+            set: getSetOptions.set
+        }, onInvalidated);
+    }
+    else {
+        return new IdentifierReferenceType$$1(subType, onInvalidated);
+    }
 }
 /**
  * Returns if a given value represents a reference type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isReferenceType$$1(type) {
     return (type.flags & TypeFlags$$1.Reference) > 0;
 }
+/**
+ * `types.safeReference` - A safe reference is like a standard reference, except that it accepts the undefined value by default
+ * and automatically sets itself to undefined (when the parent is a model) / removes itself from arrays and maps
+ * when the reference it is pointing to gets detached/destroyed.
+ *
+ * Strictly speaking it is a `types.maybe(types.reference(X))` with a customized `onInvalidate` option.
+ *
+ * @param subType
+ * @param options
+ * @returns
+ */
+function safeReference$$1(subType, options) {
+    return maybe$$1(reference$$1(subType, __assign({}, options, { onInvalidated: function (ev) {
+            ev.removeRef();
+        } })));
+}
 
 /**
  * @internal
- * @private
+ * @hidden
  */
 var IdentifierType$$1 = /** @class */ (function (_super) {
     __extends(IdentifierType$$1, _super);
@@ -29782,7 +30567,7 @@ var IdentifierType$$1 = /** @class */ (function (_super) {
 }(Type$$1));
 /**
  * @internal
- * @private
+ * @hidden
  */
 var IdentifierNumberType$$1 = /** @class */ (function (_super) {
     __extends(IdentifierNumberType$$1, _super);
@@ -29812,57 +30597,59 @@ var IdentifierNumberType$$1 = /** @class */ (function (_super) {
     return IdentifierNumberType$$1;
 }(IdentifierType$$1));
 /**
- * Identifiers are used to make references, lifecycle events and reconciling works.
+ * `types.identifier` - Identifiers are used to make references, lifecycle events and reconciling works.
  * Inside a state tree, for each type can exist only one instance for each given identifier.
  * For example there couldn't be 2 instances of user with id 1. If you need more, consider using references.
  * Identifier can be used only as type property of a model.
  * This type accepts as parameter the value type of the identifier field that can be either string or number.
  *
- * @example
+ * Example:
+ * ```ts
  *  const Todo = types.model("Todo", {
  *      id: types.identifier,
  *      title: types.string
  *  })
+ * ```
  *
- * @export
- * @alias types.identifier
- * @template T
- * @returns {IType<T, T>}
+ * @returns
  */
 var identifier$$1 = new IdentifierType$$1();
 /**
- * Similar to `types.identifier`, but `identifierNumber` will serialize from / to a number when applying snapshots
+ * `types.identifierNumber` - Similar to `types.identifier`. This one will serialize from / to a number when applying snapshots
  *
- * @example
+ * Example:
+ * ```ts
  *  const Todo = types.model("Todo", {
  *      id: types.identifierNumber,
  *      title: types.string
  *  })
+ * ```
  *
- * @export
- * @alias types.identifierNumber
- * @template T
- * @returns {IType<T, T>}
+ * @returns
  */
 var identifierNumber$$1 = new IdentifierNumberType$$1();
 /**
  * Returns if a given value represents an identifier type.
  *
- * @export
- * @template IT
- * @param {IT} type
- * @returns {type is IT}
+ * @param type
+ * @returns
  */
 function isIdentifierType$$1(type) {
     return isType$$1(type) && (type.flags & TypeFlags$$1.Identifier) > 0;
 }
+/**
+ * @internal
+ * @hidden
+ */
+function normalizeIdentifier$$1(id) {
+    return "" + id;
+}
 
 /**
- * Creates a custom type. Custom types can be used for arbitrary immutable values, that have a serializable representation. For example, to create your own Date representation, Decimal type etc.
+ * `types.custom` - Creates a custom type. Custom types can be used for arbitrary immutable values, that have a serializable representation. For example, to create your own Date representation, Decimal type etc.
  *
  * The signature of the options is:
- *
- * ```javascript
+ * ```ts
  * export interface CustomTypeOptions<S, T> {
  *     // Friendly name
  *     name: string
@@ -29877,7 +30664,8 @@ function isIdentifierType$$1(type) {
  * }
  * ```
  *
- * @example
+ * Example:
+ * ```ts
  * const DecimalPrimitive = types.custom<string, Decimal>({
  *     name: "Decimal",
  *     fromSnapshot(value: string) {
@@ -29898,20 +30686,17 @@ function isIdentifierType$$1(type) {
  * const Wallet = types.model({
  *     balance: DecimalPrimitive
  * })
+ * ```
  *
- * @export
- * @alias types.custom
- * @template S
- * @template T
- * @param {CustomTypeOptions<S, T>} options
- * @returns {(IType<S | T, S, T>)}
+ * @param options
+ * @returns
  */
 function custom$$1(options) {
     return new CustomType$$1(options);
 }
 /**
  * @internal
- * @private
+ * @hidden
  */
 var CustomType$$1 = /** @class */ (function (_super) {
     __extends(CustomType$$1, _super);
@@ -29958,25 +30743,21 @@ var CustomType$$1 = /** @class */ (function (_super) {
         if (unchanged)
             return current;
         var valueToStore = isSnapshot ? this.options.fromSnapshot(value) : value;
-        var newNode = this.instantiate(current.parent, current.subpath, current._environment, valueToStore);
+        var newNode = this.instantiate(current.parent, current.subpath, current.environment, valueToStore);
         current.die();
         return newNode;
     };
     return CustomType$$1;
 }(Type$$1));
 
-/*
- * All imports / exports should be proxied through this file.
- * Why? It gives us full control over the module load order, preventing circular dependency isses
- */
-
-/* all code is initially loaded through internal, to avoid circular dep issues */
-var types = {
+// we import the types to re-export them inside types.
+var types$$1 = {
     enumeration: enumeration$$1,
     model: model$$1,
     compose: compose$$1,
     custom: custom$$1,
     reference: reference$$1,
+    safeReference: safeReference$$1,
     union: union$$1,
     optional: optional$$1,
     literal: literal$$1,
@@ -29998,7 +30779,13 @@ var types = {
     null: nullType$$1
 };
 
-exports.types = types;
+/*
+ * All imports / exports should be proxied through this file.
+ * Why? It gives us full control over the module load order, preventing circular dependency isses
+ */
+
+/* all code is initially loaded through internal, to avoid circular dep issues */
+
 exports.typecheck = typecheck$$1;
 exports.escapeJsonPath = escapeJsonPath$$1;
 exports.unescapeJsonPath = unescapeJsonPath$$1;
@@ -30009,11 +30796,14 @@ exports.addMiddleware = addMiddleware$$1;
 exports.process = process$$1;
 exports.isStateTreeNode = isStateTreeNode$$1;
 exports.flow = flow;
+exports.castFlowReturn = castFlowReturn;
 exports.applyAction = applyAction$$1;
 exports.onAction = onAction$$1;
 exports.recordActions = recordActions$$1;
 exports.createActionTrackingMiddleware = createActionTrackingMiddleware;
-exports.setLivelynessChecking = setLivelynessChecking$$1;
+exports.setLivelinessChecking = setLivelinessChecking;
+exports.getLivelinessChecking = getLivelinessChecking;
+exports.setLivelynessChecking = setLivelynessChecking;
 exports.getType = getType$$1;
 exports.getChildType = getChildType$$1;
 exports.onPatch = onPatch$$1;
@@ -30048,6 +30838,8 @@ exports.walk = walk$$1;
 exports.getMembers = getMembers$$1;
 exports.getPropertyMembers = getPropertyMembers$$1;
 exports.cast = cast$$1;
+exports.castToSnapshot = castToSnapshot$$1;
+exports.castToReferenceSnapshot = castToReferenceSnapshot$$1;
 exports.isType = isType$$1;
 exports.isArrayType = isArrayType$$1;
 exports.isFrozenType = isFrozenType$$1;
@@ -30061,6 +30853,9 @@ exports.isPrimitiveType = isPrimitiveType$$1;
 exports.isReferenceType = isReferenceType$$1;
 exports.isRefinementType = isRefinementType$$1;
 exports.isUnionType = isUnionType$$1;
+exports.tryReference = tryReference$$1;
+exports.isValidReference = isValidReference$$1;
+exports.types = types$$1;
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../timers-browserify/main.js */ "URgk").setImmediate))
 
@@ -30474,14 +31269,17 @@ function factory(type, config, load, typed) {
 
       if (parens[0]) {
         operand = '(' + operand + ')';
-      }
+      } // for example for "not", we want a space between operand and argument
+
+
+      var opIsNamed = /[a-zA-Z]+/.test(this.op);
 
       if (assoc === 'right') {
         // prefix operator
-        return this.op + operand;
+        return this.op + (opIsNamed ? ' ' : '') + operand;
       } else if (assoc === 'left') {
         // postfix
-        return operand + this.op;
+        return operand + (opIsNamed ? ' ' : '') + this.op;
       } // fall back to postfix
 
 
@@ -31567,6 +32365,7 @@ E.prototype = {
 };
 
 module.exports = E;
+module.exports.TinyEmitter = E;
 
 
 /***/ }),
@@ -31651,7 +32450,7 @@ g = (function() {
 
 try {
 	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
+	g = g || new Function("return this")();
 } catch (e) {
 	// This works if the window reference is available
 	if (typeof window === "object") g = window;

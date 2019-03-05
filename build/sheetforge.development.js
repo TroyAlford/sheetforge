@@ -180,6 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/mobx-state-tree/dist/mobx-state-tree.js
 var mobx_state_tree = __webpack_require__("uqjs");
