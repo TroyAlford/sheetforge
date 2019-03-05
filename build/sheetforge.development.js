@@ -448,9 +448,14 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
 // CONCATENATED MODULE: ./source/utilities/math/toSymbols.js
 
 /* harmony default export */ var toSymbols = (function (expression) {
+  var fns = [];
   var symbols = [];
   math_math.parse(expression).traverse(function (node) {
-    if (node.type === 'SymbolNode' && !symbols.includes(node.name)) {
+    if (node.fn) {
+      fns.push(node.fn.name);
+    }
+
+    if (node.type === 'SymbolNode' && !symbols.includes(node.name) && !fns.includes(node.name)) {
       symbols.push(node.name);
     }
   });
