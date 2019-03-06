@@ -14,7 +14,7 @@ const PRODUCTION = ENVIRONMENT === 'production'
 const CONFIG = {
   devtool: 'source-map',
   entry: {
-    [ENVIRONMENT]: `${__dirname}/source/index.js`,
+    sheetforge: `${__dirname}/source/index.js`,
   },
   externals: PRODUCTION
     ? Object.keys(packageJson.peerDependencies).reduce((all, key) => ({ ...all, [key]: key }), {})
@@ -51,7 +51,7 @@ const CONFIG = {
     },
   },
   output: {
-    filename: PRODUCTION ? 'sheetforge.[name].min.js' : 'sheetforge.[name].js',
+    filename: PRODUCTION ? '[name].min.js' : '[name].js',
     library: 'sheetforge',
     libraryTarget: 'umd',
     path: `${__dirname}/build`,
