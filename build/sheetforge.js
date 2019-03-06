@@ -66,7 +66,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 	// Promise = chunk loading, 0 = chunk loaded
 /******/ 	var installedChunks = {
-/******/ 		"development": 0
+/******/ 		"sheetforge": 0
 /******/ 	};
 /******/
 /******/ 	var deferredModules = [];
@@ -3977,4 +3977,4 @@ function (_React$Component) {
 
 /******/ });
 });
-//# sourceMappingURL=sheetforge.development.js.map
+//# sourceMappingURL=sheetforge.js.map

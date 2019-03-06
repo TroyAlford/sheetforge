@@ -1,7 +1,7 @@
 {
   "name": "sheetforge",
   "description": "SheetForge - a React-based RPG Character Sheets",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "license": "ISC",
   "author": "Troy Alford",
   "main": "build/sheetforge.min.js",
