@@ -6,6 +6,7 @@ import Conditions from '@/components/Conditions'
 import Layout from '@/components/Layout'
 import ListOf from '@/components/List'
 import models from '@/models'
+import debounce from '@/utilities/debounce'
 import noop from '@/utilities/noop'
 import './Sheet.scss'
 
@@ -19,6 +20,16 @@ import './Sheet.scss'
 
   state = { size: 'large' }
 
+  handleWindowResize = debounce(() => {
+    let size = 'large'
+    if (window.matchMedia('(min-width: 5in) and (max-width: 7.5in)').matches) {
+      size = 'medium'
+    } else if (window.matchMedia('(max-width: 5in)').matches) {
+      size = 'small'
+    }
+    if (size !== this.state.size) this.setState({ size })
+  }, 250)
+
   constructor(props) {
     super(props)
     this.onCharacterSnapshotDisposer = onSnapshot(this.props.character, (snapshot) => {
@@ -28,6 +39,7 @@ import './Sheet.scss'
       this.props.onChange(this.props.character.toJSON(), snapshot, this)
     })
   }
+
   componentDidMount() {
     this.handleWindowResize()
     window.addEventListener('resize', this.handleWindowResize)
@@ -39,15 +51,6 @@ import './Sheet.scss'
     this.onLayoutSnapshotDisposer()
   }
 
-  handleWindowResize = () => {
-    let size = 'large'
-    if (window.matchMedia('(min-width: 5in) and (max-width: 7.5in)').matches) {
-      size = 'medium'
-    } else if (window.matchMedia('(max-width: 5in)').matches) {
-      size = 'small'
-    }
-    if (size !== this.state.size) this.setState({ size })
-  }
 
   renderComponent = (parent, model, key) => {
     if (model.type) {
