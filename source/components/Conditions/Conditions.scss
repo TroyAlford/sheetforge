@@ -6,12 +6,10 @@
   justify-content: flex-start;
 
   &.expandable-wrapper.expanded {
-    background: #fff;
     border: 1px solid;
   }
 
   > .expandable-toggle {
-    background: #fff;
     min-height: 30px;
     min-width: 30px;
 
