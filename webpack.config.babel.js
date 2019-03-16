@@ -60,7 +60,7 @@ const CONFIG = {
   plugins: [
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.HashedModuleIdsPlugin(),
-    new MiniCssExtractPlugin({ chunkFilename: 'sheetforge.[name].css', filename: 'sheetforge.[name].css' }),
+    new MiniCssExtractPlugin({ chunkFilename: '[name].css', filename: '[name].css' }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(ENVIRONMENT) }),
     new OptimizeCssAssetsPlugin({
@@ -81,6 +81,7 @@ const CONFIG = {
     all: false,
     builtAt: true,
   },
+  target: 'node',
 }
 
 export default CONFIG
