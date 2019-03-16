@@ -27,22 +27,19 @@ import './Sheet.scss'
     this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, (snapshot) => {
       this.props.onChange(this.props.character.toJSON(), snapshot, this)
     })
-    if (process && process.browser) { // eslint-disable-line no-undef
-      window.addEventListener('resize', this.handleWindowResize)
-    }
   }
   componentDidMount() {
     this.handleWindowResize()
+    window.addEventListener('resize', this.handleWindowResize)
     this.props.onMount(this)
   }
   componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowResize)
     this.onCharacterSnapshotDisposer()
     this.onLayoutSnapshotDisposer()
   }
 
   handleWindowResize = () => {
-    if (!process.browser) return // eslint-disable-line no-undef
-
     let size = 'large'
     if (window.matchMedia('(min-width: 5in) and (max-width: 7.5in)').matches) {
       size = 'medium'
