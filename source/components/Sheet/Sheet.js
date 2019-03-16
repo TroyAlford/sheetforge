@@ -12,6 +12,7 @@ import './Sheet.scss'
 @observer class Sheet extends React.Component {
   static defaultProps = {
     character: {},
+    layout: {},
     onChange: noop,
     onMount: noop,
   }
@@ -26,7 +27,9 @@ import './Sheet.scss'
     this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, (snapshot) => {
       this.props.onChange(this.props.character.toJSON(), snapshot, this)
     })
-    window.addEventListener('resize', this.handleWindowResize)
+    if (process && process.browser) { // eslint-disable-line no-undef
+      window.addEventListener('resize', this.handleWindowResize)
+    }
   }
   componentDidMount() {
     this.handleWindowResize()
@@ -38,6 +41,8 @@ import './Sheet.scss'
   }
 
   handleWindowResize = () => {
+    if (!process.browser) return // eslint-disable-line no-undef
+
     let size = 'large'
     if (window.matchMedia('(min-width: 5in) and (max-width: 7.5in)').matches) {
       size = 'medium'
