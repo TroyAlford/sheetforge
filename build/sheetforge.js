@@ -7,69 +7,10 @@
 		exports["sheetforge"] = factory();
 	else
 		root["sheetforge"] = factory();
-})(window, function() {
+})(global, function() {
 return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// install a JSONP callback for chunk loading
-/******/ 	function webpackJsonpCallback(data) {
-/******/ 		var chunkIds = data[0];
-/******/ 		var moreModules = data[1];
-/******/ 		var executeModules = data[2];
-/******/
-/******/ 		// add "moreModules" to the modules object,
-/******/ 		// then flag all "chunkIds" as loaded and fire callback
-/******/ 		var moduleId, chunkId, i = 0, resolves = [];
-/******/ 		for(;i < chunkIds.length; i++) {
-/******/ 			chunkId = chunkIds[i];
-/******/ 			if(installedChunks[chunkId]) {
-/******/ 				resolves.push(installedChunks[chunkId][0]);
-/******/ 			}
-/******/ 			installedChunks[chunkId] = 0;
-/******/ 		}
-/******/ 		for(moduleId in moreModules) {
-/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				modules[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
-/******/
-/******/ 		while(resolves.length) {
-/******/ 			resolves.shift()();
-/******/ 		}
-/******/
-/******/ 		// add entry modules from loaded chunk to deferred list
-/******/ 		deferredModules.push.apply(deferredModules, executeModules || []);
-/******/
-/******/ 		// run deferred modules when all chunks ready
-/******/ 		return checkDeferredModules();
-/******/ 	};
-/******/ 	function checkDeferredModules() {
-/******/ 		var result;
-/******/ 		for(var i = 0; i < deferredModules.length; i++) {
-/******/ 			var deferredModule = deferredModules[i];
-/******/ 			var fulfilled = true;
-/******/ 			for(var j = 1; j < deferredModule.length; j++) {
-/******/ 				var depId = deferredModule[j];
-/******/ 				if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 			}
-/******/ 			if(fulfilled) {
-/******/ 				deferredModules.splice(i--, 1);
-/******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 			}
-/******/ 		}
-/******/ 		return result;
-/******/ 	}
-/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
-/******/ 	// object to store loaded and loading chunks
-/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 	// Promise = chunk loading, 0 = chunk loaded
-/******/ 	var installedChunks = {
-/******/ 		"sheetforge": 0
-/******/ 	};
-/******/
-/******/ 	var deferredModules = [];
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -148,18 +89,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
-/******/ 	var jsonpArray = window["webpackJsonpsheetforge"] = window["webpackJsonpsheetforge"] || [];
-/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
-/******/ 	jsonpArray.push = webpackJsonpCallback;
-/******/ 	jsonpArray = jsonpArray.slice();
-/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
-/******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
-/******/
-/******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push(["05fm","vendor"]);
-/******/ 	// run deferred modules when ready
-/******/ 	return checkDeferredModules();
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "05fm");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -3626,6 +3558,7 @@ var Sheet_class, Sheet_class2, Sheet_temp;
 
 
 
+
 var Sheet_Sheet_Sheet = Object(mobx_react["observer"])(Sheet_class = (Sheet_temp = Sheet_class2 =
 /*#__PURE__*/
 function (_React$Component) {
@@ -3642,7 +3575,7 @@ function (_React$Component) {
       size: 'large'
     });
 
-    defineProperty_default()(assertThisInitialized_default()(_this), "handleWindowResize", function () {
+    defineProperty_default()(assertThisInitialized_default()(_this), "handleWindowResize", debounce(function () {
       var size = 'large';
 
       if (window.matchMedia('(min-width: 5in) and (max-width: 7.5in)').matches) {
@@ -3654,7 +3587,7 @@ function (_React$Component) {
       if (size !== _this.state.size) _this.setState({
         size: size
       });
-    });
+    }, 250));
 
     defineProperty_default()(assertThisInitialized_default()(_this), "renderComponent", function (parent, model, key) {
       if (model.type) {
@@ -3691,7 +3624,6 @@ function (_React$Component) {
     _this.onLayoutSnapshotDisposer = Object(mobx_state_tree["onSnapshot"])(_this.props.layout, function (snapshot) {
       _this.props.onChange(_this.props.character.toJSON(), snapshot, assertThisInitialized_default()(_this));
     });
-    window.addEventListener('resize', _this.handleWindowResize);
     return _this;
   }
 
@@ -3699,11 +3631,13 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.handleWindowResize();
+      window.addEventListener('resize', this.handleWindowResize);
       this.props.onMount(this);
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
+      window.removeEventListener('resize', this.handleWindowResize);
       this.onCharacterSnapshotDisposer();
       this.onLayoutSnapshotDisposer();
     }
@@ -3725,6 +3659,7 @@ function (_React$Component) {
   return Sheet;
 }(react_default.a.Component), defineProperty_default()(Sheet_class2, "defaultProps", {
   character: {},
+  layout: {},
   onChange: noop,
   onMount: noop
 }), Sheet_temp)) || Sheet_class;
