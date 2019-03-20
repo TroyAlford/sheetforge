@@ -1,0 +1,2 @@
+!function(e,o){"object"===typeof exports&&"object"===typeof module?module.exports=o():"function"===typeof define&&define.amd?define("sheetforge",[],o):"object"===typeof exports?exports.sheetforge=o():e.sheetforge=o()}(global,function(){return exports.ids=[3]});
+//# sourceMappingURL=app.995baf7ec6f54eee60ac.js.map
