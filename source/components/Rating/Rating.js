@@ -28,7 +28,7 @@ export default class Rating extends Component {
     return (
       <div className="rating">
         {(total > 0 || (allowExcess && current > 0))
-          ? range(1, bound(total, { min: 1 })).map(number => (
+          ? range(1, Math.ceil(bound(total, { min: 1 }))).map(number => (
             <span data-number={number} key={number} onClick={this.handleIconClick} title={number}>
               {(number <= current && number <= maximum) && iconOn}
               {(number > current && number <= maximum) && iconOff}

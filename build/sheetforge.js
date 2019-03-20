@@ -422,7 +422,7 @@ math.import(__webpack_require__(/*! mathjs/lib/type/matrix/DenseMatrix */ "ZS3Q"
   var safeData = objectSpread_default()({}, data);
 
   toSymbols(expression).forEach(function (symbol) {
-    if (safeData[symbol] === undefined) {
+    if (typeof safeData[symbol] !== 'number' || Number.isNaN(safeData[symbol])) {
       safeData[symbol] = options.defaultSymbolValue;
     }
   });
@@ -1429,8 +1429,12 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 // CONCATENATED MODULE: ./source/utilities/range.js
 
 /* harmony default export */ var range = (function (start, end) {
+  if (typeof start !== 'number' || typeof end !== 'number' || Math.round(start) !== start || Math.round(end) !== end) {
+    throw new TypeError('range(start, end) requires integer values for both start and end');
+  }
+
   var step = start <= end ? 1 : -1;
-  var length = Math.abs(end - start) / Math.abs(step) + 1;
+  var length = Math.floor(Math.abs(end - start) / Math.abs(step)) + 1;
   return Array.apply(void 0, toConsumableArray_default()(Array(length))).map(function (_, i) {
     return start + i * step;
   });
@@ -1487,9 +1491,9 @@ function (_Component) {
       var total = allowExcess ? math_math.max(current, maximum) : maximum;
       return react_default.a.createElement("div", {
         className: "rating"
-      }, total > 0 || allowExcess && current > 0 ? range(1, bound(total, {
+      }, total > 0 || allowExcess && current > 0 ? range(1, Math.ceil(bound(total, {
         min: 1
-      })).map(function (number) {
+      }))).map(function (number) {
         return react_default.a.createElement("span", {
           "data-number": number,
           key: number,
@@ -2470,6 +2474,7 @@ var buildSorter = function buildSorter(getter) {
     }, {
       key: "componentWillUnmount",
       value: function componentWillUnmount() {
+        if (this.sortable) this.sortable.destroy();
         this.onDataSnapshotDisposer();
         this.onLayoutSnapshotDisposer();
       }

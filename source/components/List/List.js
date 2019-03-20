@@ -106,6 +106,7 @@ export default (Model, Component, props = {}) => {
       if (this.sortable) this.sortable.option('disabled', !this.props.sortable)
     }
     componentWillUnmount() {
+      if (this.sortable) this.sortable.destroy()
       this.onDataSnapshotDisposer()
       this.onLayoutSnapshotDisposer()
     }

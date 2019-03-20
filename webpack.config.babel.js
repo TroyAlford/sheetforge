@@ -37,7 +37,7 @@ const CONFIG = {
     ],
   },
   optimization: {
-    minimize: PRODUCTION,
+    minimize: false, // PRODUCTION,
     splitChunks: PRODUCTION ? {} : {
       cacheGroups: {
         vendor: {

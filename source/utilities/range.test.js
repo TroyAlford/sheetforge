@@ -16,4 +16,7 @@ describe('range()', () => {
     const actual = range(5, -5)
     expect(actual).toEqual(expected)
   })
+  it('throws error for non-integer inputs', () => {
+    expect(() => range(2.33, -2.33)).toThrow(/requires integer values/)
+  })
 })

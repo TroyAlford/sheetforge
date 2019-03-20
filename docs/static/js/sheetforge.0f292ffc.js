@@ -1,2 +1,0 @@
-!function(e,o){"object"===typeof exports&&"object"===typeof module?module.exports=o():"function"===typeof define&&define.amd?define("sheetforge",[],o):"object"===typeof exports?exports.sheetforge=o():e.sheetforge=o()}(global,function(){return exports.ids=[18,1,2]});
-//# sourceMappingURL=sheetforge.67ae6489b6adabd1f030.js.map

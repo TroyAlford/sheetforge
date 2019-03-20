@@ -4,7 +4,7 @@ import toSymbols from '@/utilities/math/toSymbols'
 export default (expression = '', data = {}, options = { defaultSymbolValue: 0 }) => {
   const safeData = { ...data }
   toSymbols(expression).forEach((symbol) => {
-    if (safeData[symbol] === undefined) {
+    if (typeof safeData[symbol] !== 'number' || Number.isNaN(safeData[symbol])) {
       safeData[symbol] = options.defaultSymbolValue
     }
   })
