@@ -12,12 +12,11 @@ export default {
     ...webpackConfig,
     externals: {},
     output: {
-      filename: 'sheetforge.[name].min.js',
-      library: 'sheetforge',
-      libraryTarget: 'umd',
+      ...webpackConfig.output,
+      filename: '[name].min.js',
       path: `${__dirname}/docs`, // eslint-disable-line no-undef
-      umdNamedDefine: true,
     },
+    target: 'web',
   }),
   src: './source',
   themeConfig: {

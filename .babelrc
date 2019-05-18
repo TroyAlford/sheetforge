@@ -13,6 +13,7 @@
   ],
   "presets": [
     "@babel/preset-react",
-    ["@babel/preset-env", { "useBuiltIns": "entry" }]
-  ]
+    ["@babel/preset-env", { "corejs": 3, "useBuiltIns": "entry" }]
+  ],
+  "sourceType": "unambiguous"
 }
