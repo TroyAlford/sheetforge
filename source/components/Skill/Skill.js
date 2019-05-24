@@ -1,10 +1,9 @@
-import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import noop from '@/utilities/noop'
 import './Skill.scss'
 
-@observer class Skill extends Component {
+class Skill extends Component {
   static defaultProps = {
     model: {},
     onDelete: noop,

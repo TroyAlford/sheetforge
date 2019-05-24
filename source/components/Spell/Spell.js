@@ -1,5 +1,3 @@
-import { observer } from 'mobx-react'
-import { onSnapshot } from 'mobx-state-tree'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Effect from '@/components/Effect'
@@ -17,7 +15,7 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
   className: 'resource-cost-list',
 })
 
-@observer class Spell extends Component {
+class Spell extends Component {
   static defaultProps = {
     model: {},
     onDelete: noop,
@@ -36,12 +34,6 @@ const ListOfCosts = ListOf(ResourceCostModel, ResourceCost, {
   }]
 
   onResourceSnapshotDisposer = noop
-
-  componentDidMount() {
-    const { resources } = this.props.model.character
-    this.onResourceSnapshotDisposer = onSnapshot(resources, () => this.forceUpdate())
-  }
-  componentWillUnmount() { this.onResourceSnapshotDisposer() }
 
   handleCast = () => {
     this.props.model.cast()

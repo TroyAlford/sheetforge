@@ -1,11 +1,10 @@
-import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Rating from '@/components/Rating'
 import noop from '@/utilities/noop'
 import './Resource.scss'
 
-@observer class Resource extends Component {
+class Resource extends Component {
   static defaultProps = {
     model: {},
     onDelete: noop,

@@ -1,9 +1,8 @@
-import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import './Effect.scss'
 
-@observer class Effect extends Component {
+class Effect extends Component {
   static defaultProps = {
     model: {},
   }

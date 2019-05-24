@@ -1,14 +1,11 @@
-import { observer } from 'mobx-react'
-import { onSnapshot } from 'mobx-state-tree'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Rating from '@/components/Rating'
 import bound from '@/utilities/bound'
-import math from '@/utilities/math'
 import noop from '@/utilities/noop'
 import './Attribute.scss'
 
-@observer class Attribute extends Component {
+class Attribute extends Component {
   static defaultProps = {
     model: {},
     onDelete: noop,
@@ -24,11 +21,6 @@ import './Attribute.scss'
   }]
 
   CACHE = {}
-
-  componentDidMount() {
-    this.onSnapshotDisposer = onSnapshot(this.props.model.character, this.handleSnapshot)
-  }
-  componentWillUnmount() { this.onSnapshotDisposer() }
 
   handleSnapshot = (snapshot) => {
     const effects = this.props.model.effects().map(e => e.toJSON())

@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Effect from '@/components/Effect'
@@ -10,7 +9,7 @@ import './Item.scss'
 
 const EffectList = ListOf(EffectModel, Effect, { className: 'effect-list' })
 
-@observer class Item extends Component {
+class Item extends Component {
   static defaultProps = {
     model: {},
     onDelete: noop,

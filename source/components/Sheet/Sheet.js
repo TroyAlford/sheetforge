@@ -1,5 +1,3 @@
-import { observer } from 'mobx-react'
-import { onSnapshot } from 'mobx-state-tree'
 import React from 'react'
 import components from '@/components'
 import Conditions from '@/components/Conditions'
@@ -10,7 +8,7 @@ import debounce from '@/utilities/debounce'
 import noop from '@/utilities/noop'
 import './Sheet.scss'
 
-@observer class Sheet extends React.Component {
+class Sheet extends React.Component {
   static defaultProps = {
     character: {},
     layout: {},
@@ -30,16 +28,6 @@ import './Sheet.scss'
     if (size !== this.state.size) this.setState({ size })
   }, 250)
 
-  constructor(props) {
-    super(props)
-    this.onCharacterSnapshotDisposer = onSnapshot(this.props.character, (snapshot) => {
-      this.props.onChange(snapshot, this.props.layout.toJSON(), this)
-    })
-    this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout, (snapshot) => {
-      this.props.onChange(this.props.character.toJSON(), snapshot, this)
-    })
-  }
-
   componentDidMount() {
     this.handleWindowResize()
     window.addEventListener('resize', this.handleWindowResize)
@@ -50,7 +38,6 @@ import './Sheet.scss'
     this.onCharacterSnapshotDisposer()
     this.onLayoutSnapshotDisposer()
   }
-
 
   renderComponent = (parent, model, key) => {
     if (model.type) {

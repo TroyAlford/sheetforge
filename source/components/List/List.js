@@ -1,9 +1,7 @@
-import { onSnapshot } from 'mobx-state-tree'
 import React from 'react'
 import Sortable from 'sortablejs'
 import MultiToggle from '@/components/MultiToggle'
 import CollectionOf from '@/models/generic/Collection'
-import debounce from '@/utilities/debounce'
 import noop from '@/utilities/noop'
 import unique from '@/utilities/unique'
 import './List.scss'
@@ -78,9 +76,6 @@ export default (Model, Component, props = {}) => {
         if (sortOptions.length && sortOptionIndex !== undefined) {
           this.setState({ sortOption: sortOptions[sortOptionIndex] || null })
         }
-        this.onLayoutSnapshotDisposer = onSnapshot(this.props.layout,
-          debounce(() => this.forceUpdate(), 100, true)
-        )
       }
 
       const { sortable } = this.props
@@ -100,7 +95,6 @@ export default (Model, Component, props = {}) => {
           onStart: () => this.container.current.classList.add('dragging'),
         })
       }
-      this.onDataSnapshotDisposer = onSnapshot(this.props.collection, () => this.forceUpdate())
     }
     componentWillReceiveProps() {
       if (this.sortable) this.sortable.option('disabled', !this.props.sortable)
@@ -166,19 +160,21 @@ export default (Model, Component, props = {}) => {
         layout.categorize ? 'on' : 'off',
       ].join(' ')
 
-      return <>
-        <div {...{ className }} onClick={this.handleToggleCategorized} />
-        <select
-          className="filter"
-          onChange={this.handleFilterChange}
-          ref={this.filterEl}
-          tabIndex={-1}
-          value={layout.filter}
-        >
-          <option value="">All</option>
-          {categories.map(name => <option key={name} value={name}>{name}</option>)}
-        </select>
-      </>
+      return (
+        <>
+          <div {...{ className }} onClick={this.handleToggleCategorized} />
+          <select
+            className="filter"
+            onChange={this.handleFilterChange}
+            ref={this.filterEl}
+            tabIndex={-1}
+            value={layout.filter}
+          >
+            <option value="">All</option>
+            {categories.map(name => <option key={name} value={name}>{name}</option>)}
+          </select>
+        </>
+      )
     }
     renderSortWidget = () => {
       if (!this.props.sortable) return null

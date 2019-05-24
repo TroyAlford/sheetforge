@@ -1,10 +1,9 @@
-import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import noop from '@/utilities/noop'
 import './Descriptor.scss'
 
-@observer class Descriptor extends Component {
+class Descriptor extends Component {
   static defaultProps = {
     model: {},
     onDelete: noop,

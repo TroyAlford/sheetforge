@@ -1,24 +1,14 @@
-import { observer } from 'mobx-react'
-import { onSnapshot } from 'mobx-state-tree'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import Expandable from '@/components/Expandable'
 import './Conditions.scss'
 
-export default observer(class Conditions extends Component {
+export default class Conditions extends Component {
   static defaultProps = {
     model: {},
   }
 
   CACHE = {}
-
-  componentDidMount() {
-    this.onSnapshotDisposer = onSnapshot(this.props.model, this.handleSnapshot)
-  }
-
-  componentWillUnmount() {
-    this.onSnapshotDisposer()
-  }
 
   handleSnapshot = () => {
     const availableConditions = this.props.model.availableConditions()
@@ -71,4 +61,4 @@ export default observer(class Conditions extends Component {
       </div>
     )
   }
-})
+}

@@ -1,9 +1,8 @@
-import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Editable from '@/components/Editable'
 import './ResourceCost.scss'
 
-@observer class ResourceCost extends Component {
+class ResourceCost extends Component {
   static defaultProps = {
     model: {},
   }
