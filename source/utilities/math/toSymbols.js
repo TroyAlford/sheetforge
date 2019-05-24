@@ -1,4 +1,4 @@
-import math from '@/utilities/math'
+import math from '@/utilities/math/math'
 
 export default (expression) => {
   const fns = []

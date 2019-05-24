@@ -1,4 +1,4 @@
-import math from '@/utilities/math'
+import math from '@/utilities/math/math'
 import toSymbols from '@/utilities/math/toSymbols'
 
 export default (expression = '', data = {}, options = { defaultSymbolValue: 0 }) => {
