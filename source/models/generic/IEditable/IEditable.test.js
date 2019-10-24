@@ -1,86 +1,104 @@
-import { types } from 'mobx-state-tree'
-import IEditable from './IEditable'
+import $Base from './$Base'
 
-const DummyType = types.compose(
-  IEditable,
-  types.model('Dummy', {
-    bar: types.number,
-    baz: types.optional(types.array(types.string), []),
-    foo: types.string,
-  })
-)
-const DummyParent = types.compose(
-  IEditable,
-  types.model('DummyParent', {
-    child: DummyType,
-  })
-)
-
-const DEFAULTS = { bar: 1, baz: ['foo', 'bar'], foo: 'foo' }
-
-describe('models/IEditable', () => {
-  let dummy
-  let dummyParent
-
+describe('models/$Base', () => {
+  let model
   beforeEach(() => {
-    dummy = DummyType.create(DEFAULTS)
-    dummyParent = DummyParent.create({ child: dummy })
+    model = new $Base({ foo: 'bar' })
   })
 
-  it('copies initial values upon creation', () => {
-    expect(dummy.savedVersion).toEqual(dummy.toJSON())
+  it('stores data by value, not by ref', () => {
+    expect(model.current).not.toBe(model.saved)
+    expect(model.current).toEqual(model.saved)
   })
-  it('allows setting values by path', () => {
-    expect(dummyParent.child.foo).toEqual(DEFAULTS.foo)
-    expect(dummyParent.child.baz[0]).toEqual(DEFAULTS.baz[0])
 
-    dummyParent.set('child.foo', 'bar')
-    expect(dummyParent.child.foo).toEqual('bar')
-    expect(dummyParent.savedVersion.child.foo).toEqual('foo')
-    expect(dummyParent.child.savedVersion.foo).toEqual('foo')
+  it('reports dirtiness correctly', () => {
+    expect(model.isDirty).toBe(false)
+    expect(model.isPathDirty('foo')).toBe(false)
+    expect(model.isPathDirty('baz')).toBe(false)
 
-    dummyParent.set('child.baz[0]', 'yum')
-    expect(dummyParent.child.baz[0]).toEqual('yum')
-    expect(dummyParent.child.savedVersion.baz[0]).toEqual(DEFAULTS.baz[0])
-    expect(dummyParent.savedVersion.child.baz[0]).toEqual(DEFAULTS.baz[0])
+    model.saved.foo = 'FOO!'
+    expect(model.isDirty).toBe(true)
+    expect(model.isPathDirty('foo')).toBe(true)
+    expect(model.isPathDirty('baz')).toBe(false)
+
+    model.saved.foo = 'bar'
+    model.saved.baz = 'quux'
+    expect(model.isDirty).toBe(true)
+    expect(model.isPathDirty('foo')).toBe(false)
+    expect(model.isPathDirty('baz')).toBe(true)
   })
-  it('correctly identifies dirtiness', () => {
-    expect(dummyParent.child.foo).toEqual(DEFAULTS.foo)
-    expect(dummyParent.child.baz[0]).toEqual(DEFAULTS.baz[0])
 
-    expect(dummyParent.isDirty).toBe(false)
-    expect(dummyParent.child.isDirty).toBe(false)
-    expect(dummyParent.isPathDirty('child.foo')).toBe(false)
-    expect(dummyParent.isPathDirty('child.bar')).toBe(false)
-    expect(dummyParent.isPathDirty('child.baz')).toBe(false)
-    expect(dummyParent.isPathDirty('child.baz[0]')).toBe(false)
+  it('sets multiple values from object input', () => {
+    expect(model.current).toEqual({ foo: 'bar' })
 
-    dummyParent.set('child.foo', 'bar')
-    dummyParent.set('child.baz[0]', 'yum')
+    model.set({ baz: 'quux' })
+    expect(model.current).toEqual({ baz: 'quux', foo: 'bar' })
+    expect(model.saved).toEqual({ foo: 'bar' })
 
-    expect(dummyParent.isDirty).toBe(true)
-    expect(dummyParent.child.isDirty).toBe(true)
-    expect(dummyParent.isPathDirty('child.foo')).toBe(true)
-    expect(dummyParent.isPathDirty('child.bar')).toBe(false) // hasn't changed
-    expect(dummyParent.isPathDirty('child.baz')).toBe(true)
-    expect(dummyParent.isPathDirty('child.baz[0]')).toBe(true)
+    model.set({ bar: '!!', baz: { 4: 5, 6: 7 }, foo: [1, 2, 3] })
+    expect(model.current).toEqual({ bar: '!!', baz: { 4: 5, 6: 7 }, foo: [1, 2, 3] })
+    expect(model.saved).toEqual({ foo: 'bar' })
   })
-  it('markAsClean() resets savedVersion', () => {
-    dummy.set('foo', 'bar')
-    expect(dummy.isDirty).toBe(true)
 
-    dummy.markAsClean()
-    expect(dummy.isDirty).toBe(false)
-    expect(dummy.foo).toBe('bar')
-    expect(dummy.savedVersion.foo).toBe('bar')
+  it('sets values from path input', () => {
+    expect(model.current).toEqual({ foo: 'bar' })
+
+    model.set('foo.bar.baz', 'quux')
+    expect(model.current).toEqual({ foo: { bar: { baz: 'quux' } } })
+    expect(model.saved).toEqual({ foo: 'bar' })
+
+    model.set('foo.bar', { boop: 'beep', quux: 'baz' })
+    expect(model.current).toEqual({ foo: { bar: { boop: 'beep', quux: 'baz' } } })
+    expect(model.saved).toEqual({ foo: 'bar' })
   })
-  it('reset() resets values to the savedVersion', () => {
-    dummy.set('foo', 'bar')
-    expect(dummy.isDirty).toBe(true)
 
-    dummy.reset()
-    expect(dummy.isDirty).toBe(false)
-    expect(dummy.foo).toBe(DEFAULTS.foo)
-    expect(dummy.savedVersion.foo).toBe(DEFAULTS.foo)
+  it('commitChanges overrides saved with current', () => {
+    expect(model.isDirty).toBe(false)
+
+    model.current.foo = 'changed'
+    expect(model.isDirty).toBe(true)
+
+    model.commitChanges()
+
+    expect(model.isDirty).toBe(false)
+    expect(model.current).not.toBe(model.saved)
+    expect(model.current).toEqual(model.saved)
+    expect(model.saved.foo).toEqual('changed')
+  })
+
+  it('resetChanges overrides current with saved', () => {
+    expect(model.isDirty).toBe(false)
+
+    model.current.foo = 'changed'
+    expect(model.isDirty).toBe(true)
+
+    model.resetChanges()
+
+    expect(model.isDirty).toBe(false)
+    expect(model.current).not.toBe(model.saved)
+    expect(model.current).toEqual(model.saved)
+    expect(model.saved.foo).toEqual('bar')
+  })
+
+  it('reports changes', () => {
+    const INITIAL = { foo: 'bar' }
+    const onChange = jest.fn()
+
+    model.onChange(onChange)
+    expect(onChange).not.toHaveBeenCalled()
+
+    model.set('foo.bar', 'baz')
+    const AFTER_FIRST = { foo: { bar: 'baz' } }
+    expect(onChange).toHaveBeenLastCalledWith(AFTER_FIRST, INITIAL, model)
+
+    model.commitChanges()
+    expect(onChange).toHaveBeenLastCalledWith(AFTER_FIRST, AFTER_FIRST, model)
+
+    model.set({ bar: 'baz' })
+    const AFTER_SECOND = { bar: 'baz', foo: { bar: 'baz' } }
+    expect(onChange).toHaveBeenLastCalledWith(AFTER_SECOND, AFTER_FIRST, model)
+
+    model.resetChanges()
+    expect(onChange).toHaveBeenLastCalledWith(AFTER_FIRST, AFTER_FIRST, model)
   })
 })

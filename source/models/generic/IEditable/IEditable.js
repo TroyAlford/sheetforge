@@ -1,55 +1,62 @@
 import deepEqual from 'deep-equal'
-import { isObservableArray } from 'mobx'
-import { types } from 'mobx-state-tree'
+import clone from '@/utilities/clone'
+import getPatch, { NOCHANGE } from '@/utilities/getPatch'
 import getPathValue from '@/utilities/getPathValue'
 import setPathValue from '@/utilities/setPathValue'
 
-const IEditable = types.model('IEditable', {
-  // Any
-}).volatile(() => ({
-  isIEditable: true,
-  savedVersion: {},
-})).views(self => ({
-  get isDirty() { return !deepEqual(self.toJSON(), self.savedVersion) },
-})).actions(self => ({
-  /* eslint-disable no-param-reassign */
+export default class IEditable {
+  current = null
+  saved = null
 
-  afterCreate() { self.savedVersion = self.toJSON() },
-  isPathDirty: (path) => {
-    const current = getPathValue(self.toJSON(), path)
-    const initial = getPathValue(self.savedVersion, path)
+  onChangeHandlers = []
+
+  constructor(data = {}) {
+    this.current = clone(data)
+    this.saved = clone(data)
+  }
+
+  onChange = (fn) => {
+    this.onChangeHandlers.push(fn)
+    return () => { this.onChangeHandlers = this.onChangeHandlers.filter(handler => handler !== fn) }
+  }
+  reportChange = () => {
+    const patch = getPatch(this.current, this.saved)
+    if (patch !== NOCHANGE) {
+      this.onChangeHandlers.forEach(fn => fn(patch, this.current, this.saved, this))
+    }
+  }
+
+  get isDirty() { return !deepEqual(this.current, this.saved) }
+  isPathDirty = (path) => {
+    const current = getPathValue(this.current, path)
+    const initial = getPathValue(this.saved, path)
     return !deepEqual(current, initial)
-  },
-  markAsClean() {
-    self.savedVersion = self.toJSON()
+  }
 
-    Object.keys(self.savedVersion).forEach((key) => {
-      const value = self[key]
-      if (!value) { return }
+  commitChanges = () => {
+    if (!this.isDirty) return
+    this.saved = clone(this.current)
+    // this.reportChange()
+  }
+  resetChanges = () => {
+    if (!this.isDirty) return
+    unwatch(this.current, this.reportChange)
+    this.current = clone(this.saved)
+    watch(this.current, this.reportChange)
+    // this.reportChange()
+  }
 
-      if (value.isIEditable) {
-        value.markAsClean()
-      } else if (isObservableArray(value)) {
-        value.forEach(child => (child && child.isIEditable && child.markAsClean()))
-      }
-    })
-  },
-  reset() { Object.assign(self, self.savedVersion) },
-  set(key = {}, value = undefined) {
+  get = path => getPathValue(this.current, path)
+  set = (key = {}, value = undefined) => {
     if (typeof key === 'string' && value !== undefined) {
-      // allows: model.set('foo.bar', 'bar')
-      if (self[key] !== undefined) {
-        self[key] = value
-      } else {
-        setPathValue(self, key, value)
+      const currentValue = getPathValue(this.current, key)
+      if (!deepEqual(currentValue, value)) {
+        setPathValue(this.current, key, clone(value))
+        // this.reportChange()
       }
     } else if (typeof key === 'object' && value === undefined) {
-      // allows: model.set({ foo: 'Foo', bar: 'Bar' })
-      Object.assign(self, key)
+      Object.assign(this.current, clone(key))
+      // this.reportChange()
     }
-  },
-
-  /* eslint-enable no-param-reassign */
-}))
-
-export default IEditable
+  }
+}

@@ -1,31 +1,45 @@
-import { types } from 'mobx-state-tree'
-import noop from '@/utilities/noop'
+import { watch } from 'melanke-watchjs'
 import unique from '@/utilities/unique'
 
-export default (getValue = noop) => types.model({
-}).volatile(() => ({
-  isICategorizable: true,
-})).views((self) => {
-  function getCategories() {
-    if (!self.name) return []
+export default Class => class extends Class {
+  ICategorizable = true
+  CACHE = this.CACHE || {}
 
-    const categories = self.name.split(':')
-    categories.pop() // remove the name
-
-    return unique(categories.map(category => category.trim()).filter(Boolean)).sort()
+  constructor(...args) {
+    super(...args)
+    watch(this, 'name', () => {
+      if (this.name !== this.CACHE.$lastCategorizedName) {
+        delete this.CACHE.$categories
+        delete this.CACHE.$lastCategorizedName
+      }
+    })
   }
-  let lastUsedName = self.name
-  let categories = getCategories()
 
-  return {
-    get categories() {
-      if (!self.name || self.name === lastUsedName) return categories
+  categorize = () => {
+    this.CACHE.$lastCategorizedName = this.name
 
-      lastUsedName = self.name
-      categories = getCategories()
+    const nameParts = this.name.split(':').map(part => part.trim())
+    this.CACHE.$uncategorizedName = nameParts.pop() // remove the name
 
-      return categories
-    },
-    get categoryValue() { return getValue(self) },
+    this.CACHE.$categories = unique(nameParts).filter(Boolean)
   }
-})
+
+  get categories() {
+    if (!this.name) return []
+    if (!this.CACHE.$categories) this.categorize()
+
+    return this.CACHE.$categories
+  }
+  set uncategorizedName(name) {
+    this.name = [...this.categories, name].join(': ')
+  }
+  get uncategorizedName() {
+    if (!this.CACHE.$uncategorizedName) this.categorize()
+    return this.CACHE.$uncategorizedName
+  }
+
+  getCategorizedName(...categories) {
+    const parts = [...this.categories.filter(c => !categories.includes(c)), this.uncategorizedName]
+    return parts.join(': ')
+  }
+}

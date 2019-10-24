@@ -1,73 +1,50 @@
-import { isObservableArray } from 'mobx'
-import { types } from 'mobx-state-tree'
 import compareBy from '@/utilities/compareBy'
 
-export default (TYPE, options = {}) => {
-  const TypedArrayWrapper = types.model({
-    values: types.array(TYPE),
-  }).views(self => ({
-    get asArray() { return self.values.slice() },
-    get first() { return self.length ? self.at(0) : undefined },
-    get last() { return self.length ? self.at(self.length - 1) : undefined },
-    get length() { return self.values.length },
-  })).actions(self => ({
-    /* eslint-disable no-param-reassign */
+export default class Collection extends Array {
+  constructor(values = []) {
+    super(...(Array.isArray(values) ? values : [values]))
+  }
 
-    at: n => self.values[n],
-    clear: () => self.values.clear(),
-    delete: (object) => { self.values.replace(self.values.filter(item => item !== object)) },
-    deleteAt: (index) => { self.values.replace(self.values.filter((_, n) => n !== index)) },
-    every: fn => self.values.every(fn),
-    filter: fn => self.values.filter(fn),
-    find: fn => self.values.find(fn),
-    findBy: (key, value) => self.find(item => item[key] === value),
-    findById: (id) => {
-      if (!TYPE.identifierAttribute) return null
-      return self.find(item => item[TYPE.identifierAttribute] === id) || null
-    },
-    forEach: fn => self.values.forEach(fn),
-    includes: (searchElement, fromIndex) => self.values.includes(searchElement, fromIndex),
-    indexOf: element => self.values.indexOf(element),
-    insert: (object, index) => self.splice(index, 0, object),
-    map: fn => self.values.map(fn),
-    pop: () => self.values.pop(),
-    push: (...values) => self.values.replace([].concat(self.values, values)),
-    reduce: (fn, initial) => self.values.reduce(fn, initial),
-    replace: values => self.values.replace(values),
-    shift: () => self.values.shift(),
-    slice: (start, end) => self.values.slice(start, end),
-    some: fn => self.values.some(fn),
-    sortBy: (property, direction = 'asc') => {
-      if (!['asc', 'desc'].includes(direction)) {
-        throw new TypeError(`direction must be "asc" or "desc", got: "${direction}"`)
-      }
-      const values = self.values.slice().sort(compareBy(property))
-      self.values.replace(direction === 'desc' ? values.reverse() : values)
-      return self
-    },
-    splice: (index, deleteCount, value) => self.values.splice(index, deleteCount, value),
-    toObject: (keyProp, valueProp) => self.values.reduce((object, entry) => {
-      const key = entry[keyProp]
-      const value = valueProp !== undefined ? entry[valueProp] : entry
-      return { ...object, [key]: typeof value === 'function' ? value() : value }
-    }, {}),
-    unshift: (...values) => self.values.replace([].concat(values, self.values)),
+  get first() { return this[0] }
+  get last() { return this[this.length - 1] }
 
-    /* eslint-enable no-param-reassign */
-  })).postProcessSnapshot(({ values }) => values)
+  append = (...items) => { this.splice(this.length - 1, 0, ...items); return this }
+  clear = () => { this.length = 0; return this }
+  delete = (item) => {
+    while (this.indexOf(item) !== -1) { this.splice(this.indexOf(item), 1) }
+    return this
+  }
+  deleteAt = (index) => { this.splice(index, 1); return this }
+  findBy = (key, value) => this.find(item => item && item[key] === value)
+  findById = id => this.findBy('id', id)
+  groupBy = (predicate, sortBy = null, direction = 'asc') => {
+    const keys = new Set()
+    const groups = this.reduce((grouped, next, i, all) => {
+      const keyValue = typeof predicate === 'function' ? predicate(next, i, all) : next[predicate]
 
-  return types.custom({
-    ...options,
-    fromSnapshot: (snapshot = []) => TypedArrayWrapper.create({ values: snapshot }),
-    getValidationMessage: (snapshot) => {
-      if (!snapshot) return ''
-      if (isObservableArray(snapshot) || Array.isArray(snapshot)) {
-        if (snapshot.every(f => TYPE.is(f))) return ''
-      }
+      keys.add(keyValue)
+      // eslint-disable-next-line no-param-reassign
+      grouped[keyValue] = grouped[keyValue] || new Collection()
+      grouped[keyValue].push(next)
 
-      return 'Collection types must be assigned an array of values or null'
-    },
-    isTargetType: target => TypedArrayWrapper.is(target),
-    name: options.name || 'Collection',
-  })
+      return grouped
+    }, {})
+
+    if (sortBy) {
+      keys.forEach(groupKey => groups[groupKey].sortBy(sortBy, direction, true))
+    }
+
+    return groups
+  }
+  insert = (value, index = 0) => { this.splice(index, 0, value); return this }
+  sortBy = (property, direction = 'asc', inPlace = true) => {
+    if (!['asc', 'desc'].includes(direction)) {
+      throw new TypeError(`direction must be "asc" or "desc", got: "${direction}"`)
+    }
+    const values = this.slice().sort(compareBy(property, direction === 'desc'))
+    if (inPlace) { this.splice(0, this.length, ...values) }
+
+    return values
+  }
+  toArray = () => Array.from(this)
 }

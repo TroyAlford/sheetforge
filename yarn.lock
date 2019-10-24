@@ -3634,6 +3634,11 @@ deepmerge@^1.5.2:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-1.5.2.tgz#10499d868844cdad4fee0842df8c7f6f0c95a753"
   integrity sha512-95k0GDqvBjZavkuvzx/YqVLv/6YYa17fz6ILMSf7neqQITCPbnfEnQvEgMPNjH4kgobe7+WIL0yJEHku+H3qtQ==
 
+deepmerge@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-3.2.0.tgz#58ef463a57c08d376547f8869fdc5bcee957f44e"
+  integrity sha512-6+LuZGU7QCNUnAJyX8cIrlzoEgggTM6B7mm+znKOX4t5ltluT9KLjN6g61ECMS0LTsLW7yDpNoxhix5FZcrIow==
+
 default-compare@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/default-compare/-/default-compare-1.0.0.tgz#cb61131844ad84d84788fb68fd01681ca7781a2f"
@@ -7146,11 +7151,6 @@ media-typer@0.3.0:
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=
 
-melanke-watchjs@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/melanke-watchjs/-/melanke-watchjs-1.5.0.tgz#d82354ae47ed69580e7237644e7043e367534754"
-  integrity sha512-YUQzBucdH5p3s/UPQ0fvYyzqRfyLKTS35Qj5iaVBQ6XYGvvpEX7afR1xi8uUGsTEfFNqDFRrADz9TkVu4/TeXQ==
-
 mem@^4.0.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/mem/-/mem-4.3.0.tgz#461af497bc4ae09608cdb2e60eefb69bff744178"
@@ -7809,6 +7809,11 @@ object.values@^1.1.0:
     es-abstract "^1.12.0"
     function-bind "^1.1.1"
     has "^1.0.3"
+
+observable-slim@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/observable-slim/-/observable-slim-0.1.5.tgz#ddb30df2db1ee3e5bc409d29268a5766faab6b24"
+  integrity sha512-xhDK4EjwM6ehZ6KhTtDc0z5kqBhqoBQPP9pq2n1c+RXA4IcyLIm68ipDwS3nZVXhrCssoKu4LcHDUT1tl0kP9A==
 
 obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"
